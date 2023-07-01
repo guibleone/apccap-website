@@ -1,0 +1,27 @@
+.container{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.container ul {
+    display: flex;
+    list-style: none;
+}
+
+.logo{
+     text-decoration: none;
+     font-size: 2rem;
+}
+
+.links-middle{
+    text-decoration: none;
+    margin:0 5px;
+    font-size: 1.2rem;
+    
+}
+
+.links-login{
+    text-decoration: none;
+    margin:0 5px;
+}
