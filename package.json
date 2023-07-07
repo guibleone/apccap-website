@@ -1,7 +1,7 @@
 {
   "name": "ig-cafe",
   "version": "1.0.0",
-  "description": "Website made for the coffee producers association.",
+  "description": "Website made for the liquor producers association.",
 
   "main": "index.js",
   "scripts": {

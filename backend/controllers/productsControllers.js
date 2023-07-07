@@ -1,6 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const Product = require('../models/productModel.js');
-const fs = require('fs')
+const User = require('../models/userModel.js');
+const Resume = require('../models/userResumeModel.js');
 const { ref, getDownloadURL, uploadBytesResumable } = require("firebase/storage");
 const {storage} = require('../db/firebase.js')
 
@@ -183,4 +184,51 @@ const deleteProduct = asyncHandler(async (req, res) => {
     }
 })
 
-module.exports = { getProducts, addProduct, deleteProduct, getSingleProduct, updateProduct, addPhoto, trackProduct }
+// pegar dados do usuário
+const getProducer = asyncHandler(async (req, res) => {
+     try {
+        const producer = await User.findById(req.params.id)
+
+        if (!producer) {
+            res.status(404)
+            throw new Error('Produtor não encontrado')
+        }
+
+        res.status(200).json(producer)
+
+
+     } catch (error) {
+        res.status(404)
+        throw new Error('Produtor não encontrado')
+     }
+})
+
+// pegar resumo do produtor
+const getProducerResume = asyncHandler(async (req, res) => {
+    try {
+        const resume = await Resume.find({ user: req.params.id })
+
+        if (!resume) {
+            res.status(404)
+            throw new Error('Resumo não encontrado')
+        }
+
+        res.status(200).json(resume)
+
+    } catch (error) {
+        res.status(404)
+        throw new Error('Resumo não encontrado')
+    }
+})
+
+module.exports = 
+{   getProducts, 
+    addProduct, 
+    deleteProduct, 
+    getSingleProduct, 
+    updateProduct, 
+    addPhoto, 
+    trackProduct, 
+    getProducer ,
+    getProducerResume
+}

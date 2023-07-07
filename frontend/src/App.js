@@ -15,6 +15,7 @@ import RegisterProduct from './pages/Products/RegisterProduct';
 import SingleProduct from './pages/Products/SingleProduct';
 import Traceability from './pages/Traceability/Traceability';
 import Producer from './pages/Credencial/Producer';
+import SingleProducer from './pages/Traceability/SingleProducer';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path={`/produto/:id`} element={<SingleProduct />}/>
           <Route path={`/rastreabilidade`} element={<Traceability />}/>
           <Route path={`/credencial-produtor`} element={<Producer />} />
+          <Route path='/produtor/:id' element={<SingleProducer />} />
         </Routes> 
         <Footer />
       </Router>

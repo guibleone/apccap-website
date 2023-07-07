@@ -84,8 +84,8 @@ function Login() {
             justifyContent: 'center',
             flexDirection: 'column',
             alignItems: 'center',
-            height: '100vh',
-            marginTop: '-100px'
+            height: '88.4vh',
+            textAlign: 'center',
           }
         }
       >
@@ -115,17 +115,9 @@ function Login() {
             }
           } variant="contained" type="submit">Entrar</Button>
 
+          <Typography variant="body2" gutterBottom>Não tem uma conta? <a href="/registrar">Cadastre-se</a></Typography>
         </form>
 
-        {isError && <Typography variant="h6" component="h1" gutterBottom sx={
-          {
-            color: 'red',
-            border: '1px solid red',
-            width: '100%',
-            textAlign: 'center',
-            padding: '10px',
-          }
-        }>{message}</Typography>}
 
       </Box>
 

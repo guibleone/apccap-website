@@ -7,6 +7,8 @@ const error = JSON.parse(localStorage.getItem('error'))
 const initialState = {
     productsData: [],
     productData: product ? product : {},
+    producer: {},
+    producerResume: {},
     isError: false,
     isLoading: false,
     isSuccess: false,
@@ -99,6 +101,30 @@ export const trackProduct = createAsyncThunk('products/track', async(selo, thunk
          // caso ocorra algum erro
          const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
          return thunkAPI.rejectWithValue(message);
+    }
+})
+
+// pegar produtor
+export const getProducer = createAsyncThunk('products/getProducer', async (producer, thunkAPI) => {
+    try {
+        const response = await productsService.getProducer(producer)
+        return response
+    } catch (error) {
+        // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message);
+    }
+})
+
+// pegar resumo do produtor
+export const getProducerResume = createAsyncThunk('products/getProducerResume', async (producer, thunkAPI) => {
+    try {
+        const response = await productsService.getProducerResume(producer)
+        return response
+    } catch (error) {
+        // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message);
     }
 })
 
@@ -239,7 +265,43 @@ const productsSlice = createSlice({
                 localStorage.removeItem('product')
                 localStorage.setItem('error', JSON.stringify(action.payload))
             }
-            )          
+            ) 
+            // pegar produtor
+            .addCase(getProducer.pending, state => {
+                state.isLoading = true
+            })
+            .addCase(getProducer.fulfilled, (state, action) => {
+                state.isSuccess = true
+                state.isLoading = false
+                state.isError = false
+                state.producer = action.payload
+            })
+            .addCase(getProducer.rejected, (state, action) => {
+                state.isSuccess = false
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+            })
+            //pegar resumo do produtor
+            .addCase(getProducerResume.pending, state => {
+                state.isLoading = true
+            }
+            )
+            .addCase(getProducerResume.fulfilled, (state, action) => {
+                state.isSuccess = true
+                state.isLoading = false
+                state.isError = false
+                state.producerResume = action.payload
+            }
+            )
+            .addCase(getProducerResume.rejected, (state, action) => {
+                state.isSuccess = false
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+            }
+            )
+            
     }
 })
 

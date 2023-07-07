@@ -101,8 +101,7 @@ function Register() {
           justifyContent: 'center',
           flexDirection: 'column',
           alignItems: 'center',
-          height: '100vh',
-          marginTop:'-100px'
+          height: '88.4vh',
         }
       } >
 

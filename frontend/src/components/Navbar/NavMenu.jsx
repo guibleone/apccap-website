@@ -79,7 +79,7 @@ function NavMenu() {
                             flexGrow: 1,
                             fontSize: '1.5rem',
                         }
-                    } href='/'>Acecap</Link>
+                    } href='/'>Apccap</Link>
 
 
                     <IconButton

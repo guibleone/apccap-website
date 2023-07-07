@@ -1,12 +1,12 @@
-import { Box, Container, Typography, CircularProgress, Button } from '@mui/material'
-import { useNavigate } from 'react-router-dom';
+import { Box, Container, Typography, CircularProgress, Button, Link } from '@mui/material'
+import {  useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux'
 import { FcOk, FcHighPriority } from "react-icons/fc";
 
 function Traceability() {
 
   const { productData, isLoading, isError, message } = useSelector((state) => state.products)
-  const error  = localStorage.getItem('error')
+  const error = localStorage.getItem('error')
   const product = localStorage.getItem('product')
 
   const navigate = useNavigate()
@@ -28,7 +28,7 @@ function Traceability() {
     </Box>
   }
 
-  if(!error && !product){
+  if (!error && !product) {
     return <Box sx={
       {
         display: 'flex',
@@ -64,7 +64,7 @@ function Traceability() {
         </Box>
       )
 
-       : (
+        : (
           <Box sx={
             {
               display: 'flex',
@@ -72,7 +72,7 @@ function Traceability() {
               gap: '10px',
               alignItems: 'center',
               textAlign: 'center',
-              
+
             }
           }>
 
@@ -82,8 +82,10 @@ function Traceability() {
 
             <Typography variant='h5'> {productData.name} </Typography>
             <Typography variant='h5'> {productData.description} </Typography>
+            <Link href={`/produtor/${productData.producer}`} sx={{textDecoration:'none'}} >Produtor</Link>
 
-            <Button variant='contained' color='success' href='/'> Voltar </Button>
+              <Button  variant='contained' color='success' href='/'> Voltar </Button>
+     
 
           </Box>
 

@@ -117,6 +117,23 @@ export const trackProduct = async(selo) =>{
     return response.data
 }
 
+// pegar produtor
+export const getProducer = async (id) => {
+    
+    const response = await axios.get(API_URI + 'produtor/' + id)
+
+    return response.data
+
+}
+
+// pegar resumo do produtor
+export const getProducerResume = async (id) => {
+
+    const response = await axios.get(API_URI + 'produtor/resume/' + id)
+
+    return response.data
+}
+
 
 // exportar todos os métodos
 
@@ -127,7 +144,9 @@ const productsService = {
     getSingleProduct,
     updateProduct,
     addProductPhoto,
-    trackProduct
+    trackProduct,
+    getProducer,
+    getProducerResume
 }
 
 export default productsService;
