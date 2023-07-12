@@ -76,7 +76,6 @@ const addProfilePhoto = async (userData) => {
     return response.data
 }
 
-
 // logout de usuário
 const logout = async () => {
     localStorage.removeItem('user')

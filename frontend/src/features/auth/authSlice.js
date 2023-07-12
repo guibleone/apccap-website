@@ -86,6 +86,7 @@ export const addProfilePhoto = createAsyncThunk('auth/addPhoto', async (user, th
 })
 
 
+
 // slice para funções de autnticação de usuário
 export const authSlice = createSlice({
     name: 'auth',
@@ -156,6 +157,7 @@ export const authSlice = createSlice({
                 state.isError = true;
                 state.message = action.payload;
             })
+
             // logout de usuário
             .addCase(logout.fulfilled, (state) => {
                 state.user = null

@@ -175,13 +175,13 @@ const aproveUser = asyncHandler(async(req,res)=>{
             throw new Error('Usuário não encontrado')
         }
 
-        if(user.role !== 'produtor'){
-            res.status(402)
-            throw new Error('Usuário não é produtor')
-                       
+        if(user.status){
+            res.status(400)
+            throw new Error('Usuário já aprovado')
         }
 
-        user.status = true 
+        user.status = true
+        user.role = 'produtor' 
 
         await user.save() 
 

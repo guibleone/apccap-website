@@ -22,7 +22,7 @@ function Producer() {
         return (
             <Container sx={{ height: '100vh' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems:'center', gap:'10px' }}>
-                    <Typography variant='h4'>Faça login para conferir sua credencial</Typography>
+                    <Typography variant='h4'>Faça login para conferir  o processo de adesão aos produtores credenciados</Typography>
                     <Button href='/entrar' fullWidth variant='contained' color='success'>Login</Button>
                 </Box>
             </Container>

@@ -82,9 +82,9 @@ function Traceability() {
 
             <Typography variant='h5'> {productData.name} </Typography>
             <Typography variant='h5'> {productData.description} </Typography>
-            <Link href={`/produtor/${productData.producer}`} sx={{textDecoration:'none'}} >Produtor</Link>
+            <Button variant='contained' href={`/produtor/${productData.producer}`} sx={{textDecoration:'none'}} >Produtor</Button>
 
-              <Button  variant='contained' color='success' href='/'> Voltar </Button>
+            <Button  variant='contained' color='success' href='/'> Voltar </Button>
      
 
           </Box>

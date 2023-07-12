@@ -3,7 +3,7 @@ const Product = require('../models/productModel.js');
 const User = require('../models/userModel.js');
 const Resume = require('../models/userResumeModel.js');
 const { ref, getDownloadURL, uploadBytesResumable } = require("firebase/storage");
-const {storage} = require('../db/firebase.js')
+const { storage } = require('../db/firebase.js')
 
 
 // pegar produtos
@@ -39,6 +39,12 @@ const getSingleProduct = asyncHandler(async (req, res) => {
 const addProduct = asyncHandler(async (req, res) => {
 
     const { name, selo, description } = req.body
+    const usuario = await User.findById(req.user._id)
+
+    if (!name || !selo) {
+        res.status(404)
+        throw new Error('Insira os dados corretamente')
+    }
 
     const user = req.user._id
 
@@ -48,6 +54,11 @@ const addProduct = asyncHandler(async (req, res) => {
         res.status(404)
         throw new Error('Selo já cadastrado')
     }
+
+
+    usuario.selos.remove(selo)
+    await usuario.save()
+
     const product = await Product.create({
         name,
         selo,
@@ -186,7 +197,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
 
 // pegar dados do usuário
 const getProducer = asyncHandler(async (req, res) => {
-     try {
+    try {
         const producer = await User.findById(req.params.id)
 
         if (!producer) {
@@ -197,10 +208,10 @@ const getProducer = asyncHandler(async (req, res) => {
         res.status(200).json(producer)
 
 
-     } catch (error) {
+    } catch (error) {
         res.status(404)
         throw new Error('Produtor não encontrado')
-     }
+    }
 })
 
 // pegar resumo do produtor
@@ -221,14 +232,98 @@ const getProducerResume = asyncHandler(async (req, res) => {
     }
 })
 
-module.exports = 
-{   getProducts, 
-    addProduct, 
-    deleteProduct, 
-    getSingleProduct, 
-    updateProduct, 
-    addPhoto, 
-    trackProduct, 
-    getProducer ,
-    getProducerResume
+// pegar selos 
+const getSelos = asyncHandler(async (req, res) => {
+
+    const user = await User.findById(req.params.id)
+
+    if (!user) {
+        res.status(404)
+        throw new Error('Usuário não encontrado')
+    }
+
+    res.status(201).json(user.selos.sort())
+})
+
+// adicionar selo 
+const addSelo = asyncHandler(async (req, res) => {
+
+    const {quantity} = req.body
+
+    const user = await User.findById(req.params.id)
+    const producers = await User.find({ role: 'produtor' }).count()
+
+    const lastSelo = user.selos.sort().reverse()[0]
+
+
+    if (user.selos.length >= producers * 1000) {
+        res.status(400)
+        throw new Error('Limite de selos atingido')
+    }
+
+    if(!quantity){
+        res.status(400)
+        throw new Error('Informe uma quantidade válida')
+    }
+
+    if (quantity) {
+        const selos = generateSelos(producers, quantity, lastSelo)
+
+        selos.forEach(selo => {
+            if (user.selos.includes(selo)) {
+                res.status(400)
+                throw new Error('Selo já cadastrado')
+            }
+            user.selos.push(selo)
+        })
+
+        await user.save()
+
+    
+
+        res.status(201).json(selos)
+    }
+
+})
+
+
+
+const generateSelos = (user, quantity, lastSelo) => {
+
+    if (!quantity) {
+        res.status(400)
+        throw new Error('Informe uma quantidade válida')
+    }
+
+    const selos = []
+
+    for (let i = 0; i < quantity; i++) {
+
+        if(lastSelo){
+            const selo = `00${user}` + `${parseInt(lastSelo) + i + 1}`
+            selos.push(selo)
+            continue
+        }
+
+        const selo = `00${user}` + `0000${i+1}`
+        selos.push(selo)
+    }
+
+    return selos
+}
+
+module.exports =
+{
+    getProducts,
+    addProduct,
+    deleteProduct,
+    getSingleProduct,
+    updateProduct,
+    addPhoto,
+    trackProduct,
+    getProducer,
+    getProducerResume,
+    getSelos,
+    addSelo,
+    generateSelos
 }

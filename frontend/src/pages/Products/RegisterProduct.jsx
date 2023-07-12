@@ -1,14 +1,17 @@
-import { Box, Button, Container, Typography, CircularProgress, TextField, useMediaQuery, Divider } from '@mui/material'
+import { Box, Button, Container, Typography, CircularProgress, TextField, useMediaQuery, Divider, Alert, Select, MenuItem, InputLabel } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { getProducts, deleteProduct, addProduct } from '../../features/products/productsSlice'
+import { getProducts, deleteProduct, addProduct, getSelos, clear } from '../../features/products/productsSlice'
+import Selos from './Selos'
 
 
 function RegisterProduct() {
 
   const dispatch = useDispatch()
 
-  const { isLoading, isError, message } = useSelector(state => state.products)
+  const { user } = useSelector(state => state.auth)
+
+  const { isLoading, isError, message, selos, isSuccess, isSuccessSelos } = useSelector(state => state.products)
 
   const products = useSelector(state => state.products)
 
@@ -25,8 +28,19 @@ function RegisterProduct() {
 
   useEffect(() => {
     dispatch(getProducts())
-
   }, [])
+
+
+  useEffect(() => {
+
+    const userData = {
+      id: user._id,
+      token: user.token
+    }
+
+    dispatch(getSelos(userData))
+
+  }, [dispatch, user._id, user.token])
 
 
   const onChange = (e) => {
@@ -44,9 +58,9 @@ function RegisterProduct() {
       selo
     }
 
-    dispatch(addProduct(productData))
-  }
+    dispatch(addProduct(productData)) 
 
+  }
 
   if (isLoading) {
     return <Box sx={
@@ -87,7 +101,12 @@ function RegisterProduct() {
             <TextField size='small' name='name' onChange={onChange} value={name} />
 
             <Typography variant='h5'>Selo</Typography>
-            <TextField type='number' size='small' name='selo' onChange={onChange} value={selo} />
+
+            {selos.length === 0 ? <Typography variant='h6'>Você não possui selos</Typography> : (
+                <Select type='number' size='small' name='selo' onChange={onChange} value={selo} label="Selos">
+                  {selos.map((option) => <MenuItem key={option} value={option}>{option}</MenuItem>)}
+                </Select>
+            )}
 
             <Button variant='contained' type='submit'>Cadastrar</Button>
 
@@ -95,7 +114,7 @@ function RegisterProduct() {
 
         </form>
 
-        {isError && <h1>{message}</h1>}
+        <Divider sx={{ margin: '20px 0' }} />
 
         {productsData.length === 0 ?
 
@@ -110,7 +129,7 @@ function RegisterProduct() {
                 marginTop: '20px',
               }
             }>
-              <Typography sx={ matches && {textAlign:'center'}} variant="h4" component="h1" >Seus Produtos</Typography>
+              <Typography sx={matches && { textAlign: 'center' }} variant="h4" component="h1" >Seus Produtos</Typography>
 
               {productsData.map((product) => (
                 <Box sx={
@@ -120,7 +139,7 @@ function RegisterProduct() {
                     gap: '10px'
                   }
                 } key={product._id}>
-                  <Typography sx={{textAlign:'center'}} variant="h5" component="h1">{product.name}</Typography>
+                  <Typography sx={{ textAlign: 'center' }} variant="h5" component="h1">{product.name}</Typography>
                   <Button variant='outlined' color='success' href={`/produto/${product._id}`}>Editar</Button>
                   <Button variant='outlined' color='error' onClick={() => dispatch(deleteProduct(product._id))} >Excluir</Button>
 
@@ -129,6 +148,13 @@ function RegisterProduct() {
 
             </Box>
           )}
+
+
+        <Divider sx={{ margin: '20px 0' }} />
+
+        <Selos />
+
+        {(isError && !isSuccessSelos) && <Alert sx={{ margin: '10px 0' }} severity="error">{message}</Alert>}
 
       </Box>
 

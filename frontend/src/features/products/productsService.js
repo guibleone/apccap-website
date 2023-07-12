@@ -134,6 +134,38 @@ export const getProducerResume = async (id) => {
     return response.data
 }
 
+// pegar selos
+export const getSelos = async (userData) => {
+    // pegar o token do usuário
+
+    let token = userData.token
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+
+    }
+
+    const response = await axios.get(API_URI + 'selo/' + userData.id, config)
+    return response.data
+    
+}
+
+// adiicionar selo
+export const addSelo = async (userData) => {
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${userData.token}`,
+        },
+    }
+
+    const response = await axios.post(API_URI + 'selo/' + userData.id, userData, config)
+    return response.data 
+}
+
+
 
 // exportar todos os métodos
 
@@ -146,7 +178,9 @@ const productsService = {
     addProductPhoto,
     trackProduct,
     getProducer,
-    getProducerResume
+    getProducerResume,
+    getSelos,
+    addSelo
 }
 
 export default productsService;

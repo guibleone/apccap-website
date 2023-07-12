@@ -9,9 +9,11 @@ const initialState = {
     productData: product ? product : {},
     producer: {},
     producerResume: {},
+    selos: [],
     isError: false,
     isLoading: false,
     isSuccess: false,
+    isSuccessSelos: false,
     message: error ? error : '',
 }
 
@@ -93,14 +95,14 @@ export const addProductPhoto = createAsyncThunk('products/addProductPhoto', asyn
 })
 
 // rastrear produto
-export const trackProduct = createAsyncThunk('products/track', async(selo, thunkAPI)=>{
+export const trackProduct = createAsyncThunk('products/track', async (selo, thunkAPI) => {
     try {
         const response = await productsService.trackProduct(selo)
         return response
     } catch (error) {
-         // caso ocorra algum erro
-         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
-         return thunkAPI.rejectWithValue(message);
+        // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message);
     }
 })
 
@@ -123,6 +125,34 @@ export const getProducerResume = createAsyncThunk('products/getProducerResume', 
         return response
     } catch (error) {
         // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message);
+    }
+})
+
+// pegar selos 
+export const getSelos = createAsyncThunk('products/getSelos', async (user, thunkAPI) => {
+    try {
+
+        const response = await productsService.getSelos(user)
+        return response
+
+    } catch (error) {
+        // caso ocorra algum erro
+
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message);
+    }
+})
+
+// adcionar selo
+export const addSelo = createAsyncThunk('products/addSelo', async (user, thunkAPI) => {
+    try {
+        const response = await productsService.addSelo(user)
+        return response
+    } catch (error) {
+        // caso ocorra algum erro
+
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
         return thunkAPI.rejectWithValue(message);
     }
@@ -183,11 +213,13 @@ const productsSlice = createSlice({
                 state.isLoading = false
                 state.isError = false
                 state.productsData = [...state.productsData, action.payload]
+                state.selos = state.selos.filter(selo => selo !== action.payload.selo);
             })
             .addCase(addProduct.rejected, (state, action) => {
                 state.isSuccess = false
                 state.isLoading = false
                 state.isError = true
+                state.isSuccessSelos = false
                 state.message = action.payload
             })
             // deletar produto
@@ -201,7 +233,7 @@ const productsSlice = createSlice({
                 state.productsData.splice(state.productsData.indexOf(action.payload), 1)
                 state.productsData = state.productsData.filter(product => product.id !== action.payload.id);
             })
-            
+
             .addCase(deleteProduct.rejected, (state, action) => {
                 state.isSuccess = false
                 state.isLoading = false
@@ -245,8 +277,8 @@ const productsSlice = createSlice({
                 state.message = action.payload
             }
             )
-             // rastrear produto
-             .addCase(trackProduct.pending, state => {
+            // rastrear produto
+            .addCase(trackProduct.pending, state => {
                 state.isLoading = true
             }
             )
@@ -265,7 +297,7 @@ const productsSlice = createSlice({
                 localStorage.removeItem('product')
                 localStorage.setItem('error', JSON.stringify(action.payload))
             }
-            ) 
+            )
             // pegar produtor
             .addCase(getProducer.pending, state => {
                 state.isLoading = true
@@ -280,6 +312,7 @@ const productsSlice = createSlice({
                 state.isSuccess = false
                 state.isLoading = false
                 state.isError = true
+                state.isSuccessSelos = false
                 state.message = action.payload
             })
             //pegar resumo do produtor
@@ -301,7 +334,39 @@ const productsSlice = createSlice({
                 state.message = action.payload
             }
             )
-            
+            // pegar selos
+            .addCase(getSelos.pending, (state) => {
+                state.pending = true;
+            })
+            .addCase(getSelos.fulfilled, (state, action) => {
+                state.pending = false;
+                state.isSuccess = true;
+                state.selos = action.payload;
+            })
+            .addCase(getSelos.rejected, (state, action) => {
+                state.pending = false;
+                state.isError = true;
+                state.message = action.payload;
+            })
+            //adicionar selo
+            .addCase(addSelo.pending, (state) => {
+                state.pending = true;
+            }
+            )
+            .addCase(addSelo.fulfilled, (state, action) => {
+                state.pending = false;
+                state.isSuccessSelos = true;
+                state.selos = [...state.selos, action.payload]
+            }
+            )
+            .addCase(addSelo.rejected, (state, action) => {
+                state.pending = false;
+                state.isSuccessSelos = false;
+                state.isSuccess = false;
+                state.isError = true;
+                state.message = action.payload;
+            }
+            )
     }
 })
 
