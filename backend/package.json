@@ -21,11 +21,11 @@
     "firebase": "^9.22.2",
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.0",
-    "mongoose": "^7.1.0",
+    "mongoose": "^7.3.4",
     "multer": "^1.4.5-lts.1",
     "util": "^0.12.5"
   },
   "devDependencies": {
-    "nodemon": "^2.0.22"
+    "nodemon": "^3.0.1"
   }
 }

@@ -232,6 +232,7 @@ const productsSlice = createSlice({
                 state.isError = false;
                 state.productsData.splice(state.productsData.indexOf(action.payload), 1)
                 state.productsData = state.productsData.filter(product => product.id !== action.payload.id);
+                
             })
 
             .addCase(deleteProduct.rejected, (state, action) => {
@@ -355,8 +356,9 @@ const productsSlice = createSlice({
             )
             .addCase(addSelo.fulfilled, (state, action) => {
                 state.pending = false;
-                state.isSuccessSelos = true;
-                state.selos = [...state.selos, action.payload]
+                state.isSuccessSelos = true;         
+                action.payload.reduce((result, selo) => result.concat(selo), [])
+                state.selos = [...state.selos, ...action.payload]
             }
             )
             .addCase(addSelo.rejected, (state, action) => {

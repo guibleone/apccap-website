@@ -5,7 +5,6 @@ const Resume = require('../models/userResumeModel.js');
 const { ref, getDownloadURL, uploadBytesResumable } = require("firebase/storage");
 const { storage } = require('../db/firebase.js')
 
-
 // pegar produtos
 const getProducts = asyncHandler(async (req, res) => {
 
@@ -252,9 +251,15 @@ const addSelo = asyncHandler(async (req, res) => {
 
     const user = await User.findById(req.params.id)
     const producers = await User.find({ role: 'produtor' }).count()
+    const sequence_value = user.sequence_value
 
-    const lastSelo = user.selos.sort().reverse()[0]
+    const products = await Product.find({ producer: user._id })
 
+    let lastSelo = user.selos.sort().reverse()[0]
+
+    if((products.length > 0 && !lastSelo) || (products.length > 0 && lastSelo < products.sort((a, b) => b.selo - a.selo)[0].selo)){
+        lastSelo = products.sort((a, b) => b.selo - a.selo)[0].selo
+    }
 
     if (user.selos.length >= producers * 1000) {
         res.status(400)
@@ -267,19 +272,23 @@ const addSelo = asyncHandler(async (req, res) => {
     }
 
     if (quantity) {
-        const selos = generateSelos(producers, quantity, lastSelo)
+        const selos = generateSelos(sequence_value, quantity, lastSelo)
 
         selos.forEach(selo => {
             if (user.selos.includes(selo)) {
                 res.status(400)
                 throw new Error('Selo já cadastrado')
             }
+
+            if(products.find(product => product.selo === selo)){
+                res.status(400)
+                throw new Error('Selo já cadastrado')
+            }
+
             user.selos.push(selo)
         })
 
         await user.save()
-
-    
 
         res.status(201).json(selos)
     }
@@ -287,8 +296,7 @@ const addSelo = asyncHandler(async (req, res) => {
 })
 
 
-
-const generateSelos = (user, quantity, lastSelo) => {
+const generateSelos = (sequence_value, quantity, lastSelo) => {
 
     if (!quantity) {
         res.status(400)
@@ -297,15 +305,17 @@ const generateSelos = (user, quantity, lastSelo) => {
 
     const selos = []
 
+    const firstPart = (sequence_value).toString().padStart(3, "0")
+
     for (let i = 0; i < quantity; i++) {
 
         if(lastSelo){
-            const selo = `00${user}` + `${parseInt(lastSelo) + i + 1}`
+            const selo = `${firstPart}` + `${(parseInt(lastSelo.slice(-4)) + i + 1).toString().padStart(5, "0")}`
             selos.push(selo)
             continue
         }
 
-        const selo = `00${user}` + `0000${i+1}`
+        const selo = `${firstPart}` + `${(i+1).toString().padStart(5, "0")}`
         selos.push(selo)
     }
 

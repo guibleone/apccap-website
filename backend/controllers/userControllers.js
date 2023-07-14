@@ -5,7 +5,6 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const path = require('path')
 const asyncHandler = require('express-async-handler')
-const fs = require('fs')
 const { ref, getDownloadURL, uploadBytesResumable } = require("firebase/storage");
 const {storage} = require('../db/firebase.js')
 
@@ -60,6 +59,7 @@ const registerUser = asyncHandler(async (req, res) => {
             role: user.role,
             status: user.status,
             selos : user.selos,
+            sequence_value: user.sequence_value,
             token: generateToken(user._id)
         })
     } else {
@@ -105,6 +105,7 @@ const addProfilePhoto = asyncHandler(async (req, res) => {
             role: updatedUser.role,
             status: user.status,
             selos : user.selos,
+            sequence_value: user.sequence_value,
             token: generateToken(updatedUser._id)
         })
 
@@ -139,6 +140,7 @@ const loginUser = asyncHandler(async (req, res) => {
             role: user.role,
             status: user.status,
             selos : user.selos,
+            sequence_value: user.sequence_value,
             token: generateToken(user._id)
         })
     } else {
@@ -208,6 +210,7 @@ const updateUser = asyncHandler(async (req, res) => {
             role: updatedUser.role,
             status: user.status,
             selos : user.selos,
+            sequence_value: user.sequence_value,
             token: generateToken(updatedUser._id)
         })
     } else {
