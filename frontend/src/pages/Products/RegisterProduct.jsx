@@ -1,4 +1,4 @@
-import { Box, Button, Container, Typography, CircularProgress, TextField, useMediaQuery, Divider, Alert, Select, MenuItem, InputLabel } from '@mui/material'
+import { Box, Button, Container, Typography, CircularProgress, TextField, useMediaQuery, Divider, Alert, Select, MenuItem, InputLabel, FormControl } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { getProducts, deleteProduct, addProduct, getSelos, clear } from '../../features/products/productsSlice'
@@ -58,7 +58,7 @@ function RegisterProduct() {
       selo
     }
 
-    dispatch(addProduct(productData)) 
+    dispatch(addProduct(productData))
 
   }
 
@@ -77,6 +77,17 @@ function RegisterProduct() {
       } size={100} />
     </Box>
   }
+
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
 
 
   return (
@@ -97,15 +108,26 @@ function RegisterProduct() {
               gap: '10px'
             }
           }>
-            <Typography variant='h5'>Nome</Typography>
-            <TextField size='small' name='name' onChange={onChange} value={name} />
-
-            <Typography variant='h5'>Selo</Typography>
+            <TextField placeholder="Informe o nome do produto" size='small' name='name' onChange={onChange} value={name} />
 
             {selos.length === 0 ? <Typography variant='h6'>Você não possui selos</Typography> : (
-                <Select type='number' size='small' name='selo' onChange={onChange} value={selo} label="Selos">
-                  {selos.map((option) => <MenuItem key={option} value={option}>{option}</MenuItem>)}
-                </Select>
+              <div>
+                <FormControl sx={{ width: '100%' }}>
+                  <InputLabel id='selos-comprados-label'>Selos</InputLabel>
+                  <Select
+                    labelId='selos-comprados-label'
+                    id='selos-comprados'
+                    type='number'
+                    size='small'
+                    name='selo'
+                    onChange={onChange}
+                    value={selo}
+                    MenuProps={MenuProps}
+                  >
+                    {selos.map((option) => <MenuItem key={option} value={option}>{option}</MenuItem>)}
+                  </Select>
+                </FormControl>
+              </div>
             )}
 
             <Button variant='contained' type='submit'>Cadastrar</Button>
