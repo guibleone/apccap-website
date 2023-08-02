@@ -28,6 +28,7 @@ export const getUserData = createAsyncThunk('admin/user', async (user, thunkAPI)
 export const deleteUser = createAsyncThunk('admin/delete', async (user, thunkAPI) => {
     try {
         const response = await adminService.deleteUser(user)
+        thunkAPI.dispatch(listUsers(user.token)) // atualizar lista de usuários 
         return response
     } catch (error) {
         // caso ocorra algum erro

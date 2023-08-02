@@ -36,6 +36,7 @@ export const getProducts = createAsyncThunk('products/getProducts', async (user,
 export const addProduct = createAsyncThunk('products/addProduct', async (product, thunkAPI) => {
     try {
         const response = await productsService.addProduct(product)
+        thunkAPI.dispatch(getProducts()) // salva vidas // dispatch para atualizar a lista de produtos
         return response
     } catch (error) {
         // caso ocorra algum erro             
@@ -49,6 +50,7 @@ export const addProduct = createAsyncThunk('products/addProduct', async (product
 export const deleteProduct = createAsyncThunk('products/deleteProduct', async (product, thunkAPI) => {
     try {
         const response = await productsService.deleteProduct(product)
+        thunkAPI.dispatch(getProducts()) // salva vidas // dispatch para atualizar a lista de produtos
         return response
     } catch (error) {
         // caso ocorra algum erro              
@@ -167,7 +169,8 @@ const productsSlice = createSlice({
             state.isError = false
             state.isSuccess = false
             state.isLoading = false
-        }
+        },
+        
     },
     extraReducers: (builder) => {
         builder
@@ -226,20 +229,18 @@ const productsSlice = createSlice({
             .addCase(deleteProduct.pending, state => {
                 state.isLoading = true
             })
-            .addCase(deleteProduct.fulfilled, (state, action) => {
-                state.isSuccess = true;
-                state.isLoading = false;
-                state.isError = false;
-                state.productsData.splice(state.productsData.indexOf(action.payload), 1)
-                state.productsData = state.productsData.filter(product => product.id !== action.payload.id);
-                
-            })
-
             .addCase(deleteProduct.rejected, (state, action) => {
                 state.isSuccess = false
                 state.isLoading = false
                 state.isError = true
                 state.message = action.payload
+            })
+            .addCase(deleteProduct.fulfilled, (state, action) => {
+                state.isSuccess = true;
+                state.isLoading = false;
+                state.isError = false;
+                state.productsData.splice(state.productsData.indexOf(action.payload), 1)
+                state.productsData = state.productsData.filter(product => product.id !== action.payload.id);            
             })
             // atualizar produto
             .addCase(updateProduct.pending, state => {

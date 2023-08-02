@@ -17,7 +17,7 @@ const getProducts = asyncHandler(async (req, res) => {
 
     const products = await Product.find({ producer: user })
 
-    res.json(products);
+    res.status(200).json(products);
 }
 )
 
@@ -53,7 +53,6 @@ const addProduct = asyncHandler(async (req, res) => {
         res.status(404)
         throw new Error('Selo já cadastrado')
     }
-
 
     usuario.selos.remove(selo)
     await usuario.save()
@@ -174,18 +173,13 @@ const trackProduct = asyncHandler(async (req, res) => {
 })
 
 
-
 // deletar produtos
 const deleteProduct = asyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.id)
+    console.log(req.body)
 
     if (product) {
-
         await product.deleteOne()
-
-        if (product.path) {
-            await unlinkAsync(product.path)
-        }
 
         res.json({ id: product._id })
     } else {

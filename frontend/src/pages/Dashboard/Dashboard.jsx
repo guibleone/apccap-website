@@ -6,12 +6,15 @@ import { listUsers } from "../../features/admin/adminSlice"
 import { Typography, Box, Container, CssBaseline, Link, Button, TextField, CircularProgress, useMediaQuery } from '@mui/material';
 import RegisterProduct from "../Products/RegisterProduct";
 import { trackProduct, clear } from "../../features/products/productsSlice";
+import UsersPagination from "../../components/Pagination/Users"
 
 function Dashboard() {
 
   const { user } = useSelector((state) => state.auth)
 
-  const { isLoading, users } = useSelector((state) => state.admin)
+  const { isLoading } = useSelector((state) => state.admin)
+
+  const [users, setUsers] = useState([])
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -55,7 +58,7 @@ function Dashboard() {
   }
 
   return (
-    <Container sx={{height: '100vh'}}>
+    <Container sx={{ height: '100vh' }}>
       <CssBaseline />
 
       {(!user || user.role === 'user') ? (
@@ -72,7 +75,7 @@ function Dashboard() {
           <TextField type="number" placeholder="Digite o selo do produto" value={selo} onChange={(e) => setSelo(e.target.value)} />
           <Button onClick={onTrack} variant="contained" color="success">Rastrear</Button>
 
-          <Box sx={{display:'flex', flexDirection:'column', gap:'10px'}}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <Typography variant="h4" component="h1">Se torne um produtor credenciado</Typography>
             <Button href="/credencial-produtor" variant="contained">Quero me Tornar</Button>
           </Box>
@@ -112,6 +115,9 @@ function Dashboard() {
                 </Box>
               ))
               }
+
+              <UsersPagination setUsersData={(u)=> setUsers(u)}/>
+
             </Box>
           ) : (
 
@@ -119,7 +125,7 @@ function Dashboard() {
               {(user.role === "produtor" && user.status === true) ? (
 
                 <RegisterProduct />
-              ):
+              ) :
                 (
                   <Typography variant="h4" component="h1" gutterBottom>Seu cadastro está em análise</Typography>
                 )

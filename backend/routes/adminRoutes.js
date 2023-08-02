@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { hasRole } = require('../middlewares/authMiddleware.js');
-const { getUserData, getUserDocuments, getUserResume, deleteUser, alterRole, getUsers, aproveUser } = require('../controllers/adminControllers.js');
+const { getUserData, getUserDocuments, getUserResume, deleteUser, alterRole, getUsers, aproveUser, getPayment, createPayment } = require('../controllers/adminControllers.js');
 
 
 // Pegar todos os usuários
@@ -24,5 +24,8 @@ router.put('/user/:id', hasRole('admin'), alterRole)
 
 // Aprovar usuário
 router.put('/user/aprove/:id', hasRole('admin'), aproveUser)
+
+// receber pagamento de selos
+router.post('/payment', getPayment)
 
 module.exports = router;

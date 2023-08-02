@@ -8,7 +8,7 @@ const { promisify } = require('util')
 const unlinkAsync = promisify(fs.unlink)
 const { ref, getDownloadURL, uploadBytesResumable, deleteObject } = require("firebase/storage");
 const { storage } = require('../db/firebase.js');
-
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 
 
 // pegar usuário
@@ -100,27 +100,27 @@ const deleteUser = asyncHandler(async (req, res) => {
             throw new Error('Usuário não encontrado')
         }
 
-        if(user.pathFoto){
+        if (user.pathFoto) {
             const storageRef = ref(storage, `profilePhotos/${user._id}`)
             await deleteObject(storageRef)
         }
 
-        if(documents){
+        if (documents) {
             documents.map(async (document) => {
                 const storageRef = ref(storage, `documents/${document.user}/${document.name}`)
                 await deleteObject(storageRef)
             })
         }
-            
-        if(user.role === 'produtor'){
-            if(products){
+
+        if (user.role === 'produtor') {
+            if (products) {
                 products.map(async (product) => {
                     const storageRef = ref(storage, `productsPhotos/${user._id}/${product.name}.jpg`)
                     await deleteObject(storageRef)
                 })
             }
 
-            await Products.deleteMany({ producer: req.params.id })    
+            await Products.deleteMany({ producer: req.params.id })
         }
 
         await User.findByIdAndDelete(req.params.id)
@@ -165,7 +165,7 @@ const alterRole = asyncHandler(async (req, res) => {
 })
 
 // aprovar usuário
-const aproveUser = asyncHandler(async(req,res)=>{
+const aproveUser = asyncHandler(async (req, res) => {
     try {
 
         const user = await User.findById(req.params.id)
@@ -175,24 +175,52 @@ const aproveUser = asyncHandler(async(req,res)=>{
             throw new Error('Usuário não encontrado')
         }
 
-        if(user.status){
+        if (user.status) {
             res.status(400)
             throw new Error('Usuário já aprovado')
         }
 
         user.status = true
-        user.role = 'produtor' 
+        user.role = 'produtor'
 
-        await user.save() 
+        await user.save()
 
         res.status(200).json(user)
 
-        
+
     } catch (error) {
         res.status(400)
         throw new Error('Erro ao aprovar usuário')
     }
 })
+
+const getPayment = asyncHandler(async (req, res) => {
+    let { amount, id } = req.body
+
+    try {
+        const payment = await stripe.paymentIntents.create({
+            amount,
+            currency: 'BRL',
+            description: 'Compra de selos',
+            payment_method: id,
+            confirm: true
+        })
+
+        console.log("Pagamento", payment)
+        res.status(200).json({
+            message: "Pagamento efetuado com sucesso!",
+            confirm: 'success'
+        })
+
+    } catch (error) {
+        res.status(400).json({
+            message: "Pagamento não efetuado!",
+            confirm: 'error'
+        })
+    }
+})
+
+
 
 module.exports = {
     getUsers,
@@ -201,5 +229,6 @@ module.exports = {
     getUserResume,
     deleteUser,
     alterRole,
-    aproveUser
+    aproveUser,
+    getPayment
 }

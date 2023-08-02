@@ -2,8 +2,8 @@ import { Box, Button, Container, Typography, CircularProgress, TextField, useMed
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { getProducts, deleteProduct, addProduct, getSelos, clear } from '../../features/products/productsSlice'
-import Selos from './Selos'
-
+import Selo from '../../components/Stripe/Selo'
+import ProductsPagination from '../../components/Pagination/Products'
 
 function RegisterProduct() {
 
@@ -12,10 +12,6 @@ function RegisterProduct() {
   const { user } = useSelector(state => state.auth)
 
   const { isLoading, isError, message, selos, isSuccess, isSuccessSelos } = useSelector(state => state.products)
-
-  const products = useSelector(state => state.products)
-
-  const productsData = products ? products.productsData : ''
 
   const matches = useMediaQuery('(max-width:800px)')
 
@@ -26,9 +22,11 @@ function RegisterProduct() {
 
   const { name, selo } = inputData
 
+  const [productsData, setProductsData] = useState([])
+
   useEffect(() => {
     dispatch(getProducts())
-  }, [])
+  }, [ ])
 
 
   useEffect(() => {
@@ -41,6 +39,7 @@ function RegisterProduct() {
     dispatch(getSelos(userData))
 
   }, [dispatch, user._id, user.token])
+
 
 
   const onChange = (e) => {
@@ -138,6 +137,8 @@ function RegisterProduct() {
 
         <Divider sx={{ margin: '20px 0' }} />
 
+
+        
         {productsData.length === 0 ?
 
           (<Typography variant="h4" component="h1" gutterBottom>Nenhum produto cadastrado</Typography>)
@@ -151,7 +152,7 @@ function RegisterProduct() {
                 marginTop: '20px',
               }
             }>
-              <Typography sx={matches && { textAlign: 'center' }} variant="h4" component="h1" >Seus Produtos</Typography>
+              <Typography variant="h4" component="h1" >Seus Produtos</Typography>
 
               {productsData.map((product) => (
                 <Box sx={
@@ -163,18 +164,20 @@ function RegisterProduct() {
                 } key={product._id}>
                   <Typography sx={{ textAlign: 'center' }} variant="h5" component="h1">{product.name}</Typography>
                   <Button variant='outlined' color='success' href={`/produto/${product._id}`}>Editar</Button>
-                  <Button variant='outlined' color='error' onClick={() => dispatch(deleteProduct(product._id))} >Excluir</Button>
-
+                  <Button variant='outlined' color='error' onClick={() => dispatch(deleteProduct({id:product._id}))} >Excluir</Button>
                 </Box>
               ))}
 
+             
+
             </Box>
-          )}
+          )}     
 
-
+        <ProductsPagination setProductsData={(p) => setProductsData(p) } />
+    
         <Divider sx={{ margin: '20px 0' }} />
-
-        <Selos />
+     
+        <Selo />
 
         {(isError && !isSuccessSelos) && <Alert sx={{ margin: '10px 0' }} severity="error">{message}</Alert>}
 

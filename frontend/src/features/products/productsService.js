@@ -4,7 +4,6 @@ const API_URI = 'http://localhost:3001/api/products/';
 
 /*const API_URI = '/api/products/';*/
 
-
 // pegar produtos
 export const getProducts = async () => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -49,12 +48,13 @@ export const deleteProduct = async (product) => {
         }
     }
 
-    const response = await axios.delete(API_URI + product, config);
-    return response.data;
+    const response = await axios.delete(API_URI + product.id, config);
+    return response.data
+
 }
 
 // pegar único produto
-export const getSingleProduct = async(product) =>{
+export const getSingleProduct = async (product) => {
     const user = JSON.parse(localStorage.getItem('user'));
 
     const token = user.token;
@@ -105,7 +105,7 @@ export const addProductPhoto = async (product) => {
 }
 
 // rastrear produto
-export const trackProduct = async(selo) =>{
+export const trackProduct = async (selo) => {
 
     const response = await axios.post(API_URI + 'rastrear', selo)
 
@@ -119,7 +119,7 @@ export const trackProduct = async(selo) =>{
 
 // pegar produtor
 export const getProducer = async (id) => {
-    
+
     const response = await axios.get(API_URI + 'produtor/' + id)
 
     return response.data
@@ -149,7 +149,7 @@ export const getSelos = async (userData) => {
 
     const response = await axios.get(API_URI + 'selo/' + userData.id, config)
     return response.data
-    
+
 }
 
 // adiicionar selo
@@ -162,7 +162,7 @@ export const addSelo = async (userData) => {
     }
 
     const response = await axios.post(API_URI + 'selo/' + userData.id, userData, config)
-    return response.data 
+    return response.data
 }
 
 
