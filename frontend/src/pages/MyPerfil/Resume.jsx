@@ -7,7 +7,7 @@ import { Button, Typography, TextareaAutosize, Box, CircularProgress } from '@mu
 function Resume() {
 
   const { resume, isError, isLoading, isSuccess, message } = useSelector((state) => state.resume)
-  
+
   const { user } = useSelector((state) => state.auth)
 
   const [inputData, setInputData] = useState({
@@ -24,11 +24,29 @@ function Resume() {
   useEffect(() => {
 
     if (isError) {
-      toast.error(message)
+      toast.error(message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      })
     }
 
     if (isSuccess) {
-      toast.success('Resumo atualizado com sucesso')
+      toast.success('Resumo atualizado com sucesso', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      })
     }
 
     dispatch(reset())
@@ -93,11 +111,11 @@ function Resume() {
 
       <TextareaAutosize minRows={4} onChange={onChange} name="body" id="body" defaultValue={body} />
 
-      {resume ? 
-        <Button sx={{padding:"10px"}} variant="contained" onClick={handleUpdate} disabled={isLoading} color="primary">{isLoading ? <CircularProgress color="success" /> : 'Atualizar'}</Button> 
-      
-      : <Button sx={{padding:"10px"}}  variant="contained" onClick={submitResume} disabled={isLoading} color="primary">{isLoading ? <CircularProgress color="success" /> : 'Criar'}</Button>}
-      
+      {resume ?
+          <Button sx={{ padding: "10px" }} variant="contained" onClick={handleUpdate} disabled={isLoading} color="primary">{isLoading ? <CircularProgress color="success" /> : 'Atualizar'}</Button>
+
+        : <Button sx={{ padding: "10px" }} variant="contained" onClick={submitResume} disabled={isLoading} color="primary">{isLoading ? <CircularProgress color="success" /> : 'Criar'}</Button>}
+
 
     </Box>
   )

@@ -7,6 +7,7 @@ const initialState = {
     user: user ? user : null,
     isError: false,
     pending: false,
+    isLoading:false,
     isSuccess: false,
     message: '',
 }
@@ -86,7 +87,6 @@ export const addProfilePhoto = createAsyncThunk('auth/addPhoto', async (user, th
 })
 
 
-
 // slice para funções de autnticação de usuário
 export const authSlice = createSlice({
     name: 'auth',
@@ -97,6 +97,7 @@ export const authSlice = createSlice({
             state.isSuccess = false;
             state.isError = false;
             state.message = '';
+            state.isLoading = false
         },
     },
     extraReducers: (builder) => {
@@ -131,15 +132,15 @@ export const authSlice = createSlice({
             })
             // atualizar usuário
             .addCase(updateUser.pending, (state) => {
-                state.pending = true;
+                state.isLoading = true;
             })
             .addCase(updateUser.fulfilled, (state, action) => {
-                state.pending = false;
+                state.isLoading = false;
                 state.isSuccess = true;
                 state.user = action.payload;
             })
             .addCase(updateUser.rejected, (state, action) => {
-                state.pending = false;
+                state.isLoading = false;
                 state.isError = true;
                 state.message = action.payload;
             })
@@ -157,7 +158,6 @@ export const authSlice = createSlice({
                 state.isError = true;
                 state.message = action.payload;
             })
-
             // logout de usuário
             .addCase(logout.fulfilled, (state) => {
                 state.user = null

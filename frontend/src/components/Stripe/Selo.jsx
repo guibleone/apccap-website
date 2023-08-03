@@ -24,11 +24,8 @@ export default function Selo() {
                 quantity
             })
             if (response.data) {
-                console.log(response.data.url)
                 localStorage.setItem('quantity', quantity)
                 window.location.href = response.data.url;
-               
-
             }
 
         } catch (error) {

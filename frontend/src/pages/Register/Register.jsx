@@ -8,7 +8,7 @@ import { Button, Typography, Box, Container, CssBaseline, TextField, CircularPro
 
 
 function Register() {
-  
+
   const [formData, setFormData] = useState({
     name: '',
     cpf: '',
@@ -27,7 +27,16 @@ function Register() {
 
   useEffect(() => {
     if (isError) {
-      toast.error(message)
+      toast.error(message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      })
     }
 
     if (isSuccess || user) {
@@ -36,7 +45,7 @@ function Register() {
 
     if (isSuccess) {
 
-        dispatch(resetResume())
+      dispatch(resetResume())
 
       if (!resume) {
         dispatch(getResume(user.token))
@@ -60,7 +69,16 @@ function Register() {
     e.preventDefault()
 
     if (password !== password2) {
-      toast.error('Senhas não conferem.')
+      toast.error('Senhas não conferem.', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      })
     }
     else {
       const userData = {
@@ -101,7 +119,10 @@ function Register() {
           justifyContent: 'center',
           flexDirection: 'column',
           alignItems: 'center',
-          height: '88.4vh',
+          height: '100vh',
+          textAlign: 'center',
+          marginBottom:'150px',
+          marginTop:'-85px'
         }
       } >
 
@@ -158,17 +179,9 @@ function Register() {
             }
           } variant="contained" type="submit">Cadastrar</Button>
 
-        </form>
+          <Typography textAlign={'center'} variant="body2" gutterBottom>Já possui cadastro ? <a href="/entrar">Entre</a></Typography>
 
-        {isError && <Typography variant="h6" component="h1" gutterBottom sx={
-          {
-            color:'red',
-            border: '1px solid red',
-            width: '100%',
-            textAlign: 'center',
-            padding: '10px',
-          }
-        }>{message}</Typography>}
+        </form>
 
       </Box>
     </Container>

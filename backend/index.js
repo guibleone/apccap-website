@@ -11,6 +11,7 @@ const userFilesRouter = require('./routes/userFilesRoutes.js')
 const adminRouter = require('./routes/adminRoutes.js')
 const productsRouter = require('./routes/productsRoutes.js')
 const paymentRouter = require('./routes/paymentRoutes.js')
+const emailRouter = require('./routes/emailRoutes.js')
 const path = require('path')
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 
@@ -33,6 +34,7 @@ app.use('/api/documentos', userFilesRouter)
 app.use('/api/admin', adminRouter)
 app.use('/api/products', productsRouter)
 app.use('/api/payment', paymentRouter)
+app.use('/api/email', emailRouter)
 
 const dirname = path.resolve();
 

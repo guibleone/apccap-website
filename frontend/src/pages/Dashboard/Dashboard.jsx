@@ -75,12 +75,11 @@ function Dashboard() {
           <TextField type="number" placeholder="Digite o selo do produto" value={selo} onChange={(e) => setSelo(e.target.value)} />
           <Button onClick={onTrack} variant="contained" color="success">Rastrear</Button>
 
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          {/* <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <Typography variant="h4" component="h1">Se torne um produtor credenciado</Typography>
             <Button href="/credencial-produtor" variant="contained">Quero me Tornar</Button>
-          </Box>
-
-        </Box>
+            </Box>*/}
+        </Box> 
 
 
 

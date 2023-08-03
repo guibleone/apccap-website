@@ -22,7 +22,16 @@ function Login() {
   useEffect(() => {
 
     if (isError) {
-      toast.error(message)
+      toast.error(message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      })
     }
 
     if (isSuccess || user) {
@@ -84,8 +93,10 @@ function Login() {
             justifyContent: 'center',
             flexDirection: 'column',
             alignItems: 'center',
-            height: '88.4vh',
+            height: '100vh',
             textAlign: 'center',
+            marginBottom:'150px',
+            marginTop:'-100px'
           }
         }
       >
@@ -116,6 +127,7 @@ function Login() {
           } variant="contained" type="submit">Entrar</Button>
 
           <Typography variant="body2" gutterBottom>Não tem uma conta? <a href="/registrar">Cadastre-se</a></Typography>
+          
         </form>
 
 

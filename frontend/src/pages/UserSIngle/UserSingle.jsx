@@ -7,6 +7,7 @@ import { FaDownload } from 'react-icons/fa'
 import { Button, Stack, Avatar, Typography, Modal, Box, Container, CssBaseline, Divider, CircularProgress, Alert, isMuiElement } from '@mui/material';
 import AccessLevel from "./AccessLevel"
 import { toast } from 'react-toastify'
+import Email from "../../components/Email/Email"
 
 
 function UserSingle() {
@@ -18,6 +19,7 @@ function UserSingle() {
     const name = userData ? userData.name : ''
     const cpf = userData ? userData.cpf : ''
     const pathFoto = userData ? userData.pathFoto : ''
+    const email = userData ? userData.email : ''
 
     const address = userData ? userData.address :
         {
@@ -102,6 +104,8 @@ function UserSingle() {
                     variant="rounded"
                 />
                 <Typography variant="h5" component="div">{name}</Typography>
+
+               {(user._id !== id) && <Email email={email} /> } 
 
             </Stack>
 

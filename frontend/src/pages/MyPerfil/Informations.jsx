@@ -9,7 +9,7 @@ import { getResume } from "../../features/resume/resumeSlice"
 import { getDocuments } from "../../features/documents/documentsSlice"
 import { Button, Stack, Avatar, Typography, Divider, Box, Container, CssBaseline, TextField, CircularProgress } from '@mui/material'
 import { useMediaQuery } from "@mui/material"
-import {FaAddressCard} from 'react-icons/fa'
+import { FaAddressCard } from 'react-icons/fa'
 
 
 function Informations() {
@@ -39,20 +39,43 @@ function Informations() {
 
     useEffect(() => {
 
-        if (isError) {
-            toast.error(message)
-        }
-
-        if (isSuccess) {
-            toast.success('Dados atualizados com sucesso!')
-        }
-
         dispatch(getDocuments(user.token))
         dispatch(getResume(user.token))
 
         fileInputRef.current.value = null
 
-    }, [user, isError, isLoading, isSuccess, message, navigate, dispatch])
+    }, [])
+
+    useEffect(() => {
+        if (isError) {
+            toast.error(message, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+            })
+        }
+
+        if (isSuccess) {
+            toast.success('Dados atualizados com sucesso!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+            })
+        }
+
+        dispatch(reset())
+
+    }, [isError, isSuccess, message, dispatch])
 
 
     const onChange = (e) => {
@@ -94,7 +117,7 @@ function Informations() {
                 </Box>
 
                 <Divider sx={{ margin: '20px 0' }} />
-                
+
                 <Typography sx={
                     { marginBottom: '20px' }
                 } variant="h5" color="text.primary">Dados Pessoais</Typography>
@@ -142,7 +165,7 @@ function Informations() {
                         />
 
                         <input type="file" ref={fileInputRef} />
-                        <Button sx={{ padding: "10px" }} onClick={handleFile} variant="contained" disabled={pending} color="primary">{pending ? <CircularProgress color="success" /> : 'Atualizar'}</Button>
+                        <Button sx={{ padding: "10px" }} onClick={handleFile} variant="contained" disabled={pending} color="primary">{pending ? <CircularProgress size={25} color="success" /> : 'Atualizar'}</Button>
 
                     </Box>) :
                     (<Box sx={{ display: 'flex', gap: '10px', flexDirection: 'column', justifyContent: 'center' }}>
@@ -150,7 +173,7 @@ function Informations() {
                         <Typography variant="body1" color="text.primary">Adicione uma foto de perfil</Typography>
 
                         <input type="file" ref={fileInputRef} />
-                        <Button sx={{ padding: "10px" }} onClick={handleFile} variant="contained" disabled={pending} color="primary">{pending ? <CircularProgress color="success" /> : 'Atualizar'}</Button>
+                        <Button sx={{ padding: "10px" }} onClick={handleFile} variant="contained" disabled={pending} color="primary">{pending ? <CircularProgress size={25} color="success" /> : 'Atualizar'}</Button>
 
                     </Box>
                     )

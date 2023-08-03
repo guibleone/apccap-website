@@ -72,7 +72,6 @@ function Traceability() {
               gap: '10px',
               alignItems: 'center',
               textAlign: 'center',
-
             }
           }>
 
@@ -82,9 +81,9 @@ function Traceability() {
 
             <Typography variant='h5'> {productData.name} </Typography>
             <Typography variant='h5'> {productData.description} </Typography>
-            <Button variant='contained' href={`/produtor/${productData.producer}`} sx={{textDecoration:'none'}} >Produtor</Button>
 
-            <Button  variant='contained' color='success' href='/'> Voltar </Button>
+            <Button  variant='contained' href={`/produtor/${productData.producer}`} sx={{textDecoration:'none',width:'300px'}} >Produtor</Button>
+            <a sx={{width:'300px'}} variant='contained' color='success' href='/'> Voltar </a>
      
 
           </Box>
