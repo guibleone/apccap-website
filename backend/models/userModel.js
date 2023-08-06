@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const {autoIncrementID} = require('../middlewares/counterMiddleware.js')
+const { autoIncrementID } = require('../middlewares/counterMiddleware.js')
 
 // schema do usuário
 const userSchema = new mongoose.Schema({
@@ -42,15 +42,18 @@ const userSchema = new mongoose.Schema({
         type: Array,
     },
     sequence_value: { type: Number },
+    relatory: { 
+        type: String ,
+    }
 }, {
     timestamps: true
 })
 
 userSchema.plugin(autoIncrementID, {
-    modelName: 'User', 
+    modelName: 'User',
     field: 'sequence_value'
 })
 
-  
+
 module.exports = mongoose.model('User', userSchema)
 

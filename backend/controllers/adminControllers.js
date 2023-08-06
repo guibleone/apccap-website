@@ -220,6 +220,30 @@ const getPayment = asyncHandler(async (req, res) => {
     }
 })
 
+// PARTE DO SECRETÁRIO
+
+const sendRelatory = asyncHandler(async (req, res) => {
+
+    const { relatory } = req.body
+
+    const user = await User.findById(req.params.id)
+
+    if (!relatory) {
+        res.status(400)
+        throw new Error('Insira um relatório válido')
+    }
+
+    if(!user){
+        res.status(404)
+        throw new Error('Usuário não encontrado')
+    }
+
+    user.relatory = relatory
+    await user.save()
+
+    res.status(200).send(user)
+})
+
 
 
 module.exports = {
@@ -230,5 +254,6 @@ module.exports = {
     deleteUser,
     alterRole,
     aproveUser,
-    getPayment
+    getPayment,
+    sendRelatory
 }

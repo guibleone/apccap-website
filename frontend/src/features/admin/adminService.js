@@ -106,7 +106,19 @@ const aproveUser = async ({ id, token }) => {
     return response.data
 }
 
+// PARTE DO SECRETÁRIO
 
+const sendRelatory = async(relatoryData) => {
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${relatoryData.token}`
+        }
+    }
+
+    const response = await axios.post(API_URI + '/relatory/' + relatoryData.id, relatoryData, config)
+    return response.data
+}
 
 
 
@@ -117,7 +129,8 @@ const adminService = {
     deleteUser,
     alterAccess,
     listUsers,
-    aproveUser
+    aproveUser,
+    sendRelatory
 }
 
 export default adminService

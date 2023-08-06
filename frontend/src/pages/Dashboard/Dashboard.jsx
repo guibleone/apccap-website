@@ -7,6 +7,9 @@ import { Typography, Box, Container, CssBaseline, Link, Button, TextField, Circu
 import RegisterProduct from "../Products/RegisterProduct";
 import { trackProduct, clear } from "../../features/products/productsSlice";
 import UsersPagination from "../../components/Pagination/Users"
+import Secretary from "./Acesses/Secretary"
+import Tesoureiro from "./Acesses/Tesoureiro"
+import President from "./Acesses/President"
 
 function Dashboard() {
 
@@ -34,7 +37,7 @@ function Dashboard() {
 
   useEffect(() => {
 
-    if (user && user.role === "admin") {
+    if (user && (user.role === "admin" || user.role === 'secretario')) {
       dispatch(listUsers(user.token))
     }
 
@@ -55,6 +58,20 @@ function Dashboard() {
         }
       } size={100} />
     </Box>
+  }
+
+  if (user) {
+    if (!user.status && user.role !== 'user') {
+      return <Box sx={
+        {
+          display: 'flex',
+          justifyContent: 'center',
+          height: '100vh'
+        }
+      }>
+        <Typography variant="h5">Seu cadastro está em análise. Por favor aguarde.</Typography>
+      </Box>
+    }
   }
 
   return (
@@ -79,9 +96,8 @@ function Dashboard() {
             <Typography variant="h4" component="h1">Se torne um produtor credenciado</Typography>
             <Button href="/credencial-produtor" variant="contained">Quero me Tornar</Button>
             </Box>*/}
-        </Box> 
 
-
+        </Box>
 
       ) : (
 
@@ -104,7 +120,6 @@ function Dashboard() {
                 <Box key={user._id}
                   sx={{
                     marginTop: '10px',
-                    padding: '10px',
                   }}
                 >
                   <Typography variant="h6" >{`${user.name} - ${user.role}`}</Typography>
@@ -115,22 +130,35 @@ function Dashboard() {
               ))
               }
 
-              <UsersPagination setUsersData={(u)=> setUsers(u)}/>
+              <UsersPagination setUsersData={(u) => setUsers(u)} />
 
             </Box>
           ) : (
+            <>
+              <Box>
+                {(user.role === "produtor") && (
+                  <RegisterProduct />
+                )}
+              </Box>
 
-            <Box>
-              {(user.role === "produtor" && user.status === true) ? (
+              <Box>
+                {(user.role === 'secretario') && (
+                  <Secretary users={users} />
+                )}
+              </Box>
 
-                <RegisterProduct />
-              ) :
-                (
-                  <Typography variant="h4" component="h1" gutterBottom>Seu cadastro está em análise</Typography>
-                )
-              }
+              <Box>
+                {(user.role === 'tesoureiro') && (
+                  <Tesoureiro />
+                )}
+              </Box>
+              <Box>
+                {(user.role === 'presidente') && (
+                  <President />
+                )}
+              </Box>
+            </>
 
-            </Box>
           )}
         </Box>
       )

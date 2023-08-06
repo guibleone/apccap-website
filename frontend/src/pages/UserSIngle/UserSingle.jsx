@@ -4,10 +4,11 @@ import { useParams, useNavigate } from "react-router-dom"
 import { getDocumentsData, getResumeData, getUserData, deleteUser, reset, aproveUser } from "../../features/admin/adminSlice"
 import { downloadDocument } from '../../features/documents/documentsSlice'
 import { FaDownload } from 'react-icons/fa'
-import { Button, Stack, Avatar, Typography, Modal, Box, Container, CssBaseline, Divider, CircularProgress, Alert, isMuiElement } from '@mui/material';
+import { Button, Stack, Avatar, Typography, Modal, Box, Container, CssBaseline, Divider, CircularProgress, Alert, isMuiElement, TextareaAutosize } from '@mui/material';
 import AccessLevel from "./AccessLevel"
 import { toast } from 'react-toastify'
 import Email from "../../components/Email/Email"
+import SecretaryLevel from "./SecretaryLevel"
 
 
 function UserSingle() {
@@ -65,9 +66,7 @@ function UserSingle() {
         dispatch(getResumeData({ id, token: user.token }))
         dispatch(getDocumentsData({ id, token: user.token }))
 
-
         dispatch(reset())
-
 
     }, [dispatch, id, user.token])
 
@@ -89,6 +88,10 @@ function UserSingle() {
         </Box>
     }
 
+    if (user && user.role === 'secretario') {
+        return <SecretaryLevel />
+    }
+
     return (
         <Container sx={
             {
@@ -105,7 +108,7 @@ function UserSingle() {
                 />
                 <Typography variant="h5" component="div">{name}</Typography>
 
-               {(user._id !== id) && <Email email={email} /> } 
+                {(user._id !== id) && <Email email={email} />}
 
             </Stack>
 
@@ -126,17 +129,14 @@ function UserSingle() {
                         </>
                     ) : (<Typography variant="h7" component="div">Endereço não cadastrado</Typography>)}
 
-
                 </div>
 
             </Stack>
-
 
             <div>
                 <Typography variant="h5" component="div">Resumo</Typography>
                 <Typography variant="h7" component="div">{body ? body : 'Nenhum resumo criado'}</Typography>
             </div>
-
 
             <Typography variant="h5" component="div">Documentos</Typography>
 
@@ -165,8 +165,8 @@ function UserSingle() {
             <Box>
                 <Typography variant="h5" component="div">Alterar Acesso</Typography>
                 <AccessLevel id={id} token={user.token} />
-
             </Box>
+
 
             <Box sx={
                 {
@@ -199,15 +199,16 @@ function UserSingle() {
                         </Box>
                     </Modal>
                 </Box>
+
                 <div>
                     <Button onClick={() => dispatch(aproveUser({ id, token: user.token }))} color="success" variant="contained" disabled={userData.status === true || user._id === id}>Aprovar</Button>
                 </div>
 
-
             </Box>
-            <Box sx={{display:'flex', flexDirection:'column', gap:'15px', margin:'15px 0'}}> 
 
-                {(isSuccess && userData.status === true && !isError && user._id !== id)
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '15px', margin: '15px 0' }}>
+
+                {(isSuccess && userData.status === true && !isError)
                     ? <Alert severity="success">{message ? message : 'Usuário credenciado.'}</Alert>
                     : <Alert severity="error">Usuário aguardando aprovação.</Alert>
                 }
@@ -215,7 +216,6 @@ function UserSingle() {
                 {isError && <Alert severity="error">{message}</Alert>}
 
             </Box>
-
 
         </Container>
 

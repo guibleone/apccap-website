@@ -98,6 +98,21 @@ export const aproveUser = createAsyncThunk('admin/aprove', async (user, thunkAPI
     }
 })
 
+// PARTE DO SECRETÁRIO
+
+export const sendRelatory = createAsyncThunk('admin/relatory', async (user, thunkAPI) => {
+    try {
+        const response = await adminService.sendRelatory(user)
+        return response
+    } catch (error) {
+        // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message);
+    }
+})
+
+
+
 export const adminSlice = createSlice({
     name: 'admin',
     initialState,
@@ -235,8 +250,26 @@ export const adminSlice = createSlice({
                 state.message = action.payload
             }
             )
-
-            
+            // enviar relatório
+            .addCase(sendRelatory.pending, state => {
+                state.isLoading = false
+                state.isSuccess = false
+                state.isError = false
+            }
+            )
+            .addCase(sendRelatory.fulfilled, (state, action) => {
+                state.isSuccess = true
+                state.isLoading = false
+                state.isError = false
+                state.userData = action.payload
+            }
+            )
+            .addCase(sendRelatory.rejected, (state, action) => {
+                state.isError = true
+                state.isLoading = false
+                state.message = action.payload
+            }
+            )         
     }
 
 })

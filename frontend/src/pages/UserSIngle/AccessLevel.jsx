@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react'
 import { Box, FormControl, InputLabel, MenuItem, Select, Typography, Button, CssBaseline } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { alterAccess } from '../../features/admin/adminSlice'
+import { toast } from 'react-toastify'
 
-
-function AccessLevel({id, token}) {
+function AccessLevel({ id, token }) {
 
   const { user } = useSelector((state) => state.auth)
 
-  const { userData, isLoading } = useSelector((state) => state.admin)
+  const { userData, isLoading, isSuccess } = useSelector((state) => state.admin)
 
   const acesso = userData ? userData.role : ''
 
@@ -23,6 +23,28 @@ function AccessLevel({id, token}) {
     role
   }
 
+  const errorStyle = {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "colored",
+  }
+
+  const sucessStyle = {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "colored",
+  }
+
   const handleChange = (event) => {
     setRole(event.target.value);
   }
@@ -35,8 +57,25 @@ function AccessLevel({id, token}) {
     setOpen(true);
   }
 
+  const handleSubmit = () => {
 
-  if(isLoading) return <div>Carregando...</div>
+    if (!acessData.role) {
+      return toast.error('Selecione um nível de acesso', errorStyle)
+    }
+
+    dispatch(alterAccess(acessData))
+  }
+
+  useEffect(() => {
+
+    if (isSuccess) {
+      toast.success('Acesso alterado', sucessStyle)
+    }
+
+  }, [])
+
+
+  if (isLoading) return <div>Carregando...</div>
 
   return (
     <Box >
@@ -44,14 +83,10 @@ function AccessLevel({id, token}) {
 
       <FormControl fullWidth sx={
         {
-          margin:'15px 0',
+          margin: '15px 0',
         }
       }>
-        <InputLabel sx={
-          {
-            color: 'white',
-          }
-        } id="demo-controlled-open-select-label">Acesso</InputLabel>
+        <InputLabel id="demo-controlled-open-select-label">Acesso</InputLabel>
         <Select
           labelId="demo-controlled-open-select-label"
           id="demo-controlled-open-select"
@@ -61,13 +96,6 @@ function AccessLevel({id, token}) {
           open={open}
           onClose={handleClose}
           onOpen={handleOpen}
-          sx={
-            {
-              backgroundColor: '#292929',
-              color: 'white',
-            }
-
-          }
         >
           <MenuItem value={'admin'}>Administrador</MenuItem>
           <MenuItem value={'user'}>Usuário</MenuItem>
@@ -80,7 +108,7 @@ function AccessLevel({id, token}) {
 
       <Typography variant="body2" color="text.secondary"> <b>Acesso Atual: </b> {acesso}</Typography>
 
-      <Button onClick={()=> dispatch(alterAccess(acessData))} fullWidth variant="contained" sx={
+      <Button onClick={handleSubmit} fullWidth variant="contained" sx={
         {
           margin: '15px 0',
         }
