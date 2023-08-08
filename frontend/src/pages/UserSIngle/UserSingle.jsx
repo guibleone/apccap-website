@@ -9,6 +9,7 @@ import AccessLevel from "./AccessLevel"
 import { toast } from 'react-toastify'
 import Email from "../../components/Email/Email"
 import SecretaryLevel from "./SecretaryLevel"
+import PresidentLevel from "./PresidentLevel"
 
 
 function UserSingle() {
@@ -91,6 +92,11 @@ function UserSingle() {
     if (user && user.role === 'secretario') {
         return <SecretaryLevel />
     }
+
+    if (user && user.role === 'presidente') {
+        return <PresidentLevel />
+    }
+
 
     return (
         <Container sx={
@@ -201,14 +207,14 @@ function UserSingle() {
                 </Box>
 
                 <div>
-                    <Button onClick={() => dispatch(aproveUser({ id, token: user.token }))} color="success" variant="contained" disabled={userData.status === true || user._id === id}>Aprovar</Button>
+                    <Button onClick={() => dispatch(aproveUser({ id, token: user.token }))} color="success" variant="contained" disabled={userData.status === 'aprovado' || user._id === id}>Aprovar</Button>
                 </div>
 
             </Box>
 
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '15px', margin: '15px 0' }}>
 
-                {(isSuccess && userData.status === true && !isError)
+                {(isSuccess && userData.status === 'aprovado' && !isError)
                     ? <Alert severity="success">{message ? message : 'Usuário credenciado.'}</Alert>
                     : <Alert severity="error">Usuário aguardando aprovação.</Alert>
                 }

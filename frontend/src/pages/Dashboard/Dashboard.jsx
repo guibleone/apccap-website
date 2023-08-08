@@ -37,7 +37,7 @@ function Dashboard() {
 
   useEffect(() => {
 
-    if (user && (user.role === "admin" || user.role === 'secretario')) {
+    if (user && (user.role === "admin" || user.role === 'secretario' || user.role === 'presidente')) {
       dispatch(listUsers(user.token))
     }
 
@@ -50,18 +50,19 @@ function Dashboard() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        height: '100vh'
       }
     }>
       <CircularProgress sx={
         {
-          margin: '100px',
+          marginBottom: '100px',
         }
       } size={100} />
     </Box>
   }
 
   if (user) {
-    if (!user.status && user.role !== 'user') {
+    if (user.status === 'analise' && user.role !== 'user') {
       return <Box sx={
         {
           display: 'flex',
@@ -154,7 +155,7 @@ function Dashboard() {
               </Box>
               <Box>
                 {(user.role === 'presidente') && (
-                  <President />
+                  <President users={users} />
                 )}
               </Box>
             </>

@@ -1,9 +1,6 @@
 import axios from "axios";
 
-const API_URL = 'http://localhost:3001/api/resume/'
-
-//const API_URL = '/api/resume/'
-
+const API_URL = '/api/resume/'
 
 // pegar currículo
 const getResume = async (resumaData) => {

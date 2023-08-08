@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { Box, Typography, TextareaAutosize, Container, Button, Divider, CircularProgress } from '@mui/material'
+import { Box, Typography, TextareaAutosize, Container, Button, Divider, CircularProgress, TextField, Modal } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { FaDownload } from 'react-icons/fa'
 import { downloadDocument } from '../../features/documents/documentsSlice'
 import { toast } from 'react-toastify'
-import axios from 'axios'
 import { sendRelatory } from '../../features/admin/adminSlice'
+import { AiFillWarning } from 'react-icons/ai'
 
 export default function SecretaryLevel() {
 
@@ -37,6 +37,24 @@ export default function SecretaryLevel() {
         theme: "colored",
     }
 
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+
+    }
+
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+
     const userRelatory = userData.relatory ? userData.relatory : ''
 
     const [relatory, setRelatory] = useState(userRelatory)
@@ -65,11 +83,12 @@ export default function SecretaryLevel() {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
+                height: '100vh'
             }
         }>
             <CircularProgress sx={
                 {
-                    margin: '100px',
+                    marginBottom: '100px',
                 }
             } size={100} />
         </Box>
@@ -119,12 +138,45 @@ export default function SecretaryLevel() {
                     disabled={userRelatory ? true : false}
 
                 />
-                
+
                 {!userRelatory &&
                     <Box sx={{
                         display: 'flex'
                     }}>
-                        <Button onClick={handleRelatory} fullWidth color='success' variant='contained'>Enviar</Button>
+                        <Button onClick={handleOpen} fullWidth color='success' variant='contained'>Enviar</Button>
+                        <Modal
+                            open={open}
+                            onClose={handleClose}
+                        >
+                            <Box sx={style}>
+                                <Box sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '10px'
+                                }}>
+                                    <Box display={'flex'} justifyContent={'space-between'}>
+                                        <Typography variant="h6" >Tem certeza ? </Typography>
+                                        <AiFillWarning color='red' size={30} />
+                                    </Box>
+                                    <Typography variant="h7" > Você não poderá alterar o relatório depois de enviado.</Typography>
+
+                                    <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+                                        <Button color='error' variant='contained' onClick={handleClose}>Cancelar</Button>
+
+                                        <Button
+                                            disabled={isLoading}
+                                            color="success"
+                                            variant='contained'
+                                            onClick={handleRelatory}
+                                        >
+                                            {isLoading ? <CircularProgress color="success" size={24} /> : 'Enviar'}
+                                        </Button>
+
+                                    </Box>
+                                </Box>
+                            </Box>
+                        </Modal>
+
                     </Box>
                 }
 

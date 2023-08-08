@@ -9,6 +9,12 @@ const initialState = {
     isError: false,
     isLoading: false,
     isSuccess: false,
+    emailStatus:{
+        isSuccess: false,
+        isError: false,
+        isLoading: false,
+        message: '',
+    },
     message: '',
 }
 
@@ -98,6 +104,19 @@ export const aproveUser = createAsyncThunk('admin/aprove', async (user, thunkAPI
     }
 })
 
+// desaprovar usuário
+
+export const disapproveUser = createAsyncThunk('admin/disapprove', async (user, thunkAPI) => {
+    try{
+        const response = await adminService.disapproveUser(user)
+        return response
+    }catch(error){
+        // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
 // PARTE DO SECRETÁRIO
 
 export const sendRelatory = createAsyncThunk('admin/relatory', async (user, thunkAPI) => {
@@ -112,12 +131,28 @@ export const sendRelatory = createAsyncThunk('admin/relatory', async (user, thun
 })
 
 
+// EMAIL
+
+export const sendEmail = createAsyncThunk('admin/email', async (user, thunkAPI) => {
+    try {
+        const response = await adminService.sendEmail(user)
+        return response
+    } catch (error) {
+        // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message);
+    }
+})
+
 
 export const adminSlice = createSlice({
     name: 'admin',
     initialState,
     reducers: {
         reset: state => initialState,
+        resetEmailStatus: state => {
+            state.emailStatus = initialState.emailStatus
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -248,8 +283,25 @@ export const adminSlice = createSlice({
                 state.isError = true
                 state.isLoading = false
                 state.message = action.payload
-            }
-            )
+            })
+            // desaprovar usuário
+            .addCase(disapproveUser.pending, state => {
+                state.isLoading = true
+                state.isSuccess = false
+                state.isError = false
+            })
+            .addCase(disapproveUser.fulfilled, (state, action) => {
+                state.isSuccess = true
+                state.isLoading = false
+                state.isError = false
+                state.userData = action.payload
+                state.message = 'Usuário desaprovado com sucesso!'
+            })
+            .addCase(disapproveUser.rejected, (state, action) => {
+                state.isError = true
+                state.isLoading = false
+                state.message = action.payload
+            })
             // enviar relatório
             .addCase(sendRelatory.pending, state => {
                 state.isLoading = false
@@ -269,11 +321,33 @@ export const adminSlice = createSlice({
                 state.isLoading = false
                 state.message = action.payload
             }
-            )         
+            )
+            // enviar email
+            .addCase(sendEmail.pending, state => {
+                state.emailStatus.isLoading = true
+                state.emailStatus.isSuccess = false
+                state.emailStatus.isError = false
+                state.emailStatus.message = ''
+            }
+            )
+            .addCase(sendEmail.fulfilled, (state, action) => {
+                state.emailStatus.isSuccess = true
+                state.emailStatus.isLoading = false
+                state.emailStatus.isError = false
+                state.emailStatus.message = 'Email enviado com sucesso!'
+            }
+            )
+            .addCase(sendEmail.rejected, (state, action) => {
+                state.emailStatus.isError = true
+                state.emailStatus.isLoading = false
+                state.emailStatus.message = 'Erro ao enviar email!'
+            }
+            )
+
     }
 
 })
 
 
-export const { reset } = adminSlice.actions
+export const { reset,resetEmailStatus } = adminSlice.actions
 export default adminSlice.reducer

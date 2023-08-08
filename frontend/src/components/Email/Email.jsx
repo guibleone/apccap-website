@@ -1,10 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Modal, Button, Box, Typography, TextField, TextareaAutosize, CircularProgress } from '@mui/material'
-import axios from 'axios';
 import { toast } from 'react-toastify'
+import { useSelector, useDispatch } from 'react-redux'
+import { sendEmail, resetEmailStatus } from '../../features/admin/adminSlice';
 
-export default function Email(props) {
-    const { email } = props
+export default function Email({ email }) {
+    
+    const { emailStatus } = useSelector((state) => state.admin)
+    const dispatch = useDispatch()
 
     const style = {
         position: 'absolute',
@@ -18,20 +21,39 @@ export default function Email(props) {
         p: 4,
 
     }
-    const [openSnack, setOpenSnack] = useState(false);
+
+    const styleError = {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+    }
+
+    const styleSuccess = {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+    }
 
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
     const [emailData, setEmailData] = useState({
-        email: email,
         title: '',
-        message: ''
+        message: '',
     })
 
     const { title, message } = emailData
-    const [isLoading, setIsLoading] = useState(false)
 
     const onChange = (e) => {
         setEmailData((prevState) => ({
@@ -40,54 +62,32 @@ export default function Email(props) {
         }))
     }
 
-    const sendEmail = async (e) => {
+    const sendEmailData = (e) => {
         e.preventDefault()
 
-        if (title === '' || message === '') return toast.error('Preencha todos os campos', {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-        })
+        if ((title === '' || message === '')) return toast.error('Preencha todos os campos', styleError)
 
-        setIsLoading(true)
+        dispatch(sendEmail({ email, title, message }))
+    }
 
-        try {
-            const response = await axios.post('http://localhost:3001/api/email', {
-                email,
-                title,
-                message
-            })
-            if (response.data) {
+    useEffect(() => {
 
-                toast.success('Email enviado com sucesso', {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
-                })
-
-                setIsLoading(false)
-            }
-
-        } catch (error) {
-            return alert('Erro ao enviar email')
+        if (emailStatus.isSuccess) {
+            toast.success(emailStatus.message, styleSuccess)
+            handleClose()
         }
 
+        if (emailStatus.isError) {
+            toast.error(emailStatus.message, styleError)
+        }
 
-    }
+        dispatch(resetEmailStatus())
+
+    }, [emailStatus.isSuccess, emailStatus.isError])
 
     return (
         <Box>
-            <Button color="success" variant="contained" onClick={handleOpen}>Contatar</Button>
+            <Button variant="contained" color={'success'} onClick={handleOpen}>Contatar</Button>
 
             <Modal
                 open={open}
@@ -105,7 +105,13 @@ export default function Email(props) {
                             Enviar email para {email}
                         </Typography>
 
-                        <TextField sx={{ width: '100%' }} size='small' placeholder='Título' name='title' defaultValue={title} onChange={onChange} />
+                        <TextField sx={{ width: '100%' }}
+                            size='small'
+                            name='title'
+                            placeholder='Título'
+                            defaultValue={title}
+                            onChange={onChange}
+                        />
 
                         <TextareaAutosize
                             minRows={8}
@@ -120,16 +126,14 @@ export default function Email(props) {
                         <Button color='error' variant='contained' onClick={handleClose}>Cancelar</Button>
 
                         <Button
-                            disabled={isLoading}
-                            onClick={sendEmail}
+                            disabled={emailStatus.isLoading}
+                            onClick={sendEmailData}
                             color="success"
                             variant='contained'>
 
-                            {isLoading ? <CircularProgress color="success" size={24} /> : 'Enviar'}
-
+                            {emailStatus.isLoading ? <CircularProgress color="success" size={24} /> : 'Enviar'}
+                            
                         </Button>
-
-
                     </Box>
                 </Box>
             </Modal>

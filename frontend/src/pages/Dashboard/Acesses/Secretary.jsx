@@ -22,7 +22,7 @@ export default function Secretary() {
             marginTop: '10px',
           }}
         >
-          {!user.status && (
+          {user.status ==='analise' && (
           <>
             <Typography variant="h6" >{`${user.name}`}</Typography>
             <Button variant="outlined" href={`/usuario/${user._id}`}>Ver Dados</Button>

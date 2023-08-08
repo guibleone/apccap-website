@@ -60,6 +60,7 @@ const registerUser = asyncHandler(async (req, res) => {
             status: user.status,
             selos : user.selos,
             sequence_value: user.sequence_value,
+            relatory: user.relatory,
             token: generateToken(user._id)
         })
     } else {
@@ -106,6 +107,7 @@ const addProfilePhoto = asyncHandler(async (req, res) => {
             status: user.status,
             selos : user.selos,
             sequence_value: user.sequence_value,
+            relatory: user.relatory,
             token: generateToken(updatedUser._id)
         })
 
@@ -141,6 +143,7 @@ const loginUser = asyncHandler(async (req, res) => {
             status: user.status,
             selos : user.selos,
             sequence_value: user.sequence_value,
+            relatory: user.relatory,
             token: generateToken(user._id)
         })
     } else {
@@ -211,6 +214,7 @@ const updateUser = asyncHandler(async (req, res) => {
             status: user.status,
             selos : user.selos,
             sequence_value: user.sequence_value,
+            relatory: user.relatory,
             token: generateToken(updatedUser._id)
         })
     } else {

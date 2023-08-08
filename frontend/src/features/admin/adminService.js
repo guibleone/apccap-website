@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URI = 'http://localhost:3001/api/admin/'
+const API_URI = '/api/admin'
 
 // pegar usuário
 const getUserData = async ({ id, token }) => {
@@ -102,9 +102,22 @@ const aproveUser = async ({ id, token }) => {
     }
 
     const response = await axios.put(API_URI + '/user/aprove/' + id, {}, config)
-
     return response.data
 }
+
+// desaprovar usuário
+const disapproveUser = async ({ id, token }) => {
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+
+    const response = await axios.put(API_URI + '/user/disapprove/' + id, {}, config)
+    return response.data
+}
+
 
 // PARTE DO SECRETÁRIO
 
@@ -120,7 +133,13 @@ const sendRelatory = async(relatoryData) => {
     return response.data
 }
 
+// EMAILS
 
+const sendEmail = async (emailData) => {
+
+    const response = await axios.post('/api/email', emailData)
+    return response.data
+}
 
 const adminService = {
     getUserData,
@@ -130,7 +149,9 @@ const adminService = {
     alterAccess,
     listUsers,
     aproveUser,
-    sendRelatory
+    sendRelatory,
+    sendEmail,
+    disapproveUser
 }
 
 export default adminService

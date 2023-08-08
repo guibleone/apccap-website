@@ -35,8 +35,8 @@ const userSchema = new mongoose.Schema({
         default: "user"
     },
     status: {
-        type: Boolean,
-        default: false,
+        type: String,
+        default: 'analise',
     },
     selos: {
         type: Array,

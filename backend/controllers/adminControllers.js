@@ -175,12 +175,12 @@ const aproveUser = asyncHandler(async (req, res) => {
             throw new Error('Usuário não encontrado')
         }
 
-        if (user.status) {
+        if (user.status === 'aprovado') {
             res.status(400)
             throw new Error('Usuário já aprovado')
         }
 
-        user.status = true
+        user.status = 'aprovado'
         user.role = 'produtor'
 
         await user.save()
@@ -191,6 +191,33 @@ const aproveUser = asyncHandler(async (req, res) => {
     } catch (error) {
         res.status(400)
         throw new Error('Erro ao aprovar usuário')
+    }
+})
+
+// desaprovar usuário
+const disapproveUser = asyncHandler(async (req, res) => {
+    try {
+
+        const user = await User.findById(req.params.id)
+
+        if (!user) {
+            res.status(404)
+            throw new Error('Usuário não encontrado')
+        }
+
+        if (user.status === 'reprovado') {
+            res.status(400)
+            throw new Error('Usuário já reprovado')
+        }
+
+        user.status = 'reprovado'
+        await user.save()
+
+        res.status(200).json(user)
+
+    } catch (error) {
+        res.status(400)
+        throw new Error('Erro ao desaprovar usuário')
     }
 })
 
@@ -233,7 +260,7 @@ const sendRelatory = asyncHandler(async (req, res) => {
         throw new Error('Insira um relatório válido')
     }
 
-    if(!user){
+    if (!user) {
         res.status(404)
         throw new Error('Usuário não encontrado')
     }
@@ -255,5 +282,6 @@ module.exports = {
     alterRole,
     aproveUser,
     getPayment,
-    sendRelatory
+    sendRelatory,
+    disapproveUser
 }
