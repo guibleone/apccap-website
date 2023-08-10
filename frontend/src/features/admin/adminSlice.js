@@ -132,7 +132,6 @@ export const sendRelatory = createAsyncThunk('admin/relatory', async (user, thun
 
 
 // EMAIL
-
 export const sendEmail = createAsyncThunk('admin/email', async (user, thunkAPI) => {
     try {
         const response = await adminService.sendEmail(user)
@@ -144,6 +143,16 @@ export const sendEmail = createAsyncThunk('admin/email', async (user, thunkAPI) 
     }
 })
 
+export const sendConvocationEmail = createAsyncThunk('admin/convocationEmail', async (user, thunkAPI) => {
+    try {
+        const response = await adminService.sendConvocationEmail(user)
+        return response
+    } catch (error) {
+        // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+})
 
 export const adminSlice = createSlice({
     name: 'admin',
@@ -343,11 +352,27 @@ export const adminSlice = createSlice({
                 state.emailStatus.message = 'Erro ao enviar email!'
             }
             )
-
+            // convocar reunião
+            .addCase(sendConvocationEmail.pending, state => {
+                state.emailStatus.isLoading = true
+                state.emailStatus.isSuccess = false
+                state.emailStatus.isError = false
+                state.emailStatus.message = ''
+            })
+            .addCase(sendConvocationEmail.fulfilled, (state, action) => {
+                state.emailStatus.isSuccess = true
+                state.emailStatus.isLoading = false
+                state.emailStatus.isError = false
+                state.emailStatus.message = 'Email enviado com sucesso!'
+            })
+            .addCase(sendConvocationEmail.rejected, (state, action) => {
+                state.emailStatus.isError = true
+                state.emailStatus.isLoading = false
+                state.emailStatus.message = 'Erro ao enviar email!'
+            })
     }
-
 })
 
 
-export const { reset,resetEmailStatus } = adminSlice.actions
+export const { reset, resetEmailStatus } = adminSlice.actions
 export default adminSlice.reducer

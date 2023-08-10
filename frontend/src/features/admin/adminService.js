@@ -79,7 +79,7 @@ const alterAccess = async (accessData) => {
 
 // listar todos os usuários
 const listUsers = async (token) => {
-    
+
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -121,7 +121,7 @@ const disapproveUser = async ({ id, token }) => {
 
 // PARTE DO SECRETÁRIO
 
-const sendRelatory = async(relatoryData) => {
+const sendRelatory = async (relatoryData) => {
 
     const config = {
         headers: {
@@ -136,10 +136,15 @@ const sendRelatory = async(relatoryData) => {
 // EMAILS
 
 const sendEmail = async (emailData) => {
-
     const response = await axios.post('/api/email', emailData)
     return response.data
 }
+
+const sendConvocationEmail = async (emailData) => {
+    const response = await axios.post('/api/email/convocation', emailData)
+    return response.data  
+}
+
 
 const adminService = {
     getUserData,
@@ -151,7 +156,8 @@ const adminService = {
     aproveUser,
     sendRelatory,
     sendEmail,
-    disapproveUser
+    disapproveUser,
+    sendConvocationEmail
 }
 
 export default adminService

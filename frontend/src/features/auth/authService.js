@@ -76,6 +76,28 @@ const addProfilePhoto = async (userData) => {
     return response.data
 }
 
+// reiniciar aprovação
+const resetAprove = async ({ id, token }) => {
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+
+    const response = await axios.put(API_URL + 'reset/' + id, {}, config)
+
+    if (response.data) {
+        localStorage.setItem('user', JSON.stringify(response.data))
+        localStorage.removeItem('documents', JSON.stringify(response.data))
+
+    }
+
+    return response.data
+}
+
+
+
 // logout de usuário
 const logout = async () => {
     localStorage.removeItem('user')
@@ -90,6 +112,7 @@ const authService = {
     logout,
     updateUser,
     addProfilePhoto,
+    resetAprove
 }
 
 export default authService;

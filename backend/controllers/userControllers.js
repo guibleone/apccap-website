@@ -3,12 +3,9 @@ const User = require('../models/userModel.js')
 const Document = require('../models/userFilesModel.js')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-const path = require('path')
 const asyncHandler = require('express-async-handler')
-const { ref, getDownloadURL, uploadBytesResumable } = require("firebase/storage");
-const {storage} = require('../db/firebase.js')
-
-
+const { ref, getDownloadURL, uploadBytesResumable, deleteObject } = require("firebase/storage");
+const { storage } = require('../db/firebase.js')
 
 // registrar usuário
 const registerUser = asyncHandler(async (req, res) => {
@@ -18,7 +15,6 @@ const registerUser = asyncHandler(async (req, res) => {
         res.status(400)
         throw new Error('Preencha todos os campos')
     }
-
 
     // verificar se o cpf já existe
     const cpfExists = await User.findOne({ cpf })
@@ -58,7 +54,7 @@ const registerUser = asyncHandler(async (req, res) => {
             address: user.address,
             role: user.role,
             status: user.status,
-            selos : user.selos,
+            selos: user.selos,
             sequence_value: user.sequence_value,
             relatory: user.relatory,
             token: generateToken(user._id)
@@ -69,6 +65,7 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 
 })
+
 // adicionar foto de perfil
 const addProfilePhoto = asyncHandler(async (req, res) => {
 
@@ -82,7 +79,7 @@ const addProfilePhoto = asyncHandler(async (req, res) => {
     if (user) {
 
         const storageRef = ref(storage, `profilePhotos/${user._id}`)
- 
+
         const metadata = {
             contentType: req.file.mimetype,
         }
@@ -105,7 +102,7 @@ const addProfilePhoto = asyncHandler(async (req, res) => {
             address: updatedUser.address,
             role: updatedUser.role,
             status: user.status,
-            selos : user.selos,
+            selos: user.selos,
             sequence_value: user.sequence_value,
             relatory: user.relatory,
             token: generateToken(updatedUser._id)
@@ -117,7 +114,6 @@ const addProfilePhoto = asyncHandler(async (req, res) => {
     }
 
 })
-
 
 // login de usuário
 const loginUser = asyncHandler(async (req, res) => {
@@ -141,7 +137,7 @@ const loginUser = asyncHandler(async (req, res) => {
             address: user.address,
             role: user.role,
             status: user.status,
-            selos : user.selos,
+            selos: user.selos,
             sequence_value: user.sequence_value,
             relatory: user.relatory,
             token: generateToken(user._id)
@@ -189,7 +185,6 @@ const updateUser = asyncHandler(async (req, res) => {
         }
     }
 
-
     // verificar se o usuário existe
     if (user) {
         user.name = req.body.name || user.name
@@ -212,7 +207,7 @@ const updateUser = asyncHandler(async (req, res) => {
             address: updatedUser.address,
             role: updatedUser.role,
             status: user.status,
-            selos : user.selos,
+            selos: user.selos,
             sequence_value: user.sequence_value,
             relatory: user.relatory,
             token: generateToken(updatedUser._id)
@@ -224,6 +219,59 @@ const updateUser = asyncHandler(async (req, res) => {
 
 })
 
+// reiniciar aprovação
+
+const restartAprove = asyncHandler(async (req, res) => {
+    try {
+
+        const user = await User.findById(req.params.id)
+        const documents = await Document.find({ user: req.params.id })
+
+        if (!user) {
+            res.status(404)
+            throw new Error('Usuário não encontrado')
+        }
+
+        if (user.status === 'analise') {
+            res.status(400)
+            throw new Error('Usuário já está em análise')
+        }
+
+        user.status = 'analise'
+        user.relatory = ''
+
+        if (documents) {
+            documents.map(async (document) => {
+                const storageRef = ref(storage, `documents/${document.user}/${document.name}`)
+                await deleteObject(storageRef)
+            })
+        }
+
+        await Document.deleteMany({ user: req.params.id })
+
+        const updatedUser = await user.save()
+
+        res.status(200).json({
+            _id: updatedUser._id,
+            name: updatedUser.name,
+            cpf: updatedUser.cpf,
+            email: updatedUser.email,
+            pathFoto: updatedUser.pathFoto,
+            acessLevel: updatedUser.acessLevel,
+            address: updatedUser.address,
+            role: updatedUser.role,
+            status: user.status,
+            selos: user.selos,
+            sequence_value: user.sequence_value,
+            relatory: user.relatory,
+            token: generateToken(updatedUser._id)
+        })
+
+    } catch (error) {
+        res.status(400)
+        throw new Error('Erro ao reiniciar aprovação')
+    }
+})
 
 // gerar token
 const generateToken = (id) => {
@@ -232,7 +280,6 @@ const generateToken = (id) => {
     })
 }
 
-
 // exportar funções
 module.exports = {
     registerUser,
@@ -240,4 +287,5 @@ module.exports = {
     deleteUser,
     updateUser,
     addProfilePhoto,
+    restartAprove
 }

@@ -1,5 +1,5 @@
 const express = require('express')
-const { getUsers, registerUser, loginUser, deleteUser, updateUser, addProfilePhoto, addSelo, getSelos } = require('../controllers/userControllers.js')
+const { registerUser, loginUser, deleteUser, updateUser, addProfilePhoto, restartAprove  } = require('../controllers/userControllers.js')
 const { protect, hasRole } = require('../middlewares/authMiddleware.js')
 const { uploadProfilePhoto } = require('../middlewares/multer.js')
 
@@ -17,6 +17,9 @@ router.delete('/:id', deleteUser)
 
 // rotas PUT
 router.put('/:id', protect, updateUser)
+
+// Reinicar aprovação de usuário
+router.put('/reset/:id', hasRole('user'), restartAprove)
 
 
 // exporta o router

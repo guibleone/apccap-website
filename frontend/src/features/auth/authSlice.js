@@ -86,6 +86,20 @@ export const addProfilePhoto = createAsyncThunk('auth/addPhoto', async (user, th
     }
 })
 
+// reinicar aprovação
+
+export const resetAprove = createAsyncThunk('auth/reset', async (user, thunkAPI) => {
+    try{
+        const response = await authService.resetAprove(user)
+        return response
+    }catch(error){
+        // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
+
 
 // slice para funções de autnticação de usuário
 export const authSlice = createSlice({
@@ -161,8 +175,22 @@ export const authSlice = createSlice({
             // logout de usuário
             .addCase(logout.fulfilled, (state) => {
                 state.user = null
-            }
-            )
+            })
+            // resetar aprovação
+            .addCase(resetAprove.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(resetAprove.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isSuccess = true
+                state.user = action.payload
+            })
+            .addCase(resetAprove.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+            })
+
     }
 
 

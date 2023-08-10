@@ -221,6 +221,7 @@ const disapproveUser = asyncHandler(async (req, res) => {
     }
 })
 
+
 const getPayment = asyncHandler(async (req, res) => {
     let { amount, id } = req.body
 
@@ -283,5 +284,5 @@ module.exports = {
     aproveUser,
     getPayment,
     sendRelatory,
-    disapproveUser
+    disapproveUser,
 }
