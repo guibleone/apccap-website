@@ -41,6 +41,21 @@ const getOneSpread = expressAsyncHandler(async(req,res)=>{
     res.status(201).json(spreadSheet)
 })
 
+
+// editar planilha
+const editSpreadSheet = expressAsyncHandler(async(req,res)=>{
+    const spreadSheet = await SpreadSheet.findById(req.params.id)
+    if(!spreadSheet){
+        res.status(404)
+        throw new Error('Planilha não encontrada')
+    }
+    spreadSheet.title_spread = req.body.title_spread || spreadSheet.title_spread
+    spreadSheet.itens = req.body.itens || spreadSheet.itens
+
+    const updatedSpreadSheet = await spreadSheet.save()
+    res.status(201).json(updatedSpreadSheet)
+})
+
 // exclui planilha
 const deleteSpreadSheet = expressAsyncHandler(async(req,res)=>{
     const spreadSheet = await SpreadSheet.findById(req.params.id)
@@ -94,11 +109,31 @@ const addExcel = expressAsyncHandler(async(req,res)=>{
 
 })
 
+// deletar planilha Excel
+const deleteExcel = expressAsyncHandler(async(req,res)=>{
+
+    const spreadSheet = await SpreadSheet.findById(req.params.id)
+    const user = await User.findById(spreadSheet.user)
+
+    if(!spreadSheet){
+        res.status(404)
+        throw new Error('Planilha não encontrada')
+    }
+   
+    const storageRef = ref(storage, `planilha/${user.name}/${spreadSheet.title_spread}`)
+    await deleteObject(storageRef)
+
+    await spreadSheet.deleteOne()
+    res.status(200).json('Planilha excluida')
+})
+
 
 module.exports = {
     addSpreadSheet,
     getSpreadSheets,
     getOneSpread,
     deleteSpreadSheet,
-    addExcel
+    addExcel,
+    deleteExcel,
+    editSpreadSheet
 }

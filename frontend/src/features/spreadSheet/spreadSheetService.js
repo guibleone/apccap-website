@@ -66,12 +66,40 @@ const addExcel = async (data) => {
     return response.data
 }
 
+// deletar planilha excel
+const deleteExcel = async (data) => {
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${data.token}`,
+        },
+
+    };
+
+    const response = await axios.delete(API_URL + 'excel/' + data.id, config);
+    return response.data
+}
+
+// editar planilha
+const editSpreadSheet = async (data) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${data.token}`,
+        },
+    };
+
+    const response = await axios.put(API_URL + data.id, data.spreadsheet, config);
+    return response.data
+}
+
 const spreadSheetService = {
     getSpreadSheets,
     addSpreadSheet,
     getOneSpread,
     deleteSpreadSheet,
-    addExcel
+    addExcel,
+    deleteExcel,
+    editSpreadSheet
 }
 
 export default spreadSheetService

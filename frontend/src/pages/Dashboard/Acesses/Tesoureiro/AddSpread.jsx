@@ -119,6 +119,7 @@ export default function AddSpread() {
                 gap: '10px'
             }}>
                 <Typography variant='h4'>Adicionar Custos </Typography>
+                <Typography variant='h7'>Adicione os custos da Associação a uma planilha.</Typography>
 
                 <Box sx={{ display: 'flex', gap: '10px' }}>
                     <TextField onChange={onChange} value={title} name='title' placeholder='Título' />

@@ -21,6 +21,9 @@ const fileFilterDoc = (req, file, cb) => {
   if (
     file.mimetype === "application/pdf"
   ) {
+    file.originalname = Buffer.from(file.originalname, 'latin1').toString(
+      'utf8',
+    )
     cb(null, true);
   } else {
     cb(null, false);
@@ -48,6 +51,9 @@ const fileFilterExcel = (req, file, cb) => {
   if (
     file.mimetype === "text/csv"
   ) {
+    file.originalname = Buffer.from(file.originalname, 'latin1').toString(
+      'utf8',
+    )
     cb(null, true);
   } else {
     cb(null, false);
@@ -86,8 +92,6 @@ const uploadProduct = multer({
 // configura o tamanho máximo do arquivo (excel)
 const uploadExcel = multer({
   storage: multer.memoryStorage(),
-  defParamCharset: 'utf8',
-	defCharset: 'utf8',
   limits: {
     fileSize: 1024 * 1024 * 5,
   },

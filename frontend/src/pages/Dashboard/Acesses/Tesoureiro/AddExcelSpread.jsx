@@ -1,8 +1,10 @@
 import { Box, Button, Typography, CircularProgress } from '@mui/material'
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addExcel, resetExcel } from '../../../../features/spreadSheet/spreadSheetSlice'
+import { addExcel, deleteExcel, resetExcel } from '../../../../features/spreadSheet/spreadSheetSlice'
 import { toast } from 'react-toastify'
+import { AiOutlineDownload } from 'react-icons/ai'
+import { BiTrashAlt } from 'react-icons/bi'
 
 export default function AddExcelSpread() {
     const styleError = {
@@ -55,6 +57,16 @@ export default function AddExcelSpread() {
         dispatch(addExcel(excelData))
     }
 
+    // deletar planilha
+    const handleDelete = (id) => {
+
+        const data = {
+            id,
+            token: user.token
+        }
+
+        dispatch(deleteExcel(data))
+    }
 
     useEffect(() => {
         if (excel.isError) {
@@ -68,16 +80,31 @@ export default function AddExcelSpread() {
 
     }, [excel.isError, excel.isSuccess, excel.message])
 
+    if (excel.isLoading) {
+        return <Box sx={
+            {
+                display: 'flex',
+                justifyContent: 'center',
+            }
+        }>
+            <CircularProgress sx={
+                {
+                    marginBottom: '100px',
+                }
+            } size={100} />
+        </Box>
+    }
+
     return (
-        <Box>
-            <Typography variant='h4'>Planilhas Excel</Typography>
+        <Box sx={{ margin: '50px 0' }}>
+            <Typography variant='h5'>Upload Planilhas</Typography>
 
             <Box>
                 <form onSubmit={handleSubmit}>
                     <input onChange={onChange} type="file" ref={fileInputRef} />
                     <Button disabled={excel.isLoading ? true : false}
                         sx={{ margin: '10px 0' }} type="submit" variant="contained" color="primary">
-                        {excel.isLoading ? <CircularProgress color="success" size={24} /> : 'Adcionar'}
+                        Adicionar
                     </Button>
                 </form>
             </Box>
@@ -86,10 +113,13 @@ export default function AddExcelSpread() {
                 {spreadSheets && spreadSheets.map((spreadSheet) => (
                     <Box key={spreadSheet._id}>
                         {spreadSheet.pathExcel && (
-                            <>
+                            <Box>
                                 <Typography variant='h6'>{spreadSheet.title_spread}</Typography>
-                                <Button onClick={() => window.open(spreadSheet.pathExcel)} variant='outlined'>Baixar</Button>
-                            </>
+                                <Box sx={{ display: 'flex', gap: '5px' }}>
+                                    <Button onClick={() => window.open(spreadSheet.pathExcel)} color='success' variant='outlined'><AiOutlineDownload size={20} /></Button>
+                                    <Button onClick={() => handleDelete(spreadSheet._id)} color='error' variant='outlined'><BiTrashAlt size={20} /></Button>
+                                </Box>
+                            </Box>
                         )}
                     </Box>
                 ))}

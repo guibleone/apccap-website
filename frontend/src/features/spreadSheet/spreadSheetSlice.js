@@ -55,6 +55,7 @@ export const addSpreadSheet = createAsyncThunk('spreadSheet/add', async (spreadS
 export const deleteSpreadSheet = createAsyncThunk('spreadSheet/delete', async (spreadSheet, thunkAPI) => {
     try {
         const response = await spreadSheetService.deleteSpreadSheet(spreadSheet)
+        thunkAPI.dispatch(getSpreadSheets(spreadSheet))
         return response
     }
     catch (error) {
@@ -66,7 +67,6 @@ export const deleteSpreadSheet = createAsyncThunk('spreadSheet/delete', async (s
 // adicionar planilha Excel
 export const addExcel = createAsyncThunk('spreadSheet/addExcel', async (spreadSheet, thunkAPI) => {
     try {
-        console.log(spreadSheet)
         const response = await spreadSheetService.addExcel(spreadSheet)
         thunkAPI.dispatch(getSpreadSheets(spreadSheet))
         return response
@@ -76,6 +76,32 @@ export const addExcel = createAsyncThunk('spreadSheet/addExcel', async (spreadSh
         return thunkAPI.rejectWithValue(message);
     }
 })
+
+// deletar planilha Excel
+export const deleteExcel = createAsyncThunk('spreadSheet/deleteExcel', async (spreadSheet, thunkAPI) => {
+    try {
+        const response = await spreadSheetService.deleteExcel(spreadSheet)
+        thunkAPI.dispatch(getSpreadSheets(spreadSheet))
+        return response
+    }
+    catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message);
+    }
+})
+
+// editar planilha
+export const editSpreadSheet = createAsyncThunk('spreadSheet/edit', async (spreadSheet, thunkAPI) => {
+    try {
+        const response = await spreadSheetService.editSpreadSheet(spreadSheet)
+        return response
+    }
+    catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message);
+    }
+})
+
 
 // slice
 
@@ -104,7 +130,6 @@ const spreadSheetSlice = createSlice({
             })
             .addCase(getSpreadSheets.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.isSuccess = true;
                 state.spreadSheets = action.payload
             })
             .addCase(getSpreadSheets.rejected, (state, action) => {
@@ -118,7 +143,6 @@ const spreadSheetSlice = createSlice({
             }
             ).addCase(getOneSpread.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.isSuccess = true;
                 state.singleSpread = action.payload
             }
             ).addCase(getOneSpread.rejected, (state, action) => {
@@ -167,6 +191,35 @@ const spreadSheetSlice = createSlice({
                 state.excel.isLoading = false;
                 state.excel.isError = true;
                 state.excel.message = action.payload
+            })
+            // deletar planilha Excel
+            .addCase(deleteExcel.pending, (state, action) => {
+                state.excel.isLoading = true;
+            }
+            ).addCase(deleteExcel.fulfilled, (state, action) => {
+                state.excel.isLoading = false;
+                state.excel.isSuccess = true;
+                state.excel.message = action.payload
+            }
+            ).addCase(deleteExcel.rejected, (state, action) => {
+                state.excel.isLoading = false;
+                state.excel.isError = true;
+                state.excel.message = action.payload
+            })
+            // editar planilha
+            .addCase(editSpreadSheet.pending, (state, action) => {
+                state.isLoading = true;
+            }
+            ).addCase(editSpreadSheet.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.message = 'Planilha editada com sucesso'
+                state.singleSpread = action.payload
+            }
+            ).addCase(editSpreadSheet.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload
             })
     }
 })

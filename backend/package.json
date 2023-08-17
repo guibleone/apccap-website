@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "API for a website made for the coffee producers association",
+  "description": "API for a website made for the liquor producers association",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -27,6 +27,9 @@
     "resend": "^0.17.2",
     "stripe": "^12.16.0",
     "util": "^0.12.5"
+  },
+  "engines": {
+    "node": ">=14.20.1"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"

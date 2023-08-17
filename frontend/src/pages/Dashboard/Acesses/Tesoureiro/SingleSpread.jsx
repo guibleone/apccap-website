@@ -1,12 +1,10 @@
-import { Box, Button, Container, TextField, Typography, CircularProgress, Modal } from '@mui/material'
+import { Box, Button, Container, TextField, Typography, CircularProgress } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { getOneSpread, deleteSpreadSheet } from '../../../../features/spreadSheet/spreadSheetSlice'
-import { AiOutlineDelete, AiFillWarning } from 'react-icons/ai'
+import { getOneSpread, editSpreadSheet, resetSpreadSheet } from '../../../../features/spreadSheet/spreadSheetSlice'
 import { toast } from 'react-toastify'
-import { useNavigate } from 'react-router'
-import {RiArrowGoBackFill} from 'react-icons/ri'
+import { RiArrowGoBackFill } from 'react-icons/ri'
 
 export default function SingleSpread() {
     const styleSuccess = {
@@ -20,33 +18,81 @@ export default function SingleSpread() {
         theme: "colored",
     }
 
-    const style = {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 400,
-        bgcolor: 'background.paper',
-        border: '2px solid #000',
-        boxShadow: 24,
-        p: 4,
+    const styleError = {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
     }
 
     const { id } = useParams()
     const dispatch = useDispatch()
 
-    const navigate = useNavigate()
-
-    const { singleSpread, isLoading } = useSelector(state => state.spreadSheet)
+    const { singleSpread, isLoading, isSuccess, isError, message } = useSelector(state => state.spreadSheet)
     const { user } = useSelector(state => state.auth)
 
+    const [spreadsheet, setSpreadsheet] = useState({
+        itens: singleSpread ? singleSpread.itens.map(item => ({ ...item })) : []
+      });
+    
     const [isDisabled, setIsDisabled] = useState(true)
 
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const onChange = (e, index) => {
+
+        const { name, value } = e.target;
+
+        const updatedItem = { ...spreadsheet.itens[index], [name]: value };
+    
+        const updatedItens = [...spreadsheet.itens];
+        updatedItens[index] = updatedItem;
+    
+        setSpreadsheet({ ...spreadsheet, itens: updatedItens });
+
+    }
+
+    const onSubmit = (e) => {
+        e.preventDefault();
+    
+        const updatedItens = singleSpread.itens.map((item, index) => ({
+            ...item,
+            ...spreadsheet.itens[index],
+        }));
+
+        const updatedSpread = {
+            ...singleSpread, 
+            itens: updatedItens, 
+        };
+    
+        const data ={
+            token: user.token,
+            id,
+            spreadsheet: updatedSpread
+        }
+
+        dispatch(editSpreadSheet(data))
+        setIsDisabled(true)
+    
+    };
 
     useEffect(() => {
+        if (isError) {
+            toast.error(message, styleError)
+        }
+        if (isSuccess) {
+            toast.success(message, styleSuccess)
+        }
+
+        dispatch(resetSpreadSheet())
+
+    },[ isError, isSuccess, message])
+         
+
+    useEffect(() => {
+
         const data = {
             token: user.token,
             id
@@ -54,7 +100,7 @@ export default function SingleSpread() {
 
         dispatch(getOneSpread(data))
 
-    }, [])
+    }, [ dispatch, id, user.token])
 
 
     if (isLoading) {
@@ -76,63 +122,35 @@ export default function SingleSpread() {
 
     return (
         <Container sx={{ height: '100vh' }}>
-            <Box sx={{display:'flex', flexDirection:'column', gap:'20px'}}>
-                <Box sx={{display:'flex', gap:'5px'}}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                <Box sx={{ display: 'flex', gap: '5px' }}>
 
-                <Typography variant='h4'>{singleSpread && singleSpread.title_spread}</Typography>
-                <Button variant='outlined' href='/'><RiArrowGoBackFill size={20} /></Button>
-                <Button onClick={handleOpen} color='error' variant='outlined'><AiOutlineDelete size={20} /></Button>
+                    <Button variant='outlined' href='/'><RiArrowGoBackFill size={20} /></Button>
+                    <Typography variant='h4'>{singleSpread && singleSpread.title_spread}</Typography>
 
-                <Modal open={open}onClose={handleClose}>
-                    <Box sx={style}>
-                        <Box sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '10px'
-                        }}>
-                            <Box display={'flex'} justifyContent={'space-between'}>
-                                <Typography variant="h6" >Tem certeza ? </Typography>
-                                <AiFillWarning color='red' size={30} />
-                            </Box>
+                </Box>
 
-                            <Typography variant="h7" > Você não poderá reverter essa ação.</Typography>
-
-                            <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
-
-                                <Button color='error' variant='contained' onClick={handleClose}>Cancelar</Button>
-
-                                <Button
-                                    color="success"
-                                    variant='contained'
-                                    onClick={() => {
-                                        dispatch(deleteSpreadSheet({ token: user.token, id: singleSpread._id }))
-                                        toast.success('Planilha excluída com sucesso!', styleSuccess)
-                                        handleClose()
-                                        navigate('/')
-                                    }}
-                                >
-                                    Excluir
-                                </Button>
-                            </Box>
-                        </Box>
-                    </Box>
-                </Modal>
-            </Box>
-
-              <Typography variant='h7'>Confira os dados dessa planilha.</Typography>
+                <Typography variant='h7'>Confira os dados dessa planilha.</Typography>
 
             </Box>
 
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {singleSpread && singleSpread.itens.map((iten) => (
-                    <Box sx={{ display: 'flex', gap: '5px' }}>
-                        <TextField label='Título' name='title' disabled={isDisabled} value={iten.title} />
-                        <TextField fullWidth label='Descrição' name='description' disabled={isDisabled} value={iten.cost_description} />
-                        <TextField label='Valor' name='value' disabled={isDisabled} value={iten.cost} />
+                {singleSpread && singleSpread.itens.map((iten, index) => (
+                    <Box key={index} sx={{ display: 'flex', gap: '5px' }}>
+                        <TextField onChange={e => onChange(e, index)} name='title' disabled={isDisabled} defaultValue={iten.title} />
+                        <TextField onChange={e => onChange(e, index)} fullWidth name='cost_description' disabled={isDisabled} defaultValue={iten.cost_description} />
+                        <TextField onChange={e => onChange(e, index)} name='cost' disabled={isDisabled} defaultValue={iten.cost} />
 
                     </Box>
                 ))}
-                <Button variant='contained' onClick={() => setIsDisabled(!isDisabled)}>{!isDisabled ? 'Salvar' : 'Editar'}</Button>
+
+                {isDisabled ? (<>
+                    <Button onClick={() => setIsDisabled(false)} variant='outlined' color='info'>Editar</Button>
+
+                </>) : (
+                    <Button onClick={onSubmit} variant='outlined' color='info'>Salvar</Button>
+                )}
+
             </Box>
 
             <Box>
