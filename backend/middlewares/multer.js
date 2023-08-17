@@ -42,6 +42,19 @@ const fileFilterProduct = (req, file, cb) => {
   }
 };
 
+// configura o filtro (excel)
+const fileFilterExcel = (req, file, cb) => {
+  // rejeitar um arquivo se não for compatível com o excel
+  if (
+    file.mimetype === "text/csv"
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+    return new Error("Formato de arquivo inválido");
+  }}
+
+
 // configura o tamanho máximo do arquivo (foto de perfil)
 const uploadProfilePhoto = multer({
   storage: multer.memoryStorage(),
@@ -70,4 +83,16 @@ const uploadProduct = multer({
   fileFilter: fileFilterProduct,
 })
 
-module.exports = {uploadProfilePhoto, uploadDoc, uploadProduct};
+// configura o tamanho máximo do arquivo (excel)
+const uploadExcel = multer({
+  storage: multer.memoryStorage(),
+  defParamCharset: 'utf8',
+	defCharset: 'utf8',
+  limits: {
+    fileSize: 1024 * 1024 * 5,
+  },
+  fileFilter: fileFilterExcel,
+
+});
+
+module.exports = {uploadProfilePhoto, uploadDoc, uploadProduct, uploadExcel};

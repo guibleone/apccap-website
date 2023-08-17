@@ -8,7 +8,7 @@ import RegisterProduct from "../Products/RegisterProduct";
 import { trackProduct, clear } from "../../features/products/productsSlice";
 import UsersPagination from "../../components/Pagination/Users"
 import Secretary from "./Acesses/Secretary"
-import Tesoureiro from "./Acesses/Tesoureiro"
+import Tesoureiro from "./Acesses/Tesoureiro/Tesoureiro"
 import President from "./Acesses/President"
 
 function Dashboard() {

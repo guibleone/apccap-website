@@ -8,7 +8,7 @@ export default function Secretary() {
   return (
     <Container>
       <Box>
-        <Typography variant='h4'>Bem vindo de volta, Secretário</Typography>
+        <Typography variant='h4'>Bem vindo de volta, Secretário (a)</Typography>
       </Box>
 
       <Box>

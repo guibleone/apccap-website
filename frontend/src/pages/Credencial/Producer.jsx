@@ -57,16 +57,17 @@ function Producer() {
 
             <Box>
 
-                {user.status === 'analise' && <Documents />}
+                {(user.status === 'analise' || user.status === 'aprovado') && <Documents />}
 
                 {user.status === 'reprovado' &&
                     <Button
-                        disabled={!isLoading}
+                        disabled={isLoading}
                         onClick={() => dispatch(resetAprove({ id: user._id, token: user.token }))}
                         variant='contained'
                         fullWidth
                     >
-                        {isLoading ? <CircularProgress color="success" size={24} /> : 'Tentar Novamente'}
+                    {isLoading ? <CircularProgress color="success" size={24} /> : 'Tentar Novamente'}
+
                     </Button>}
 
             </Box>

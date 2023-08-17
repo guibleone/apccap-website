@@ -47,7 +47,7 @@ export default function President() {
   const handleSendEmail = () => {
     if (!message) return toast.error('Preencha a menssagem', styleError)
 
-    dispatch(sendConvocationEmail({ message, date: startDate.toLocaleString()}))
+    dispatch(sendConvocationEmail({ message, date: startDate.toLocaleString() }))
   }
 
   useEffect(() => {
@@ -100,15 +100,6 @@ export default function President() {
 
         <Box>
 
-          <DatePicker
-            selected={startDate}
-            onChange={(date) => setStartDate(date)}
-            showTimeSelect
-            dateFormat="Pp"
-            locale={ptBR}
-            customInput={<Button variant='outlined'>Data e Hora</Button>}
-          />
-
           <TextareaAutosize
             minRows={6}
             placeholder='Mensagem para convocação'
@@ -119,18 +110,27 @@ export default function President() {
             onChange={(e) => setMessage(e.target.value)}
           />
 
+          <DatePicker
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
+            showTimeSelect
+            dateFormat="Pp"
+            locale={ptBR}
+            customInput={<Button variant='contained'>Data e Hora</Button>}
+          />
+
           <Typography>Reunião: {startDate.toLocaleString()}</Typography>
 
         </Box>
 
         <Typography color={'red'} variant='h7'>Será enviado um email para todos membros da associação.</Typography>
 
-        <Button 
-        disabled={emailStatus.isLoading} 
-        onClick={handleSendEmail} 
-        fullWidth 
-        variant='contained' 
-        color='success'> {emailStatus.isLoading ? <CircularProgress color="success" size={24} /> : 'Enviar'}</Button>
+        <Button
+          disabled={emailStatus.isLoading}
+          onClick={handleSendEmail}
+          fullWidth
+          variant='contained'
+          color='success'> {emailStatus.isLoading ? <CircularProgress color="success" size={24} /> : 'Enviar'}</Button>
 
       </Box>
 

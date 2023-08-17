@@ -16,6 +16,7 @@ import SingleProduct from './pages/Products/SingleProduct';
 import Traceability from './pages/Traceability/Traceability';
 import Producer from './pages/Credencial/Producer';
 import SingleProducer from './pages/Traceability/SingleProducer';
+import SingleSpread from './pages/Dashboard/Acesses/Tesoureiro/SingleSpread';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           <Route path={`/rastreabilidade`} element={<Traceability />}/>
           <Route path={`/credencial-produtor`} element={<Producer />} />
           <Route path='/produtor/:id' element={<SingleProducer />} />
+          <Route path='/planilha/:id' element={<SingleSpread />} />
         </Routes> 
         <Footer />
       </Router>
