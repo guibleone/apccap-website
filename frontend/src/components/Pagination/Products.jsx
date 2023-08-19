@@ -20,7 +20,7 @@ export default function ProductsPagination({setProductsData}) {
         }
     }
 
-    const pageSize = 6
+    const pageSize = 3
 
     const [pagination, setPagination] = useState({
         count: 0,
@@ -34,7 +34,7 @@ export default function ProductsPagination({setProductsData}) {
 
             setProductsData(response.data)
         })
-    }, [pagination.from, pagination.to])
+    }, [pagination.from, pagination.to, productsData])
 
 
     const handlePageChange = (event, page) => {

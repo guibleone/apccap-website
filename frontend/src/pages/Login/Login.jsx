@@ -4,7 +4,9 @@ import { loginUser, reset } from '../../features/auth/authSlice'
 import { getResume } from '../../features/resume/resumeSlice'
 import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
-import { Button, Typography, Box, Container, CssBaseline, TextField, CircularProgress, Stack, Alert } from '@mui/material';
+import { Button, Typography, Box, Container, CssBaseline, TextField, CircularProgress, Avatar,Grid,Link  } from '@mui/material';
+import { AiFillUnlock } from 'react-icons/ai'
+
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -66,74 +68,76 @@ function Login() {
   }
 
 
-  if (isLoading) {
-    return <Box sx={
-      {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh'
-      }
-    }>
-      <CircularProgress sx={
-        {
-          margin: '100px',
-        }
-      } size={100} />
-    </Box>
-  }
-
   return (
-    <Container>
-      <CssBaseline />
-      <Box
-        sx={
-          {
-            display: 'flex',
-            justifyContent: 'center',
-            flexDirection: 'column',
-            alignItems: 'center',
-            height: '100vh',
-            textAlign: 'center',
-            marginBottom:'150px',
-            marginTop:'-100px'
-          }
-        }
-      >
+    <Container component="main" maxWidth="xs">
+    <CssBaseline />
+    <Box
+      sx={{
+        marginTop: 8,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        minHeight: '100vh'
+      }}
+    >
+      <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+        <AiFillUnlock />
+      </Avatar>
 
-        <Typography variant="h4" component="h1" gutterBottom>ENTRAR</Typography>
+      <Typography component="h1" variant="h5">
+        Entrar
+      </Typography>
 
-        <form onSubmit={onSubmit}>
+      <Box component="form" noValidate onSubmit={onSubmit} sx={{ mt: 3 }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} >
+            <TextField
+              required
+              fullWidth
+              id="cpf"
+              label="CPF"
+              name="cpf"
+              autoComplete="cpf" onChange={onChange} type="number" value={cpf}
+            />
+          </Grid>
 
-          <TextField sx={
-            {
-              width: '100%',
-              marginBottom: 2,
-            }
-          } label='CPF' variant='filled' onChange={onChange} type="number" id="cpf" name="cpf" value={cpf} />
+          <Grid item xs={12}>
+            <TextField
+              required
+              fullWidth
+              name="password"
+              label="Senha"
+              type="password"
+              id="password"
+              autoComplete="new-password"
+              onChange={onChange} value={password}
+            />
+          </Grid>
+   
+        </Grid>
 
-          <TextField sx={
-            {
-              width: '100%',
-              marginBottom: 2,
-            }
-          } label='Senha' variant='filled' onChange={onChange} type="password" id="password" name="password" value={password} />
+        <Button
+          disabled={isLoading}
+          type="submit"
+          fullWidth
+          variant="contained"
+          sx={{ mt: 3, mb: 2 }}
+        >
+          {isLoading ? <CircularProgress size={25} color="success" /> : 'Entrar'}
 
-          <Button sx={
-            {
-              width: '100%',
-              marginBottom: 2,
-            }
-          } variant="contained" type="submit">Entrar</Button>
-
-          <Typography variant="body2" gutterBottom>Não tem uma conta? <a href="/registrar">Cadastre-se</a></Typography>
-          
-        </form>
-
-
+        </Button>
+        <Grid container justifyContent="flex-end">
+          <Grid item>
+            <Link href="/registrar" variant="body2">
+              Não possui conta ? Cadastre-se
+            </Link>
+          </Grid>
+        </Grid>
       </Box>
+    </Box>
+  </Container>
 
-    </Container>
+  
   )
 }
 

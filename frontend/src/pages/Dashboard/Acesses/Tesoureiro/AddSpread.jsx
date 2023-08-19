@@ -5,26 +5,28 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addSpreadSheet } from '../../../../features/spreadSheet/spreadSheetSlice'
 
 export default function AddSpread() {
-    const styleError = {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-    }
 
-    const styleSuccess = {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
+    const toastStyles = {
+        styleSuccess: {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+        },
+        styleError: {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+        }
     }
 
     const style = {
@@ -80,7 +82,7 @@ export default function AddSpread() {
 
     const submitCost = (e) => {
 
-        if (!title || !cost_description || !cost) return toast.error('Preencha todos os campos', styleError)
+        if (!title || !cost_description || !cost) return toast.error('Preencha todos os campos', toastStyles.styleError)
 
         e.preventDefault()
 
@@ -96,8 +98,8 @@ export default function AddSpread() {
     const submitSpreadsheet = (e) => {
         e.preventDefault()
 
-        if (!spreadsheet.title_spread) return toast.error('Preencha o título da planilha', styleError)
-        if (costs.length === 0) return toast.error('Adicione pelo menos um item', styleError)
+        if (!spreadsheet.title_spread) return toast.error('Preencha o título da planilha', toastStyles.styleError)
+        if (costs.length === 0) return toast.error('Adicione pelo menos um item', toastStyles.styleError)
 
         const data = {
             token: user.token,
@@ -136,7 +138,7 @@ export default function AddSpread() {
                     <>
                         <Box key={index} sx={{
                             display: 'flex',
-                            justifyContent: 'space-between',
+                            justifyContent: 'space-around',
                             gap: '10px',
                             backgroundColor: '#f5f5f5',
                             padding: '10px',
@@ -145,13 +147,11 @@ export default function AddSpread() {
 
                         }}>
                             <Typography>{cost.title}</Typography>
-                            <Typography>{cost.cost_description}</Typography>
+                            <Typography width={500}>{cost.cost_description}</Typography>
                             <Typography>{cost.cost}</Typography>
 
-                        </Box>
-
-                        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                             <Button onClick={() => setCosts((prevState) => prevState.filter((cost, i) => i !== index))} variant='contained' color='error'>Excluir</Button>
+
                         </Box>
                     </>
                 ))}

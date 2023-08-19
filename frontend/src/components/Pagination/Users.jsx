@@ -4,6 +4,7 @@ import { useSelector } from "react-redux"
 
 
 export default function UsersPagination({ setUsersData }) {
+    
     const { users } = useSelector((state) => state.admin)
 
     const service = {
@@ -34,7 +35,7 @@ export default function UsersPagination({ setUsersData }) {
 
             setUsersData(response.data)
         })
-    }, [pagination.from, pagination.to])
+    }, [pagination.from, pagination.to, users])
 
     const handlePageChange = (event, page) => {
         const from = (page - 1) * pageSize

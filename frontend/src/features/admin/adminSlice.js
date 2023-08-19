@@ -159,8 +159,15 @@ export const adminSlice = createSlice({
     initialState,
     reducers: {
         reset: state => initialState,
+        resetStatus: state => {
+            state.message = ''
+            state.isSuccess = false
+            state.isError = false
+            state.isLoading = false
+        },  
         resetEmailStatus: state => {
             state.emailStatus = initialState.emailStatus
+            state.isSuccess = false
         }
     },
     extraReducers: (builder) => {
@@ -170,7 +177,6 @@ export const adminSlice = createSlice({
                 state.isLoading = true
             })
             .addCase(getUserData.fulfilled, (state, action) => {
-                state.isSuccess = true
                 state.isLoading = false
                 state.isError = false
                 state.userData = action.payload
@@ -224,8 +230,7 @@ export const adminSlice = createSlice({
                 state.isSuccess = true
                 state.isLoading = false
                 state.isError = false
-                state.users.splice(state.users.indexOf(action.payload), 1)
-                state.users = state.users.filter(user => user._id !== action.payload.id);
+                state.message = action.payload
             }
             )
             .addCase(deleteUser.rejected, (state, action) => {
@@ -261,7 +266,6 @@ export const adminSlice = createSlice({
             }
             )
             .addCase(listUsers.fulfilled, (state, action) => {
-                state.isSuccess = true
                 state.isLoading = false
                 state.isError = false
                 state.users = action.payload
@@ -374,5 +378,5 @@ export const adminSlice = createSlice({
 })
 
 
-export const { reset, resetEmailStatus } = adminSlice.actions
+export const { reset, resetEmailStatus, resetStatus } = adminSlice.actions
 export default adminSlice.reducer

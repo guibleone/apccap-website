@@ -4,8 +4,30 @@ import { useSelector, useDispatch } from 'react-redux'
 import { getProducts, deleteProduct, addProduct, getSelos, clear } from '../../features/products/productsSlice'
 import Selo from '../../components/Stripe/Selo'
 import ProductsPagination from '../../components/Pagination/Products'
+import { toast } from 'react-toastify'
 
 function RegisterProduct() {
+  const styleError = {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "colored",
+  }
+
+  const styleSuccess = {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "colored",
+  }
 
   const dispatch = useDispatch()
 
@@ -26,7 +48,7 @@ function RegisterProduct() {
 
   useEffect(() => {
     dispatch(getProducts())
-  }, [ ])
+  }, [])
 
 
   useEffect(() => {
@@ -40,6 +62,18 @@ function RegisterProduct() {
 
   }, [dispatch, user._id, user.token])
 
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success(message, styleSuccess)
+    }
+
+    if (isError) {
+      toast.error(message, styleError)
+    }
+
+    dispatch(clear())
+
+  }, [isSuccess, isError, message])
 
 
   const onChange = (e) => {
@@ -138,7 +172,7 @@ function RegisterProduct() {
         <Divider sx={{ margin: '20px 0' }} />
 
 
-        
+
         {productsData.length === 0 ?
 
           (<Typography variant="h4" component="h1" gutterBottom>Nenhum produto cadastrado</Typography>)
@@ -164,19 +198,19 @@ function RegisterProduct() {
                 } key={product._id}>
                   <Typography sx={{ textAlign: 'center' }} variant="h5" component="h1">{product.name}</Typography>
                   <Button variant='outlined' color='success' href={`/produto/${product._id}`}>Editar</Button>
-                  <Button variant='outlined' color='error' onClick={() => dispatch(deleteProduct({id:product._id}))} >Excluir</Button>
+                  <Button variant='outlined' color='error' onClick={() => dispatch(deleteProduct({ id: product._id }))} >Excluir</Button>
                 </Box>
               ))}
 
-             
+
 
             </Box>
-          )}     
+          )}
 
-        <ProductsPagination setProductsData={(p) => setProductsData(p) } />
-    
+        <ProductsPagination setProductsData={(p) => setProductsData(p)} />
+
         <Divider sx={{ margin: '20px 0' }} />
-     
+
         <Selo />
 
         {(isError && !isSuccessSelos) && <Alert sx={{ margin: '10px 0' }} severity="error">{message}</Alert>}

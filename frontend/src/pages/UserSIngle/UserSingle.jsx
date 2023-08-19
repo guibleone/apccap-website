@@ -214,8 +214,8 @@ function UserSingle() {
 
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '15px', margin: '15px 0' }}>
 
-                {(isSuccess && userData.status === 'aprovado' && !isError)
-                    ? <Alert severity="success">{message ? message : 'Usuário credenciado.'}</Alert>
+                {(userData.status === 'aprovado' && !isError)
+                    ? <Alert severity="success">Usuário credenciado</Alert>
                     : <Alert severity="error">Usuário aguardando aprovação.</Alert>
                 }
 

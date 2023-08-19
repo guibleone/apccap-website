@@ -1,6 +1,7 @@
 import { Box, Container, Typography, Button } from '@mui/material'
 import UsersPagination from '../../../components/Pagination/Users'
 import { useState } from 'react'
+
 export default function Secretary() {
 
   const [users, setUsers] = useState([])

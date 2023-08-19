@@ -27,7 +27,7 @@ const addSpreadSheet = expressAsyncHandler(async (req, res) => {
 
 // pegar todas planilhas
 const getSpreadSheets = expressAsyncHandler(async (req, res) => {
-    const spreadSheets = await SpreadSheet.find({}).populate('user', 'name')
+    const spreadSheets = await SpreadSheet.find({user: req.user._id})
     res.json(spreadSheets)
 })
 
@@ -63,6 +63,7 @@ const deleteSpreadSheet = expressAsyncHandler(async(req,res)=>{
         res.status(404)
         throw new Error('Planilha não encontrada')
     }
+    
     await spreadSheet.deleteOne()
     res.status(200).json({message: 'Planilha excluida'})
 })

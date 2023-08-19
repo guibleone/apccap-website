@@ -179,7 +179,6 @@ const productsSlice = createSlice({
                 state.isLoading = true
             })
             .addCase(getProducts.fulfilled, (state, action) => {
-                state.isSuccess = true
                 state.isLoading = false
                 state.isError = false
                 state.productsData = action.payload
@@ -195,7 +194,6 @@ const productsSlice = createSlice({
                 state.isLoading = true
             })
             .addCase(getSingleProduct.fulfilled, (state, action) => {
-                state.isSuccess = true
                 state.isLoading = false
                 state.isError = false
                 state.productData = action.payload
@@ -215,6 +213,7 @@ const productsSlice = createSlice({
                 state.isSuccess = true
                 state.isLoading = false
                 state.isError = false
+                state.message = 'Produto adicionado com sucesso'
                 state.productsData = [...state.productsData, action.payload]
                 state.selos = state.selos.filter(selo => selo !== action.payload.selo);
             })
@@ -222,7 +221,6 @@ const productsSlice = createSlice({
                 state.isSuccess = false
                 state.isLoading = false
                 state.isError = true
-                state.isSuccessSelos = false
                 state.message = action.payload
             })
             // deletar produto
@@ -239,8 +237,7 @@ const productsSlice = createSlice({
                 state.isSuccess = true;
                 state.isLoading = false;
                 state.isError = false;
-                state.productsData.splice(state.productsData.indexOf(action.payload), 1)
-                state.productsData = state.productsData.filter(product => product.id !== action.payload.id);            
+                state.message = action.payload;           
             })
             // atualizar produto
             .addCase(updateProduct.pending, state => {
@@ -342,7 +339,6 @@ const productsSlice = createSlice({
             })
             .addCase(getSelos.fulfilled, (state, action) => {
                 state.pending = false;
-                state.isSuccess = true;
                 state.selos = action.payload;
             })
             .addCase(getSelos.rejected, (state, action) => {

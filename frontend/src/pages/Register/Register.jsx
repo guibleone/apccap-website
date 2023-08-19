@@ -4,7 +4,11 @@ import { reset, registerUser } from '../../features/auth/authSlice'
 import { getResume, resetResume } from '../../features/resume/resumeSlice'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { Button, Typography, Box, Container, CssBaseline, TextField, CircularProgress } from '@mui/material';
+import {
+  Button, Typography, Box, Container, CssBaseline, TextField, CircularProgress,
+  Avatar, FormControlLabel, Checkbox, Grid, Link, LockOutlinedIcon
+} from '@mui/material';
+import { AiFillLock } from 'react-icons/ai'
 
 
 function Register() {
@@ -110,82 +114,99 @@ function Register() {
     </Box>
   }
   return (
-    <Container>
+    <Container component="main" maxWidth="xs">
       <CssBaseline />
-
-      <Box sx={
-        {
+      <Box
+        sx={{
+          marginTop: 8,
           display: 'flex',
-          justifyContent: 'center',
           flexDirection: 'column',
           alignItems: 'center',
-          height: '100vh',
-          textAlign: 'center',
-          marginBottom:'150px',
-          marginTop:'-85px'
-        }
-      } >
+          minHeight: '100vh'
+        }}
+      >
+        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <AiFillLock />
+        </Avatar>
 
-        <Typography variant="h4" component="h1" gutterBottom>CADASTRO</Typography>
+        <Typography component="h1" variant="h5">
+          Registrar
+        </Typography>
 
-        <form onSubmit={onSubmit}>
+        <Box component="form" noValidate onSubmit={onSubmit} sx={{ mt: 3 }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="name"
+                required
+                fullWidth
+                label="Nome Completo"
+                autoFocus
+                onChange={onChange} type="text" id="name" name="name" value={name}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                required
+                fullWidth
+                id="cpf"
+                label="CPF"
+                name="cpf"
+                autoComplete="cpf" onChange={onChange} type="number" value={cpf}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="email"
+                label="Email"
+                name="email"
+                onChange={onChange} type='email' value={email}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                name="password"
+                label="Senha"
+                type="password"
+                id="password"
+                autoComplete="new-password"
+                onChange={onChange} value={password}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                label="Confirmar Senha"
+                autoComplete="new-password"
+                onChange={onChange} type="password" id="password2" name="password2" value={password2}
+              />
+            </Grid>
+          </Grid>
+          <Button
+            disabled={isLoading}
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            {isLoading ? <CircularProgress size={25} color="success" /> : 'Cadastrar'}
 
-          <TextField sx={
-            {
-              width: '100%',
-              marginBottom: 2,
-            }
-          } label='Nome' variant='filled' onChange={onChange} type="text" id="name" name="name" value={name} />
-
-
-          <TextField sx={
-            {
-              width: '100%',
-              marginBottom: 2,
-            }
-          } label='CPF' variant='filled' onChange={onChange} type="number" id="cpf" name="cpf" value={cpf}>
-
-          </TextField>
-
-          <TextField sx={
-            {
-              width: '100%',
-              marginBottom: 2,
-            }
-          } label='Email' variant='filled' onChange={onChange} type="email" id="email" name="email" value={email} />
-
-
-
-          <TextField sx={
-            {
-              width: '100%',
-              marginBottom: 2,
-            }
-          } label='Senha' variant='filled' onChange={onChange} type="password" id="password" name="password" value={password} />
-
-
-
-          <TextField sx={
-            {
-              width: '100%',
-              marginBottom: 2,
-            }
-          } label='Confirme sua senha' variant='filled' onChange={onChange} type="password" id="password2" name="password2" value={password2} />
-
-          <Button sx={
-            {
-              width: '100%',
-              marginBottom: 2,
-            }
-          } variant="contained" type="submit">Cadastrar</Button>
-
-          <Typography textAlign={'center'} variant="body2" gutterBottom>Já possui cadastro ? <a href="/entrar">Entre</a></Typography>
-
-        </form>
-
+          </Button>
+          <Grid container justifyContent="flex-end">
+            <Grid item>
+              <Link href="/entrar" variant="body2">
+                Já tem uma conta ? Entre
+              </Link>
+            </Grid>
+          </Grid>
+        </Box>
       </Box>
     </Container>
-
   )
 }
 

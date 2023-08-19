@@ -2,6 +2,7 @@ const User = require('../models/userModel')
 const Document = require('../models/userFilesModel')
 const Resume = require('../models/userResumeModel')
 const Products = require('../models/productModel')
+const SpreadSheet = require('../models/spreadSheetModel')
 const asyncHandler = require('express-async-handler')
 const fs = require('fs')
 const { promisify } = require('util')
@@ -94,6 +95,7 @@ const deleteUser = asyncHandler(async (req, res) => {
         const user = await User.findById(req.params.id)
         const documents = await Document.find({ user: req.params.id })
         const products = await Products.find({ producer: req.params.id })
+        const spreadSheets = await SpreadSheet.find({ user: req.params.id })
 
         if (!user) {
             res.status(404)
@@ -112,6 +114,12 @@ const deleteUser = asyncHandler(async (req, res) => {
             })
         }
 
+        if (spreadSheets) {
+            spreadSheets.map(async (spreadSheet) => {
+                const storageRef = ref(storage, `planilha/${user.name}/${spreadSheet.title_spread}`)
+                await deleteObject(storageRef)
+        })}
+
         if (user.role === 'produtor') {
             if (products) {
                 products.map(async (product) => {
@@ -126,8 +134,9 @@ const deleteUser = asyncHandler(async (req, res) => {
         await User.findByIdAndDelete(req.params.id)
         await Document.deleteMany({ user: req.params.id })
         await Resume.deleteMany({ user: req.params.id })
+        await SpreadSheet.deleteMany({ user: req.params.id })
 
-        res.status(200).json({ id: req.params.id })
+        res.status(200).json('Usuário deletado com sucesso')
 
     } catch (error) {
         res.status(400)

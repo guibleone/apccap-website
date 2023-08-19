@@ -176,12 +176,11 @@ const trackProduct = asyncHandler(async (req, res) => {
 // deletar produtos
 const deleteProduct = asyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.id)
-    console.log(req.body)
 
     if (product) {
         await product.deleteOne()
 
-        res.json({ id: product._id })
+        res.json('Produto deletado com sucesso')
     } else {
         res.status(404)
         throw new Error('Produto não encontrado')
