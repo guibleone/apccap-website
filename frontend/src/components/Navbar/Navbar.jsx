@@ -1,10 +1,9 @@
 import { useNavigate } from "react-router-dom"
 import { logout, reset } from '../../features/auth/authSlice'
 import { useDispatch, useSelector } from 'react-redux'
-import './Styles.css'
 import { resetResume } from "../../features/resume/resumeSlice"
 import { resetDocuments } from "../../features/documents/documentsSlice"
-import { Button, Link, Container, Box, Typography, CssBaseline, Avatar } from '@mui/material'
+import { Button, Link, Container, Box, Typography, CssBaseline, Avatar, Grid } from '@mui/material'
 import { useMediaQuery } from "@mui/material"
 import NavMenu from "./NavMenu"
 
@@ -27,52 +26,49 @@ function Navbar() {
   const matches = useMediaQuery('(max-width:800px)')
 
 
-  if(matches) 
-  {
+  if (matches) {
 
-    return(
-    
-        <Box sx={
-          {
-            display: 'flex',
-            justifyContent: 'space-around',
-            padding: '10px',
-          }
+    return (
 
-        }>
+      <Box sx={
+        {
+          display: 'flex',
+          justifyContent: 'space-around',
+          padding: '10px',
+        }
 
-          <NavMenu />
+      }>
 
-        </Box>
+        <NavMenu />
 
-
+      </Box>
     )
 
   }
 
 
+  const linkStyle = {
+    color: 'inherit',
+    '&:hover': {
+      color: '#ff0000',
+    },
+    textDecoration: 'none',
+  }
+
   return (
-    
-    <Container>
 
-      <CssBaseline />
+    <Box sx={{
+      backgroundColor: '#ffffff',
+    }}>
 
-      <Box sx={
-        {
-          display: 'flex',
-          alignItems: 'center',
-          textAlign: 'center',
-          justifyContent: 'space-around',
-          padding: '10px',
-        }
-      }>
+      <Container maxWidth='lg' sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: '10px',
+      }}>
 
-        <Link sx={
-          {
-            color: 'inherit',
-            textDecoration: 'none',
-          }
-        } href="/"><Typography variant="h4" component="div" >Apccap</Typography></Link>
+       <Link href="/"><img width='100px' src={require('../../imgs/logo-apccap.png')} alt="Logo" /></Link>
 
         <Box sx={
           {
@@ -91,17 +87,16 @@ function Navbar() {
             {
               color: 'inherit',
               textDecoration: 'none',
-
             }
-          } href="/">Festival da Cachaça</Link>
-          
+          } href="/festival-cachaca">Festival da Cachaça</Link>
+
           <Link sx={
             {
               color: 'inherit',
               textDecoration: 'none',
 
             }
-          } href="/">Quem Somos</Link>
+          } href="/quem-somos">Quem Somos</Link>
           <Link sx={
             {
               color: 'inherit',
@@ -110,7 +105,6 @@ function Navbar() {
             }
           } href="/blog">Blog</Link>
         </Box>
-
         {!user ?
           (
             <Box sx={
@@ -156,7 +150,7 @@ function Navbar() {
 
                   <Avatar src={user.pathFoto ? user.pathFoto : 'https://placehold.co/600x400'} alt="Foto de Perfil"
                     sx={{ width: 36, height: 36 }} />
-                    
+
                 </Link>
                 <Button variant="outlined" color="error" sx={
                   {
@@ -171,8 +165,9 @@ function Navbar() {
             </Box>
           )
         }
-      </Box>
-    </Container>
+      </Container>
+
+    </Box>
 
   )
 }

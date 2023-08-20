@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const API_URL = '/api/users/'
+//const API_URL = 'https://apccap-api.onrender.com/api/users/'
 
 // registrar usuário
 const registerUser = async (userData) => {

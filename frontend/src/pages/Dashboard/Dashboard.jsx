@@ -17,6 +17,7 @@ function Dashboard() {
   const { user } = useSelector((state) => state.auth)
 
   const { isLoading } = useSelector((state) => state.admin)
+  const { isLoading: productLoading } = useSelector((state) => state.products)
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -74,7 +75,7 @@ function Dashboard() {
   }
 
   return (
-    <Container sx={{minHeight:'100vh'}}> 
+    <Container sx={{ minHeight: '100vh' }}>
       <CssBaseline />
 
       {(!user || user.role === 'user') ? (
@@ -89,7 +90,9 @@ function Dashboard() {
 
           <Typography variant="h4" component="h1" gutterBottom>Rastreie produtos oficiais</Typography>
           <TextField type="number" placeholder="Digite o selo do produto" value={selo} onChange={(e) => setSelo(e.target.value)} />
-          <Button onClick={onTrack} variant="contained" color="success">Rastrear</Button>
+          <Button disabled={productLoading} onClick={onTrack} variant="contained" color="success">
+            {productLoading ? <CircularProgress size={25} color="success" /> : 'Rastrar'}
+            </Button>
 
         </Box>
 
@@ -105,7 +108,7 @@ function Dashboard() {
           )}
 
           {(user.role === 'secretario') && (
-            <Secretary  />
+            <Secretary />
           )}
 
           {(user.role === 'tesoureiro') && (

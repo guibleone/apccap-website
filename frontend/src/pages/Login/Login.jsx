@@ -16,7 +16,7 @@ function Login() {
 
   const { cpf, password } = formData
 
-  const { user, isError, isLoading, isSuccess, message } = useSelector((state) => state.auth)
+  const { user, isError, isLoading, isSuccess, message, pending } = useSelector((state) => state.auth)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -117,13 +117,13 @@ function Login() {
         </Grid>
 
         <Button
-          disabled={isLoading}
+          disabled={pending}
           type="submit"
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
         >
-          {isLoading ? <CircularProgress size={25} color="success" /> : 'Entrar'}
+          {pending ? <CircularProgress size={25} color="success" /> : 'Entrar'}
 
         </Button>
         <Grid container justifyContent="flex-end">

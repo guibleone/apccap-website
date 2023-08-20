@@ -68,19 +68,22 @@ function NavMenu() {
             <CssBaseline />
             <AppBar sx={
                 {
-                    backgroundColor: '#000000',
+                    backgroundColor: '#66C8C7',
 
                 }
             } position="fixed" open={open}>
                 <Toolbar>
+
                     <Link sx={
                         {
                             color: 'inherit',
                             textDecoration: 'none',
                             flexGrow: 1,
-                            fontSize: '1.5rem',
+                            fontSize: '1.3rem',
+                            fontWeight: 'bold',
+                           
                         }
-                    } href='/'>Apccap</Link>
+                    } href="/">APCCAP</Link>
 
 
                     <IconButton
@@ -149,7 +152,7 @@ function NavMenu() {
                                 textDecoration: 'none',
 
                             }
-                        } href="/">Festival da Cachaça</Link>
+                        } href="/festival-cachaca">Festival da Cachaça</Link>
                     </ListItem>
 
                     <Divider />
@@ -164,7 +167,7 @@ function NavMenu() {
                                 textDecoration: 'none',
 
                             }
-                        } href="/">Quem Somos</Link>
+                        } href="/quem-somos">Quem Somos</Link>
                     </ListItem>
 
                     <ListItem >

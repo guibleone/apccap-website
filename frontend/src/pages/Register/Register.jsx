@@ -24,7 +24,7 @@ function Register() {
   const resume = useSelector((state) => state.resume.resume)
   const { name, cpf, email, password, password2 } = formData
 
-  const { user, isError, isLoading, isSuccess, message } = useSelector((state) => state.auth)
+  const { user, isError, isLoading, isSuccess, message,pending } = useSelector((state) => state.auth)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -188,13 +188,13 @@ function Register() {
             </Grid>
           </Grid>
           <Button
-            disabled={isLoading}
+            disabled={pending}
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            {isLoading ? <CircularProgress size={25} color="success" /> : 'Cadastrar'}
+            {pending ? <CircularProgress size={25} color="success" /> : 'Cadastrar'}
 
           </Button>
           <Grid container justifyContent="flex-end">

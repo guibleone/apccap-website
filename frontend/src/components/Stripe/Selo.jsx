@@ -6,6 +6,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addSelo } from '../../features/products/productsSlice'
 
 export default function Selo() {
+
+    const API_URL = 'https://apccap-api.onrender.com/api/payment/comprar-selos'
+
     const [quantity, setQuantity] = useState('')
     const dispatch = useDispatch()
 
@@ -20,7 +23,7 @@ export default function Selo() {
         }
 
         try {
-            const response = await axios.post('http://localhost:3001/api/payment/comprar-selos', {
+            const response = await axios.post(API_URL, {
                 quantity
             })
             if (response.data) {

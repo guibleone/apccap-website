@@ -8,7 +8,7 @@ import Navbar from './components/Navbar/Navbar.jsx';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Informations from './pages/MyPerfil/Informations';
-import UserSingle from './pages/UserSIngle/UserSingle';
+
 import Footer from './components/Footer/Footer';
 import Blog from './pages/Blog/Blog';
 import RegisterProduct from './pages/Products/RegisterProduct';
@@ -17,6 +17,9 @@ import Traceability from './pages/Traceability/Traceability';
 import Producer from './pages/Credencial/Producer';
 import SingleProducer from './pages/Traceability/SingleProducer';
 import SingleSpread from './pages/Dashboard/Acesses/Tesoureiro/SingleSpread';
+import UserSingle from './pages/UserSingle/UserSingle';
+import Festival from './pages/Festival/Festival';
+import QuemSomos from './pages/QuemSomos/QuemSomos';
 
 function App() {
   return (
@@ -36,6 +39,9 @@ function App() {
           <Route path={`/credencial-produtor`} element={<Producer />} />
           <Route path='/produtor/:id' element={<SingleProducer />} />
           <Route path='/planilha/:id' element={<SingleSpread />} />
+          <Route path='/festival-cachaca' element={<Festival />} />
+          <Route path='/quem-somos' element={<QuemSomos />} />
+          <Route path='*' element={<h1>Not Found 404</h1>} />
         </Routes> 
         <Footer />
       </Router>
