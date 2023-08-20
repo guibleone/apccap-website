@@ -5,9 +5,10 @@ import {
     CssBaseline, Drawer, Divider, Link, List, ListItem, ListItemIcon, ListItemText, Button, Avatar
 } from '@mui/material';
 import {
-    TbMenu2, TbArrowNarrowLeft, TbArrowNarrowRight, TbCoffee,
+    TbMenu2, TbArrowNarrowLeft, TbArrowNarrowRight, 
     TbSearch, TbHome2, TbUsers, TbNews
 } from "react-icons/tb";
+import { MdLiquor } from "react-icons/md";
 
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'
@@ -140,7 +141,7 @@ function NavMenu() {
 
                     <ListItem >
                         <ListItemIcon>
-                            <TbCoffee />
+                            <MdLiquor />
                         </ListItemIcon>
                         <Link sx={
                             {
@@ -148,7 +149,7 @@ function NavMenu() {
                                 textDecoration: 'none',
 
                             }
-                        } href="/">Festival do Café</Link>
+                        } href="/">Festival da Cachaça</Link>
                     </ListItem>
 
                     <Divider />

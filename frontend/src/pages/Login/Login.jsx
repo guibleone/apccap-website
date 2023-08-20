@@ -80,7 +80,7 @@ function Login() {
         minHeight: '100vh'
       }}
     >
-      <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+      <Avatar sx={{ m: 1, bgcolor: 'green' }}>
         <AiFillUnlock />
       </Avatar>
 

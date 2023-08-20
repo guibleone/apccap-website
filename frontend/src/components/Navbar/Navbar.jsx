@@ -93,7 +93,7 @@ function Navbar() {
               textDecoration: 'none',
 
             }
-          } href="/">Festival do Café</Link>
+          } href="/">Festival da Cachaça</Link>
           
           <Link sx={
             {
