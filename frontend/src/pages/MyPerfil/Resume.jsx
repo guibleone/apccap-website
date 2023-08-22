@@ -106,15 +106,16 @@ function Resume() {
       <Typography sx={
         {
           marginBottom: '20px',
+          textAlign:'center'
 
         }} variant='h5' >Resumo</Typography>
 
       <TextareaAutosize minRows={4} onChange={onChange} name="body" id="body" defaultValue={body} />
 
       {resume ?
-          <Button sx={{ padding: "10px" }} variant="contained" onClick={handleUpdate} disabled={isLoading} color="primary">{isLoading ? <CircularProgress color="success" /> : 'Atualizar'}</Button>
+          <Button variant="contained" onClick={handleUpdate} disabled={isLoading} color="primary">{isLoading ? <CircularProgress color="success" /> : 'Atualizar'}</Button>
 
-        : <Button sx={{ padding: "10px" }} variant="contained" onClick={submitResume} disabled={isLoading} color="primary">{isLoading ? <CircularProgress color="success" /> : 'Criar'}</Button>}
+        : <Button variant="contained" onClick={submitResume} disabled={isLoading} color="primary">{isLoading ? <CircularProgress color="success" /> : 'Criar'}</Button>}
 
 
     </Box>

@@ -73,9 +73,10 @@ export const getSingleProduct = createAsyncThunk('products/singleProduct', async
 })
 
 // atualizar produto
-export const updateProduct = createAsyncThunk('products/updateProduct', async (product, thunkAPI) => {
+export const updateProduct = createAsyncThunk('products/updateProduct', async ({inputData, userData}, thunkAPI) => {
     try {
-        const response = await productsService.updateProduct(product)
+        const response = await productsService.updateProduct(inputData)
+        thunkAPI.dispatch(getSelos(userData)) // salva vidas // dispatch para atualizar a lista de produtos
         return response
     } catch (error) {
         // caso ocorra algum erro
@@ -170,7 +171,7 @@ const productsSlice = createSlice({
             state.isSuccess = false
             state.isLoading = false
         },
-        
+
     },
     extraReducers: (builder) => {
         builder
@@ -237,7 +238,7 @@ const productsSlice = createSlice({
                 state.isSuccess = true;
                 state.isLoading = false;
                 state.isError = false;
-                state.message = action.payload;           
+                state.message = action.payload;
             })
             // atualizar produto
             .addCase(updateProduct.pending, state => {
@@ -336,6 +337,8 @@ const productsSlice = createSlice({
             // pegar selos
             .addCase(getSelos.pending, (state) => {
                 state.pending = true;
+                state.isError = false;
+                state.isSuccess = false;
             })
             .addCase(getSelos.fulfilled, (state, action) => {
                 state.pending = false;
@@ -353,7 +356,7 @@ const productsSlice = createSlice({
             )
             .addCase(addSelo.fulfilled, (state, action) => {
                 state.pending = false;
-                state.isSuccessSelos = true;         
+                state.isSuccessSelos = true;
                 action.payload.reduce((result, selo) => result.concat(selo), [])
                 state.selos = [...state.selos, ...action.payload]
             }

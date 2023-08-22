@@ -39,7 +39,8 @@ const userSchema = new mongoose.Schema({
         default: 'analise',
     },
     selos: {
-        type: Array,
+        type: Number,
+        default: 0
     },
     sequence_value: { type: Number },
     relatory: { 

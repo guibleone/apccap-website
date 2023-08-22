@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { Container, Box, Typography, Avatar, CircularProgress, Divider, Button } from '@mui/material'
+import { Container, Box, Typography, Avatar, CircularProgress, useMediaQuery, Button } from '@mui/material'
 import { useEffect } from 'react'
 import { getProducer, getProducerResume } from '../../features/products/productsSlice'
 import Email from '../../components/Email/Email'
@@ -11,6 +11,26 @@ function SingleProducer() {
     const { producer, isLoading, producerResume } = useSelector(state => state.products)
 
     const dispatch = useDispatch()
+
+
+    const matches = useMediaQuery('(max-width:600px)');
+
+    const styleBox = matches ? {
+        display: 'flex',
+        gap: '10px',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        alignItems: 'center',
+        textAlign: 'center'
+
+    } : {
+        display: 'flex',
+        gap: '10px',
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        alignItems: 'center',
+    }
+
 
     useEffect(() => {
         dispatch(getProducer(id))
@@ -39,7 +59,7 @@ function SingleProducer() {
         <Container sx={{ height: '100vh' }}>
 
             <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center', flexDirection: 'column' }}>
-                <Box sx={{ display: 'flex', gap: '10px', border: '1px solid black' }}>
+                <Box sx={styleBox}>
                     <Avatar variant='square' src={producer.pathFoto ? producer.pathFoto : 'https://placehold.co/600x400'} alt="Foto de Perfil"
                         sx={{ width: 150, height: 150 }}
                     />
@@ -48,21 +68,9 @@ function SingleProducer() {
                         <Typography variant='h4'>{producer ? producer.name : ''}</Typography>
                         <Typography variant='h6'>{producer.address ? `${producer.address.logradouro}, ${producer.address.numero} ` : ''}</Typography>
                         <Typography variant='h6'>{producer.address ? `${producer.address.cidade} / ${producer.address.estado} ` : ''}</Typography>
-                        <Typography variant='h6'>{producer ? `${producer.email} ` : ''}</Typography>
                     </Box>
 
-                    <Box sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '10px',
-                        justifyContent: 'center',
-                        marginLeft: 'auto',
-                        marginRight: '50px'
-
-                    }}>
-
-                        <Email email={producer.email}/>
-                  </Box>
+                    <Email email={producer.email}/>
 
                 </Box>
 

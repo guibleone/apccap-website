@@ -140,12 +140,12 @@ const sendRelatory = async (relatoryData) => {
 //https://apccap-api.onrender.com
 
 const sendEmail = async (emailData) => {
-    const response = await axios.post('/api/email', emailData)
+    const response = await axios.post('https://apccap-api.onrender.com/api/email', emailData)
     return response.data
 }
 
 const sendConvocationEmail = async (emailData) => {
-    const response = await axios.post('/api/email/convocation', emailData)
+    const response = await axios.post('https://apccap-api.onrender.com/api/email/convocation', emailData)
     return response.data  
 }
 

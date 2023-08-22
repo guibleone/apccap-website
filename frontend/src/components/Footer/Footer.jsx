@@ -32,7 +32,7 @@ function Footer() {
             Rua Lorem Ipsum, 123 - Lorem Ipsum
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Email: appcap@gamil.com
+            Email: apccap@gmail.com
           </Typography>
           <Typography variant="body2" color="text.secondary">
             Telefone: (11) 1234-5678

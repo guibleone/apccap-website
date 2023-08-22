@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { Box, CircularProgress, Container, Typography, Button, TextareaAutosize, Modal, TextField } from '@mui/material';
+import { Box, CircularProgress, Container, Typography, Button, TextareaAutosize, Modal, useMediaQuery } from '@mui/material';
 import Email from '../../components/Email/Email';
 import { aproveUser, reset, sendEmail, disapproveUser } from '../../features/admin/adminSlice';
 import { useEffect } from 'react';
@@ -38,7 +38,9 @@ export default function PresidentLevel() {
         theme: "colored",
     }
 
-    const style = {
+    const matches = useMediaQuery('(min-width:600px)');
+    
+    const style = matches ? {
         position: 'absolute',
         top: '50%',
         left: '50%',
@@ -48,6 +50,18 @@ export default function PresidentLevel() {
         border: '2px solid #000',
         boxShadow: 24,
         p: 4,
+
+    } : {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: '90%',
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+
     }
 
     const [open, setOpen] = useState(false);

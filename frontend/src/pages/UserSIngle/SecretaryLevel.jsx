@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box, Typography, TextareaAutosize, Container, Button, Divider, CircularProgress, TextField, Modal } from '@mui/material'
+import { Box, Typography, TextareaAutosize, Container, Button, Divider, CircularProgress, useMediaQuery, Modal } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { FaDownload } from 'react-icons/fa'
 import { downloadDocument } from '../../features/documents/documentsSlice'
@@ -37,7 +37,9 @@ export default function SecretaryLevel() {
         theme: "colored",
     }
 
-    const style = {
+    const matches = useMediaQuery('(min-width:600px)');
+    
+    const style = matches ? {
         position: 'absolute',
         top: '50%',
         left: '50%',
@@ -48,7 +50,19 @@ export default function SecretaryLevel() {
         boxShadow: 24,
         p: 4,
 
+    } : {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: '90%',
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+
     }
+
 
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);

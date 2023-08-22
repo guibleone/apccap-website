@@ -21,7 +21,7 @@ export default function UsersPagination({ setUsersData }) {
         }
     }
 
-    const pageSize = 5
+    const pageSize = 6
 
     const [pagination, setPagination] = useState({
         count: 0,

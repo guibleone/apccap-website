@@ -1,20 +1,34 @@
 import { useEffect, useState } from 'react';
-import { Modal, Button, Box, Typography, TextField, TextareaAutosize, CircularProgress } from '@mui/material'
+import { Modal, Button, Box, Typography, TextField, TextareaAutosize, CircularProgress , useMediaQuery} from '@mui/material'
 import { toast } from 'react-toastify'
 import { useSelector, useDispatch } from 'react-redux'
 import { sendEmail, resetEmailStatus } from '../../features/admin/adminSlice';
+import { AiOutlineMail } from 'react-icons/ai';
 
 export default function Email({ email }) {
     
     const { emailStatus } = useSelector((state) => state.admin)
     const dispatch = useDispatch()
 
-    const style = {
+    const matches = useMediaQuery('(min-width:600px)');
+
+    const style = matches ? {
         position: 'absolute',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
         width: 600,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+
+    } : {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: '90%',
         bgcolor: 'background.paper',
         border: '2px solid #000',
         boxShadow: 24,
@@ -99,10 +113,16 @@ export default function Email({ email }) {
                     <Box sx={{
                         display: 'flex',
                         flexDirection: 'column',
-                        gap: '10px'
-                    }}>
-                        <Typography id="modal-modal-title" variant="h6" component="h2">
-                            Enviar email para {email}
+                        gap: '10px',
+                        textAlign: 'center',
+                    }}> 
+                        <Box sx={{display:'flex', justifyContent:'center', alignItems:'center', flexDirection:'column', gap:'10px'}}>
+                        <AiOutlineMail size={25}   />
+                             
+                        </Box>
+
+                        <Typography variant={!matches ? 'h7' : 'h5'} >
+                         {email}
                         </Typography>
 
                         <TextField sx={{ width: '100%' }}

@@ -20,7 +20,7 @@ export default function ProductsPagination({setProductsData}) {
         }
     }
 
-    const pageSize = 3
+    const pageSize = 4
 
     const [pagination, setPagination] = useState({
         count: 0,

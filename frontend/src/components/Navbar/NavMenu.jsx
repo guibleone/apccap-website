@@ -68,7 +68,7 @@ function NavMenu() {
             <CssBaseline />
             <AppBar sx={
                 {
-                    backgroundColor: '#66C8C7',
+                    backgroundColor: '#003DF2',
 
                 }
             } position="fixed" open={open}>

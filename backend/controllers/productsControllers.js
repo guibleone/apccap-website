@@ -34,45 +34,60 @@ const getSingleProduct = asyncHandler(async (req, res) => {
     res.status(200).json(product)
 })
 
+// gerar selos
+
+const generateSelos = ({ params }) => {
+
+    const { sequence_value, quantity, startSelo, endSelo } = params
+
+    const firstPart = (sequence_value).toString().padStart(3, "0")
+
+    for (let i = 0; i < quantity; i++) {
+
+        if (lastSelo) {
+            const selo = `${firstPart}` + `${(parseInt(lastSelo.slice(-4)) + i + 1).toString().padStart(5, "0")}`
+            selos.push(selo)
+            continue
+        }
+
+        const selo = `${firstPart}` + `${(i + 1).toString().padStart(5, "0")}`
+    }
+
+
+    return selos
+}
+
 // adicionar produtos
 const addProduct = asyncHandler(async (req, res) => {
 
-    const { name, selo, description } = req.body
-    const usuario = await User.findById(req.user._id)
+    const { name, description, quantity } = req.body
+    const user = await User.findById(req.user._id)
 
-    if (!name || !selo) {
+    if (user.selos < quantity) {
+        res.status(400)
+        throw new Error('Quantidade de selos insuficiente')
+    }
+
+    if (!name || !description || !quantity) {
         res.status(404)
         throw new Error('Insira os dados corretamente')
     }
 
-    const user = req.user._id
-
-    const isSelo = await Product.findOne({ selo })
-
-    if (isSelo) {
-        res.status(404)
-        throw new Error('Selo já cadastrado')
-    }
-
-    usuario.selos.remove(selo)
-    await usuario.save()
-
     const product = await Product.create({
         name,
-        selo,
+        startSelo: `${user.sequence_value.toString().padStart(3, "0")}` + `${(1).toString().padStart(5, "0")}`,
+        endSelo: `${user.sequence_value.toString().padStart(3, "0")}` + `${(quantity).toString().padStart(5, "0")}`,
         description,
-        producer: user
+        producer: user._id
     })
 
     if (product) {
-        res.status(201).json({
-            _id: product._id,
-            name: product.name,
-            selo: product.selo,
-            description: product.description,
-            producer: product.producer
-        })
-    } else {
+        user.selos -= quantity
+        await user.save()
+        res.status(201).json(product)
+    }
+
+    else {
         res.status(400)
         throw new Error('Dados inválidos')
     }
@@ -81,28 +96,26 @@ const addProduct = asyncHandler(async (req, res) => {
 // atualizar produto
 const updateProduct = asyncHandler(async (req, res) => {
 
-    const { name, selo, description } = req.body
+    const { name, quantity, description } = req.body
 
-    const user = req.user._id
+    const user = await User.findById(req.user._id)
 
     const product = await Product.findById(req.params.id)
 
     if (product) {
         product.name = name
-        product.selo = selo
-        product.producer = user
+        product.producer = user._id
         product.description = description
+
+        if (quantity && quantity > 0 && quantity <= user.selos) {
+            product.endSelo = (parseInt(product.endSelo) + parseInt(quantity)).toString().padStart(8, "0")
+            user.selos -= quantity
+            await user.save()
+        }
 
         const updatedProduct = await product.save()
 
-        res.json({
-            _id: updatedProduct._id,
-            name: updatedProduct.name,
-            selo: updatedProduct.selo,
-            description: updatedProduct.description,
-            producer: updatedProduct.producer,
-            path: updatedProduct.path
-        })
+        res.json(updatedProduct)
 
     } else {
         res.status(404)
@@ -234,86 +247,34 @@ const getSelos = asyncHandler(async (req, res) => {
         throw new Error('Usuário não encontrado')
     }
 
-    res.status(201).json(user.selos.sort())
+    res.status(201).json(user.selos)
 })
 
 // adicionar selo 
 const addSelo = asyncHandler(async (req, res) => {
 
-    const {quantity} = req.body
-
+    const { quantity } = req.body
     const user = await User.findById(req.params.id)
-    const producers = await User.find({ role: 'produtor' }).count()
-    const sequence_value = user.sequence_value
 
-    const products = await Product.find({ producer: user._id })
-
-    let lastSelo = user.selos.sort().reverse()[0]
-
-    if((products.length > 0 && !lastSelo) || (products.length > 0 && lastSelo < products.sort((a, b) => b.selo - a.selo)[0].selo)){
-        lastSelo = products.sort((a, b) => b.selo - a.selo)[0].selo
+    if (!user) {
+        res.status(404)
+        throw new Error('Usuário não encontrado')
     }
 
-    if (user.selos.length >= producers * 1000) {
-        res.status(400)
-        throw new Error('Limite de selos atingido')
+    if (!quantity) {
+        res.status(404)
+        throw new Error('Insira a quantidade de selos')
     }
 
-    if(!quantity){
-        res.status(400)
-        throw new Error('Informe uma quantidade válida')
-    }
+    user.selos += parseInt(quantity)
 
-    if (quantity) {
-        const selos = generateSelos(sequence_value, quantity, lastSelo)
+    await user.save()
 
-        selos.forEach(selo => {
-            if (user.selos.includes(selo)) {
-                res.status(400)
-                throw new Error('Selo já cadastrado')
-            }
-
-            if(products.find(product => product.selo === selo)){
-                res.status(400)
-                throw new Error('Selo já cadastrado')
-            }
-
-            user.selos.push(selo)
-        })
-
-        await user.save()
-
-        res.status(201).json(selos)
-    }
+    res.status(201).json(`${quantity} selos adicionados com sucesso`)
 
 })
 
 
-const generateSelos = (sequence_value, quantity, lastSelo) => {
-
-    if (!quantity) {
-        res.status(400)
-        throw new Error('Informe uma quantidade válida')
-    }
-
-    const selos = []
-
-    const firstPart = (sequence_value).toString().padStart(3, "0")
-
-    for (let i = 0; i < quantity; i++) {
-
-        if(lastSelo){
-            const selo = `${firstPart}` + `${(parseInt(lastSelo.slice(-4)) + i + 1).toString().padStart(5, "0")}`
-            selos.push(selo)
-            continue
-        }
-
-        const selo = `${firstPart}` + `${(i+1).toString().padStart(5, "0")}`
-        selos.push(selo)
-    }
-
-    return selos
-}
 
 module.exports =
 {

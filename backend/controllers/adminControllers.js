@@ -118,23 +118,20 @@ const deleteUser = asyncHandler(async (req, res) => {
             spreadSheets.map(async (spreadSheet) => {
                 const storageRef = ref(storage, `planilha/${user.name}/${spreadSheet.title_spread}`)
                 await deleteObject(storageRef)
-        })}
+            })
+        }
 
-        if (user.role === 'produtor') {
-            if (products) {
-                products.map(async (product) => {
-                    const storageRef = ref(storage, `productsPhotos/${user._id}/${product.name}.jpg`)
-                    await deleteObject(storageRef)
-                })
-            }
-
-            await Products.deleteMany({ producer: req.params.id })
+        if (products) {
+            const storageRef = ref(storage, `productsPhotos/${user._id}`)
+            const res = await deleteObject(storageRef)
+            console.log(res)
         }
 
         await User.findByIdAndDelete(req.params.id)
         await Document.deleteMany({ user: req.params.id })
         await Resume.deleteMany({ user: req.params.id })
-        await SpreadSheet.deleteMany({ user: req.params.id })
+        await SpreadSheet.deleteMany({ user: req.params.id })    
+        await Products.deleteMany({ producer: req.params.id })
 
         res.status(200).json('Usuário deletado com sucesso')
 

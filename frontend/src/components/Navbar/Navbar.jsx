@@ -49,8 +49,10 @@ function Navbar() {
 
   const linkStyle = {
     color: 'inherit',
+    fontFamily: 'Roboto',
+    fontSize: '1rem',
     '&:hover': {
-      color: '#ff0000',
+      color: '#00B2A9',
     },
     textDecoration: 'none',
   }
@@ -66,9 +68,11 @@ function Navbar() {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '10px',
+        borderBottom: '1px solid #e0e0e0',
+       
       }}>
 
-       <Link href="/"><img width='100px' src={require('../../imgs/logo-apccap.png')} alt="Logo" /></Link>
+        <Link href="/"> <img width={100} src={require('../../imgs/logo-apccap.png')} alt="Logo" /></Link>
 
         <Box sx={
           {
@@ -77,34 +81,21 @@ function Navbar() {
           }
         }>
           <Link sx={
-            {
-              color: 'inherit',
-              textDecoration: 'none',
-            }
+            linkStyle
           } href="/rastreabilidade">Rastreabilidade</Link>
 
           <Link sx={
-            {
-              color: 'inherit',
-              textDecoration: 'none',
-            }
+            linkStyle
           } href="/festival-cachaca">Festival da Cachaça</Link>
 
           <Link sx={
-            {
-              color: 'inherit',
-              textDecoration: 'none',
-
-            }
+            linkStyle
           } href="/quem-somos">Quem Somos</Link>
           <Link sx={
-            {
-              color: 'inherit',
-              textDecoration: 'none',
-
-            }
+            linkStyle
           } href="/blog">Blog</Link>
         </Box>
+
         {!user ?
           (
             <Box sx={
@@ -116,16 +107,10 @@ function Navbar() {
               }
             }>
               <Link sx={
-                {
-                  color: 'inherit',
-                  textDecoration: 'none',
-                }
+                linkStyle
               } href="/entrar">Entrar</Link>
               <Link sx={
-                {
-                  color: 'inherit',
-                  textDecoration: 'none',
-                }
+                linkStyle
               } href="/registrar">Registrar</Link>
             </Box>
           )

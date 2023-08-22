@@ -6,12 +6,15 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    selo:{
+    startSelo:{
         type: String,
-        required: true
+    },
+    endSelo:{
+        type: String,
     },
     description:{
-        type:String
+        type:String,
+        required: true      
     },
     path:{
         type: String,

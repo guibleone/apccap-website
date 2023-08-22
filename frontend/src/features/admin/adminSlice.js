@@ -191,7 +191,6 @@ export const adminSlice = createSlice({
             }
             )
             .addCase(getResumeData.fulfilled, (state, action) => {
-                state.isSuccess = true
                 state.isLoading = false
                 state.isError = false
                 state.resumeData = action.payload.splice(0, 1)[0]
@@ -208,7 +207,6 @@ export const adminSlice = createSlice({
             }
             )
             .addCase(getDocumentsData.fulfilled, (state, action) => {
-                state.isSuccess = true
                 state.isLoading = false
                 state.isError = false
                 state.documentsData = action.payload        

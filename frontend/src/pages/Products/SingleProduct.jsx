@@ -2,11 +2,11 @@ import { Container, Box, Typography, CircularProgress, TextField, Button, useMed
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { getSingleProduct, updateProduct, addProductPhoto } from '../../features/products/productsSlice'
+import { getSingleProduct, updateProduct, addProductPhoto, getSelos } from '../../features/products/productsSlice'
 
 
 function SingleProduct() {
-    const { productData, isLoading, isError, message } = useSelector((state) => state.products)
+    const { productData, isLoading, isError, message, selos } = useSelector((state) => state.products)
 
     const { id } = useParams()
 
@@ -25,9 +25,21 @@ function SingleProduct() {
 
     const fileInputRef = useRef(null)
 
+    useEffect(() => {
+
+        const userData = {
+            id: user._id,
+            token: user.token
+        }
+
+        dispatch(getSelos(userData))
+
+    }, [user._id, user.token])
 
     useEffect(() => {
+
         dispatch(getSingleProduct(id));
+
     }, [id, dispatch]);
 
     useEffect(() => {
@@ -49,7 +61,15 @@ function SingleProduct() {
     const onSubmit = (e) => {
         e.preventDefault()
 
-        dispatch(updateProduct(inputData))
+        const userData = {
+            id: user._id,
+            token: user.token
+        }
+
+
+        dispatch(updateProduct({ inputData, userData }))
+
+        inputData.quantity = ''
     }
 
     const handlePhoto = (e) => {
@@ -115,17 +135,17 @@ function SingleProduct() {
                         }>
                             <img width={300} src={productData.path ? productData.path : 'https://placehold.co/300x300'} alt="Foto do produto" />
 
-                            {productData.path ? 
-                            <>
-                                 <input type="file" ref={fileInputRef} />
-                                 <Button onClick={handlePhoto} variant='contained'>Alterar</Button> 
-                            </>
+                            {productData.path ?
+                                <>
+                                    <input type="file" ref={fileInputRef} />
+                                    <Button onClick={handlePhoto} variant='contained'>Alterar</Button>
+                                </>
 
-                            : 
-                            <>
-                                <input type="file" ref={fileInputRef} />
-                                <Button onClick={handlePhoto} variant='contained'>Adicionar</Button>
-                            </>
+                                :
+                                <>
+                                    <input type="file" ref={fileInputRef} />
+                                    <Button onClick={handlePhoto} variant='contained'>Adicionar</Button>
+                                </>
                             }
 
                         </Box>
@@ -138,6 +158,8 @@ function SingleProduct() {
                                 width: '100%',
                             }
                         }>
+
+                            <Typography variant='h5'>Lote: {`${productData.startSelo} - ${productData.endSelo}`}</Typography>
                             <Typography variant='h5'>Nome</Typography>
                             <TextField onChange={onChange} size='small' defaultValue={productData ? productData.name : ''} name='name' />
 
@@ -145,8 +167,9 @@ function SingleProduct() {
                             <TextField onChange={onChange} size='small' defaultValue={productData ? productData.description : ''} name='description' />
 
 
-                            <Typography variant='h5'>Selo</Typography>
-                            <TextField disabled size='small' defaultValue={productData ? productData.selo : ''} name='selo' />
+                            <Typography variant='h5'> Adicionar mais selos ?</Typography>
+                            <Typography variant='subtitle1'>Você possui {selos} selos</Typography>
+                            <TextField onChange={onChange} size='small' name='quantity' placeholder='Quantidade'/>
 
                             <Button variant='contained' type='submit'>Salvar</Button>
                         </Box>
@@ -154,7 +177,7 @@ function SingleProduct() {
                 </form>
 
                 {isError && <Typography variant='h5'>{message}</Typography>}
-                
+
             </Box> :
 
                 <Box>

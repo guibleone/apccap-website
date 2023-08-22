@@ -1,10 +1,12 @@
-import { Box, Button, Container, Typography, CircularProgress, TextField, useMediaQuery, Divider, Alert, Select, MenuItem, InputLabel, FormControl } from '@mui/material'
+import { Box, Button, Container, Typography, CircularProgress, TextField, useMediaQuery, Divider, Alert, Select, MenuItem, InputLabel, FormControl, Grid, Card, CardMedia, CardContent, CardActions } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { getProducts, deleteProduct, addProduct, getSelos, clear } from '../../features/products/productsSlice'
 import Selo from '../../components/Stripe/Selo'
 import ProductsPagination from '../../components/Pagination/Products'
 import { toast } from 'react-toastify'
+import { AiOutlineEdit } from 'react-icons/ai'
+import { BiTrashAlt } from 'react-icons/bi'
 
 function RegisterProduct() {
   const styleError = {
@@ -33,9 +35,9 @@ function RegisterProduct() {
 
   const { user } = useSelector(state => state.auth)
 
-  const { isLoading, isError, message, selos, isSuccess, isSuccessSelos } = useSelector(state => state.products)
+  const { isLoading, isError, message, isSuccess, isSuccessSelos, selos } = useSelector(state => state.products)
 
-  const matches = useMediaQuery('(max-width:800px)')
+  const matches = useMediaQuery('(max-width:600px)')
 
   const [inputData, setFormData] = useState({
     name: '',
@@ -126,43 +128,35 @@ function RegisterProduct() {
   return (
     <Container sx={
       {
-        height: '100vh',
+        minHeight: '100vh',
       }
     }>
-      <Box>
 
-        <Typography variant="h4" component="h1" gutterBottom>Cadastrar Produto</Typography>
+      <Box sx={{ marginBottom: '50px' }}>
 
         <form onSubmit={onSubmit}>
+
           <Box sx={
             {
               display: 'flex',
               flexDirection: 'column',
-              gap: '10px'
+              gap: '10px',
+              margin: '20px 0'
             }
           }>
+
+            <Typography sx={{ textAlign: 'center' }} variant={matches ? 'h5' : 'h4'} component="h1" gutterBottom>Cadastrar Produto</Typography>
             <TextField placeholder="Informe o nome do produto" size='small' name='name' onChange={onChange} value={name} />
 
-            {selos.length === 0 ? <Typography variant='h6'>Você não possui selos</Typography> : (
-              <div>
-                <FormControl sx={{ width: '100%' }}>
-                  <InputLabel id='selos-comprados-label'>Selos</InputLabel>
-                  <Select
-                    labelId='selos-comprados-label'
-                    id='selos-comprados'
-                    type='number'
-                    size='small'
-                    name='selo'
-                    onChange={onChange}
-                    value={selo}
-                    MenuProps={MenuProps}
-                  >
-                    {selos.map((option) => <MenuItem key={option} value={option}>{option}</MenuItem>)}
-                  </Select>
-                </FormControl>
-              </div>
-            )}
+            {selos === 0 ? <Typography variant='h6'>Você não possui selos</Typography>:
+            (<>
+            <Typography variant='h6'>Você possui {selos} selos.</Typography>
+            </>
+            )
+            }
+            
 
+          
             <Button variant='contained' type='submit'>Cadastrar</Button>
 
           </Box>
@@ -186,23 +180,54 @@ function RegisterProduct() {
                 marginTop: '20px',
               }
             }>
-              <Typography variant="h4" component="h1" >Seus Produtos</Typography>
-
-              {productsData.map((product) => (
-                <Box sx={
-                  {
-                    display: 'flex',
-                    flexDirection: matches ? 'column' : 'row',
-                    gap: '10px'
-                  }
-                } key={product._id}>
-                  <Typography sx={{ textAlign: 'center' }} variant="h5" component="h1">{product.name}</Typography>
-                  <Button variant='outlined' color='success' href={`/produto/${product._id}`}>Editar</Button>
-                  <Button variant='outlined' color='error' onClick={() => dispatch(deleteProduct({ id: product._id }))} >Excluir</Button>
-                </Box>
-              ))}
+              <Typography sx={{ textAlign: 'center' }} variant={matches ? 'h5' : 'h4'} component="h1" >Seus Produtos</Typography>
 
 
+              <Grid
+                sx={{ margin: '10px 0', display: 'flex', flexDirection: matches ? 'column' : 'row', gap: matches ? '20px' : '0' }}
+                container={!matches}
+                rowSpacing={{ xs: 8, sm: 6, md: 3 }}
+                columnSpacing={{ xs: 8, sm: 6, md: 3 }}
+              >
+
+                {productsData.map((product) => (
+
+                  <Grid alignSelf={'center'} item key={product._id} md={3}>
+
+                    <Card
+                      sx={{
+                        maxWidth: matches ? 352 : 252,
+                        minWidth: 262,
+                        border: matches ? '1px solid #E4E3E3' : 'none',
+                        borderRadius: '5px',
+                      }}>
+
+                      <CardMedia
+                        sx={{ height: matches ? 252 : 252 }}
+                        image={product.path ? product.path : 'https://as1.ftcdn.net/jpg/02/68/55/60/220_F_268556012_c1WBaKFN5rjRxR2eyV33znK4qnYeKZjm.jpg'}
+                      />
+
+                      <CardContent>
+                        <Typography sx={{ textAlign: 'center' }} variant="h6" component="h1">{product.name}</Typography>
+                      </CardContent>
+
+                      <CardActions sx={{ display: 'flex', justifyContent: 'center', gap: '5px' }}>
+                        <Button variant='outlined' color='info' href={`/produto/${product._id}`}>
+                          <AiOutlineEdit size={20} />
+                        </Button>
+
+                        <Button variant='outlined' color='error' onClick={() => dispatch(deleteProduct({ id: product._id }))} >
+                          <BiTrashAlt size={20} />
+                        </Button>
+                      </CardActions>
+
+                    </Card>
+
+                  </Grid>
+                ))}
+
+
+              </Grid>
 
             </Box>
           )}
