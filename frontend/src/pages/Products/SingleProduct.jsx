@@ -159,7 +159,7 @@ function SingleProduct() {
                             }
                         }>
 
-                            <Typography variant='h5'>Lote: {`${productData.startSelo} - ${productData.endSelo}`}</Typography>
+                            <Typography sx={{ textAlign: 'center' }} variant='h5'>Lote: {`${productData.startSelo} - ${productData.endSelo}`}</Typography>
                             <Typography variant='h5'>Nome</Typography>
                             <TextField onChange={onChange} size='small' defaultValue={productData ? productData.name : ''} name='name' />
 
@@ -167,11 +167,14 @@ function SingleProduct() {
                             <TextField onChange={onChange} size='small' defaultValue={productData ? productData.description : ''} name='description' />
 
 
-                            <Typography variant='h5'> Adicionar mais selos ?</Typography>
+                            {/* <Typography variant='h5'> Adicionar mais selos ?</Typography>
                             <Typography variant='subtitle1'>Você possui {selos} selos</Typography>
                             <TextField onChange={onChange} size='small' name='quantity' placeholder='Quantidade'/>
+                           
+                            */}
 
-                            <Button variant='contained' type='submit'>Salvar</Button>
+                          <Button variant='contained' type='submit'>Salvar</Button>
+
                         </Box>
                     </Box>
                 </form>

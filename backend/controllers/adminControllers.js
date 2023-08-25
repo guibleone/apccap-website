@@ -122,9 +122,12 @@ const deleteUser = asyncHandler(async (req, res) => {
         }
 
         if (products) {
-            const storageRef = ref(storage, `productsPhotos/${user._id}`)
-            const res = await deleteObject(storageRef)
-            console.log(res)
+            products.map(async (product) => {
+                if(product.path){
+                    const storageRef = ref(storage, `productsPhotos/${product.producer}/${product.name}.jpg`)
+                    await deleteObject(storageRef)
+                }
+            })
         }
 
         await User.findByIdAndDelete(req.params.id)

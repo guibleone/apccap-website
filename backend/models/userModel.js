@@ -39,12 +39,13 @@ const userSchema = new mongoose.Schema({
         default: 'analise',
     },
     selos: {
-        type: Number,
-        default: 0
+        quantity: { type: Number, default: 0 },
+        startSelo: { type: String },
+        endSelo: { type: String },
     },
     sequence_value: { type: Number },
-    relatory: { 
-        type: String ,
+    relatory: {
+        type: String,
     }
 }, {
     timestamps: true

@@ -5,6 +5,7 @@ import documentsReducer from '../features/documents/documentsSlice'
 import adminReducer from '../features/admin/adminSlice'
 import productsReducer from '../features/products/productsSlice'
 import spreadSheetReducer from '../features/spreadSheet/spreadSheetSlice'
+import paymentsReducer from '../features/payments/paymentsSlice'
 
 export const store = configureStore({
   reducer: {
@@ -14,5 +15,6 @@ export const store = configureStore({
     admin: adminReducer,
     products: productsReducer,
     spreadSheet: spreadSheetReducer,
+    payments: paymentsReducer,
   },
 });

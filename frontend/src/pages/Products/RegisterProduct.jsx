@@ -36,15 +36,17 @@ function RegisterProduct() {
   const { user } = useSelector(state => state.auth)
 
   const { isLoading, isError, message, isSuccess, isSuccessSelos, selos } = useSelector(state => state.products)
+  const {payments} = useSelector(state => state.payments)
 
   const matches = useMediaQuery('(max-width:600px)')
 
   const [inputData, setFormData] = useState({
     name: '',
-    selo: ''
+    quantity: '',
+    description: '',
   })
 
-  const { name, selo } = inputData
+  const { name, quantity, description } = inputData
 
   const [productsData, setProductsData] = useState([])
 
@@ -88,12 +90,19 @@ function RegisterProduct() {
   const onSubmit = (e) => {
     e.preventDefault()
 
-    const productData = {
-      name,
-      selo
+
+    const userData = {
+      id: user._id,
+      token: user.token
     }
 
-    dispatch(addProduct(productData))
+    const productData = {
+      name,
+      description,
+      quantity
+    }
+
+    dispatch(addProduct({ productData, userData }))
 
   }
 
@@ -112,17 +121,6 @@ function RegisterProduct() {
       } size={100} />
     </Box>
   }
-
-  const ITEM_HEIGHT = 48;
-  const ITEM_PADDING_TOP = 8;
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250,
-      },
-    },
-  };
 
 
   return (
@@ -146,17 +144,19 @@ function RegisterProduct() {
           }>
 
             <Typography sx={{ textAlign: 'center' }} variant={matches ? 'h5' : 'h4'} component="h1" gutterBottom>Cadastrar Produto</Typography>
+           
             <TextField placeholder="Informe o nome do produto" size='small' name='name' onChange={onChange} value={name} />
+            <TextField placeholder="Informe a descrição do produto" size='small' name='description' onChange={onChange} value={description}  />
 
-            {selos === 0 ? <Typography variant='h6'>Você não possui selos</Typography>:
-            (<>
-            <Typography variant='h6'>Você possui {selos} selos.</Typography>
-            </>
-            )
+            <TextField disabled={selos.quantity === 0} placeholder="Informe a quantidade de selos" size='small' name='quantity' onChange={onChange} />
+
+            {selos.quantity === 0 ? <Typography variant='p'>Você não possui selos. Por favor compre-os.</Typography> :
+              (<>
+                <Typography variant='p'>Você possui {selos.quantity} selos.</Typography>
+              </>
+              )
             }
             
-
-          
             <Button variant='contained' type='submit'>Cadastrar</Button>
 
           </Box>

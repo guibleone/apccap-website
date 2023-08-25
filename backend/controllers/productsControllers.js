@@ -60,30 +60,38 @@ const generateSelos = ({ params }) => {
 // adicionar produtos
 const addProduct = asyncHandler(async (req, res) => {
 
-    const { name, description, quantity } = req.body
+    const { name, quantity, description } = req.body
     const user = await User.findById(req.user._id)
 
-    if (user.selos < quantity) {
+
+    if (user.selos.quantity < quantity) {
         res.status(400)
         throw new Error('Quantidade de selos insuficiente')
     }
 
-    if (!name || !description || !quantity) {
+    if (!name || !quantity || !description) {
         res.status(404)
         throw new Error('Insira os dados corretamente')
     }
 
     const product = await Product.create({
         name,
-        startSelo: `${user.sequence_value.toString().padStart(3, "0")}` + `${(1).toString().padStart(5, "0")}`,
-        endSelo: `${user.sequence_value.toString().padStart(3, "0")}` + `${(quantity).toString().padStart(5, "0")}`,
         description,
+        startSelo: !user.selos.endSelo ? `${user.sequence_value.toString().padStart(3, "0")}` + `${(1).toString().padStart(5, "0")}` :
+        `${user.selos.endSelo.slice(0, 3)}` + `${(parseInt(user.selos.endSelo.slice(-5)) + 1).toString().padStart(5, "0")}`,
+        endSelo: !user.selos.endSelo ?  `${user.sequence_value.toString().padStart(3, "0")}` + `${(quantity).toString().padStart(5, "0")}` :
+        `${user.selos.endSelo.slice(0, 3)}` + `${(parseInt(user.selos.endSelo.slice(-5)) + parseInt(quantity)).toString().padStart(5, "0")}`,
         producer: user._id
     })
+    
 
     if (product) {
-        user.selos -= quantity
+        user.selos.quantity -= quantity
+        user.selos.startSelo = product.startSelo
+        user.selos.endSelo = product.endSelo
         await user.save()
+
+        console.log(product)
         res.status(201).json(product)
     }
 
@@ -96,7 +104,7 @@ const addProduct = asyncHandler(async (req, res) => {
 // atualizar produto
 const updateProduct = asyncHandler(async (req, res) => {
 
-    const { name, quantity, description } = req.body
+    const { name, description } = req.body
 
     const user = await User.findById(req.user._id)
 
@@ -106,12 +114,6 @@ const updateProduct = asyncHandler(async (req, res) => {
         product.name = name
         product.producer = user._id
         product.description = description
-
-        if (quantity && quantity > 0 && quantity <= user.selos) {
-            product.endSelo = (parseInt(product.endSelo) + parseInt(quantity)).toString().padStart(8, "0")
-            user.selos -= quantity
-            await user.save()
-        }
 
         const updatedProduct = await product.save()
 
@@ -150,14 +152,7 @@ const addPhoto = asyncHandler(async (req, res) => {
 
         const updatedProduct = await product.save()
 
-        res.json({
-            _id: updatedProduct._id,
-            name: updatedProduct.name,
-            selo: updatedProduct.selo,
-            description: updatedProduct.description,
-            producer: updatedProduct.producer,
-            path: updatedProduct.path
-        })
+        res.json(updatedProduct)
 
     } else {
         res.status(404)
@@ -168,6 +163,7 @@ const addPhoto = asyncHandler(async (req, res) => {
 
 // rasteeio de produto
 const trackProduct = asyncHandler(async (req, res) => {
+
     const { selo } = req.body
 
     if (!selo) {
@@ -175,14 +171,50 @@ const trackProduct = asyncHandler(async (req, res) => {
         throw new Error('Selo inválido')
     }
 
-    const product = await Product.findOne({ selo })
+    if(selo.slice(0, 3) === '000'){
+        res.status(404)
+        throw new Error('Selo inválido')
+    }
+
+    if(selo.slice(0,8) > 99999999){
+        res.status(404)
+        throw new Error('Selo inválido')
+    }
+
+    if(selo.length !== 8){
+        res.status(404)
+        throw new Error('Selo inválido')
+    }
+
+    const firtsPart = selo.slice(0, 3)
+
+    const user = await User.findOne({ sequence_value: firtsPart })
+
+    if (!user) {
+        res.status(404)
+        throw new Error('Selo inválido')
+    }
+
+    const products = await Product.find({ producer: user._id })
+
+    if (!products) {
+        res.status(404)
+        throw new Error('Selo inválido')
+    }
+
+    const product = products.find((product) => {
+        if (product.startSelo <= selo && product.endSelo >= selo) {
+            return product
+        }
+    })
 
     if (!product) {
         res.status(404)
-        throw new Error('Produto não encontrado')
+        throw new Error('Selo inválido')
     }
 
     res.status(200).json(product)
+
 })
 
 
@@ -266,7 +298,8 @@ const addSelo = asyncHandler(async (req, res) => {
         throw new Error('Insira a quantidade de selos')
     }
 
-    user.selos += parseInt(quantity)
+    user.selos.quantity += parseInt(quantity)
+    console.log(user.selos.quantity)
 
     await user.save()
 

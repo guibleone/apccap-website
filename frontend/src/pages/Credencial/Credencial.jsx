@@ -1,10 +1,12 @@
-import { Box, Container, CssBaseline, Typography, Button, CircularProgress } from '@mui/material'
+import { Box, Container, CssBaseline, Typography, Button, CircularProgress, Link } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getDocuments } from '../../features/documents/documentsSlice'
 import Documents from '../MyPerfil/Documents'
 import { FcApproval, FcCancel, FcClock } from 'react-icons/fc'
 import { resetAprove } from '../../features/auth/authSlice'
+import Mensalidade from './Mensalidade'
+
 
 function Producer() {
 
@@ -33,18 +35,28 @@ function Producer() {
     }
 
     return (
-        <Container sx={{ height: '100vh' }}>
+        <Container sx={{ minHeight: '100vh' }}>
             <CssBaseline />
 
-            <Box sx={{ display: 'flex', margin: '15px 0' }}>
+            <Box sx={{ display: 'flex', flexDirection:'column', gap:'10px', alignItems:'center' }}>
 
-                {user.status === 'analise' && <Typography variant='h4'>Seu cadastro está em análise <FcClock /></Typography>}
+                {user.status === 'analise' && <Typography textAlign='center' variant='h4'>Seu cadastro está em análise <FcClock /></Typography>}
 
                 {user.status === 'aprovado' && (
-                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                        <Typography variant='h4'>Aprovado <FcApproval /> </Typography>
-                        <Typography>{user.relatory}</Typography>
-                    </Box>
+                    <>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap:'10px' }}>
+                            <Typography textAlign='center' variant='h4'>Aprovado <FcApproval /> </Typography>
+                            <Typography>{user.relatory}</Typography>
+
+                            <Typography variant='p'>Como produtor credenciado você terá que pagar uma taxa mensal.
+                                Caso não pague estará sujeito a reinvidicação da credencial.
+                            </Typography>
+
+                            <Mensalidade />
+
+
+                        </Box>
+                    </>
                 )}
 
                 {user.status === 'reprovado' && (
@@ -57,7 +69,7 @@ function Producer() {
 
             <Box>
 
-                {(user.status === 'analise' || user.status === 'aprovado') && <Documents />}
+                {(user.status === 'analise') && <Documents />}
 
                 {user.status === 'reprovado' &&
                     <Button
@@ -66,10 +78,9 @@ function Producer() {
                         variant='contained'
                         fullWidth
                     >
-                    {isLoading ? <CircularProgress color="success" size={24} /> : 'Tentar Novamente'}
+                        {isLoading ? <CircularProgress color="success" size={24} /> : 'Tentar Novamente'}
 
                     </Button>}
-
             </Box>
         </Container>
     )

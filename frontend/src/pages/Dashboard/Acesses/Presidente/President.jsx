@@ -1,13 +1,13 @@
 import { Box, Container, Typography, Button, TextareaAutosize, Divider, CircularProgress } from '@mui/material'
 import { useState, useEffect } from 'react'
-import UsersPagination from '../../../components/Pagination/Users'
+import UsersPagination from '../../../../components/Pagination/Users'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale, setDefaultLocale } from "react-datepicker";
 import ptBR from 'date-fns/locale/pt-BR';
 import { toast } from 'react-toastify'
 import { useSelector, useDispatch } from 'react-redux';
-import { sendConvocationEmail, resetEmailStatus } from '../../../features/admin/adminSlice';
+import { sendConvocationEmail, resetEmailStatus } from '../../../../features/admin/adminSlice';
 
 registerLocale('pt-BR', ptBR)
 setDefaultLocale('ptBR')
@@ -130,8 +130,9 @@ export default function President() {
           onClick={handleSendEmail}
           fullWidth
           variant='contained'
-          color='success'> {emailStatus.isLoading ? <CircularProgress color="success" size={24} /> : 'Enviar'}</Button>
-
+          color='success'> {emailStatus.isLoading ? <CircularProgress color="success" size={24} /> : 'Enviar'}
+          </Button>
+          
       </Box>
 
     </Container >

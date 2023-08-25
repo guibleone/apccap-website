@@ -9,8 +9,9 @@ import { trackProduct, clear } from "../../features/products/productsSlice";
 import UsersPagination from "../../components/Pagination/Users"
 import Secretary from "./Acesses/Secretary"
 import Tesoureiro from "./Acesses/Tesoureiro/Tesoureiro"
-import President from "./Acesses/President"
+import President from "./Acesses/Presidente/President"
 import Admin from "./Acesses/Admin"
+import { getSubscription } from "../../features/payments/paymentsSlice"
 
 function Dashboard() {
 
@@ -18,6 +19,7 @@ function Dashboard() {
 
   const { isLoading } = useSelector((state) => state.admin)
   const { isLoading: productLoading } = useSelector((state) => state.products)
+  const {payments} = useSelector((state) => state.payments)
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -40,10 +42,18 @@ function Dashboard() {
     if (user && (user.role === "admin" || user.role === 'secretario' || user.role === 'presidente')) {
       dispatch(listUsers(user.token))
     }
+    if(user && (user.role === 'produtor')){
+      const userData = {
+        email: user.email,
+        token: user.token
+      }
+      dispatch(getSubscription(userData))
+    }
 
   }, [])
 
-  if (isLoading) {
+  if (isLoading || (!payments && user && user.role === 'produtor')) {
+
     return <Box sx={
       {
         display: 'flex',
@@ -73,6 +83,14 @@ function Dashboard() {
       </Box>
     }
   }
+
+  if((payments && user) && payments.subscription !=='active' && user.role === 'produtor'){
+    return <Box sx={{display:'flex', flexDirection:'column', alignItems:'center', minHeight:'100vh'}}>
+      <Typography variant="h5">Você precisa assinar a mensalidade para ter acesso a essa página.</Typography>
+      <Button color='success' variant='contained' href="/credencial-produtor">Assinar</Button>
+    </Box>
+  }
+
 
   return (
     <Container sx={{ minHeight: '100vh' }}>

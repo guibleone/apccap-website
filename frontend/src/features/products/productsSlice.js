@@ -33,10 +33,11 @@ export const getProducts = createAsyncThunk('products/getProducts', async (user,
 )
 
 // adicionar produtos
-export const addProduct = createAsyncThunk('products/addProduct', async (product, thunkAPI) => {
+export const addProduct = createAsyncThunk('products/addProduct', async ({ productData, userData }, thunkAPI) => {
     try {
-        const response = await productsService.addProduct(product)
-        thunkAPI.dispatch(getProducts()) // salva vidas // dispatch para atualizar a lista de produtos
+        const response = await productsService.addProduct(productData)
+        thunkAPI.dispatch(getProducts(userData)) // salva vidas // dispatch para atualizar a lista de produtos
+        thunkAPI.dispatch(getSelos(userData)) // salva vidas // dispatch para atualizar a lista de produtos
         return response
     } catch (error) {
         // caso ocorra algum erro             
@@ -73,7 +74,7 @@ export const getSingleProduct = createAsyncThunk('products/singleProduct', async
 })
 
 // atualizar produto
-export const updateProduct = createAsyncThunk('products/updateProduct', async ({inputData, userData}, thunkAPI) => {
+export const updateProduct = createAsyncThunk('products/updateProduct', async ({ inputData, userData }, thunkAPI) => {
     try {
         const response = await productsService.updateProduct(inputData)
         thunkAPI.dispatch(getSelos(userData)) // salva vidas // dispatch para atualizar a lista de produtos
@@ -152,6 +153,7 @@ export const getSelos = createAsyncThunk('products/getSelos', async (user, thunk
 export const addSelo = createAsyncThunk('products/addSelo', async (user, thunkAPI) => {
     try {
         const response = await productsService.addSelo(user)
+        thunkAPI.dispatch(getSelos(user)) // salva vidas // dispatch para atualizar a lista de produtos
         return response
     } catch (error) {
         // caso ocorra algum erro
@@ -215,8 +217,6 @@ const productsSlice = createSlice({
                 state.isLoading = false
                 state.isError = false
                 state.message = 'Produto adicionado com sucesso'
-                state.productsData = [...state.productsData, action.payload]
-                state.selos = state.selos.filter(selo => selo !== action.payload.selo);
             })
             .addCase(addProduct.rejected, (state, action) => {
                 state.isSuccess = false
@@ -341,6 +341,7 @@ const productsSlice = createSlice({
                 state.isSuccess = false;
             })
             .addCase(getSelos.fulfilled, (state, action) => {
+                state.isSuccess = false;
                 state.pending = false;
                 state.selos = action.payload;
             })
@@ -357,8 +358,7 @@ const productsSlice = createSlice({
             .addCase(addSelo.fulfilled, (state, action) => {
                 state.pending = false;
                 state.isSuccessSelos = true;
-                action.payload.reduce((result, selo) => result.concat(selo), [])
-                state.selos = [...state.selos, ...action.payload]
+                state.message = action.payload;
             }
             )
             .addCase(addSelo.rejected, (state, action) => {
