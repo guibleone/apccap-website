@@ -1,7 +1,6 @@
 import axios from 'axios'
 
 const API_URI = '/api/admin'
-//const API_URI = 'https://apccap-api.onrender.com/api/admin'
 
 // pegar usuário
 const getUserData = async ({ id, token }) => {
@@ -136,16 +135,13 @@ const sendRelatory = async (relatoryData) => {
 
 // EMAILS
 
-// tirar o https://apccap-api.onrender.com/api/email no desenvolvimento
-//https://apccap-api.onrender.com
-
 const sendEmail = async (emailData) => {
-    const response = await axios.post('https://apccap-api.onrender.com/api/email', emailData)
+    const response = await axios.post('/api/email', emailData)
     return response.data
 }
 
 const sendConvocationEmail = async (emailData) => {
-    const response = await axios.post('https://apccap-api.onrender.com/api/email/convocation', emailData)
+    const response = await axios.post('/api/email/convocation', emailData)
     return response.data  
 }
 

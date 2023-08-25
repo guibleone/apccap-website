@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_URI = '/api/products/';
-//const API_URI = 'https://apccap-api.onrender.com/api/products/';
+
 
 // pegar produtos
 export const getProducts = async () => {

@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const API_URL =  '/api/documentos/'
-//const API_URL = 'https://apccap-api.onrender.com' + '/api/documentos/'
+
 
 // pegar documentos ADMIN
 const getDocumentsAdmin = async(token) => {

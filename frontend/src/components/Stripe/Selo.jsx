@@ -8,9 +8,6 @@ import { toast } from 'react-toastify'
 
 export default function Selo() {
 
-    // alterar para o endereço da API quando usando o firebase
-    const API_URL = 'https://apccap-api.onrender.com/api/payment/comprar-selos'
-
     const [quantity, setQuantity] = useState('')
     const dispatch = useDispatch()
 

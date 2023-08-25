@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_URL = '/api/resume/'
-//const API_URL = 'https://apccap-api.onrender.com/api/resume/'
+
 
 // pegar currículo
 const getResume = async (resumaData) => {

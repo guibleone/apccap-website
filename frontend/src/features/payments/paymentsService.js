@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "api/payment/"
+const API_URL = "/api/payment/"
 
 // pegar assinatura
 const getSubscription = async (user) => {
