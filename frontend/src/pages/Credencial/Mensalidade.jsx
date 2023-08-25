@@ -89,7 +89,7 @@ export default function Mensalidade() {
 
       {(payments && payments.portal) && (
           <Button onClick={() => window.location.href = payments.portal} target='_blank' variant='contained' color='success'>
-            Portal do Cliente
+            Portal do Produtor
           </Button>
       )}
 
