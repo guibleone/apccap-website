@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { createResume, reset, updateResume } from '../../features/resume/resumeSlice'
 import { toast } from 'react-toastify'
 import { Button, Typography, TextareaAutosize, Box, CircularProgress } from '@mui/material';
+import {styleError, styleSuccess} from '../toastStyles'
 
 function Resume() {
 
@@ -24,29 +25,11 @@ function Resume() {
   useEffect(() => {
 
     if (isError) {
-      toast.error(message, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      })
+      toast.error(message, styleError)
     }
 
     if (isSuccess) {
-      toast.success('Resumo atualizado com sucesso', {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      })
+      toast.success('Resumo atualizado com sucesso', styleSuccess)
     }
 
     dispatch(reset())

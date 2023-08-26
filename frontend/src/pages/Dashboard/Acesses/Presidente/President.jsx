@@ -8,33 +8,13 @@ import ptBR from 'date-fns/locale/pt-BR';
 import { toast } from 'react-toastify'
 import { useSelector, useDispatch } from 'react-redux';
 import { sendConvocationEmail, resetEmailStatus } from '../../../../features/admin/adminSlice';
+import { styleError, styleSuccess } from '../../../toastStyles'
+import UsersCredenciados from './UsersCredenciados';
 
 registerLocale('pt-BR', ptBR)
 setDefaultLocale('ptBR')
 
 export default function President() {
-
-  const styleError = {
-    position: "top-right",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "colored",
-  }
-
-  const styleSuccess = {
-    position: "top-right",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "colored",
-  }
 
   const [users, setUsers] = useState([])
   const [startDate, setStartDate] = useState(new Date());
@@ -131,9 +111,13 @@ export default function President() {
           fullWidth
           variant='contained'
           color='success'> {emailStatus.isLoading ? <CircularProgress color="success" size={24} /> : 'Enviar'}
-          </Button>
-          
+        </Button>
+
       </Box>
+
+      <Divider sx={{ margin: '20px 0' }} />
+
+      <UsersCredenciados />
 
     </Container >
   )

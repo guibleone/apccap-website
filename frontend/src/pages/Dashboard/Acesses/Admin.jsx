@@ -5,31 +5,9 @@ import { Typography, Box, Button, useMediaQuery, CardActions, Card, CardMedia, C
 import UsersPagination from "../../../components/Pagination/Users"
 import { toast } from 'react-toastify'
 import { resetStatus } from "../../../features/admin/adminSlice"
-
+import { styleError, styleSuccess } from '../../toastStyles'
 
 export default function Admin() {
-  const styleError = {
-    position: "top-right",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "colored",
-  }
-
-  const styleSuccess = {
-    position: "top-right",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "colored",
-  }
-
   const styles = {
     mobile: {
       box: {

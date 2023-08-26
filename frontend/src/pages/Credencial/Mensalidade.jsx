@@ -4,6 +4,7 @@ import { Box, Button, TextField, Typography, Alert, useMediaQuery, CircularProgr
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { getSubscription } from '../../features/payments/paymentsSlice'
+import { styleSuccess, styleError } from '../toastStyles'
 
 export default function Mensalidade() {
 
@@ -79,21 +80,24 @@ export default function Mensalidade() {
 
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-
-      <form onSubmit={handleSubmit}>
-        <Button disabled={isLoadingPayment || (payments && payments.subscription)} fullWidth variant='contained' color='success' type="submit">
-          {isLoadingPayment ? <CircularProgress color="success" size={24} /> : 'Assinar Mensalidade'}
-        </Button>
-      </form>
-
-      {(payments && payments.portal) && (
-          <Button onClick={() => window.location.href = payments.portal} target='_blank' variant='contained' color='success'>
-            Portal do Produtor
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center' }}>
+      
+      {(payments && !payments.portal) && (
+        <form onSubmit={handleSubmit}>
+          <Button disabled={isLoadingPayment || (payments && payments.subscription)} variant='outlined' color='success' type="submit">
+            {isLoadingPayment ? <CircularProgress color="success" size={24} /> : 'Assinar'}
           </Button>
+        </form>
       )}
 
-      {messagePayment && <Alert severity="info">{messagePayment}</Alert>}
+      {(payments && payments.portal) && (
+        <Button onClick={() => window.location.href = payments.portal} target='_blank' variant='contained' color='success'>
+          Portal do Produtor
+        </Button>
+      )}
+
+      {(messagePayment === "Pedido cancelado - compre novamente quando estiver pronto.") && <Alert severity="error">{messagePayment}</Alert>}
+      {(messagePayment === "Pedido realizado com sucesso!") && <Alert severity="success">{messagePayment}</Alert>}
 
     </Box>
 

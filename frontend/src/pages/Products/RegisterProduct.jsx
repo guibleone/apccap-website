@@ -7,30 +7,9 @@ import ProductsPagination from '../../components/Pagination/Products'
 import { toast } from 'react-toastify'
 import { AiOutlineEdit } from 'react-icons/ai'
 import { BiTrashAlt } from 'react-icons/bi'
+import { styleError, styleSuccess } from '../toastStyles'
 
 function RegisterProduct() {
-  const styleError = {
-    position: "top-right",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "colored",
-  }
-
-  const styleSuccess = {
-    position: "top-right",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "colored",
-  }
-
   const dispatch = useDispatch()
 
   const { user } = useSelector(state => state.auth)

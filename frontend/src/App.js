@@ -20,6 +20,7 @@ import SingleSpread from './pages/Dashboard/Acesses/Tesoureiro/SingleSpread';
 import UserSingle from './pages/UserSingle/UserSingle';
 import Festival from './pages/Festival/Festival';
 import QuemSomos from './pages/QuemSomos/QuemSomos';
+import User from './pages/Dashboard/Acesses/Presidente/SingleUserCredenciado';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route path='/meu-perfil' element={<Informations />} />
           <Route path='/blog' element={<Blog />} />
           <Route path={`/usuario/:id`} element={<UserSingle /> } />
+          <Route path={`/usuario-credenciado/:id`} element={<User /> } />
           <Route path={`/produtos`} element={<RegisterProduct />} />
           <Route path={`/produto/:id`} element={<SingleProduct />}/>
           <Route path={`/rastreabilidade`} element={<Traceability />}/>

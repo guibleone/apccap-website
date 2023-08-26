@@ -5,29 +5,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getOneSpread, editSpreadSheet, resetSpreadSheet } from '../../../../features/spreadSheet/spreadSheetSlice'
 import { toast } from 'react-toastify'
 import { RiArrowGoBackFill } from 'react-icons/ri'
+import { styleError, styleSuccess } from '../../../toastStyles'
 
 export default function SingleSpread() {
-    const styleSuccess = {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-    }
-
-    const styleError = {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-    }
 
     const { id } = useParams()
     const dispatch = useDispatch()

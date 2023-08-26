@@ -3,31 +3,9 @@ import React, { useState } from 'react'
 import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
 import { addSpreadSheet } from '../../../../features/spreadSheet/spreadSheetSlice'
+import { styleError } from '../../../toastStyles'
 
 export default function AddSpread() {
-
-    const toastStyles = {
-        styleSuccess: {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-        },
-        styleError: {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-        }
-    }
 
     const style = {
         position: 'absolute',
@@ -82,7 +60,7 @@ export default function AddSpread() {
 
     const submitCost = (e) => {
 
-        if (!title || !cost_description || !cost) return toast.error('Preencha todos os campos', toastStyles.styleError)
+        if (!title || !cost_description || !cost) return toast.error('Preencha todos os campos',styleError)
 
         e.preventDefault()
 
@@ -98,8 +76,8 @@ export default function AddSpread() {
     const submitSpreadsheet = (e) => {
         e.preventDefault()
 
-        if (!spreadsheet.title_spread) return toast.error('Preencha o título da planilha', toastStyles.styleError)
-        if (costs.length === 0) return toast.error('Adicione pelo menos um item', toastStyles.styleError)
+        if (!spreadsheet.title_spread) return toast.error('Preencha o título da planilha',styleError)
+        if (costs.length === 0) return toast.error('Adicione pelo menos um item',styleError)
 
         const data = {
             token: user.token,

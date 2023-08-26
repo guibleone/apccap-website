@@ -5,29 +5,9 @@ import { addExcel, deleteExcel, resetExcel } from '../../../../features/spreadSh
 import { toast } from 'react-toastify'
 import { AiOutlineDownload } from 'react-icons/ai'
 import { BiTrashAlt } from 'react-icons/bi'
+import { styleError, styleSuccess } from '../../../toastStyles'
 
 export default function AddExcelSpread() {
-    const styleError = {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-    }
-
-    const styleSuccess = {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-    }
     const { user } = useSelector((state) => state.auth)
     const { spreadSheets, isLoading, excel } = useSelector((state) => state.spreadSheet)
     const dispatch = useDispatch()

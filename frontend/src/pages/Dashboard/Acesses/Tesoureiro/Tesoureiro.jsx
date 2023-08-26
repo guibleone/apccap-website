@@ -8,10 +8,6 @@ import AddExcelSpread from './AddExcelSpread'
 
 export default function Tesoureiro() {
 
-  const styles = {
-
-  }
-  
   const { user } = useSelector((state) => state.auth)
   const dispatch = useDispatch()
 

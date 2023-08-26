@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { reset } from "../../features/auth/authSlice"
 import { listUsers } from "../../features/admin/adminSlice"
 import { Typography, Box, Container, CssBaseline, Link, Button, TextField, CircularProgress, useMediaQuery } from '@mui/material';
 import RegisterProduct from "../Products/RegisterProduct";
 import { trackProduct, clear } from "../../features/products/productsSlice";
-import UsersPagination from "../../components/Pagination/Users"
 import Secretary from "./Acesses/Secretary"
 import Tesoureiro from "./Acesses/Tesoureiro/Tesoureiro"
 import President from "./Acesses/Presidente/President"
 import Admin from "./Acesses/Admin"
 import { getSubscription } from "../../features/payments/paymentsSlice"
+import { FcLock } from 'react-icons/fc'
 
 function Dashboard() {
 
@@ -19,7 +18,7 @@ function Dashboard() {
 
   const { isLoading } = useSelector((state) => state.admin)
   const { isLoading: productLoading } = useSelector((state) => state.products)
-  const {payments} = useSelector((state) => state.payments)
+  const { payments } = useSelector((state) => state.payments)
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -38,11 +37,15 @@ function Dashboard() {
   }
 
   useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
+  useEffect(() => {
 
     if (user && (user.role === "admin" || user.role === 'secretario' || user.role === 'presidente')) {
       dispatch(listUsers(user.token))
     }
-    if(user && (user.role === 'produtor')){
+    if (user && (user.role === 'produtor')) {
       const userData = {
         email: user.email,
         token: user.token
@@ -84,11 +87,15 @@ function Dashboard() {
     }
   }
 
-  if((payments && user) && payments.subscription !=='active' && user.role === 'produtor'){
-    return <Box sx={{display:'flex', flexDirection:'column', alignItems:'center', minHeight:'100vh'}}>
-      <Typography variant="h5">Você precisa assinar a mensalidade para ter acesso a essa página.</Typography>
-      <Button color='success' variant='contained' href="/credencial-produtor">Assinar</Button>
-    </Box>
+  if ((payments && user) && payments.subscription !== 'active' && user.role === 'produtor') {
+    return (
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh', padding:'20px', gap:'10px' }}>
+        <FcLock size={100} />
+        <Typography textAlign={'center'} variant="h5">Acesso negado</Typography>
+        <Typography textAlign={'center'} variant="p">Verifique a situação da sua credencial</Typography>
+        <Button color='success' variant='outlined' onClick={() => navigate('/credencial-produtor')} >Credencial</Button>
+      </Box>
+    )
   }
 
 
@@ -110,7 +117,7 @@ function Dashboard() {
           <TextField type="number" placeholder="Digite o selo do produto" value={selo} onChange={(e) => setSelo(e.target.value)} />
           <Button disabled={productLoading} onClick={onTrack} variant="contained" color="success">
             {productLoading ? <CircularProgress size={25} color="success" /> : 'Rastrar'}
-            </Button>
+          </Button>
 
         </Box>
 

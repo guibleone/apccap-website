@@ -18,8 +18,6 @@ function UserSingle() {
 
     const { userData, resumeData, documentsData, isLoading, message, isError, isSuccess } = useSelector((state) => state.admin)
 
-
-
     const name = userData ? userData.name : ''
     const cpf = userData ? userData.cpf : ''
     const pathFoto = userData ? userData.pathFoto : ''

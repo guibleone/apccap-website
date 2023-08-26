@@ -35,6 +35,7 @@ const getUserData = asyncHandler(async (req, res) => {
     try {
 
         const user = await User.findById(req.params.id).select('-password')
+         
 
         //const token = req.user.token
 

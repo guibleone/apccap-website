@@ -3,6 +3,7 @@ import { Box, FormControl, InputLabel, MenuItem, Select, Typography, Button, Css
 import { useDispatch, useSelector } from 'react-redux'
 import { alterAccess } from '../../features/admin/adminSlice'
 import { toast } from 'react-toastify'
+import { styleError, styleSuccess } from '../toastStyles'
 
 function AccessLevel({ id, token }) {
 
@@ -23,28 +24,6 @@ function AccessLevel({ id, token }) {
     role
   }
 
-  const errorStyle = {
-    position: "top-right",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "colored",
-  }
-
-  const sucessStyle = {
-    position: "top-right",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "colored",
-  }
-
   const handleChange = (event) => {
     setRole(event.target.value);
   }
@@ -60,7 +39,7 @@ function AccessLevel({ id, token }) {
   const handleSubmit = () => {
 
     if (!acessData.role) {
-      return toast.error('Selecione um nível de acesso', errorStyle)
+      return toast.error('Selecione um nível de acesso', styleError)
     }
 
     dispatch(alterAccess(acessData))
@@ -69,7 +48,7 @@ function AccessLevel({ id, token }) {
   useEffect(() => {
 
     if (isSuccess) {
-      toast.success('Acesso alterado', sucessStyle)
+      toast.success('Acesso alterado', styleSuccess)
     }
 
   }, [])

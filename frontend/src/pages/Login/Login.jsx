@@ -6,7 +6,7 @@ import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
 import { Button, Typography, Box, Container, CssBaseline, TextField, CircularProgress, Avatar,Grid,Link  } from '@mui/material';
 import { AiFillUnlock } from 'react-icons/ai'
-
+import { styleError, styleSuccess } from '../toastStyles'
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -24,16 +24,7 @@ function Login() {
   useEffect(() => {
 
     if (isError) {
-      toast.error(message, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      })
+      toast.error(message, styleError)
     }
 
     if (isSuccess || user) {

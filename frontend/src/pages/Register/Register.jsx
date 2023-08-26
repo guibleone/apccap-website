@@ -9,6 +9,7 @@ import {
   Avatar, FormControlLabel, Checkbox, Grid, Link, LockOutlinedIcon
 } from '@mui/material';
 import { AiFillLock } from 'react-icons/ai'
+import { styleError, styleSuccess } from '../toastStyles'
 
 
 function Register() {
@@ -31,16 +32,7 @@ function Register() {
 
   useEffect(() => {
     if (isError) {
-      toast.error(message, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      })
+      toast.error(message, styleError)
     }
 
     if (isSuccess || user) {
@@ -73,16 +65,7 @@ function Register() {
     e.preventDefault()
 
     if (password !== password2) {
-      toast.error('Senhas não conferem.', {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      })
+      toast.error('Senhas não conferem.', styleError)
     }
     else {
       const userData = {

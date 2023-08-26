@@ -38,19 +38,17 @@ function Producer() {
         <Container sx={{ minHeight: '100vh' }}>
             <CssBaseline />
 
-            <Box sx={{ display: 'flex', flexDirection:'column', gap:'10px', alignItems:'center' }}>
+            <Box sx={{ display: 'flex', flexDirection:'column', gap:'10px', alignItems:'center', padding:'20px' }}>
 
                 {user.status === 'analise' && <Typography textAlign='center' variant='h4'>Seu cadastro está em análise <FcClock /></Typography>}
 
                 {user.status === 'aprovado' && (
                     <>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', gap:'10px' }}>
-                            <Typography textAlign='center' variant='h4'>Aprovado <FcApproval /> </Typography>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap:'10px', alignItems:'center' }}>
+                            <Typography  variant='h4'>Aprovado <FcApproval /> </Typography>
                             <Typography>{user.relatory}</Typography>
 
-                            <Typography variant='p'>Como produtor credenciado você terá que pagar uma taxa mensal.
-                                Caso não pague estará sujeito a reinvidicação da credencial.
-                            </Typography>
+                            <Typography textAlign={'center'} variant=''>Assine a nossa credencial para ter acesso a todas funcionalidades</Typography>
 
                             <Mensalidade />
 

@@ -2,6 +2,7 @@ import { Box, Container, Typography, CircularProgress, Button, Link } from '@mui
 import {  useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux'
 import { FcOk, FcHighPriority } from "react-icons/fc";
+import { useEffect } from 'react';
 
 function Traceability() {
 
@@ -10,6 +11,11 @@ function Traceability() {
   const product = localStorage.getItem('product')
 
   const navigate = useNavigate()
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
 
   if (isLoading) {
     return <Box sx={
@@ -41,6 +47,8 @@ function Traceability() {
       <Typography variant='h4'> Rastreio Indisponível <FcHighPriority /> </Typography>
     </Box>
   }
+
+
 
   return (
     <Container sx={

@@ -6,6 +6,7 @@ import { toast } from "react-toastify"
 import { resetDocuments } from "../../features/documents/documentsSlice"
 import { Button, Typography, Box, Stack, CircularProgress } from '@mui/material';
 import { FaDownload, FaTrash } from 'react-icons/fa'
+import {styleError, styleSuccess} from '../toastStyles'
 
 function Documents() {
 
@@ -42,16 +43,7 @@ function Documents() {
 
   useEffect(() => {
     if (documents && isError) {
-      toast.error(message, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      })
+      toast.error(message, styleError)
     }
 
     dispatch(resetDocuments())

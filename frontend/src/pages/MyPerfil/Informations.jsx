@@ -9,7 +9,7 @@ import { getResume } from "../../features/resume/resumeSlice"
 import { getDocuments } from "../../features/documents/documentsSlice"
 import { Button, Stack, Avatar, Typography, Divider, Box, Container, CssBaseline, TextField, CircularProgress, Grid } from '@mui/material'
 import { useMediaQuery } from "@mui/material"
-import { FaAddressCard } from 'react-icons/fa'
+import {styleError, styleSuccess} from '../toastStyles'
 
 
 function Informations() {
@@ -48,29 +48,11 @@ function Informations() {
 
     useEffect(() => {
         if (isError) {
-            toast.error(message, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-            })
+            toast.error(message, styleError)
         }
 
         if (isSuccess) {
-            toast.success('Dados atualizados com sucesso!', {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-            })
+            toast.success('Dados atualizados com sucesso!', styleSuccess)
         }
 
         dispatch(reset())
@@ -228,9 +210,8 @@ function Informations() {
                 <Resume />
 
                 <Divider sx={{ margin: '20px 0' }} />
-
-
             </Box>
+
         </Container >
 
     )

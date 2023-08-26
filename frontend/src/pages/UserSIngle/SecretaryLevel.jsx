@@ -6,6 +6,7 @@ import { downloadDocument } from '../../features/documents/documentsSlice'
 import { toast } from 'react-toastify'
 import { sendRelatory } from '../../features/admin/adminSlice'
 import { AiFillWarning } from 'react-icons/ai'
+import { styleError, styleSuccess } from '../toastStyles'
 
 export default function SecretaryLevel() {
 
@@ -14,28 +15,6 @@ export default function SecretaryLevel() {
     const dispatch = useDispatch()
 
     const documents = documentsData ? documentsData : []
-
-    const styleError = {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-    }
-
-    const styleSuccess = {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-    }
 
     const matches = useMediaQuery('(min-width:600px)');
     

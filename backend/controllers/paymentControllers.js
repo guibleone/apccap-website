@@ -48,11 +48,14 @@ const payMensalidade = asyncHandler(async (req, res) => {
 const getSubscription = asyncHandler(async (req, res) => {
 
     const { email } = req.body;
+
     try {
         const customer = await stripe.customers.list({
             email: email,
             limit: 1
         });
+
+        if(!customer.data.length) return res.status(200).json({subscription: null });
 
         const subscription = await stripe.subscriptions.list({
             customer: customer.data[0].id,
