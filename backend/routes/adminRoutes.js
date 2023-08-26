@@ -31,6 +31,6 @@ router.put('/user/disapprove/:id', hasRole(['admin','presidente']), disapproveUs
 router.post('/payment', getPayment)
 
 // PARTE DO SECRETÁRIO
-router.post('/relatory/:id', hasRole('secretario'), sendRelatory)
+router.post('/relatory/:id', hasRole(['secretario','presidente']), sendRelatory)
 
 module.exports = router;

@@ -109,6 +109,7 @@ export const aproveUser = createAsyncThunk('admin/aprove', async (user, thunkAPI
 export const disapproveUser = createAsyncThunk('admin/disapprove', async (user, thunkAPI) => {
     try{
         const response = await adminService.disapproveUser(user)
+        thunkAPI.dispatch(listUsers(user.token)) // atualizar lista de usuários
         return response
     }catch(error){
         // caso ocorra algum erro

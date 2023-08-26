@@ -10,6 +10,7 @@ const unlinkAsync = promisify(fs.unlink)
 const { ref, getDownloadURL, uploadBytesResumable, deleteObject } = require("firebase/storage");
 const { storage } = require('../db/firebase.js');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
+const jwt = require('jsonwebtoken')
 
 
 // pegar usuário
@@ -35,9 +36,6 @@ const getUserData = asyncHandler(async (req, res) => {
     try {
 
         const user = await User.findById(req.params.id).select('-password')
-         
-
-        //const token = req.user.token
 
         if (user) {
             res.status(200).json(user)
@@ -50,6 +48,7 @@ const getUserData = asyncHandler(async (req, res) => {
         throw new Error('Erro ao carrgegar usuário')
     }
 })
+
 
 // pegar documentos do usuário
 const getUserDocuments = asyncHandler(async (req, res) => {
@@ -124,7 +123,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 
         if (products) {
             products.map(async (product) => {
-                if(product.path){
+                if (product.path) {
                     const storageRef = ref(storage, `productsPhotos/${product.producer}/${product.name}.jpg`)
                     await deleteObject(storageRef)
                 }
@@ -134,7 +133,7 @@ const deleteUser = asyncHandler(async (req, res) => {
         await User.findByIdAndDelete(req.params.id)
         await Document.deleteMany({ user: req.params.id })
         await Resume.deleteMany({ user: req.params.id })
-        await SpreadSheet.deleteMany({ user: req.params.id })    
+        await SpreadSheet.deleteMany({ user: req.params.id })
         await Products.deleteMany({ producer: req.params.id })
 
         res.status(200).json('Usuário deletado com sucesso')

@@ -87,7 +87,7 @@ function Dashboard() {
     }
   }
 
-  if ((payments && user) && payments.subscription !== 'active' && user.role === 'produtor') {
+  if ((payments && user && payments.subscription !== 'active' && user.role === 'produtor') || (user && user.status === 'reprovado')) {
     return (
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh', padding:'20px', gap:'10px' }}>
         <FcLock size={100} />

@@ -1,24 +1,85 @@
-import { Avatar, Box, Button, Container, Divider, Grid, Skeleton, Typography } from '@mui/material'
+import { Avatar, Box, Button, Container, Divider, Grid, Skeleton, Typography, Modal, CircularProgress, TextareaAutosize } from '@mui/material'
 import React, { useEffect } from 'react'
 import { useParams } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
-import { getUserData } from '../../../../features/admin/adminSlice'
+import { getUserData, sendEmail, sendRelatory } from '../../../../features/admin/adminSlice'
 import { getSubscription } from '../../../../features/payments/paymentsSlice'
 import { useMediaQuery } from '@mui/material'
 import { useNavigate } from 'react-router'
+import { useState } from 'react'
+import { AiFillWarning } from 'react-icons/ai'
+import { styleError, styleSuccess } from '../../../toastStyles'
+import { toast } from 'react-toastify'
+import { disapproveUser } from '../../../../features/admin/adminSlice'
+
 
 export default function User() {
 
     const { user } = useSelector((state) => state.auth)
-    const { userData: produtor,  } = useSelector((state) => state.admin)
+    const { userData: produtor, isLoading: isLoadingAdmin } = useSelector((state) => state.admin)
     const { payments, isLoading: isLoadingPayment } = useSelector((state) => state.payments)
-    const matches = useMediaQuery('(max-width:800px)')
+    const matches = useMediaQuery('(min-width:600px)')
+
+    const [openDesaprove, setOpenDesaprove] = useState(false);
+
+    const handleOpenDesaprove = () => setOpenDesaprove(true);
+    const handleCloseDesaprove = () => setOpenDesaprove(false);
 
     const dispatch = useDispatch()
 
     const { id } = useParams()
 
     const navigate = useNavigate()
+
+    const style = matches ? {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+
+    } : {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: '90%',
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+
+    }
+
+    const [relatory, setRelatory] = useState('')
+
+
+    const handleDessaprove = () => {
+
+        if(!relatory) return toast.error('Preencha o relatório', styleError)
+
+        dispatch(sendEmail({
+            email: produtor.email,
+            title: 'Descredenciamento de produtor',
+            message: relatory,
+        }))
+
+        const relatoryData = {
+            relatory,
+            id: produtor._id,
+            token: user.token
+        }
+
+        dispatch(sendRelatory(relatoryData))
+        dispatch(disapproveUser({ id, token: user.token }))
+
+        toast.success('Usuário descredenciado com sucesso', styleSuccess)
+        navigate('/')
+    }
 
     useEffect(() => {
 
@@ -36,7 +97,7 @@ export default function User() {
 
     useEffect(() => {
         window.scrollTo(0, 0)
-      }, [])
+    }, [])
 
     return (
         <Container sx={{ minHeight: '100vh' }}>
@@ -65,8 +126,8 @@ export default function User() {
 
                 <Grid item xs={12} md={5} sx={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center', padding: '10px' }}  >
 
-                    {isLoadingPayment ? <Skeleton variant='rectangular' width={'100%'} height={user.relatory} /> : (
-                        <Typography textAlign={'center'} variant='h6'>{user && user.relatory ? user.relatory : 'Usuário não possui relatório'}</Typography>
+                    {isLoadingPayment ? <Skeleton variant='rectangular' width={'100%'} height={produtor.relatory} /> : (
+                        <Typography textAlign={'center'} variant='h6'>{(produtor && produtor.relatory) ? produtor.relatory : 'Usuário não possui relatório'}</Typography>
                     )}
                 </Grid>
 
@@ -76,11 +137,11 @@ export default function User() {
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItens: 'center', gap: '10px', padding: '10px' }}>
 
                         {isLoadingPayment ? <Skeleton variant='rectangular' width={'100%'} height={15} /> : (
-                            <Typography textAlign={'center'}  variant='h7'>Status: {user && user.status}</Typography>
+                            <Typography textAlign={'center'} variant='h7'>Status: {produtor && produtor.status}</Typography>
                         )}
 
                         {isLoadingPayment ? <Skeleton variant='rectangular' width={'100%'} height={15} /> : (
-                            <Typography textAlign={'center'}   variant='h7'>Credencial: {payments && payments.subscription ? 'Ativa' : 'Inativa'}</Typography>
+                            <Typography textAlign={'center'} variant='h7'>Credencial: {payments && payments.subscription ? 'Ativa' : 'Inativa'}</Typography>
                         )}
 
                     </Box>
@@ -88,7 +149,43 @@ export default function User() {
                 </Grid>
 
                 <Grid item xs={12} md={12} sx={{ margin: '10px 0' }}  >
-                    <Button fullWidth variant='outlined' color='error' href={`/usuario/${id}/editar`}>Descredenciar</Button>
+                    <Button fullWidth onClick={handleOpenDesaprove} color='error' variant='outlined'>Descredenciar</Button>
+                    <Modal
+                        open={openDesaprove}
+                        onClose={handleCloseDesaprove}
+                    >
+                        <Box sx={style}>
+                            <Box sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '10px'
+                            }}>
+                                <Box display={'flex'} justifyContent={'space-between'}>
+                                    <Typography variant="h6" >Tem certeza ? </Typography>
+                                    <AiFillWarning color='red' size={30} />
+                                </Box>
+
+                                <Typography variant="h7" >Digite o motivo do descredenciamento.</Typography>
+
+                                <TextareaAutosize onChange={(e) => setRelatory(e.target.value)} minRows={8} style={{ width: '100%' }} />
+
+
+                                <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+                                    <Button color='error' variant='outlined' onClick={handleCloseDesaprove}>Cancelar</Button>
+
+                                    <Button
+                                        disabled={isLoadingAdmin}
+                                        color="success"
+                                        variant='outlined'
+                                        onClick={handleDessaprove}
+                                    >
+                                        {isLoadingAdmin ? <CircularProgress color="success" size={24} /> : 'Descredenciar'}
+                                    </Button>
+
+                                </Box>
+                            </Box>
+                        </Box>
+                    </Modal>
                     <Button sx={{ margin: '10px 0' }} fullWidth variant='outlined' color='success' onClick={() => navigate('/')}>Voltar</Button>
                 </Grid>
 

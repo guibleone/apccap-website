@@ -39,7 +39,7 @@ export default function UsersCredenciados() {
                     {(user.role === 'produtor' && user.status === 'aprovado') && (
                         <>
                             <Typography variant="h6" >{`${user.name}`}</Typography>
-                            <Button variant="outlined" onClick={() => navigate(`/usuario-credenciado/${user._id}`)}>Ver Dados</Button>
+                            <Button variant="outlined" onClick={() => navigate(`/usuario-credenciado/${user._id}`)} > Ver Dados</Button>
                         </>
                     )}
 

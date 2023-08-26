@@ -19,7 +19,7 @@ router.delete('/:id', deleteUser)
 router.put('/:id', protect, updateUser)
 
 // Reinicar aprovação de usuário
-router.put('/reset/:id', hasRole('user'), restartAprove)
+router.put('/reset/:id', hasRole(['user','produtor']), restartAprove)
 
 
 // exporta o router

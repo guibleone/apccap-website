@@ -114,10 +114,10 @@ export default function President() {
         </Button>
 
       </Box>
+        
+        <Divider sx={{ margin: '20px 0' }} />
 
-      <Divider sx={{ margin: '20px 0' }} />
-
-      <UsersCredenciados />
+        <UsersCredenciados  />
 
     </Container >
   )
