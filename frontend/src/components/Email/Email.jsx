@@ -136,7 +136,7 @@ export default function Email({ email }) {
                         <TextareaAutosize
                             minRows={8}
                             placeholder='Mensagem'
-                            style={{ width: "100%", resize: 'none', fontSize: '16px', padding: '10px' }}
+                            style={{ width: "100%", resize: 'none', fontSize: '16px', padding: '10px', border:'1px solid black' }}
                             maxRows={8}
                             defaultValue={message}
                             onChange={onChange}

@@ -152,7 +152,7 @@ export default function User() {
                         )}
 
                         {isLoadingPayment ? <Skeleton variant='rectangular' width={'100%'} height={15} /> : (
-                            <Typography sx={{ textAlign: 'center' }} variant='h7'>Credencial {payments && payments.subscription ?
+                            <Typography sx={{ textAlign: 'center' }} variant='h7'>Assinatura {payments && payments.subscription ?
                                 (<FcOk style={{ verticalAlign: 'bottom' }} size={25} />) : (<FcCancel style={{ verticalAlign: 'bottom' }} size={25} />)}
                             </Typography>
                         )}

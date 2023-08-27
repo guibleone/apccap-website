@@ -4,6 +4,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 const paySelos = asyncHandler(async (req, res) => {
 
     const URL = 'http://localhost:3000'
+    
     const { quantity } = req.body
 
     const session = await stripe.checkout.sessions.create({

@@ -1,4 +1,4 @@
-import { Box, Container, Typography, CircularProgress, Button, Link, TextField } from '@mui/material'
+import { Box, Container, Typography, CircularProgress, Button, Link, TextField, Alert } from '@mui/material'
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'
 import { FcOk, FcHighPriority } from "react-icons/fc";
@@ -26,8 +26,6 @@ function Traceability() {
     dispatch(trackProduct({ selo }))
   }
 
-
-
   if (isLoading) {
     return <Box sx={
       {
@@ -45,13 +43,14 @@ function Traceability() {
     </Box>
   }
 
-  if ((productData && Object.keys(productData).length <= 0) && !isError) {
+  if ((productData && Object.keys(productData).length <= 0)) {
     return (<Container sx={
       {
         display: 'flex',
         flexDirection: 'column',
         gap: '10px',
         minHeight: '100vh',
+        marginTop: '10px',
       }
     }>
 
@@ -60,6 +59,8 @@ function Traceability() {
       <Button disabled={isLoading} onClick={onTrack} variant="contained" color="success">
         {isLoading ? <CircularProgress size={25} color="success" /> : 'Rastrear'}
       </Button>
+
+      {isError && <Alert severity="error" sx={{ width: '100%' }}>{message}</Alert>}
 
     </Container>
 
@@ -73,48 +74,30 @@ function Traceability() {
         marginTop: '10px',
       }
     }>
+      {!isError && <Box sx={
+        {
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '10px',
+          alignItems: 'center',
+          textAlign: 'center',
+        }
+      }>
 
-      {(isError) ? (
-        <Box sx={
-          {
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '10px',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }
-        }>
-          <Typography variant='h4'> {message} <FcHighPriority /> </Typography>
-          <Button variant='contained' color='error' onClick={() => dispatch(reset()) && navigate('/rastreabilidade')}> Tentar novamente </Button>
-        </Box>
-      )
+        <Typography variant='h4'> Produto Oficial <FcOk size={45} style={{ verticalAlign: 'bottom' }} /></Typography>
 
-        : (
-          <Box sx={
-            {
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '10px',
-              alignItems: 'center',
-              textAlign: 'center',
-            }
-          }>
+        <img width={300} src={productData.path ? productData.path : 'https://placehold.co/300x300'} alt="Foto do produto" />
 
-            <Typography variant='h4'> Produto Oficial <FcOk size={45} style={{verticalAlign:'bottom'}} /></Typography>
+        <Typography variant='h5'> {productData.name} </Typography>
+        <Typography variant='h5'> {productData.description} </Typography>
 
-            <img width={300} src={productData.path ? productData.path : 'https://placehold.co/300x300'} alt="Foto do produto" />
+        <Button variant='contained' onClick={() => navigate(`/produtor/${productData.producer}`)} sx={{ textDecoration: 'none', width: '300px' }} >Produtor</Button>
+        <Button sx={{ width: '300px' }} variant='contained' color='success' onClick={() => dispatch(reset()) && navigate('/rastreabilidade')}> Voltar </Button>
 
-            <Typography variant='h5'> {productData.name} </Typography>
-            <Typography variant='h5'> {productData.description} </Typography>
-
-            <Button variant='contained' onClick={() => navigate(`/produtor/${productData.producer}`)} sx={{ textDecoration: 'none', width: '300px' }} >Produtor</Button>
-            <Button sx={{ width: '300px' }} variant='contained' color='success' onClick={() => dispatch(reset()) && navigate('/rastreabilidade')}> Voltar </Button>
-
-
-          </Box>
-
-        )
+      </Box>
       }
+
+
 
 
     </Container>

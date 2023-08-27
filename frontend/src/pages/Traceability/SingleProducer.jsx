@@ -62,7 +62,7 @@ function SingleProducer() {
 
             <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center', flexDirection: 'column' }}>
                 <Box sx={styleBox}>
-                    <Avatar variant='square' src={producer.pathFoto ? producer.pathFoto : 'https://placehold.co/600x400'} alt="Foto de Perfil"
+                    <Avatar variant='rounded' src={producer.pathFoto ? producer.pathFoto : 'https://placehold.co/600x400'} alt="Foto de Perfil"
                         sx={{ width: 150, height: 150 }}
                     />
 
