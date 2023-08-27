@@ -100,7 +100,7 @@ function Dashboard() {
 
 
   return (
-    <Container sx={{ minHeight: '100vh' }}>
+    <Container sx={{ minHeight: '100vh', marginTop: '10px', }}>
       <CssBaseline />
 
       {(!user || user.role === 'user') ? (
@@ -114,9 +114,9 @@ function Dashboard() {
         }>
 
           <Typography variant="h4" component="h1" gutterBottom>Rastreie produtos oficiais</Typography>
-          <TextField type="number" placeholder="Digite o selo do produto" value={selo} onChange={(e) => setSelo(e.target.value)} />
+          <TextField type="number"  name='selo' placeholder="Digite o selo do produto" value={selo} onChange={(e) => setSelo(e.target.value)} />
           <Button disabled={productLoading} onClick={onTrack} variant="contained" color="success">
-            {productLoading ? <CircularProgress size={25} color="success" /> : 'Rastrar'}
+            {productLoading ? <CircularProgress size={25} color="success" /> : 'Rastrear'}
           </Button>
 
         </Box>

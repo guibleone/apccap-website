@@ -173,6 +173,13 @@ const productsSlice = createSlice({
             state.isSuccess = false
             state.isLoading = false
         },
+        reset(state) {
+            state.message = ''
+            state.isError = false
+            state.isSuccess = false
+            state.isLoading = false
+            state.productData = {}
+        }
 
     },
     extraReducers: (builder) => {
@@ -372,6 +379,6 @@ const productsSlice = createSlice({
     }
 })
 
-export const { clear } = productsSlice.actions
+export const { clear, reset } = productsSlice.actions
 export default productsSlice.reducer
 

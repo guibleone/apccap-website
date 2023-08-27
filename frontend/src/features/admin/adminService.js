@@ -133,6 +133,21 @@ const sendRelatory = async (relatoryData) => {
     return response.data
 }
 
+// PARTE DO PRESIDENTE
+const getProducts = async (data) => {
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${data.token}`
+        }
+    }
+
+
+    const response = await axios.get(API_URI + '/products/' + data.id, config)
+    return response.data
+}
+
+
 // EMAILS
 
 const sendEmail = async (emailData) => {
@@ -157,7 +172,8 @@ const adminService = {
     sendRelatory,
     sendEmail,
     disapproveUser,
-    sendConvocationEmail
+    sendConvocationEmail,
+    getProducts
 }
 
 export default adminService

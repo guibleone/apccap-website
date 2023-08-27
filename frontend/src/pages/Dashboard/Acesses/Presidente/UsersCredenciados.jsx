@@ -25,8 +25,8 @@ export default function UsersCredenciados() {
     return (
         <>
             <Box>
-                <Typography variant='h7'>Estes são os usuários aprovados.</Typography>
-                <Typography variant='p'>Se necessário descredencie-os</Typography>
+                <Typography variant='h5'>Produtores</Typography>
+                <Typography variant='p'>Gerencie as credenciais</Typography>
             </Box>
 
             {users && users.map((user) => (

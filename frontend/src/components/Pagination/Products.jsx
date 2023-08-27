@@ -4,7 +4,7 @@ import { useSelector } from "react-redux"
 
 export default function ProductsPagination({setProductsData}) {
 
-    const { productsData } = useSelector((state) => state.products)
+    const productsData = useSelector((state) => state.admin.productsData ? state.admin.productsData : state.products.productsData)
 
     const service = {
         getData: ({ from, to }) => {

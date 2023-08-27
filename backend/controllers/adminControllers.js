@@ -281,6 +281,24 @@ const sendRelatory = asyncHandler(async (req, res) => {
     res.status(200).send(user)
 })
 
+// parte do presidente
+
+const getProuducts = asyncHandler(async (req, res) => {
+    try {
+        const products = await Products.find({producer: req.params.id})
+
+        if (!products) {
+            res.status(404)
+            throw new Error('Produtos não encontrados')
+        }
+
+        res.status(200).json(products)
+
+    } catch (error) {
+        res.status(400)
+        throw new Error('Erro ao carregar produtos')
+    }
+})
 
 
 module.exports = {
@@ -294,4 +312,5 @@ module.exports = {
     getPayment,
     sendRelatory,
     disapproveUser,
+    getProuducts
 }

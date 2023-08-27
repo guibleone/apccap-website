@@ -107,12 +107,6 @@ export const addProductPhoto = async (product) => {
 export const trackProduct = async (selo) => {
 
     const response = await axios.post(API_URI + 'rastrear', selo)
-
-    if (response.data) {
-        localStorage.removeItem('error')
-        localStorage.setItem('product', JSON.stringify(response.data))
-    }
-
     return response.data
 }
 

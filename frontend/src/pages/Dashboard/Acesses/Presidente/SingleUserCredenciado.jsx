@@ -1,8 +1,8 @@
-import { Avatar, Box, Button, Container, Divider, Grid, Skeleton, Typography, Modal, CircularProgress, TextareaAutosize } from '@mui/material'
+import { Avatar, Box, Button, Container, Divider, Grid, Skeleton, Typography, Modal, CircularProgress, TextareaAutosize, Card, CardMedia, CardContent } from '@mui/material'
 import React, { useEffect } from 'react'
 import { useParams } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
-import { getUserData, sendEmail, sendRelatory } from '../../../../features/admin/adminSlice'
+import { getProducts, getUserData, sendEmail, sendRelatory } from '../../../../features/admin/adminSlice'
 import { getSubscription } from '../../../../features/payments/paymentsSlice'
 import { useMediaQuery } from '@mui/material'
 import { useNavigate } from 'react-router'
@@ -11,15 +11,18 @@ import { AiFillWarning } from 'react-icons/ai'
 import { styleError, styleSuccess } from '../../../toastStyles'
 import { toast } from 'react-toastify'
 import { disapproveUser } from '../../../../features/admin/adminSlice'
-
+import { FcCancel, FcDeleteDatabase, FcOk } from 'react-icons/fc'
+import ProductsPagination from '../../../../components/Pagination/Products'
 
 export default function User() {
 
     const { user } = useSelector((state) => state.auth)
-    const { userData: produtor, isLoading: isLoadingAdmin } = useSelector((state) => state.admin)
+    const { userData: produtor, isLoading: isLoadingAdmin, } = useSelector((state) => state.admin)
     const { payments, isLoading: isLoadingPayment } = useSelector((state) => state.payments)
-    const matches = useMediaQuery('(min-width:600px)')
+    const matches = useMediaQuery('(min-width:800px)')
 
+    const [productsData, setProductsData] = useState([])
+    
     const [openDesaprove, setOpenDesaprove] = useState(false);
 
     const handleOpenDesaprove = () => setOpenDesaprove(true);
@@ -57,10 +60,9 @@ export default function User() {
 
     const [relatory, setRelatory] = useState('')
 
-
     const handleDessaprove = () => {
 
-        if(!relatory) return toast.error('Preencha o relatório', styleError)
+        if (!relatory) return toast.error('Preencha o relatório', styleError)
 
         dispatch(sendEmail({
             email: produtor.email,
@@ -85,6 +87,13 @@ export default function User() {
 
         dispatch(getUserData({ id, token: user.token }))
 
+        const data = {
+            id,
+            token: user.token
+        }
+
+        dispatch(getProducts(data))
+
     }, [id, user.token, dispatch])
 
     useEffect(() => {
@@ -101,7 +110,7 @@ export default function User() {
 
     return (
         <Container sx={{ minHeight: '100vh' }}>
-            <Grid container margin={'20px 0'} >
+            <Grid container  >
                 <Grid item xs={12} md={4} >
                     <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '10px', padding: '10px' }}>
 
@@ -122,7 +131,7 @@ export default function User() {
 
                 </Grid>
 
-                <Divider orientation={matches ? 'horizontal' : 'vertical'} flexItem />
+                <Divider orientation={'vertical'} flexItem />
 
                 <Grid item xs={12} md={5} sx={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center', padding: '10px' }}  >
 
@@ -137,11 +146,15 @@ export default function User() {
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItens: 'center', gap: '10px', padding: '10px' }}>
 
                         {isLoadingPayment ? <Skeleton variant='rectangular' width={'100%'} height={15} /> : (
-                            <Typography textAlign={'center'} variant='h7'>Status: {produtor && produtor.status}</Typography>
+                            <Typography textAlign={'center'} variant='h7'>Status {produtor && produtor.status ?
+                                (<FcOk style={{ verticalAlign: 'bottom' }} size={25} />) : (<FcCancel style={{ verticalAlign: 'bottom' }} size={25} />)}
+                            </Typography>
                         )}
 
                         {isLoadingPayment ? <Skeleton variant='rectangular' width={'100%'} height={15} /> : (
-                            <Typography textAlign={'center'} variant='h7'>Credencial: {payments && payments.subscription ? 'Ativa' : 'Inativa'}</Typography>
+                            <Typography sx={{ textAlign: 'center' }} variant='h7'>Credencial {payments && payments.subscription ?
+                                (<FcOk style={{ verticalAlign: 'bottom' }} size={25} />) : (<FcCancel style={{ verticalAlign: 'bottom' }} size={25} />)}
+                            </Typography>
                         )}
 
                     </Box>
@@ -149,7 +162,9 @@ export default function User() {
                 </Grid>
 
                 <Grid item xs={12} md={12} sx={{ margin: '10px 0' }}  >
-                    <Button fullWidth onClick={handleOpenDesaprove} color='error' variant='outlined'>Descredenciar</Button>
+                    {isLoadingPayment ? <Skeleton variant='rectangular' width={'100%'} height={40} /> :
+                        <Button fullWidth onClick={handleOpenDesaprove} color='error' variant='outlined'>Descredenciar</Button>
+                    }
                     <Modal
                         open={openDesaprove}
                         onClose={handleCloseDesaprove}
@@ -158,19 +173,22 @@ export default function User() {
                             <Box sx={{
                                 display: 'flex',
                                 flexDirection: 'column',
-                                gap: '10px'
+                                gap: '10px',
+                                alignItems: 'center',
                             }}>
                                 <Box display={'flex'} justifyContent={'space-between'}>
                                     <Typography variant="h6" >Tem certeza ? </Typography>
                                     <AiFillWarning color='red' size={30} />
                                 </Box>
 
-                                <Typography variant="h7" >Digite o motivo do descredenciamento.</Typography>
+                                <Typography textAlign={'center'} variant="h7" >Digite o motivo do descredenciamento.</Typography>
 
-                                <TextareaAutosize onChange={(e) => setRelatory(e.target.value)} minRows={8} style={{ width: '100%' }} />
+                                <TextareaAutosize onChange={(e) => setRelatory(e.target.value)} minRows={8} style={{ width: '100%', padding: '10px', border: '1px solid black' }} />
 
+                                <Typography color={'red'} variant="h7" >Será enviado um email ao produtor.</Typography>
 
                                 <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+
                                     <Button color='error' variant='outlined' onClick={handleCloseDesaprove}>Cancelar</Button>
 
                                     <Button
@@ -186,10 +204,75 @@ export default function User() {
                             </Box>
                         </Box>
                     </Modal>
-                    <Button sx={{ margin: '10px 0' }} fullWidth variant='outlined' color='success' onClick={() => navigate('/')}>Voltar</Button>
+
+                    {isLoadingPayment ? <Skeleton variant='rectangular' width={'100%'} height={40} sx={{ margin: '10px 0' }} /> :
+                        <Button sx={{ margin: '10px 0' }} fullWidth variant='outlined' color='success' onClick={() => navigate('/')}>Voltar</Button>
+                    }
+
                 </Grid>
 
             </Grid>
+
+            <Divider sx={{ margin: '20px 0' }} />
+
+            <Grid container spacing={2}>
+
+                <Grid item xs={12} md={12} >
+                    {isLoadingPayment ? <Skeleton variant='rectangular' width={'100%'} height={25} /> : (
+                        <Typography textAlign={'center'} variant="h5" >Produtos</Typography>
+                    )}
+                </Grid>
+
+                {(productsData && productsData.length > 0) ? productsData.map((product) => (
+                    <>
+                    <Grid lg={3} md={4} sm={6} xs={12} item key={product._id} sx={{ display: 'flex', justifyContent: 'center' }} >
+                        {isLoadingPayment ? <Skeleton variant='rectangular' width={'100%'} height={270} sx={{ margin: '5px' }} /> : 
+                            <Card
+                                sx={{
+                                    maxWidth: matches ? 352 : 252,
+                                    minWidth: 252,
+                                    border: '1px solid #E4E3E3',
+                                    borderRadius: '5px',                                 
+                                }}>
+
+                                <CardMedia
+                                    sx={{ height: matches ? 252 : 252 }}
+                                    image={product.path ? product.path : 'https://as1.ftcdn.net/jpg/02/68/55/60/220_F_268556012_c1WBaKFN5rjRxR2eyV33znK4qnYeKZjm.jpg'}
+                                />
+
+                                <CardContent>
+                                    <Typography sx={{ textAlign: 'center' }} variant="h6" component="h1">{product.name}</Typography>
+                                </CardContent>
+
+                                <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems:'center' }}>
+                                    <Typography variant="p" >{product.description}</Typography>
+                                    <Typography variant="p" >{product.startSelo} - {product.endSelo}</Typography>
+                                </CardContent>
+
+                            </Card>
+                        }
+                    </Grid>
+
+                   
+
+                    </>
+                    
+
+                )) : (
+                    <Grid item md={12} xs={12} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', margin: '10px 0' }}>
+                        {isLoadingPayment ? <Skeleton variant='rectangular' width={'100%'} height={50} /> : (
+                            <>
+                                <FcDeleteDatabase size={100} />
+                                <Typography variant="h7" >Nenhum produto cadastrado</Typography>
+                            </>
+                        )}
+                    </Grid>
+                )}
+
+            </Grid>
+
+            <ProductsPagination setProductsData={(p) => setProductsData(p)} />
+
 
         </Container>
     )

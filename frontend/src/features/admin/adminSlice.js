@@ -2,14 +2,14 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import adminService from "./adminService";
 
 const initialState = {
-    users:[],
+    users: [],
     userData: {},
     resumeData: null,
     documentsData: null,
     isError: false,
     isLoading: false,
     isSuccess: false,
-    emailStatus:{
+    emailStatus: {
         isSuccess: false,
         isError: false,
         isLoading: false,
@@ -72,7 +72,7 @@ export const getDocumentsData = createAsyncThunk('admin/documents', async (user,
 export const alterAccess = createAsyncThunk('admin/role', async (user, thunkAPI) => {
     try {
         const response = await adminService.alterAccess(user)
-        return response 
+        return response
     } catch (error) {
         // caso ocorra algum erro
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
@@ -107,11 +107,11 @@ export const aproveUser = createAsyncThunk('admin/aprove', async (user, thunkAPI
 // desaprovar usuário
 
 export const disapproveUser = createAsyncThunk('admin/disapprove', async (user, thunkAPI) => {
-    try{
+    try {
         const response = await adminService.disapproveUser(user)
         thunkAPI.dispatch(listUsers(user.token)) // atualizar lista de usuários
         return response
-    }catch(error){
+    } catch (error) {
         // caso ocorra algum erro
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
         return thunkAPI.rejectWithValue(message)
@@ -131,6 +131,18 @@ export const sendRelatory = createAsyncThunk('admin/relatory', async (user, thun
     }
 })
 
+// PARTE DO PRESIDENTE
+
+export const getProducts = createAsyncThunk('admin/products', async (user, thunkAPI) => {
+    try {
+        const response = await adminService.getProducts(user)
+        return response
+    } catch (error) {
+        // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+})
 
 // EMAIL
 export const sendEmail = createAsyncThunk('admin/email', async (user, thunkAPI) => {
@@ -165,7 +177,7 @@ export const adminSlice = createSlice({
             state.isSuccess = false
             state.isError = false
             state.isLoading = false
-        },  
+        },
         resetEmailStatus: state => {
             state.emailStatus = initialState.emailStatus
             state.isSuccess = false
@@ -210,7 +222,7 @@ export const adminSlice = createSlice({
             .addCase(getDocumentsData.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.isError = false
-                state.documentsData = action.payload        
+                state.documentsData = action.payload
             }
             )
             .addCase(getDocumentsData.rejected, (state, action) => {
@@ -256,7 +268,7 @@ export const adminSlice = createSlice({
                 state.isLoading = false
                 state.message = action.payload
             }
-            ) 
+            )
             // listar usuários
             .addCase(listUsers.pending, state => {
                 state.isLoading = true
@@ -373,6 +385,20 @@ export const adminSlice = createSlice({
                 state.emailStatus.isLoading = false
                 state.emailStatus.message = 'Erro ao enviar email!'
             })
+            // pegar produtos
+            .addCase(getProducts.pending, state => {
+                state.isLoading = true
+            })
+            .addCase(getProducts.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isError = false
+                state.productsData = action.payload
+            } )
+            .addCase(getProducts.rejected, (state, action) => {
+                state.isError = true
+                state.message = action.payload
+            })
+
     }
 })
 

@@ -4,8 +4,10 @@ import { Container, Box, Typography, Avatar, CircularProgress, useMediaQuery, Bu
 import { useEffect } from 'react'
 import { getProducer, getProducerResume } from '../../features/products/productsSlice'
 import Email from '../../components/Email/Email'
+import { useNavigate } from 'react-router-dom'
 
 function SingleProducer() {
+    const navigate = useNavigate()
     const { id } = useParams()
 
     const { producer, isLoading, producerResume } = useSelector(state => state.products)
@@ -77,7 +79,7 @@ function SingleProducer() {
                 <Box sx={{ border: '1px solid black', padding: '10px' }}>
                     <Typography variant='h5'>{producerResume[0] ? producerResume[0].body : 'Produtor não possui resumo'}</Typography>
                 </Box>
-                <Button variant='contained' color='primary' href='/rastreabilidade'>Produto</Button>
+                <Button variant='contained' color='primary' onClick={() => navigate('/rastreabilidade')}>Produto</Button>
 
             </Box>
 
