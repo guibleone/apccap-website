@@ -17,8 +17,25 @@ const getSubscription = async (user) => {
 
 }
 
+// pegar balanço
+const getBalance = async (token) => {
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+
+    }
+
+    const response = await axios.get(API_URL + 'balance', config)
+    return response.data
+    
+}
+
+
 const paymentsService = {
-    getSubscription
+    getSubscription,
+    getBalance
 }
 
 export default paymentsService

@@ -1,4 +1,4 @@
-import { Box, Button, Typography, CircularProgress } from '@mui/material'
+import { Box, Button, Typography, CircularProgress, Input } from '@mui/material'
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addExcel, deleteExcel, resetExcel } from '../../../../features/spreadSheet/spreadSheetSlice'
@@ -6,6 +6,7 @@ import { toast } from 'react-toastify'
 import { AiOutlineDownload } from 'react-icons/ai'
 import { BiTrashAlt } from 'react-icons/bi'
 import { styleError, styleSuccess } from '../../../toastStyles'
+import { Link } from 'react-router-dom'
 
 export default function AddExcelSpread() {
     const { user } = useSelector((state) => state.auth)
@@ -76,21 +77,23 @@ export default function AddExcelSpread() {
     }
 
     return (
-        <Box sx={{ margin: '50px 0' }}>
-            <Typography variant='h5'>Upload Planilhas</Typography>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <Typography variant='h5'>Upload de Planilhas</Typography>
+            <Typography variant='p'>Faça o envio de suas planilhas Excel</Typography>
 
-            <Box>
-                <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                     <input onChange={onChange} type="file" ref={fileInputRef} />
                     <Button disabled={excel.isLoading ? true : false}
                         sx={{ margin: '10px 0' }} type="submit" variant="contained" color="primary">
                         Adicionar
                     </Button>
-                </form>
-            </Box>
+                </Box>
+            </form >
+
 
             <Box>
-                {spreadSheets && spreadSheets.map((spreadSheet) => (
+                {spreadSheets && spreadSheets.filter((spreadSheet) => spreadSheet.pathExcel).slice(0, 3).map((spreadSheet) => (
                     <Box key={spreadSheet._id}>
                         {spreadSheet.pathExcel && (
                             <Box>
@@ -103,7 +106,13 @@ export default function AddExcelSpread() {
                         )}
                     </Box>
                 ))}
+
             </Box>
+
+            {(spreadSheets && spreadSheets.length > 3) && (
+                    <Link style={{ textDecoration: 'none', color: '#000', margin:'10px 0' }} to='/planilhas'> Ver Tudo</Link>
+             )}
+
         </Box >
     )
 }

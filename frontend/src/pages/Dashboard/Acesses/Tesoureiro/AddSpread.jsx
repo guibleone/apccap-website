@@ -96,15 +96,15 @@ export default function AddSpread() {
             <Box sx={{
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '10px'
+                gap: '10px',
             }}>
-                <Typography variant='h4'>Adicionar Custos </Typography>
-                <Typography variant='h7'>Adicione os custos da Associação a uma planilha.</Typography>
+                <Typography variant='h5'>Adicionar Custos </Typography>
+                <Typography variant='p'>Adicione os custos da Associação a uma planilha.</Typography>
 
                 <Box sx={{ display: 'flex', gap: '10px' }}>
-                    <TextField onChange={onChange} value={title} name='title' placeholder='Título' />
-                    <TextField onChange={onChange} value={cost_description} name='cost_description' fullWidth placeholder='Descrição' />
-                    <TextField type='number' onChange={onChange} value={cost} name='cost' placeholder='Valor' />
+                    <TextField size={'small'}  onChange={onChange} value={title} name='title' placeholder='Título' />
+                    <TextField size={'small'}  onChange={onChange} value={cost_description} name='cost_description' fullWidth placeholder='Descrição' />
+                    <TextField size={'small'}  type='number' onChange={onChange} value={cost} name='cost' placeholder='Valor' />
                 </Box>
 
                 <Button onClick={submitCost} fullWidth variant='contained' color='info' >Adicionar</Button>
@@ -124,13 +124,13 @@ export default function AddSpread() {
                             border: '1px solid #ccc',
 
                         }}>
-                            <Typography>{cost.title}</Typography>
-                            <Typography width={500}>{cost.cost_description}</Typography>
-                            <Typography>{cost.cost}</Typography>
+                            <Typography noWrap>{cost.title}</Typography>
+                            <Typography noWrap width={500}>{cost.cost_description}</Typography>
+                            <Typography noWrap>{cost.cost}</Typography>
 
                             <Button onClick={() => setCosts((prevState) => prevState.filter((cost, i) => i !== index))} variant='contained' color='error'>Excluir</Button>
 
-                        </Box>
+                         </Box>
                     </>
                 ))}
 

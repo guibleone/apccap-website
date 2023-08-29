@@ -21,6 +21,8 @@ import UserSingle from './pages/UserSingle/UserSingle';
 import Festival from './pages/Festival/Festival';
 import QuemSomos from './pages/QuemSomos/QuemSomos';
 import User from './pages/Dashboard/Acesses/Presidente/SingleUserCredenciado';
+import StripeBalance from './pages/Dashboard/Acesses/Tesoureiro/StripeBalance';
+import AllSpreadSheets from './pages/Dashboard/Acesses/Tesoureiro/AllSpreadSheets';
 
 function App() {
   return (
@@ -41,8 +43,10 @@ function App() {
           <Route path={`/credencial-produtor`} element={<Producer />} />
           <Route path='/produtor/:id' element={<SingleProducer />} />
           <Route path='/planilha/:id' element={<SingleSpread />} />
+          <Route path='/planilhas' element={<AllSpreadSheets />} />
           <Route path='/festival-cachaca' element={<Festival />} />
           <Route path='/quem-somos' element={<QuemSomos />} />
+          <Route path='/balancete' element={<StripeBalance />} />
           <Route path='*' element={<h1>Not Found 404</h1>} />
         </Routes> 
         <Footer />

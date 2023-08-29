@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { sendConvocationEmail, resetEmailStatus } from '../../../../features/admin/adminSlice';
 import { styleError, styleSuccess } from '../../../toastStyles'
 import UsersCredenciados from './UsersCredenciados';
+import { Link } from 'react-router-dom';
 
 registerLocale('pt-BR', ptBR)
 setDefaultLocale('ptBR')
@@ -43,13 +44,14 @@ export default function President() {
     dispatch(resetEmailStatus())
 
   }, [emailStatus.isSuccess, emailStatus.isError])
+  
 
   return (
     <Container>
 
       <Box>
-        <Typography variant='h4'>Bem vindo de volta, Presidente</Typography>
-        <Typography variant='h7'>Estes são os usuários com relatórios concluídos. Aprove e faça a devolutiva.</Typography>
+        <Typography variant='h5'>Bem vindo de volta, Presidente</Typography>
+        <Typography variant='p'>Estes são os usuários com relatórios concluídos. Aprove e faça a devolutiva.</Typography>
       </Box>
 
       {users && users.map((user) => (
@@ -76,7 +78,7 @@ export default function President() {
 
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
 
-        <Typography variant='h4'>Convoque para reuniões</Typography>
+        <Typography variant='h5'>Convoque para reuniões</Typography>
 
         <Box>
 
@@ -112,6 +114,8 @@ export default function President() {
           variant='contained'
           color='success'> {emailStatus.isLoading ? <CircularProgress color="success" size={24} /> : 'Enviar'}
         </Button>
+
+        <Typography textAlign={'center'} variant='p'><Link to={'/historico'}>Histórico</Link></Typography>
 
       </Box>
         

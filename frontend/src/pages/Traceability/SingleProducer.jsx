@@ -83,7 +83,6 @@ function SingleProducer() {
 
             </Box>
 
-
         </Container>
     )
 }

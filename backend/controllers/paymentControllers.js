@@ -82,9 +82,24 @@ const getSubscription = asyncHandler(async (req, res) => {
     }
 })
 
+// pegar saldos
+
+const getBalance = asyncHandler(async (req, res) => {
+
+    try{
+        const balance = await stripe.balance.retrieve();
+        res.status(200).json({ balance });
+    }
+    catch(error){
+        res.status(500).json({ error: 'Um erro ocorreu' });
+    }
+    
+})
+
 
 module.exports = {
     paySelos,
     payMensalidade,
-    getSubscription
+    getSubscription,
+    getBalance
 }

@@ -21,6 +21,19 @@ export const getSubscription = createAsyncThunk('payments/getSubscription', asyn
     }
 })
 
+// pegar balanço
+
+export const getBalance = createAsyncThunk('payments/getBalance', async (token, thunkAPI) => {
+    try {
+        const response = await paymentsService.getBalance(token)
+        return response
+    } catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message);
+    }
+})
+
+
 
 const paymentsSlice = createSlice({
     name: 'payments',
@@ -35,6 +48,7 @@ const paymentsSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+        // pegar assinatura
             .addCase(getSubscription.pending, (state) => {
                 state.isLoading = true;
             })
@@ -48,6 +62,24 @@ const paymentsSlice = createSlice({
                 state.isError = true;
                 state.message = action.payload;
             })
+        // pegar balanço
+            .addCase(getBalance.pending, (state) => {
+                state.isLoading = true;
+            }
+            )
+            .addCase(getBalance.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.payments = action.payload;
+            }
+            )
+            .addCase(getBalance.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload;
+            }
+            )
+            
     }
 })
 

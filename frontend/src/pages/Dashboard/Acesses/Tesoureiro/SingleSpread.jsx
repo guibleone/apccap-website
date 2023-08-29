@@ -1,6 +1,6 @@
 import { Box, Button, Container, TextField, Typography, CircularProgress } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { getOneSpread, editSpreadSheet, resetSpreadSheet } from '../../../../features/spreadSheet/spreadSheetSlice'
 import { toast } from 'react-toastify'
@@ -82,6 +82,10 @@ export default function SingleSpread() {
 
     }, [ dispatch, id, user.token])
 
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [])
+
 
     if (isLoading) {
         return <Box sx={
@@ -105,7 +109,7 @@ export default function SingleSpread() {
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 <Box sx={{ display: 'flex', gap: '5px' }}>
 
-                    <Button variant='outlined' href='/'><RiArrowGoBackFill size={20} /></Button>
+                    <Button variant='outlined' component={Link} to={'/planilhas'}><RiArrowGoBackFill size={20} /></Button>
                     <Typography variant='h4'>{singleSpread && singleSpread.title_spread}</Typography>
 
                 </Box>
