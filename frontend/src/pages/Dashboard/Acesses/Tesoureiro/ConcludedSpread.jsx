@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom'
 
 export default function ConcludedSpread() {
 
-  const { spreadSheets, isLoading, excel } = useSelector((state) => state.spreadSheet)
+  const { spreadSheets, isLoading } = useSelector((state) => state.spreadSheet)
   const { user } = useSelector((state) => state.auth)
 
   const dispatch = useDispatch()
@@ -23,7 +23,7 @@ export default function ConcludedSpread() {
     dispatch(deleteSpreadSheet(data))
   }
 
-  if (isLoading && !spreadSheets) {
+  if (isLoading) {
     return <Box sx={
       {
         display: 'flex',

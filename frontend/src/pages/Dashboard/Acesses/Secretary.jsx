@@ -9,11 +9,11 @@ export default function Secretary() {
   return (
     <Container>
       <Box>
-        <Typography variant='h4'>Bem vindo de volta, Secretário (a)</Typography>
+        <Typography variant='h5'>Bem vindo de volta, Secretário (a)</Typography>
       </Box>
 
       <Box>
-        <Typography variant='h7'>Estes são os usuários a serem aprovados. Por favor faça o relatório de cada um.</Typography>
+        <Typography variant='p'>Estes são os usuários a serem aprovados. Por favor faça o relatório de cada um.</Typography>
       </Box>
 
       {users && users.map((user) => (

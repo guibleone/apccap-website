@@ -126,7 +126,7 @@ const spreadSheetSlice = createSlice({
         builder
             // pegar planilhas 
             .addCase(getSpreadSheets.pending, (state, action) => {
-                state.isLoading = true;
+                state.isLoading = false;
             })
             .addCase(getSpreadSheets.fulfilled, (state, action) => {
                 state.isLoading = false;
