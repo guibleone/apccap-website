@@ -150,13 +150,24 @@ export const addSelo = async (userData) => {
 
     const config = {
         headers: {
-            Authorization: `Bearer ${userData.token}`,
-        },
+            'Content-type': 'multipart/form-data',
+            Authorization: `Bearer ${userData.token}`
+        }
     }
 
     const response = await axios.post(API_URI + 'selo/' + userData.id, userData, config)
     return response.data
 }
+
+
+
+
+
+
+
+
+
+// adicionar relatório
 
 
 

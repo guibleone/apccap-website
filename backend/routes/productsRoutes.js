@@ -1,8 +1,8 @@
 const express = require('express');
 const { hasRole } = require('../middlewares/authMiddleware');
 const { getProducts, addProduct, deleteProduct, getSingleProduct, updateProduct, addPhoto, 
-    trackProduct, getProducer, getProducerResume, getSelos, addSelo, generateSelos } = require('../controllers/productsControllers');
-const { uploadProduct } = require('../middlewares/multer');
+    trackProduct, getProducer, getProducerResume, getSelos, addSelo, generateSelos, } = require('../controllers/productsControllers');
+const { uploadProduct, uploadSelo } = require('../middlewares/multer');
 
 
 const router = express.Router();
@@ -13,7 +13,7 @@ router.get('/produtor/resume/:id', getProducerResume)
 
 // rotas selos
 router.get('/selo/:id',hasRole('produtor'), getSelos)
-router.post('/selo/:id', hasRole('produtor'), addSelo)
+router.post('/selo/:id', uploadSelo.single("pathRelatory"),  hasRole('produtor'), addSelo)
 
 // pegar produtos
 router.get('/', hasRole('produtor'), getProducts) 

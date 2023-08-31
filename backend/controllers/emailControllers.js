@@ -32,10 +32,32 @@ const sendEmail = asyncHandler(async (req, res) => {
 
 const senConvocationEmail = asyncHandler(async (req, res) => {
 
-    const usersAssociates = await User.find({ role: ['presidente', 'secretario', 'tesoureiro', 'admin'] })
+    const { typeReunion } = req.body
+
+    let roles = []
+    let title = ''
+
+    if (typeReunion.administrativa) {
+        roles.push('presidente', 'secretario','admin','tesoureiro')
+        title = 'Convocação Reunião Administrativa'
+    }
+
+    if(typeReunion.assembleia_ordinal){
+        roles.push('presidente', 'secretario','admin','tesoureiro','produtor')
+        title = 'Convocação Assembleia Ordinária'
+    }
+
+    if(typeReunion.assembleia_extraordinaria){
+        roles.push('presidente', 'secretario','admin','tesoureiro','produtor')
+        title = 'Convocação Assembleia Extraordinária'
+    }
+    
+    const usersAssociates = await User.find({ role: { $in: roles } })
+
     const emails = usersAssociates.map(user => (user.email))
 
     const resend = new Resend(process.env.RESEND_API_KEY)
+    
     const { method } = req;
 
     const { message, date } = req.body;
@@ -50,8 +72,15 @@ const senConvocationEmail = asyncHandler(async (req, res) => {
             const data = await resend.sendEmail({
                 from: 'Apccap <reuniao.associados@apccap.shop>',
                 to: emails, // TODO: change to `email
-                subject: `Convocação de Reunião`, // TODO: change to `title
-                html: `<p>${message}</p> <br> <h2>Data: ${date}</h2>`
+                subject: title, // TODO: change to `title
+                html: 
+               `
+                <h4>Atenção Associado, </h4>
+                <p>${message}</p> <br> 
+                <h4>Data: ${date}</h4>
+                <p>Atenciosamente, </p>
+                <img src=https://firebasestorage.googleapis.com/v0/b/igcachaca.appspot.com/o/imagens%2Flogo-apccap.png?alt=media&token=77051693-5b1c-4b72-8d1a-9d3f3dc4b29d" alt="logo" width="100px" height="100px" />       
+            `
             });
 
             return res.status(200).send(data);

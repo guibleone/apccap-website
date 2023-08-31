@@ -107,6 +107,11 @@ const deleteUser = asyncHandler(async (req, res) => {
             await deleteObject(storageRef)
         }
 
+        if(user.selos.pathRelatory){
+            const storageRef = ref(storage, `relatóriosSelos/${user._id}`)
+            await deleteObject(storageRef)
+        }
+
         if (documents) {
             documents.map(async (document) => {
                 const storageRef = ref(storage, `documents/${document.user}/${document.name}`)

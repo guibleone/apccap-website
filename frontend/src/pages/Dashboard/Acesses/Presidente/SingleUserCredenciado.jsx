@@ -233,7 +233,6 @@ export default function User() {
                 {(productsData && productsData.length > 0) ? productsData.map((product) => (
                     <>
                         <Grid lg={3} md={4} sm={6} xs={12} item key={product._id} sx={{ display: 'flex', justifyContent: 'center' }} >
-
                             <Card
                                 sx={{
                                     maxWidth: matches ? 352 : 252,

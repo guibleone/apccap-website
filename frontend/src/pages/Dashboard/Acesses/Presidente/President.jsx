@@ -10,8 +10,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { sendConvocationEmail, resetEmailStatus } from '../../../../features/admin/adminSlice';
 import { styleError, styleSuccess } from '../../../toastStyles'
 import UsersCredenciados from './UsersCredenciados';
-import { Link } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
 registerLocale('pt-BR', ptBR)
 setDefaultLocale('ptBR')
 
@@ -22,16 +21,15 @@ export default function President() {
 
   const { emailStatus } = useSelector((state) => state.admin)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const [message, setMessage] = useState('')
-
 
   const [typeReunion, setTypeReunion] = useState({
     administrativa: false,
     assembleia_ordinal: false,
     assembleia_extraordinaria: false
   })
-
 
   const handleChange = (event) => {
     
@@ -45,13 +43,11 @@ export default function President() {
   
   }
 
-  console.log(typeReunion)
-
   const handleSendEmail = () => {
     if (!message) return toast.error('Preencha a menssagem', styleError)
     if(!typeReunion.administrativa && !typeReunion.assembleia_ordinal && !typeReunion.assembleia_extraordinaria) return toast.error('Selecione o tipo de reunião', styleError)
 
-    dispatch(sendConvocationEmail({ message, date: startDate.toLocaleString() }))
+    dispatch(sendConvocationEmail({ message, date: startDate.toLocaleString(), typeReunion }))
   }
 
   useEffect(() => {
@@ -68,7 +64,6 @@ export default function President() {
 
   }, [emailStatus.isSuccess, emailStatus.isError])
   
-
   return (
     <Container>
 
@@ -88,6 +83,30 @@ export default function President() {
             <>
               <Typography variant="h6" >{`${user.name}`}</Typography>
               <Button variant="outlined" href={`/usuario/${user._id}`}>Ver Dados</Button>
+            </>
+          )}
+
+        </Box>
+
+      ))}
+
+      <UsersPagination setUsersData={(u) => setUsers(u)} />
+
+      <Divider sx={{ margin: '20px 0' }} />
+
+      <Typography variant='h5'>Relatórios de selos</Typography>
+
+      {users && users.map((user) => (
+
+        <Box key={user._id}
+          sx={{
+            marginTop: '10px',
+          }}
+        >
+          {(user.selos.pathRelatory && user.selos.status === 'analise') && (
+            <>
+              <Typography variant="h6" >{`${user.name}`}</Typography>
+              <Button variant="outlined" onClick={() => navigate(`/usuario/selo/${user._id}`)}   >Ver Dados</Button>
             </>
           )}
 

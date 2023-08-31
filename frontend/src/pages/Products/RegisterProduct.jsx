@@ -131,7 +131,9 @@ function RegisterProduct() {
 
             {selos.quantity === 0 ? <Typography variant='p'>Você não possui selos. Por favor compre-os.</Typography> :
               (<>
-                <Typography variant='p'>Você possui {selos.quantity} selos.</Typography>
+                <Typography variant='p'>Você possui {selos.quantity} selos 
+                {selos.status === 'analise' ? (<span style={{color:'red'}}> em análise.</span>) : (<span style={{color:'green'}}> em análise.</span>)}
+                </Typography>
               </>
               )
             }

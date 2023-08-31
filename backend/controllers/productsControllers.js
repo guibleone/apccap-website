@@ -69,6 +69,11 @@ const addProduct = asyncHandler(async (req, res) => {
         throw new Error('Quantidade de selos insuficiente')
     }
 
+    if(user.selos.status === 'analise' && quantity > 1){
+        res.status(400)
+        throw new Error('Seus selos estão em análise')
+    }
+
     if (!name || !quantity || !description) {
         res.status(404)
         throw new Error('Insira os dados corretamente')
@@ -78,12 +83,12 @@ const addProduct = asyncHandler(async (req, res) => {
         name,
         description,
         startSelo: !user.selos.endSelo ? `${user.sequence_value.toString().padStart(3, "0")}` + `${(1).toString().padStart(5, "0")}` :
-        `${user.selos.endSelo.slice(0, 3)}` + `${(parseInt(user.selos.endSelo.slice(-5)) + 1).toString().padStart(5, "0")}`,
-        endSelo: !user.selos.endSelo ?  `${user.sequence_value.toString().padStart(3, "0")}` + `${(quantity).toString().padStart(5, "0")}` :
-        `${user.selos.endSelo.slice(0, 3)}` + `${(parseInt(user.selos.endSelo.slice(-5)) + parseInt(quantity)).toString().padStart(5, "0")}`,
+            `${user.selos.endSelo.slice(0, 3)}` + `${(parseInt(user.selos.endSelo.slice(-5)) + 1).toString().padStart(5, "0")}`,
+        endSelo: !user.selos.endSelo ? `${user.sequence_value.toString().padStart(3, "0")}` + `${(quantity).toString().padStart(5, "0")}` :
+            `${user.selos.endSelo.slice(0, 3)}` + `${(parseInt(user.selos.endSelo.slice(-5)) + parseInt(quantity)).toString().padStart(5, "0")}`,
         producer: user._id
     })
-    
+
 
     if (product) {
         user.selos.quantity -= quantity
@@ -171,17 +176,17 @@ const trackProduct = asyncHandler(async (req, res) => {
         throw new Error('Selo inválido')
     }
 
-    if(selo.slice(0, 3) === '000'){
+    if (selo.slice(0, 3) === '000') {
         res.status(404)
         throw new Error('Selo inválido')
     }
 
-    if(selo.slice(0,8) > 99999999){
+    if (selo.slice(0, 8) > 99999999) {
         res.status(404)
         throw new Error('Selo inválido')
     }
 
-    if(selo.length !== 8){
+    if (selo.length !== 8) {
         res.status(404)
         throw new Error('Selo inválido')
     }
@@ -286,6 +291,9 @@ const getSelos = asyncHandler(async (req, res) => {
 const addSelo = asyncHandler(async (req, res) => {
 
     const { quantity } = req.body
+
+    const pathRelatory = req.file
+
     const user = await User.findById(req.params.id)
 
     if (!user) {
@@ -298,12 +306,34 @@ const addSelo = asyncHandler(async (req, res) => {
         throw new Error('Insira a quantidade de selos')
     }
 
-    user.selos.quantity += parseInt(quantity)
-    console.log(user.selos.quantity)
+    if (!pathRelatory) {
+        res.status(404)
+        throw new Error('Insira o relatório')
+    }
+
+    if (user.selos.status === 'analise') {
+        res.status(404)
+        throw new Error('Aguarde a análise do seus selos')
+
+    }
+
+    const refStorage = ref(storage, `realatóriosSelos/${user._id}/${pathRelatory.originalname}`)
+
+    const metadata = {
+        contentType: 'application/pdf'
+    }
+
+    const snapshot = await uploadBytesResumable(refStorage, req.file.buffer, metadata);
+
+    const url = await getDownloadURL(snapshot.ref);
+
+    user.selos.pathRelatory = url
+    user.selos.status = 'analise'
+    user.selos.quantity = quantity
 
     await user.save()
 
-    res.status(201).json(`${quantity} selos adicionados com sucesso`)
+    res.status(201).json(`${quantity} selos enviados para análise`)
 
 })
 
