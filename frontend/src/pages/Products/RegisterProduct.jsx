@@ -99,7 +99,6 @@ function RegisterProduct() {
         userId: user._id,
       })
       if (response.data) {
-        localStorage.setItem('quantity', quantity)
         window.location.href = response.data.url;
       }
 
@@ -107,6 +106,24 @@ function RegisterProduct() {
       console.log('Erro no pagamento: ', error)
     }
   }
+
+  const [messagePayment, setMessagePayment] = useState('')
+
+  useEffect(() => {
+
+    const query = new URLSearchParams(window.location.search);
+
+    if (query.get("success")) {
+      setMessagePayment("Pedido realizado com sucesso!");
+    }
+
+    if (query.get("canceled")) {
+      setMessagePayment("Pedido cancelado - compre novamente quando estiver pronto.")
+    }
+
+
+  }, []);
+
 
 
   if (isLoading) {
@@ -153,15 +170,18 @@ function RegisterProduct() {
 
             <TextField disabled={selos.newQuantity === 0} placeholder="Informe a quantidade de selos" size='small' name='quantity' onChange={onChange} />
 
-            {selos.newQuantity && <Typography variant='p'>Você possui <span style={{color:'green'}}>{selos.newQuantity}</span> selos disponíveis.</Typography>}
+            {selos.newQuantity && <Typography variant='p'>Você possui <span style={{ color: 'green' }}>{selos.newQuantity}</span> selos disponíveis.</Typography>}
 
-            {(selos.status === 'analise') && <Typography variant='p'><span style={{color:'red'}}> {selos.quantity}</span> selos estão em análise. Por favor aguarde.</Typography>}
-            {(selos.status === 'pendente') && <Typography variant='p'><span style={{color:'red'}}> {selos.quantity}</span> selos estão pendentes. Por favor faça o pagamento.
+            {messagePayment && messagePayment ===  "Pedido realizado com sucesso!" && <Alert color='success'>{messagePayment}</Alert>}
+            {messagePayment && messagePayment !==  "Pedido realizado com sucesso!" && <Alert color='error'>{messagePayment}</Alert>}
+
+            {(selos.status === 'analise') && <Typography variant='p'><span style={{ color: 'red' }}> {selos.quantity}</span> selos estão em análise. Por favor aguarde.</Typography>}
+            {(selos.status === 'pendente') && <Typography variant='p'><span style={{ color: 'red' }}> {selos.quantity}</span> selos estão pendentes. Por favor faça o pagamento.
               <Button variant='outlined' onClick={() => handlePayment()}>Pagar</Button>
             </Typography>}
 
             {(selos.status === 'reprovado') && <Typography variant='p' color={'error'}>Seus {selos.quantity} selos foram reprovados. Por favor peça-os novamente.</Typography>}
-            
+
             <Button variant='contained' type='submit'>Cadastrar</Button>
 
           </Box>

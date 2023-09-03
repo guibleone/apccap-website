@@ -174,7 +174,6 @@ export const disaproveSelos = createAsyncThunk('presidente/disaproveSelos', asyn
     }
 })
 
-
 // EMAIL
 export const sendEmail = createAsyncThunk('admin/email', async (user, thunkAPI) => {
     try {
