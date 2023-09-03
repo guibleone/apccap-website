@@ -147,6 +147,33 @@ const getProducts = async (data) => {
     return response.data
 }
 
+const approveSelos = async (data) => {
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${data.token}`
+        }
+    }
+
+    const response = await axios.post(API_URI + '/aproveSelos/' + data.id, data, config)
+    return response.data
+}
+
+// desaprovar selos
+
+const disaproveSelos = async (data) => {
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${data.token}`
+        }
+    }
+
+    const response = await axios.post(API_URI + '/disaproveSelos/' + data.id, data, config)
+
+    return response.data
+}
+
 
 // EMAILS
 
@@ -173,7 +200,9 @@ const adminService = {
     sendEmail,
     disapproveUser,
     sendConvocationEmail,
-    getProducts
+    getProducts,
+    approveSelos,
+    disaproveSelos
 }
 
 export default adminService

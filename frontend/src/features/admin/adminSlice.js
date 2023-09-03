@@ -133,7 +133,7 @@ export const sendRelatory = createAsyncThunk('admin/relatory', async (user, thun
 
 // PARTE DO PRESIDENTE
 
-export const getProducts = createAsyncThunk('admin/products', async (user, thunkAPI) => {
+export const getProducts = createAsyncThunk('presidente/products', async (user, thunkAPI) => {
     try {
         const response = await adminService.getProducts(user)
         return response
@@ -143,6 +143,37 @@ export const getProducts = createAsyncThunk('admin/products', async (user, thunk
         return thunkAPI.rejectWithValue(message)
     }
 })
+
+// aprovar selos
+
+export const approveSelos = createAsyncThunk('presidente/approveSelos', async(user, thunkAPI) => {
+
+    try{
+        const response = await adminService.approveSelos(user)
+        thunkAPI.dispatch(listUsers(user.token))
+        return response
+    }catch(error){
+        // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
+// desaprovar selos
+
+export const disaproveSelos = createAsyncThunk('presidente/disaproveSelos', async(user, thunkAPI) => {
+
+    try{
+        const response = await adminService.disaproveSelos(user)
+        thunkAPI.dispatch(listUsers(user.token))
+        return response
+    }catch(error){
+        // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
 
 // EMAIL
 export const sendEmail = createAsyncThunk('admin/email', async (user, thunkAPI) => {
@@ -393,11 +424,45 @@ export const adminSlice = createSlice({
                 state.isLoading = false
                 state.isError = false
                 state.productsData = action.payload
-            } )
+            })
             .addCase(getProducts.rejected, (state, action) => {
                 state.isError = true
                 state.message = action.payload
             })
+            // aprovar selos
+            .addCase(approveSelos.pending, state => {
+                state.isLoading = true
+            })
+            .addCase(approveSelos.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isError = false
+                state.userData = action.payload
+                state.message = 'Selos aprovados com sucesso!'
+            })
+            .addCase(approveSelos.rejected, (state, action) => {
+                state.isError = true
+                state.message = action.payload
+                state.isLoading = false
+            })
+            // desaprovar selos
+            .addCase(disaproveSelos.pending, state => {
+                state.isLoading = true
+            }
+            )
+            .addCase(disaproveSelos.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isError = false
+                state.userData = action.payload
+                state.message = 'Selos desaprovados com sucesso!'
+            }
+            )
+            .addCase(disaproveSelos.rejected, (state, action) => {
+                state.isError = true
+                state.message = action.payload
+                state.isLoading = false
+            }
+            )
+
 
     }
 })

@@ -19,7 +19,12 @@ const sendEmail = asyncHandler(async (req, res) => {
                 from: 'Apccap <contato.produtor@apccap.shop>',
                 to: `${email}`, // TODO: change to `email
                 subject: `${title}`, // TODO: change to `title
-                html: `<p>${message}</p>`
+                html: `
+                <h4>Atenção Associado, </h4>
+                <p>${message}</p> <br>
+                <p>Atenciosamente, </p>
+                <img src=https://firebasestorage.googleapis.com/v0/b/igcachaca.appspot.com/o/imagens%2Flogo-apccap.png?alt=media&token=77051693-5b1c-4b72-8d1a-9d3f3dc4b29d" alt="logo" width="100px" height="100px" />                 
+                `
             });
 
             return res.status(200).send(data);

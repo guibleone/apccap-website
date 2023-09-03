@@ -229,6 +229,7 @@ const productsSlice = createSlice({
                 state.isSuccess = false
                 state.isLoading = false
                 state.isError = true
+                state.isSuccessSelos = false
                 state.message = action.payload
             })
             // deletar produto

@@ -8,6 +8,7 @@ import { toast } from 'react-toastify'
 import { AiOutlineEdit } from 'react-icons/ai'
 import { BiTrashAlt } from 'react-icons/bi'
 import { styleError, styleSuccess } from '../toastStyles'
+import axios from 'axios'
 
 function RegisterProduct() {
   const dispatch = useDispatch()
@@ -15,7 +16,7 @@ function RegisterProduct() {
   const { user } = useSelector(state => state.auth)
 
   const { isLoading, isError, message, isSuccess, isSuccessSelos, selos } = useSelector(state => state.products)
-  const {payments} = useSelector(state => state.payments)
+  const { payments } = useSelector(state => state.payments)
 
   const matches = useMediaQuery('(max-width:600px)')
 
@@ -46,6 +47,7 @@ function RegisterProduct() {
   }, [dispatch, user._id, user.token])
 
   useEffect(() => {
+
     if (isSuccess) {
       toast.success(message, styleSuccess)
     }
@@ -85,6 +87,28 @@ function RegisterProduct() {
 
   }
 
+  const handlePayment = async (e) => {
+
+    if (!selos.newQuantity) {
+      console.log('Informe uma quantidade válida')
+    }
+
+    try {
+      const response = await axios.post('/api/payment/comprar-selos', {
+        quantity: selos.quantity,
+        userId: user._id,
+      })
+      if (response.data) {
+        localStorage.setItem('quantity', quantity)
+        window.location.href = response.data.url;
+      }
+
+    } catch (error) {
+      console.log('Erro no pagamento: ', error)
+    }
+  }
+
+
   if (isLoading) {
     return <Box sx={
       {
@@ -123,20 +147,20 @@ function RegisterProduct() {
           }>
 
             <Typography sx={{ textAlign: 'center' }} variant={matches ? 'h5' : 'h4'} component="h1" gutterBottom>Cadastrar Produto</Typography>
-           
+
             <TextField placeholder="Informe o nome do produto" size='small' name='name' onChange={onChange} value={name} />
-            <TextField placeholder="Informe a descrição do produto" size='small' name='description' onChange={onChange} value={description}  />
+            <TextField placeholder="Informe a descrição do produto" size='small' name='description' onChange={onChange} value={description} />
 
-            <TextField disabled={selos.quantity === 0} placeholder="Informe a quantidade de selos" size='small' name='quantity' onChange={onChange} />
+            <TextField disabled={selos.newQuantity === 0} placeholder="Informe a quantidade de selos" size='small' name='quantity' onChange={onChange} />
 
-            {selos.quantity === 0 ? <Typography variant='p'>Você não possui selos. Por favor compre-os.</Typography> :
-              (<>
-                <Typography variant='p'>Você possui {selos.quantity} selos 
-                {selos.status === 'analise' ? (<span style={{color:'red'}}> em análise.</span>) : (<span style={{color:'green'}}> em análise.</span>)}
-                </Typography>
-              </>
-              )
-            }
+            {selos.newQuantity && <Typography variant='p'>Você possui <span style={{color:'green'}}>{selos.newQuantity}</span> selos disponíveis.</Typography>}
+
+            {(selos.status === 'analise') && <Typography variant='p'><span style={{color:'red'}}> {selos.quantity}</span> selos estão em análise. Por favor aguarde.</Typography>}
+            {(selos.status === 'pendente') && <Typography variant='p'><span style={{color:'red'}}> {selos.quantity}</span> selos estão pendentes. Por favor faça o pagamento.
+              <Button variant='outlined' onClick={() => handlePayment()}>Pagar</Button>
+            </Typography>}
+
+            {(selos.status === 'reprovado') && <Typography variant='p' color={'error'}>Seus {selos.quantity} selos foram reprovados. Por favor peça-os novamente.</Typography>}
             
             <Button variant='contained' type='submit'>Cadastrar</Button>
 

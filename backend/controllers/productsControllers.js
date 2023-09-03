@@ -64,14 +64,19 @@ const addProduct = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id)
 
 
-    if (user.selos.quantity < quantity) {
+    if (user.selos.newQuantity < quantity) {
         res.status(400)
         throw new Error('Quantidade de selos insuficiente')
     }
 
-    if(user.selos.status === 'analise' && quantity > 1){
+    if(user.selos.status === 'analise' && user.selos.newQuantity < 1){
         res.status(400)
         throw new Error('Seus selos estão em análise')
+    }
+
+    if(user.selos.status === 'pendente' && user.selos.newQuantity < 1){
+        res.status(400)
+        throw new Error('Seus selos estão pendentes')
     }
 
     if (!name || !quantity || !description) {
@@ -89,14 +94,12 @@ const addProduct = asyncHandler(async (req, res) => {
         producer: user._id
     })
 
-
     if (product) {
-        user.selos.quantity -= quantity
+        user.selos.newQuantity -= quantity
         user.selos.startSelo = product.startSelo
         user.selos.endSelo = product.endSelo
         await user.save()
 
-        console.log(product)
         res.status(201).json(product)
     }
 
@@ -315,6 +318,21 @@ const addSelo = asyncHandler(async (req, res) => {
         res.status(404)
         throw new Error('Aguarde a análise do seus selos')
 
+    }
+
+    if(user.selos.status === 'aprovado'){
+        res.status(404)
+        user.selos.status = 'analise'
+    }
+
+    if(user.selos.status === 'reprovado'){
+        res.status(404)
+        user.selos.status = 'analise'
+    }
+
+    if(user.selos.status === 'pendente'){
+        res.status(404)
+        throw new Error('Seus selos estão pendentes')
     }
 
     const refStorage = ref(storage, `realatóriosSelos/${user._id}/${pathRelatory.originalname}`)

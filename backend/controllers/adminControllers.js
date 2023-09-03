@@ -237,6 +237,7 @@ const disapproveUser = asyncHandler(async (req, res) => {
 
 
 const getPayment = asyncHandler(async (req, res) => {
+    
     let { amount, id } = req.body
 
     try {
@@ -305,6 +306,89 @@ const getProuducts = asyncHandler(async (req, res) => {
     }
 })
 
+const aproveSelos = asyncHandler(async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id)
+
+        if (!user) {
+            res.status(404)
+            throw new Error('Usuário não encontrado')
+        }
+
+        if (user.selos.status === 'aprovado') {
+            res.status(400)
+            throw new Error('Selos já aprovados')
+        }
+
+        if(user.selos.status === 'reprovado'){
+            res.status(400)
+            throw new Error('Selos já reprovados')
+        }
+
+        if(user.selos.status === 'pendente'){
+            res.status(400)
+            throw new Error('Selos já pendentes')
+        }
+
+        if(!user.selos.pathRelatory){
+            res.status(400)
+            throw new Error('Relatório não encontrado')
+        }
+
+        user.selos.status = 'pendente'
+
+        await user.save()
+
+        res.status(200).json(user)
+    
+    } catch (error) {
+        res.status(400)
+        throw new Error('Erro ao aprovar selos')    
+    }
+})
+
+
+const disaproveSelos = asyncHandler(async (req, res) => {
+    try {
+
+        const user = await User.findById(req.params.id)
+
+        if (!user) {
+            res.status(404)
+            throw new Error('Usuário não encontrado')
+        }
+
+        if (user.selos.status === 'aprovado') {
+            res.status(400)
+            throw new Error('Selos já aprovados')
+        }
+
+        if(user.selos.status === 'reprovado'){
+            res.status(400)
+            throw new Error('Selos já reprovados')
+        }
+
+        if(user.selos.status === 'pendente'){
+            res.status(400)
+            throw new Error('Selos já pendentes')
+        }
+
+        if(!user.selos.pathRelatory){
+            res.status(400)
+            throw new Error('Relatório não encontrado')
+        }
+
+        user.selos.status = 'reprovado'
+
+        await user.save()
+
+        res.status(200).json(user)
+
+    } catch (error) {
+        res.status(400)
+        throw new Error('Erro ao desaprovar selos')
+    }
+})
 
 module.exports = {
     getUsers,
@@ -317,5 +401,7 @@ module.exports = {
     getPayment,
     sendRelatory,
     disapproveUser,
-    getProuducts
+    getProuducts,
+    aproveSelos,
+    disaproveSelos
 }

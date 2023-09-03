@@ -3,7 +3,7 @@ const router = express.Router();
 const { hasRole } = require('../middlewares/authMiddleware.js');
 const { getUserData, getUserDocuments, getUserResume, 
     deleteUser, alterRole, getUsers, aproveUser, 
-    getPayment, sendRelatory, disapproveUser, getProuducts } = require('../controllers/adminControllers.js');
+    getPayment, sendRelatory, disapproveUser, getProuducts, aproveSelos, disaproveSelos } = require('../controllers/adminControllers.js');
 
 // Pegar todos os usuários
 router.get('/', hasRole(['admin','secretario','presidente']), getUsers);
@@ -37,5 +37,7 @@ router.post('/relatory/:id', hasRole(['secretario','presidente']), sendRelatory)
 
 // PARTE DO PRESIDENTE
 router.get('/products/:id', hasRole('presidente'), getProuducts)
+router.post('/aproveSelos/:id', hasRole('presidente'), aproveSelos)
+router.post('/disaproveSelos/:id', hasRole('presidente'), disaproveSelos)
 
 module.exports = router;

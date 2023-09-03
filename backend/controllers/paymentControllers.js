@@ -1,11 +1,15 @@
 const asyncHandler = require('express-async-handler')
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
+const User = require('../models/userModel.js')
 
 const paySelos = asyncHandler(async (req, res) => {
 
     const URL = 'http://localhost:3000'
-    
-    const { quantity } = req.body
+
+    const { quantity, userId } = req.body
+    const user = await User.findById(userId)
+
+    if(!user) return res.status(404).json({ error: 'Usuário não encontrado' })
 
     const session = await stripe.checkout.sessions.create({
         line_items: [
@@ -18,6 +22,15 @@ const paySelos = asyncHandler(async (req, res) => {
         success_url: `${URL}?success=true`,
         cancel_url: `${URL}?canceled=true`,
     });
+
+
+    if(session.success_url) {
+        user.selos.status = 'aprovado'
+        user.selos.newQuantity += quantity
+        user.selos.quantity = 0
+        await user.save()
+    }
+
     res.json(200, { url: session.url })
 })
 
