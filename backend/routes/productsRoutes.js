@@ -1,7 +1,7 @@
 const express = require('express');
 const { hasRole } = require('../middlewares/authMiddleware');
 const { getProducts, addProduct, deleteProduct, getSingleProduct, updateProduct, addPhoto, 
-    trackProduct, getProducer, getProducerResume, getSelos, addSelo, generateSelos, } = require('../controllers/productsControllers');
+    trackProduct, getProducer, getProducerResume, getSelos, addSelo, generateSelos, addSelosPayed } = require('../controllers/productsControllers');
 const { uploadProduct, uploadSelo } = require('../middlewares/multer');
 
 
@@ -38,5 +38,9 @@ router.post('/rastrear', trackProduct)
 
 // gerar selos
 router.post('/selo-generate', generateSelos)
+
+// adicionar selos pagos
+
+router.post('/selo-pago', addSelosPayed)
 
 module.exports = router;

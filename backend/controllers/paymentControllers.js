@@ -24,13 +24,6 @@ const paySelos = asyncHandler(async (req, res) => {
     });
 
 
-    if(session.success_url) {
-        user.selos.status = 'aprovado'
-        user.selos.newQuantity += quantity
-        user.selos.quantity = 0
-        await user.save()
-    }
-
     res.json(200, { url: session.url })
 })
 

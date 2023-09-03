@@ -69,12 +69,12 @@ const addProduct = asyncHandler(async (req, res) => {
         throw new Error('Quantidade de selos insuficiente')
     }
 
-    if(user.selos.status === 'analise' && user.selos.newQuantity < 1){
+    if (user.selos.status === 'analise' && user.selos.newQuantity < 1) {
         res.status(400)
         throw new Error('Seus selos estão em análise')
     }
 
-    if(user.selos.status === 'pendente' && user.selos.newQuantity < 1){
+    if (user.selos.status === 'pendente' && user.selos.newQuantity < 1) {
         res.status(400)
         throw new Error('Seus selos estão pendentes')
     }
@@ -320,17 +320,17 @@ const addSelo = asyncHandler(async (req, res) => {
 
     }
 
-    if(user.selos.status === 'aprovado'){
+    if (user.selos.status === 'aprovado') {
         res.status(404)
         user.selos.status = 'analise'
     }
 
-    if(user.selos.status === 'reprovado'){
+    if (user.selos.status === 'reprovado') {
         res.status(404)
         user.selos.status = 'analise'
     }
 
-    if(user.selos.status === 'pendente'){
+    if (user.selos.status === 'pendente') {
         res.status(404)
         throw new Error('Seus selos estão pendentes')
     }
@@ -355,20 +355,45 @@ const addSelo = asyncHandler(async (req, res) => {
 
 })
 
+// adicionar selos pagos
+
+const addSelosPayed = asyncHandler(async (req, res) => {
+  try{
+
+    const { quantity, id } = req.body
+
+    const user = await User.findById(id)
+
+    if (!user) return res.status(404).json({ error: 'Usuário não encontrado' })
+
+    user.selos.status = 'aprovado'
+    user.selos.newQuantity += quantity
+    user.selos.quantity = 0
+
+    await user.save()
+
+    res.status(200).json({ message: 'Selos adicionados com sucesso' })
+  }catch(error){
+    res.status(404)
+    throw new Error('Usuário não encontrado')
+  }
+
+})
 
 
-module.exports =
-{
-    getProducts,
-    addProduct,
-    deleteProduct,
-    getSingleProduct,
-    updateProduct,
-    addPhoto,
-    trackProduct,
-    getProducer,
-    getProducerResume,
-    getSelos,
-    addSelo,
-    generateSelos
-}
+    module.exports =
+    {
+        getProducts,
+        addProduct,
+        deleteProduct,
+        getSingleProduct,
+        updateProduct,
+        addPhoto,
+        trackProduct,
+        getProducer,
+        getProducerResume,
+        getSelos,
+        addSelo,
+        generateSelos,
+        addSelosPayed
+    }

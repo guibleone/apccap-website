@@ -1,7 +1,7 @@
 import { Box, Button, Container, Typography, CircularProgress, TextField, useMediaQuery, Divider, Alert, Select, MenuItem, InputLabel, FormControl, Grid, Card, CardMedia, CardContent, CardActions } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { getProducts, deleteProduct, addProduct, getSelos, clear } from '../../features/products/productsSlice'
+import { getProducts, deleteProduct, addProduct, getSelos, clear, addSelo, addSelosPayed } from '../../features/products/productsSlice'
 import Selo from '../../components/Stripe/Selo'
 import ProductsPagination from '../../components/Pagination/Products'
 import { toast } from 'react-toastify'
@@ -113,16 +113,30 @@ function RegisterProduct() {
 
     const query = new URLSearchParams(window.location.search);
 
-    if (query.get("success")) {
+    if (query.get("success") && (selos && selos.quantity > 0 && selos.status === 'pendente')) {
+
+      const userData = {
+        id: user._id,
+        token: user.token,
+        quantity: selos.quantity,   
+      }
+
+      dispatch(addSelosPayed(userData))
       setMessagePayment("Pedido realizado com sucesso!");
+
+      query.delete("success");
+
     }
 
     if (query.get("canceled")) {
+      
       setMessagePayment("Pedido cancelado - compre novamente quando estiver pronto.")
+
+      query.delete("canceled");
     }
 
 
-  }, []);
+  }, [selos]);
 
 
 
@@ -172,15 +186,17 @@ function RegisterProduct() {
 
             {selos.newQuantity && <Typography variant='p'>Você possui <span style={{ color: 'green' }}>{selos.newQuantity}</span> selos disponíveis.</Typography>}
 
-            {messagePayment && messagePayment ===  "Pedido realizado com sucesso!" && <Alert color='success'>{messagePayment}</Alert>}
-            {messagePayment && messagePayment !==  "Pedido realizado com sucesso!" && <Alert color='error'>{messagePayment}</Alert>}
-
             {(selos.status === 'analise') && <Typography variant='p'><span style={{ color: 'red' }}> {selos.quantity}</span> selos estão em análise. Por favor aguarde.</Typography>}
             {(selos.status === 'pendente') && <Typography variant='p'><span style={{ color: 'red' }}> {selos.quantity}</span> selos estão pendentes. Por favor faça o pagamento.
               <Button variant='outlined' onClick={() => handlePayment()}>Pagar</Button>
             </Typography>}
+         
+            {messagePayment && messagePayment ===  "Pedido realizado com sucesso!" && <Alert color='success'>{messagePayment}</Alert>}
+            {messagePayment && messagePayment !==  "Pedido realizado com sucesso!" && <Alert color='error'>{messagePayment}</Alert>}
 
             {(selos.status === 'reprovado') && <Typography variant='p' color={'error'}>Seus {selos.quantity} selos foram reprovados. Por favor peça-os novamente.</Typography>}
+
+
 
             <Button variant='contained' type='submit'>Cadastrar</Button>
 

@@ -161,13 +161,12 @@ export const addSelo = async (userData) => {
 
 
 
+// adicionar selos pagos
+export const addSelosPayed = async (userData) => {
 
-
-
-
-
-
-// adicionar relatório
+    const response = await axios.post(API_URI + 'selo-pago', userData)
+    return response.data
+}
 
 
 
@@ -184,7 +183,8 @@ const productsService = {
     getProducer,
     getProducerResume,
     getSelos,
-    addSelo
+    addSelo,
+    addSelosPayed
 }
 
 export default productsService;

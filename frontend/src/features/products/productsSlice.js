@@ -163,6 +163,25 @@ export const addSelo = createAsyncThunk('products/addSelo', async (user, thunkAP
     }
 })
 
+// adcionar selo pago
+
+export const addSelosPayed = createAsyncThunk('products/addSelosPayed', async (user, thunkAPI) => {
+
+    try {
+        const response = await productsService.addSelosPayed(user)
+        thunkAPI.dispatch(getSelos(user)) // salva vidas // dispatch para atualizar a lista de produtos
+        return response
+    } catch (error) {
+        // caso ocorra algum erro
+
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message);
+    }
+
+})
+
+
+
 const productsSlice = createSlice({
     name: 'products',
     initialState,
@@ -370,6 +389,25 @@ const productsSlice = createSlice({
             }
             )
             .addCase(addSelo.rejected, (state, action) => {
+                state.pending = false;
+                state.isSuccessSelos = false;
+                state.isSuccess = false;
+                state.isError = true;
+                state.message = action.payload;
+            }
+            )
+            // adicionar selos pagos
+            .addCase(addSelosPayed.pending, (state) => {
+                state.pending = true;
+            }
+            )
+            .addCase(addSelosPayed.fulfilled, (state, action) => {
+                state.pending = false;
+                state.isSuccessSelos = true;
+                state.message = action.payload;
+            }
+            )
+            .addCase(addSelosPayed.rejected, (state, action) => {
                 state.pending = false;
                 state.isSuccessSelos = false;
                 state.isSuccess = false;
