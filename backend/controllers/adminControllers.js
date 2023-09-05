@@ -5,7 +5,7 @@ const Products = require('../models/productModel')
 const SpreadSheet = require('../models/spreadSheetModel')
 const asyncHandler = require('express-async-handler')
 const fs = require('fs')
-const { promisify } = require('util')
+const { promisify, types } = require('util')
 const unlinkAsync = promisify(fs.unlink)
 const { ref, getDownloadURL, uploadBytesResumable, deleteObject } = require("firebase/storage");
 const { storage } = require('../db/firebase.js');
@@ -107,7 +107,7 @@ const deleteUser = asyncHandler(async (req, res) => {
             await deleteObject(storageRef)
         }
 
-        if(user.selos.pathRelatory){
+        if (user.selos.pathRelatory) {
             const storageRef = ref(storage, `relatóriosSelos/${user._id}`)
             await deleteObject(storageRef)
         }
@@ -237,7 +237,7 @@ const disapproveUser = asyncHandler(async (req, res) => {
 
 
 const getPayment = asyncHandler(async (req, res) => {
-    
+
     let { amount, id } = req.body
 
     try {
@@ -291,7 +291,7 @@ const sendRelatory = asyncHandler(async (req, res) => {
 
 const getProuducts = asyncHandler(async (req, res) => {
     try {
-        const products = await Products.find({producer: req.params.id})
+        const products = await Products.find({ producer: req.params.id })
 
         if (!products) {
             res.status(404)
@@ -320,17 +320,17 @@ const aproveSelos = asyncHandler(async (req, res) => {
             throw new Error('Selos já aprovados')
         }
 
-        if(user.selos.status === 'reprovado'){
+        if (user.selos.status === 'reprovado') {
             res.status(400)
             throw new Error('Selos já reprovados')
         }
 
-        if(user.selos.status === 'pendente'){
+        if (user.selos.status === 'pendente') {
             res.status(400)
             throw new Error('Selos já pendentes')
         }
 
-        if(!user.selos.pathRelatory){
+        if (!user.selos.pathRelatory) {
             res.status(400)
             throw new Error('Relatório não encontrado')
         }
@@ -340,10 +340,10 @@ const aproveSelos = asyncHandler(async (req, res) => {
         await user.save()
 
         res.status(200).json(user)
-    
+
     } catch (error) {
         res.status(400)
-        throw new Error('Erro ao aprovar selos')    
+        throw new Error('Erro ao aprovar selos')
     }
 })
 
@@ -363,17 +363,17 @@ const disaproveSelos = asyncHandler(async (req, res) => {
             throw new Error('Selos já aprovados')
         }
 
-        if(user.selos.status === 'reprovado'){
+        if (user.selos.status === 'reprovado') {
             res.status(400)
             throw new Error('Selos já reprovados')
         }
 
-        if(user.selos.status === 'pendente'){
+        if (user.selos.status === 'pendente') {
             res.status(400)
             throw new Error('Selos já pendentes')
         }
 
-        if(!user.selos.pathRelatory){
+        if (!user.selos.pathRelatory) {
             res.status(400)
             throw new Error('Relatório não encontrado')
         }
@@ -390,6 +390,82 @@ const disaproveSelos = asyncHandler(async (req, res) => {
     }
 })
 
+// PARTE DO CONSELHO
+const addRelatorys = asyncHandler(async (req, res) => {
+    try {
+        const { type } = req.body;
+
+        const user = await User.findById(req.params.id);
+
+        if (!req.file) {
+            return res.status(400).json({ error: 'Insira o relatório' });
+        }
+
+        if (!type) {
+            return res.status(400).json({ error: 'Insira o tipo de relatório' });
+        }
+
+        if (!user) {
+            return res.status(400).json({ error: 'Usuário não encontrado' });
+        }
+
+        const refStorage = ref(storage, `conselhoRelatórios/${user._id}/${type}`);
+
+        const metadata = {
+            contentType: 'application/pdf',
+        };
+
+        const snapshot = await uploadBytesResumable(refStorage, req.file.buffer, metadata);
+
+        const url = await getDownloadURL(snapshot.ref);
+
+        if (!url) {
+            return res.status(400).json({ error: 'Algo de errado aconteceu' });
+        }
+
+        user.analise[type] = url;
+        await user.save();
+
+        return res.status(200).json(user);
+    } catch (error) {
+        return res.status(400).json({ error: 'Erro ao adicionar relatórios' });
+    }
+});
+
+// deletar relatórios
+
+const deleteRelatorys = asyncHandler(async (req, res) => {
+    try {
+
+        const { type } = req.body
+        
+        const user = await User.findById(req.params.id)
+
+        if (!type) {
+            res.status(400)
+            throw new Error('Informe o tipo de relatório')
+        }
+
+        if (!user) {
+            res.status(400)
+            throw new Error('Usuário não encontrado')
+        }
+
+        const refStorage = ref(storage, `conselhoRelatórios/${user._id}/${type}`)
+        await deleteObject(refStorage)
+
+        user.analise[type] = ''
+        await user.save()
+
+        res.status(200).json(user)
+
+
+    } catch (error) {
+        res.status(400)
+        throw new Error('Erro ao deletar relatório')
+    }
+})
+
 module.exports = {
     getUsers,
     getUserData,
@@ -403,5 +479,7 @@ module.exports = {
     disapproveUser,
     getProuducts,
     aproveSelos,
-    disaproveSelos
+    disaproveSelos,
+    addRelatorys,
+    deleteRelatorys
 }

@@ -17,7 +17,7 @@ export default function SecretaryLevel() {
     const documents = documentsData ? documentsData : []
 
     const matches = useMediaQuery('(min-width:600px)');
-    
+
     const style = matches ? {
         position: 'absolute',
         top: '50%',
@@ -93,27 +93,27 @@ export default function SecretaryLevel() {
                 <Typography variant='h4'>{userData.name} - {userData.cpf}</Typography>
 
                 <Box>
-                    <Typography variant="h5" component="div">Documentos</Typography>
+                    {userData.analise && userData.analise.analise_pedido && (
+                        <>
+                            <Typography variant='h5'>Análise do pedido</Typography>
+                            <Button href={userData.analise.analise_pedido} target='_blank' variant='outlined' color='success' startIcon={<FaDownload />}>Download</Button>
+                        </>
+                    )}
 
-                    {documents.length > 0 ? documents.map((document) => (
-                        <Box sx={
-                            {
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                                width: '100%',
-                                border: '1px solid black',
-                                padding: '10px',
-                                margin: '10px 0'
-                            }
-                        } key={document._id}>
-                            <p>{document.name}</p>
-                            <Button variant="contained" color="success" onClick={() => dispatch(downloadDocument(document))}>{<FaDownload />}</Button>
-                        </Box>
+                    {userData.analise && userData.analise.vistoria && (
+                        <>
+                            <Typography variant='h5'>Vistoria</Typography>
+                            <Button href={userData.analise.vistoria} target='_blank' variant='outlined' color='success' startIcon={<FaDownload />}>Download</Button>
+                        </>
+                    )}
 
-                    )) : <p>Nenhum documento adicionado</p>
+                    {userData.analise && userData.analise.analise_laboratorial && (
+                        <>
+                            <Typography variant='h5'>Análise Laboratorial</Typography>
+                            <Button href={userData.analise.analise_laboratorial} target='_blank' variant='outlined' color='success' startIcon={<FaDownload />}>Download</Button>
+                        </>
+                    )}
 
-                    }
                 </Box>
 
                 <Divider sx={{ margin: '20px 0' }} />

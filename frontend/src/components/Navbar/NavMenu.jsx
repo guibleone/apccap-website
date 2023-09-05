@@ -2,7 +2,7 @@ import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import {
     Box, AppBar as MuiAppBar, Toolbar, IconButton, Typography,
-    CssBaseline, Drawer, Divider, Link, List, ListItem, ListItemIcon, ListItemText, Button, Avatar
+    CssBaseline, Drawer, Divider, List, ListItem, ListItemIcon, ListItemText, Button, Avatar
 } from '@mui/material';
 import {
     TbMenu2, TbArrowNarrowLeft, TbArrowNarrowRight, 
@@ -10,7 +10,7 @@ import {
 } from "react-icons/tb";
 import { MdLiquor } from "react-icons/md";
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'
 import { logout } from '../../features/auth/authSlice';
 
@@ -74,7 +74,7 @@ function NavMenu() {
             } position="fixed" open={open}>
                 <Toolbar>
 
-                    <Link sx={
+                    <Link style={
                         {
                             color: 'inherit',
                             textDecoration: 'none',
@@ -83,7 +83,7 @@ function NavMenu() {
                             fontWeight: 'bold',
                            
                         }
-                    } href="/">APCCAP</Link>
+                    } to="/">APCCAP</Link>
 
 
                     <IconButton
@@ -122,37 +122,37 @@ function NavMenu() {
                         <ListItemIcon>
                             <TbHome2 />
                         </ListItemIcon>
-                        <Link sx={
+                        <Link style={
                             {
                                 color: 'inherit',
                                 textDecoration: 'none',
                             }
-                        } href="/">Início</Link>
+                        } to="/">Início</Link>
                     </ListItem>
 
                     <ListItem >
                         <ListItemIcon>
                             <TbSearch />
                         </ListItemIcon>
-                        <Link sx={
+                        <Link style={
                             {
                                 color: 'inherit',
                                 textDecoration: 'none',
                             }
-                        } href="/rastreabilidade">Rastreabilidade</Link>
+                        } to="/rastreabilidade">Rastreabilidade</Link>
                     </ListItem>
 
                     <ListItem >
                         <ListItemIcon>
                             <MdLiquor />
                         </ListItemIcon>
-                        <Link sx={
+                        <Link style={
                             {
                                 color: 'inherit',
                                 textDecoration: 'none',
 
                             }
-                        } href="/festival-cachaca">Festival da Cachaça</Link>
+                        } to="/festival-cachaca">Festival da Cachaça</Link>
                     </ListItem>
 
                     <Divider />
@@ -161,26 +161,26 @@ function NavMenu() {
                         <ListItemIcon>
                             <TbUsers />
                         </ListItemIcon>
-                        <Link sx={
+                        <Link style={
                             {
                                 color: 'inherit',
                                 textDecoration: 'none',
 
                             }
-                        } href="/quem-somos">Quem Somos</Link>
+                        } to="/quem-somos">Quem Somos</Link>
                     </ListItem>
 
                     <ListItem >
                         <ListItemIcon>
                             <TbNews />
                         </ListItemIcon>
-                        <Link sx={
+                        <Link style={
                             {
                                 color: 'inherit',
                                 textDecoration: 'none',
 
                             }
-                        } href="/blog">Blog</Link>
+                        } to="/blog">Blog</Link>
                     </ListItem>
 
 
@@ -205,12 +205,13 @@ function NavMenu() {
                             </>
                         ) : (
                             <>
-                                <Link sx={
+                                <Link style={
                                     {
                                         color: 'inherit',
                                         textDecoration: 'none',
                                     }
-                                } href="/meu-perfil">
+                                }
+                                 to="/meu-perfil">
 
                                     <Avatar src={user.pathFoto ? user.pathFoto : 'https://placehold.co/600x400'} alt="Foto de Perfil"
 

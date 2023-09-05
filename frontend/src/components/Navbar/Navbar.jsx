@@ -1,9 +1,9 @@
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Link } from "react-router-dom"
 import { logout, reset } from '../../features/auth/authSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { resetResume } from "../../features/resume/resumeSlice"
 import { resetDocuments } from "../../features/documents/documentsSlice"
-import { Button, Link, Container, Box, Typography, CssBaseline, Avatar, Grid } from '@mui/material'
+import { Button,  Container, Box, Typography, CssBaseline, Avatar, Grid } from '@mui/material'
 import { useMediaQuery } from "@mui/material"
 import NavMenu from "./NavMenu"
 
@@ -46,7 +46,6 @@ function Navbar() {
 
   }
 
-
   const linkStyle = {
     color: 'inherit',
     fontFamily: 'Roboto',
@@ -72,7 +71,7 @@ function Navbar() {
        
       }}>
 
-        <Link href="/"> <img width={100} src={require('../../imgs/logo-apccap.png')} alt="Logo" /></Link>
+        <Link to="/"> <img width={100} src={require('../../imgs/logo-apccap.png')} alt="Logo" /></Link>
 
         <Box sx={
           {
@@ -80,20 +79,12 @@ function Navbar() {
             gap: '15px',
           }
         }>
-          <Link sx={
-            linkStyle
-          } href="/rastreabilidade">Rastreabilidade</Link>
+          <Link style={linkStyle} to="/rastreabilidade">Rastreabilidade</Link>
 
-          <Link sx={
-            linkStyle
-          } href="/festival-cachaca">Festival da Cachaça</Link>
+          <Link style={linkStyle} to="/festival-cachaca">Festival da Cachaça</Link>
 
-          <Link sx={
-            linkStyle
-          } href="/quem-somos">Quem Somos</Link>
-          <Link sx={
-            linkStyle
-          } href="/blog">Blog</Link>
+          <Link style={linkStyle} to="/quem-somos">Quem Somos</Link>
+          <Link style={linkStyle} to="/blog">Blog</Link>
         </Box>
 
         {!user ?
@@ -106,12 +97,8 @@ function Navbar() {
                 gap: '10px',
               }
             }>
-              <Link sx={
-                linkStyle
-              } href="/entrar">Entrar</Link>
-              <Link sx={
-                linkStyle
-              } href="/registrar">Registrar</Link>
+              <Link style={linkStyle} to="/entrar">Entrar</Link>
+              <Link style={linkStyle} to="/registrar">Registrar</Link>
             </Box>
           )
           :
@@ -131,7 +118,7 @@ function Navbar() {
                     color: 'inherit',
                     textDecoration: 'none',
                   }
-                } href="/meu-perfil">
+                } to="/meu-perfil">
 
                   <Avatar src={user.pathFoto ? user.pathFoto : 'https://placehold.co/600x400'} alt="Foto de Perfil"
                     sx={{ width: 36, height: 36 }} />

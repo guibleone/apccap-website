@@ -11,6 +11,7 @@ import President from "./Acesses/Presidente/President"
 import Admin from "./Acesses/Admin"
 import { getSubscription } from "../../features/payments/paymentsSlice"
 import { FcLock } from 'react-icons/fc'
+import Conselho from "./Acesses/Conselho/Conselho";
 
 function Dashboard() {
 
@@ -42,7 +43,7 @@ function Dashboard() {
 
   useEffect(() => {
 
-    if (user && (user.role === "admin" || user.role === 'secretario' || user.role === 'presidente')) {
+    if (user && (user.role === "admin" || user.role === 'secretario' || user.role === 'presidente' || user.role==='conselho')) {
       dispatch(listUsers(user.token))
     }
     if (user && (user.role === 'produtor')) {
@@ -142,6 +143,10 @@ function Dashboard() {
 
           {(user.role === 'presidente') && (
             <President />
+          )}
+
+          {(user.role === 'conselho') &&(
+            <Conselho />
           )}
 
         </>

@@ -24,6 +24,8 @@ import User from './pages/Dashboard/Acesses/Presidente/SingleUserCredenciado';
 import StripeBalance from './pages/Dashboard/Acesses/Tesoureiro/StripeBalance';
 import AllSpreadSheets from './pages/Dashboard/Acesses/Tesoureiro/AllSpreadSheets';
 import SeloRelatory from './pages/Dashboard/Acesses/Presidente/SeloRelatory';
+import AnaliseCredencial from './pages/Dashboard/Acesses/Conselho/AnaliseCredencial';
+import AnaliseSelos from './pages/Dashboard/Acesses/Conselho/AnaliseSelos';
 
 function App() {
   return (
@@ -49,6 +51,8 @@ function App() {
           <Route path='/festival-cachaca' element={<Festival />} />
           <Route path='/quem-somos' element={<QuemSomos />} />
           <Route path='/balancete' element={<StripeBalance />} />
+          <Route path='/analise-credencial/:id' element={<AnaliseCredencial />} />
+          <Route path='/analise-selos/:id' element={<AnaliseSelos />} />
           <Route path='*' element={<h1>Not Found 404</h1>} />
         </Routes> 
         <Footer />

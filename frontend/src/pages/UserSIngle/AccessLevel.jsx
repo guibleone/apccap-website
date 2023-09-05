@@ -82,6 +82,7 @@ function AccessLevel({ id, token }) {
           <MenuItem value={'tesoureiro'}>Tesoureiro</MenuItem>
           <MenuItem value={'presidente'}>Presidente</MenuItem>
           <MenuItem value={'produtor'}>Produtor</MenuItem>
+          <MenuItem value={'conselho'}>Conselho Regulador </MenuItem>
         </Select>
       </FormControl>
 

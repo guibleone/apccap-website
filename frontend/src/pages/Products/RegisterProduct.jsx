@@ -184,7 +184,7 @@ function RegisterProduct() {
 
             <TextField disabled={selos.newQuantity === 0} placeholder="Informe a quantidade de selos" size='small' name='quantity' onChange={onChange} />
 
-            {selos.newQuantity && <Typography variant='p'>Você possui <span style={{ color: 'green' }}>{selos.newQuantity}</span> selos disponíveis.</Typography>}
+            {selos.newQuantity >= 0 && <Typography variant='p'>Você possui <span style={{ color: 'green' }}> {selos.newQuantity}</span> selos disponíveis.</Typography>}
 
             {(selos.status === 'analise') && <Typography variant='p'><span style={{ color: 'red' }}> {selos.quantity}</span> selos estão em análise. Por favor aguarde.</Typography>}
             {(selos.status === 'pendente') && <Typography variant='p'><span style={{ color: 'red' }}> {selos.quantity}</span> selos estão pendentes. Por favor faça o pagamento.
@@ -195,7 +195,6 @@ function RegisterProduct() {
             {messagePayment && messagePayment !==  "Pedido realizado com sucesso!" && <Alert color='error'>{messagePayment}</Alert>}
 
             {(selos.status === 'reprovado') && <Typography variant='p' color={'error'}>Seus {selos.quantity} selos foram reprovados. Por favor peça-os novamente.</Typography>}
-
 
 
             <Button variant='contained' type='submit'>Cadastrar</Button>

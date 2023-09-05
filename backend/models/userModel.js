@@ -47,9 +47,12 @@ const userSchema = new mongoose.Schema({
         pathRelatory: { type: String },
     },
     sequence_value: { type: Number },
-    relatory: {
-        type: String,
-    }
+    relatory: { type: String },
+    analise: {
+        analise_pedido: { type: String, default: '' },
+        vistoria: { type: String, default: '' },
+        analise_laboratorial: { type: String, default: '' },
+    },
 }, {
     timestamps: true
 })

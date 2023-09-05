@@ -197,28 +197,30 @@ function UserSingle() {
                 </Grid>
 
                 <Grid item md={4} sx={styleBox3}>
+
                     <Typography variant="h5" component="div">Documentos</Typography>
+                    <Box sx={{height:documents.length > 0 ? '200px' : '30px', paddingRight:'10px'}}>
+                        {documents.length > 0 ? documents.map((document) => (
+                            <Box sx={
+                                {
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    width: '100%',
+                                    border: '1px solid black',
+                                    borderRadius: '5px',
+                                    padding: '10px',
+                                    margin: '10px 0'
+                                }
+                            } key={document._id}>
+                                <p>{document.name}</p>
+                                <Button variant="outlined" color="success" onClick={() => dispatch(downloadDocument(document))}>{<FaDownload />}</Button>
+                            </Box>
 
-                    {documents.length > 0 ? documents.map((document) => (
-                        <Box sx={
-                            {
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                                width: '100%',
-                                border: '1px solid black',
-                                borderRadius: '5px',
-                                padding: '10px',
-                                margin: '10px 0'
-                            }
-                        } key={document._id}>
-                            <p>{document.name}</p>
-                            <Button variant="contained" color="success" onClick={() => dispatch(downloadDocument(document))}>{<FaDownload />}</Button>
-                        </Box>
+                        )) : <p>Nenhum documento adicionado</p>
 
-                    )) : <p>Nenhum documento adicionado</p>
-
-                    }
+                        }
+                    </Box>
 
                 </Grid>
 

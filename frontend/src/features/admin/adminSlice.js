@@ -174,6 +174,33 @@ export const disaproveSelos = createAsyncThunk('presidente/disaproveSelos', asyn
     }
 })
 
+// PARTE DO CONSELHO
+
+export const addRelatorys = createAsyncThunk('conselho/addRelatorys', async(user, thunkAPI) => {
+
+    try{
+        const response = await adminService.addRelatorys(user)
+        return response
+    }catch(error){
+        // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
+export const deleteRelatorys = createAsyncThunk('conselho/deleteRelatorys', async(user, thunkAPI) => {
+
+    try{
+        const response = await adminService.deleteRelatorys(user)
+        return response
+    }catch(error){
+        // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        console.log(message)
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
 // EMAIL
 export const sendEmail = createAsyncThunk('admin/email', async (user, thunkAPI) => {
     try {
@@ -258,81 +285,69 @@ export const adminSlice = createSlice({
             .addCase(getDocumentsData.rejected, (state, action) => {
                 state.isError = true
                 state.message = action.payload
-            }
-            )
+            })
             // deletar usuário
             .addCase(deleteUser.pending, state => {
                 state.isLoading = true
                 state.isSuccess = false
                 state.isError = false
-            }
-            )
+            })
             .addCase(deleteUser.fulfilled, (state, action) => {
                 state.isSuccess = true
                 state.isLoading = false
                 state.isError = false
                 state.message = action.payload
-            }
-            )
+            })
             .addCase(deleteUser.rejected, (state, action) => {
                 state.isError = true
                 state.message = action.payload
-            }
-            )
+            })
             // alterar nível de acesso do usuário
             .addCase(alterAccess.pending, state => {
                 state.isLoading = true
                 state.isSuccess = false
                 state.isError = false
-            }
-            )
+            })
             .addCase(alterAccess.fulfilled, (state, action) => {
                 state.isSuccess = true
                 state.isLoading = false
                 state.isError = false
                 state.userData = action.payload
-            }
-            )
+            })
             .addCase(alterAccess.rejected, (state, action) => {
                 state.isError = true
                 state.isLoading = false
                 state.message = action.payload
-            }
-            )
+            })
             // listar usuários
             .addCase(listUsers.pending, state => {
                 state.isLoading = true
                 state.isSuccess = false
                 state.isError = false
-            }
-            )
+            })
             .addCase(listUsers.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.isError = false
                 state.users = action.payload
-            }
-            )
+            })
             .addCase(listUsers.rejected, (state, action) => {
                 state.isError = true
                 state.isLoading = false
                 state.message = action.payload
-            }
-            )
+            })
             // aprovar usuário      
             .addCase(aproveUser.pending, state => {
                 state.isLoading = true
                 state.isSuccess = false
                 state.isError = false
-            }
-            )
+            })
             .addCase(aproveUser.fulfilled, (state, action) => {
                 state.isSuccess = true
                 state.isLoading = false
                 state.isError = false
                 state.userData = action.payload
                 state.message = 'Usuário aprovado com sucesso!'
-            }
-            )
+            })
             .addCase(aproveUser.rejected, (state, action) => {
                 state.isError = true
                 state.isLoading = false
@@ -361,42 +376,36 @@ export const adminSlice = createSlice({
                 state.isLoading = false
                 state.isSuccess = false
                 state.isError = false
-            }
-            )
+            })
             .addCase(sendRelatory.fulfilled, (state, action) => {
                 state.isSuccess = true
                 state.isLoading = false
                 state.isError = false
                 state.userData = action.payload
-            }
-            )
+            })
             .addCase(sendRelatory.rejected, (state, action) => {
                 state.isError = true
                 state.isLoading = false
                 state.message = action.payload
-            }
-            )
+            })
             // enviar email
             .addCase(sendEmail.pending, state => {
                 state.emailStatus.isLoading = true
                 state.emailStatus.isSuccess = false
                 state.emailStatus.isError = false
                 state.emailStatus.message = ''
-            }
-            )
+            })
             .addCase(sendEmail.fulfilled, (state, action) => {
                 state.emailStatus.isSuccess = true
                 state.emailStatus.isLoading = false
                 state.emailStatus.isError = false
                 state.emailStatus.message = 'Email enviado com sucesso!'
-            }
-            )
+            })
             .addCase(sendEmail.rejected, (state, action) => {
                 state.emailStatus.isError = true
                 state.emailStatus.isLoading = false
                 state.emailStatus.message = 'Erro ao enviar email!'
-            }
-            )
+            })
             // convocar reunião
             .addCase(sendConvocationEmail.pending, state => {
                 state.emailStatus.isLoading = true
@@ -446,23 +455,49 @@ export const adminSlice = createSlice({
             // desaprovar selos
             .addCase(disaproveSelos.pending, state => {
                 state.isLoading = true
-            }
-            )
+            })
             .addCase(disaproveSelos.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.isError = false
                 state.userData = action.payload
                 state.message = 'Selos desaprovados com sucesso!'
-            }
-            )
+            })
             .addCase(disaproveSelos.rejected, (state, action) => {
                 state.isError = true
                 state.message = action.payload
                 state.isLoading = false
-            }
-            )
-
-
+            })
+            // PARTE DO CONSELHO
+            // adicionar relatórios
+            .addCase(addRelatorys.pending, state => {
+                state.isLoading = true
+            })
+            .addCase(addRelatorys.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isError = false
+                state.userData = action.payload
+                state.message = 'Relatório adicionado com sucesso!'
+            })
+            .addCase(addRelatorys.rejected, (state, action) => {
+                state.isError = true
+                state.message = action.payload
+                state.isLoading = false
+            })
+            // deletar relatórios
+            .addCase(deleteRelatorys.pending, state => {
+                state.isLoading = true
+            })
+            .addCase(deleteRelatorys.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isError = false
+                state.userData = action.payload
+                state.message = 'Relatório deletado com sucesso!'
+            })
+            .addCase(deleteRelatorys.rejected, (state, action) => {
+                state.isError = true
+                state.message = action.payload
+                state.isLoading = false
+            })
     }
 })
 

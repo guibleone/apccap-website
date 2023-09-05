@@ -17,20 +17,23 @@ export default function Secretary() {
       </Box>
 
       {users && users.map((user) => (
+        <>
+          {(user.analise.analise_pedido && user.analise.vistoria && user.analise.analise_laboratorial) && (<>   
+           <Box key={user._id}
+            sx={{
+              marginTop: '10px',
+            }}
+          >
+            {user.status === 'analise' && (
+              <>
+                <Typography variant="h6" >{`${user.name}`}</Typography>
+                <Button variant="outlined" href={`/usuario/${user._id}`}>Ver Dados</Button>
+              </>
+            )}
 
-        <Box key={user._id}
-          sx={{
-            marginTop: '10px',
-          }}
-        >
-          {user.status ==='analise' && (
-          <>
-            <Typography variant="h6" >{`${user.name}`}</Typography>
-            <Button variant="outlined" href={`/usuario/${user._id}`}>Ver Dados</Button>
-          </>
-          )}
-
-        </Box>
+          </Box>
+          </>)}
+        </>
       ))}
 
       <UsersPagination setUsersData={(u) => setUsers(u)} />

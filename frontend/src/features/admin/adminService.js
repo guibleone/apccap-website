@@ -174,6 +174,36 @@ const disaproveSelos = async (data) => {
     return response.data
 }
 
+// PARTE DO CONSLEHO
+
+// adicionar relatórios
+const addRelatorys = async (data) => {
+
+    console.log(data)
+    const config = {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${data.token}`
+        }
+    }
+
+    const response = await axios.post(API_URI + '/add-relatorys/' + data.id, data, config)
+
+    return response.data
+}
+
+//deletar relatórios
+const deleteRelatorys = async (data) => {
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${data.token}`
+        }
+    }
+
+    const response = await axios.post(API_URI + '/delete-relatorys/' + data.id, data, config)
+    return response.data
+}
 
 // EMAILS
 
@@ -184,7 +214,7 @@ const sendEmail = async (emailData) => {
 
 const sendConvocationEmail = async (emailData) => {
     const response = await axios.post('/api/email/convocation', emailData)
-    return response.data  
+    return response.data
 }
 
 
@@ -202,7 +232,9 @@ const adminService = {
     sendConvocationEmail,
     getProducts,
     approveSelos,
-    disaproveSelos
+    disaproveSelos,
+    addRelatorys,
+    deleteRelatorys
 }
 
 export default adminService
