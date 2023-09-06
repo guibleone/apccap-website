@@ -112,6 +112,25 @@ const deleteUser = asyncHandler(async (req, res) => {
             await deleteObject(storageRef)
         }
 
+        if (user.analise.analise_pedido.path) {
+            const storageRef = ref(storage, `conselhoRelatórios/${user._id}/analise_pedido`)
+            await deleteObject(storageRef)
+        }
+
+        if (user.analise.vistoria.path) {
+            const storageRef = ref(storage, `conselhoRelatórios/${user._id}/vistoria`)
+            await deleteObject(storageRef)
+        }
+
+        if (user.analise.analise_laboratorial.path) {
+            const storageRef = ref(storage, `conselhoRelatórios/${user._id}/analise_laboratorial`)
+            await deleteObject(storageRef)
+        }
+        if(user.analise.analise_pedido.recurso.path){
+            const storageRef = ref(storage, `conselhoRelatórios/${user._id}/recurso`)
+            await deleteObject(storageRef)
+        }
+
         if (documents) {
             documents.map(async (document) => {
                 const storageRef = ref(storage, `documents/${document.user}/${document.name}`)
@@ -265,27 +284,70 @@ const getPayment = asyncHandler(async (req, res) => {
 
 // PARTE DO SECRETÁRIO
 
-const sendRelatory = asyncHandler(async (req, res) => {
+const approveRelatory = asyncHandler(async (req, res) => {
 
-    const { relatory } = req.body
+    try {
+        const { type } = req.body
 
-    const user = await User.findById(req.params.id)
+        const user = await User.findById(req.params.id)
 
-    if (!relatory) {
+        if (!user) {
+            res.status(404)
+            throw new Error('Usuário não encontrado')
+        }
+
+        if (type === 'analise_laboratorial') {
+            user.status = 'aprovado'
+            await user.save()
+        }
+
+        user.analise[type].status = 'aprovado'
+
+        await user.save()
+
+        res.status(200).send(user)
+
+    } catch (error) {
         res.status(400)
-        throw new Error('Insira um relatório válido')
+        throw new Error('Erro ao aprovar relatório')
     }
-
-    if (!user) {
-        res.status(404)
-        throw new Error('Usuário não encontrado')
-    }
-
-    user.relatory = relatory
-    await user.save()
-
-    res.status(200).send(user)
 })
+
+// reprovar relatório
+const repproveRelatory = asyncHandler(async (req, res) => {
+    try {
+        const { type } = req.body
+
+        const user = await User.findById(req.params.id)
+
+        if (!user) {
+            res.status(404)
+            throw new Error('Usuário não encontrado')
+        }
+
+        if (type === 'analise_pedido') {
+            user.analise.analise_pedido.recurso.status = true
+            user.analise.analise_pedido.recurso.time = Date.now()
+            await user.save()
+        }
+
+        if (user.analise.analise_laboratorial.status === 'reprovado' || user.analise.vistoria.status === 'reprovado') {
+            user.status = 'reprovado'
+            await user.save()
+        }
+
+        user.analise[type].status = 'reprovado'
+        await user.save()
+
+        res.status(200).json(user)
+
+    } catch (error) {
+        res.status(400)
+        throw new Error('Erro ao reprovar relatório')
+    }
+})
+
+
 
 // parte do presidente
 
@@ -423,7 +485,9 @@ const addRelatorys = asyncHandler(async (req, res) => {
             return res.status(400).json({ error: 'Algo de errado aconteceu' });
         }
 
-        user.analise[type] = url;
+        user.analise[type].path = url;
+        user.analise[type].status = 'pendente'
+
         await user.save();
 
         return res.status(200).json(user);
@@ -438,7 +502,7 @@ const deleteRelatorys = asyncHandler(async (req, res) => {
     try {
 
         const { type } = req.body
-        
+
         const user = await User.findById(req.params.id)
 
         if (!type) {
@@ -454,7 +518,9 @@ const deleteRelatorys = asyncHandler(async (req, res) => {
         const refStorage = ref(storage, `conselhoRelatórios/${user._id}/${type}`)
         await deleteObject(refStorage)
 
-        user.analise[type] = ''
+        user.analise[type].path = ''
+        user.analise[type].status = ''
+
         await user.save()
 
         res.status(200).json(user)
@@ -466,6 +532,10 @@ const deleteRelatorys = asyncHandler(async (req, res) => {
     }
 })
 
+// aprovar recurso
+
+// desaprovar recurso
+
 module.exports = {
     getUsers,
     getUserData,
@@ -475,11 +545,12 @@ module.exports = {
     alterRole,
     aproveUser,
     getPayment,
-    sendRelatory,
+    approveRelatory,
     disapproveUser,
     getProuducts,
     aproveSelos,
     disaproveSelos,
     addRelatorys,
-    deleteRelatorys
+    deleteRelatorys,
+    repproveRelatory
 }

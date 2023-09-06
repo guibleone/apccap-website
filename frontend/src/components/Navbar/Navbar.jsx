@@ -3,7 +3,10 @@ import { logout, reset } from '../../features/auth/authSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { resetResume } from "../../features/resume/resumeSlice"
 import { resetDocuments } from "../../features/documents/documentsSlice"
-import { Button,  Container, Box, Typography, CssBaseline, Avatar, Grid } from '@mui/material'
+import { reset as resetAdmin } from "../../features/admin/adminSlice"
+import { reset as resetProducts } from "../../features/products/productsSlice"
+import { reset as resetSpreadsheet } from "../../features/spreadSheet/spreadSheetSlice"
+import { Button, Container, Box, Typography, CssBaseline, Avatar, Grid } from '@mui/material'
 import { useMediaQuery } from "@mui/material"
 import NavMenu from "./NavMenu"
 
@@ -20,6 +23,9 @@ function Navbar() {
     dispatch(logout())
     dispatch(reset())
     dispatch(resetDocuments())
+    dispatch(resetAdmin())
+    dispatch(resetProducts())
+    dispatch(resetSpreadsheet())
     navigate('/')
   }
 
@@ -68,7 +74,7 @@ function Navbar() {
         alignItems: 'center',
         padding: '10px',
         borderBottom: '1px solid #e0e0e0',
-       
+
       }}>
 
         <Link to="/"> <img width={100} src={require('../../imgs/logo-apccap.png')} alt="Logo" /></Link>

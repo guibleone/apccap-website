@@ -49,9 +49,23 @@ const userSchema = new mongoose.Schema({
     sequence_value: { type: Number },
     relatory: { type: String },
     analise: {
-        analise_pedido: { type: String, default: '' },
-        vistoria: { type: String, default: '' },
-        analise_laboratorial: { type: String, default: '' },
+        analise_pedido: {
+            path: { type: String, default: '' },
+            status: { type: String, default: '' },
+            recurso: {
+                path: { type: String, default: '' },
+                time: {type: Date, default: ''},
+                status: { type: Boolean, default: false },
+            }
+        },
+       vistoria: {
+            path: { type: String, default: '' },
+            status: { type: String, default: '' },
+       },
+       analise_laboratorial: {
+            path: { type: String, default: '' },
+            status: { type: String, default: '' },
+       },
     },
 }, {
     timestamps: true

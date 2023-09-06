@@ -131,6 +131,29 @@ export const sendRelatory = createAsyncThunk('admin/relatory', async (user, thun
     }
 })
 
+// aprovar relatórios
+export const approveRelatory = createAsyncThunk('admin/relatory-approve', async (user, thunkAPI) => {
+    try {
+        const response = await adminService.approveRelatory(user)
+        return response
+    } catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message);
+    }
+})
+
+// reprovar relatorios
+
+export const repproveRelatory = createAsyncThunk('admin/relatory-repprove', async (user, thunkAPI) => {
+    try {
+        const response = await adminService.repproveRelatory(user)
+        return response
+    } catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message);
+    }
+})
+
 // PARTE DO PRESIDENTE
 
 export const getProducts = createAsyncThunk('presidente/products', async (user, thunkAPI) => {
@@ -146,13 +169,13 @@ export const getProducts = createAsyncThunk('presidente/products', async (user, 
 
 // aprovar selos
 
-export const approveSelos = createAsyncThunk('presidente/approveSelos', async(user, thunkAPI) => {
+export const approveSelos = createAsyncThunk('presidente/approveSelos', async (user, thunkAPI) => {
 
-    try{
+    try {
         const response = await adminService.approveSelos(user)
         thunkAPI.dispatch(listUsers(user.token))
         return response
-    }catch(error){
+    } catch (error) {
         // caso ocorra algum erro
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
         return thunkAPI.rejectWithValue(message)
@@ -161,13 +184,13 @@ export const approveSelos = createAsyncThunk('presidente/approveSelos', async(us
 
 // desaprovar selos
 
-export const disaproveSelos = createAsyncThunk('presidente/disaproveSelos', async(user, thunkAPI) => {
+export const disaproveSelos = createAsyncThunk('presidente/disaproveSelos', async (user, thunkAPI) => {
 
-    try{
+    try {
         const response = await adminService.disaproveSelos(user)
         thunkAPI.dispatch(listUsers(user.token))
         return response
-    }catch(error){
+    } catch (error) {
         // caso ocorra algum erro
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
         return thunkAPI.rejectWithValue(message)
@@ -176,24 +199,24 @@ export const disaproveSelos = createAsyncThunk('presidente/disaproveSelos', asyn
 
 // PARTE DO CONSELHO
 
-export const addRelatorys = createAsyncThunk('conselho/addRelatorys', async(user, thunkAPI) => {
+export const addRelatorys = createAsyncThunk('conselho/addRelatorys', async (user, thunkAPI) => {
 
-    try{
+    try {
         const response = await adminService.addRelatorys(user)
         return response
-    }catch(error){
+    } catch (error) {
         // caso ocorra algum erro
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
         return thunkAPI.rejectWithValue(message)
     }
 })
 
-export const deleteRelatorys = createAsyncThunk('conselho/deleteRelatorys', async(user, thunkAPI) => {
+export const deleteRelatorys = createAsyncThunk('conselho/deleteRelatorys', async (user, thunkAPI) => {
 
-    try{
+    try {
         const response = await adminService.deleteRelatorys(user)
         return response
-    }catch(error){
+    } catch (error) {
         // caso ocorra algum erro
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
         console.log(message)
@@ -219,6 +242,16 @@ export const sendConvocationEmail = createAsyncThunk('admin/convocationEmail', a
         return response
     } catch (error) {
         // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
+export const sendRelatoryEmail = createAsyncThunk('admin/relatoryEmail', async (user, thunkAPI) => {
+    try {
+        const response = await adminService.sendRelatoryEmail(user)
+        return response
+    } catch (error) {
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
         return thunkAPI.rejectWithValue(message)
     }
@@ -475,6 +508,7 @@ export const adminSlice = createSlice({
             .addCase(addRelatorys.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.isError = false
+                state.isSuccess = true
                 state.userData = action.payload
                 state.message = 'Relatório adicionado com sucesso!'
             })
@@ -490,6 +524,7 @@ export const adminSlice = createSlice({
             .addCase(deleteRelatorys.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.isError = false
+                state.isSuccess = true
                 state.userData = action.payload
                 state.message = 'Relatório deletado com sucesso!'
             })
@@ -497,6 +532,55 @@ export const adminSlice = createSlice({
                 state.isError = true
                 state.message = action.payload
                 state.isLoading = false
+            })
+            // aprovar relatórios
+            .addCase(approveRelatory.pending, state => {
+                state.isLoading = true
+            })
+            .addCase(approveRelatory.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isError = false
+                state.isSuccess = true
+                state.userData = action.payload
+                state.message = 'Relatório aprovado com sucesso!'
+            })
+            .addCase(approveRelatory.rejected, (state, action) => {
+                state.isError = true
+                state.message = action.payload
+                state.isLoading = false
+            })
+            // reprovar relatórios
+            .addCase(repproveRelatory.pending, state => {
+                state.isLoading = true
+            })
+            .addCase(repproveRelatory.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isError = false
+                state.isSuccess = true
+                state.userData = action.payload
+                state.message = 'Relatório reprovado com sucesso!'
+            })
+            .addCase(repproveRelatory.rejected, (state, action) => {
+                state.isError = true
+                state.message = action.payload
+                state.isLoading = false
+            })
+            // enviar email de relatório
+            .addCase(sendRelatoryEmail.pending, state => {
+                state.emailStatus.isLoading = true
+                state.isSuccess = false
+                state.isError = false
+            })
+            .addCase(sendRelatoryEmail.fulfilled, (state, action) => {
+                state.emailStatus.isSuccess = true
+                state.emailStatus.isLoading = false
+                state.emailStatus.isError = false
+                state.emailStatus.message = 'Email enviado com sucesso!'
+            })
+            .addCase(sendRelatoryEmail.rejected, (state, action) => {
+                state.emailStatus.isError = true
+                state.emailStatus.isLoading = false
+                state.emailStatus.message = 'Erro ao enviar email!'
             })
     }
 })

@@ -19,6 +19,8 @@ export default function Selo() {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
+        if(quantity <= 0) return toast.error('Informe uma quantidade válida', styleError)
+        
         const userData = {
             id: user._id,
             token: user.token,

@@ -109,6 +109,7 @@ const spreadSheetSlice = createSlice({
     name: 'spreadSheet',
     initialState,
     reducers: {
+        reset: state => initialState,
         resetSpreadSheet(state, action) {
             state.isError = false
             state.isSuccess = false
@@ -224,5 +225,5 @@ const spreadSheetSlice = createSlice({
     }
 })
 
-export const { resetSpreadSheet,resetExcel } = spreadSheetSlice.actions
+export const { resetSpreadSheet,resetExcel, reset } = spreadSheetSlice.actions
 export default spreadSheetSlice.reducer

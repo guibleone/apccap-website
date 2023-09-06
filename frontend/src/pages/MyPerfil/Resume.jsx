@@ -96,9 +96,9 @@ function Resume() {
       <TextareaAutosize minRows={4} onChange={onChange} name="body" id="body" defaultValue={body} />
 
       {resume ?
-          <Button variant="contained" onClick={handleUpdate} disabled={isLoading} color="primary">{isLoading ? <CircularProgress color="success" /> : 'Atualizar'}</Button>
+          <Button variant="contained" onClick={handleUpdate} disabled={isLoading && resume} color="primary">{isLoading && resume ? <CircularProgress color="success" /> : 'Atualizar'}</Button>
 
-        : <Button variant="contained" onClick={submitResume} disabled={isLoading} color="primary">{isLoading ? <CircularProgress color="success" /> : 'Criar'}</Button>}
+        : <Button variant="contained" onClick={submitResume} disabled={isLoading && resume} color="primary">{isLoading  && resume ? <CircularProgress color="success" /> : 'Criar'}</Button>}
 
 
     </Box>

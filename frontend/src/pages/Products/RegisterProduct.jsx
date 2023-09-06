@@ -113,7 +113,7 @@ function RegisterProduct() {
 
     const query = new URLSearchParams(window.location.search);
 
-    if (query.get("success") && (selos && selos.quantity > 0 && selos.status === 'pendente')) {
+    if (query.get("success") && (selos && selos.quantity >= 0 && selos.status === 'pendente')) {
 
       const userData = {
         id: user._id,
@@ -136,7 +136,7 @@ function RegisterProduct() {
     }
 
 
-  }, [selos]);
+  }, [selos, messagePayment]);
 
 
 

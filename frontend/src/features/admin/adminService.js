@@ -133,6 +133,33 @@ const sendRelatory = async (relatoryData) => {
     return response.data
 }
 
+// aprovar relatório 
+const approveRelatory = async (relatoryData) => {
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${relatoryData.token}`
+        }
+    }
+
+    const response = await axios.post(API_URI + '/relatory-approve/' + relatoryData.id, relatoryData, config)
+    return response.data
+}
+
+// desparovar relatório
+
+const repproveRelatory = async (relatoryData) => {
+    
+    const config = {
+        headers: {
+            Authorization: `Bearer ${relatoryData.token}`
+        }
+    }
+
+    const response = await axios.post(API_URI + '/relatory-repprove/' + relatoryData.id, relatoryData, config)
+    return response.data
+}
+
 // PARTE DO PRESIDENTE
 const getProducts = async (data) => {
 
@@ -217,6 +244,11 @@ const sendConvocationEmail = async (emailData) => {
     return response.data
 }
 
+const sendRelatoryEmail = async (emailData) => {
+    const response = await axios.post('/api/email/relatory', emailData)
+    return response.data
+}
+
 
 const adminService = {
     getUserData,
@@ -234,7 +266,10 @@ const adminService = {
     approveSelos,
     disaproveSelos,
     addRelatorys,
-    deleteRelatorys
+    deleteRelatorys,
+    approveRelatory,
+    sendRelatoryEmail,
+    repproveRelatory
 }
 
 export default adminService

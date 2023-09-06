@@ -1,17 +1,18 @@
-import React, { useState } from 'react'
-import { Box, Typography, TextareaAutosize, Container, Button, Divider, CircularProgress, useMediaQuery, Modal } from '@mui/material'
+import React, { useEffect, useState } from 'react'
+import { Box, Typography, TextareaAutosize, Container, Button, Divider, CircularProgress, useMediaQuery, Modal, Alert } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { FaDownload } from 'react-icons/fa'
 import { downloadDocument } from '../../features/documents/documentsSlice'
 import { toast } from 'react-toastify'
-import { sendRelatory } from '../../features/admin/adminSlice'
+import { approveRelatory, repproveRelatory, sendRelatoryEmail } from '../../features/admin/adminSlice'
 import { AiFillWarning } from 'react-icons/ai'
 import { styleError, styleSuccess } from '../toastStyles'
+import { FcClock } from 'react-icons/fc'
 
 export default function SecretaryLevel() {
 
     const { user } = useSelector((state) => state.auth)
-    const { userData, documentsData, isLoading } = useSelector((state) => state.admin)
+    const { userData, documentsData, isLoading, isSuccess, isError, emailStatus, message } = useSelector((state) => state.admin)
     const dispatch = useDispatch()
 
     const documents = documentsData ? documentsData : []
@@ -43,32 +44,72 @@ export default function SecretaryLevel() {
     }
 
 
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const [openApprove, setOpenApprove] = useState(false)
+    const [openRepprove, setOpenRepprove] = useState(false)
+
+    const [type, setType] = useState('')
+
+    const handleOpenApprove = () => setOpenApprove(!openApprove)
+    const handleOpenRepprove = () => setOpenRepprove(!openRepprove)
 
 
-    const userRelatory = userData.relatory ? userData.relatory : ''
+    const handleApprove = async () => {
 
-    const [relatory, setRelatory] = useState(userRelatory)
-
-    const handleRelatory = async () => {
-
-        if (!relatory) {
-            return toast.error('Insira um relatório válido', styleError)
-        }
-
-
-        const relatoryData = {
-            relatory,
+        const data = {
             id: userData._id,
+            type: type,
             token: user.token
         }
 
-        dispatch(sendRelatory(relatoryData))
+        const emailData = {
+            email: userData.email,
+            result: 'APROVADO',
+            type: type
+        }
 
-        toast.success('Relatório enviado com sucesso', styleSuccess)
+        dispatch(approveRelatory(data))
+        dispatch(sendRelatoryEmail(emailData))
+
     }
+
+    const handleRepprove = async () => {
+        const data = {
+            id: userData._id,
+            type: type,
+            token: user.token
+        }
+
+        const emailData = {
+            email: userData.email,
+            result: 'REPROVADO',
+            type: type
+        }
+
+        dispatch(repproveRelatory(data))
+
+        dispatch(sendRelatoryEmail(emailData))
+
+    }
+
+    useEffect(() => {
+
+        if (isError) {
+            toast.error(message, styleError)
+        }
+
+        if (isSuccess) {
+            toast.success(message, styleSuccess)
+        }
+
+        if (emailStatus.isError) {
+            toast.error('Erro ao enviar email', styleError)
+        }
+
+        if (emailStatus.isSuccess) {
+            toast.success('Email enviado com sucesso', styleSuccess)
+        }
+
+    }, [isError, isSuccess, emailStatus.isError, emailStatus.isSuccess])
 
     if (isLoading) {
         return <Box sx={
@@ -90,90 +131,159 @@ export default function SecretaryLevel() {
     return (
         <Container sx={{ height: '100vh' }}>
             <Box>
-                <Typography variant='h4'>{userData.name} - {userData.cpf}</Typography>
+                <Typography variant='h5'>{userData.name} - {userData.cpf}</Typography>
 
                 <Box>
-                    {userData.analise && userData.analise.analise_pedido && (
+                    {userData.analise && userData.analise.analise_pedido.path && (
                         <>
-                            <Typography variant='h5'>Análise do pedido</Typography>
-                            <Button href={userData.analise.analise_pedido} target='_blank' variant='outlined' color='success' startIcon={<FaDownload />}>Download</Button>
+                            <Typography variant='h6'>Relatório da Análise do Pedido</Typography>
+                            <Box sx={{ display: 'flex', gap: '5px' }}>
+                                {userData.analise && userData.analise.analise_pedido.status === 'pendente' &&
+                                    <>
+                                        <Button href={userData.analise.analise_pedido.path} target='_blank' variant='outlined' color='info' startIcon={<FaDownload />}>Baixar</Button>
+                                        <Button onClick={() => { handleOpenRepprove(); setType('analise_pedido'); }} color='error'>Reprovar</Button>
+                                        <Button onClick={() => { handleOpenApprove(); setType('analise_pedido'); }} color='success'>Aprovar</Button>
+                                    </>
+                                }
+                                {userData.analise && userData.analise.analise_pedido.status === 'aprovado' &&
+                                    <>
+                                        <Alert severity="success">Análise aprovada !</Alert>
+                                    </>
+                                }
+                                {userData.analise && userData.analise.analise_pedido.status === 'reprovado' &&
+                                    <>
+                                        <Alert severity="error">Análise reprovada !</Alert>
+                                    </>
+                                }
+                            </Box>
                         </>
                     )}
 
-                    {userData.analise && userData.analise.vistoria && (
+                    {userData.analise && userData.analise.vistoria.path && (
                         <>
-                            <Typography variant='h5'>Vistoria</Typography>
-                            <Button href={userData.analise.vistoria} target='_blank' variant='outlined' color='success' startIcon={<FaDownload />}>Download</Button>
+                            <Typography variant='h6'>Relatório da Vistoria</Typography>
+                            <Box sx={{ display: 'flex', gap: '5px' }}>
+                                {userData.analise && userData.analise.vistoria.status === 'pendente' &&
+                                    <>
+                                        <Button href={userData.analise.vistoria.path} target='_blank' variant='outlined' color='info' startIcon={<FaDownload />}>Baixar</Button>
+                                        <Button onClick={() => { handleOpenRepprove(); setType('vistoria'); }} color='error'>Reprovar</Button>
+                                        <Button onClick={() => { handleOpenApprove(); setType('vistoria'); }} color='success'>Aprovar</Button>
+                                    </>
+                                }
+                                {userData.analise && userData.analise.vistoria.status === 'aprovado' &&
+                                    <>
+                                        <Alert severity="success">Análise aprovada !</Alert>
+                                    </>
+                                }
+                                {userData.analise && userData.analise.vistoria.status === 'reprovado' &&
+                                    <>
+                                        <Alert severity="error">Análise reprovada !</Alert>
+                                    </>
+                                }
+                            </Box>
                         </>
                     )}
 
-                    {userData.analise && userData.analise.analise_laboratorial && (
+
+                    {userData.analise && userData.analise.analise_laboratorial.path && (
                         <>
-                            <Typography variant='h5'>Análise Laboratorial</Typography>
-                            <Button href={userData.analise.analise_laboratorial} target='_blank' variant='outlined' color='success' startIcon={<FaDownload />}>Download</Button>
+                            <Typography variant='h6'>Relatório da Análise Laboratorial</Typography>
+                            <Box sx={{ display: 'flex', gap: '5px' }}>
+                                {userData.analise && userData.analise.analise_laboratorial.status === 'pendente' &&
+                                    <>
+                                        <Button href={userData.analise.analise_laboratorial.path} target='_blank' variant='outlined' color='info' startIcon={<FaDownload />}>Baixar</Button>
+                                        <Button onClick={() => { handleOpenRepprove(); setType('analise_laboratorial'); }} color='error'>Reprovar</Button>
+                                        <Button onClick={() => { handleOpenApprove(); setType('analise_laboratorial'); }} color='success'>Aprovar</Button>
+                                    </>
+                                }
+                                {userData.analise && userData.analise.analise_laboratorial.status === 'aprovado' &&
+                                    <>
+                                        <Alert severity="success">Análise aprovada !</Alert>
+                                    </>
+                                }
+                                {userData.analise && userData.analise.analise_laboratorial.status === 'reprovado' &&
+                                    <>
+                                        <Alert severity="error">Análise reprovada !</Alert>
+                                    </>
+                                }
+                            </Box>
                         </>
                     )}
-
                 </Box>
 
-                <Divider sx={{ margin: '20px 0' }} />
-
-                <Typography variant="h5" component="div">Relatório</Typography>
-
-                <TextareaAutosize
-                    minRows={8}
-                    placeholder='Mensagem'
-                    style={{ width: "100%", resize: 'none', fontSize: '16px', padding: '10px', margin: '10px 0' }}
-                    maxRows={8}
-                    name='message'
-                    defaultValue={userRelatory}
-                    onChange={(e) => setRelatory(e.target.value)}
-                    disabled={userRelatory ? true : false}
-
-                />
-
-                {!userRelatory &&
-                    <Box sx={{
-                        display: 'flex'
-                    }}>
-                        <Button onClick={handleOpen} fullWidth color='success' variant='contained'>Enviar</Button>
-                        <Modal
-                            open={open}
-                            onClose={handleClose}
-                        >
-                            <Box sx={style}>
-                                <Box sx={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    gap: '10px'
-                                }}>
-                                    <Box display={'flex'} justifyContent={'space-between'}>
-                                        <Typography variant="h6" >Tem certeza ? </Typography>
-                                        <AiFillWarning color='red' size={30} />
-                                    </Box>
-                                    <Typography variant="h7" > Você não poderá alterar o relatório depois de enviado.</Typography>
-
-                                    <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
-                                        <Button color='error' variant='contained' onClick={handleClose}>Cancelar</Button>
-
-                                        <Button
-                                            disabled={isLoading}
-                                            color="success"
-                                            variant='contained'
-                                            onClick={handleRelatory}
-                                        >
-                                            {isLoading ? <CircularProgress color="success" size={24} /> : 'Enviar'}
-                                        </Button>
-
-                                    </Box>
-                                </Box>
+                <Modal
+                    open={openApprove}
+                    onClose={handleOpenApprove}
+                >
+                    <Box sx={style}>
+                        <Box sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '10px'
+                        }}>
+                            <Box display={'flex'} justifyContent={'space-between'}>
+                                <Typography variant="h6" >Tem certeza ? </Typography>
+                                <AiFillWarning color='red' size={30} />
                             </Box>
-                        </Modal>
 
+                            <Typography variant="h7" > Essa ação é permanente. </Typography>
+                            <Typography color='error' variant="p" > Será enviado um email ao produtor.</Typography>
+
+                            <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+                                <Button color='error' variant='contained' onClick={handleOpenApprove}>Cancelar</Button>
+
+                                <Button
+                                    disabled={isLoading}
+                                    color="success"
+                                    variant='contained'
+                                    onClick={handleApprove}
+                                >
+                                    {isLoading ? <CircularProgress color="success" size={24} /> : 'Aprovar'}
+                                </Button>
+
+                            </Box>
+                        </Box>
                     </Box>
-                }
+                </Modal>
+
+
+                <Modal
+                    open={openRepprove}
+                    onClose={handleOpenRepprove}
+                >
+                    <Box sx={style}>
+                        <Box sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '10px'
+                        }}>
+                            <Box display={'flex'} justifyContent={'space-between'}>
+                                <Typography variant="h6" >Tem certeza ? </Typography>
+                                <AiFillWarning color='red' size={30} />
+                            </Box>
+
+                            <Typography variant="h7" > Essa ação é permanente. </Typography>
+                            <Typography color='error' variant="p" > Será enviado um email ao produtor.</Typography>
+
+                            <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+                                <Button color='error' variant='contained' onClick={handleOpenRepprove}>Cancelar</Button>
+
+                                <Button
+                                    disabled={isLoading}
+                                    color="success"
+                                    variant='contained'
+                                    onClick={handleRepprove}
+                                >
+                                    {isLoading ? <CircularProgress color="success" size={24} /> : 'Reprovar'}
+                                </Button>
+
+                            </Box>
+                        </Box>
+                    </Box>
+                </Modal>
 
             </Box>
+
         </Container>
 
     )

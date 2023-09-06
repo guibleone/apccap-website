@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-const { sendEmail, senConvocationEmail } = require('../controllers/emailControllers.js');
+const { sendEmail, senConvocationEmail,sendRelatoryEmail } = require('../controllers/emailControllers.js');
 
 router.post('/', sendEmail);
 router.post('/convocation',  senConvocationEmail);
+router.post('/relatory', sendRelatoryEmail);
 
 module.exports = router;

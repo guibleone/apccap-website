@@ -43,26 +43,26 @@ const senConvocationEmail = asyncHandler(async (req, res) => {
     let title = ''
 
     if (typeReunion.administrativa) {
-        roles.push('presidente', 'secretario','admin','tesoureiro')
+        roles.push('presidente', 'secretario', 'admin', 'tesoureiro')
         title = 'Convocação Reunião Administrativa'
     }
 
-    if(typeReunion.assembleia_ordinal){
-        roles.push('presidente', 'secretario','admin','tesoureiro','produtor')
+    if (typeReunion.assembleia_ordinal) {
+        roles.push('presidente', 'secretario', 'admin', 'tesoureiro', 'produtor')
         title = 'Convocação Assembleia Ordinária'
     }
 
-    if(typeReunion.assembleia_extraordinaria){
-        roles.push('presidente', 'secretario','admin','tesoureiro','produtor')
+    if (typeReunion.assembleia_extraordinaria) {
+        roles.push('presidente', 'secretario', 'admin', 'tesoureiro', 'produtor')
         title = 'Convocação Assembleia Extraordinária'
     }
-    
+
     const usersAssociates = await User.find({ role: { $in: roles } })
 
     const emails = usersAssociates.map(user => (user.email))
 
     const resend = new Resend(process.env.RESEND_API_KEY)
-    
+
     const { method } = req;
 
     const { message, date } = req.body;
@@ -78,8 +78,8 @@ const senConvocationEmail = asyncHandler(async (req, res) => {
                 from: 'Apccap <reuniao.associados@apccap.shop>',
                 to: emails, // TODO: change to `email
                 subject: title, // TODO: change to `title
-                html: 
-               `
+                html:
+                    `
                 <h4>Atenção Associado, </h4>
                 <p>${message}</p> <br> 
                 <h4>Data: ${date}</h4>
@@ -96,4 +96,58 @@ const senConvocationEmail = asyncHandler(async (req, res) => {
     }
 })
 
-module.exports = { sendEmail, senConvocationEmail }
+const sendRelatoryEmail = asyncHandler(async (req, res) => {
+
+    const { method } = req;
+
+    const { type, email, result } = req.body
+
+    let title = ''
+
+    if (type === 'analise_pedido') {
+        title = 'Análise de Pedido'
+    }
+
+    if (type === 'vistoria') {
+        title = 'Vistoria'
+    }
+
+    if (type === 'analise_laboratorial') {
+        title = 'Análise Laboratorial'
+    }
+
+    const resend = new Resend(process.env.RESEND_API_KEY)
+
+    if (!email || !type) {
+        res.status(400)
+        throw new Error('Preencha todos os campos')
+    }
+
+    try {
+        const data = await resend.sendEmail({
+            from: 'Apccap <credencial.produtor@apccap.shop>',
+            to: `${email}`, // TODO: change to `email
+            subject: title, // TODO: change to `title
+            html:`<h4>Atenção Produtor, </h4>
+
+                <p>Seu relatório de ${title} foi <h4>${result}</h4>.</p> 
+                
+                <p>Para mais informações, entre em contato com a associação. Ou acesse o site <a href="www.apccap.shop">Apccap</a>. </p> 
+                
+                <p>Atenciosamente, </p>
+
+                <h4>Direção APCCAP</h4>
+
+                `
+        });
+
+        return res.status(200).send(data);
+
+    } catch (error) {
+        console.log(error)
+
+    }
+})
+
+
+module.exports = { sendEmail, senConvocationEmail, sendRelatoryEmail }

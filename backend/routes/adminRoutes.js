@@ -3,8 +3,8 @@ const router = express.Router();
 const { hasRole } = require('../middlewares/authMiddleware.js');
 const { getUserData, getUserDocuments, getUserResume,
     deleteUser, alterRole, getUsers, aproveUser,
-    getPayment, sendRelatory, disapproveUser, getProuducts, aproveSelos, 
-    disaproveSelos, addRelatorys, deleteRelatorys } = require('../controllers/adminControllers.js');
+    getPayment, disapproveUser, getProuducts, aproveSelos, 
+    disaproveSelos, addRelatorys, deleteRelatorys, approveRelatory, repproveRelatory } = require('../controllers/adminControllers.js');
 const { uploadRelatory } = require('../middlewares/multer.js');
 
 // Pegar todos os usuários
@@ -35,7 +35,8 @@ router.put('/user/disapprove/:id', hasRole(['admin', 'presidente']), disapproveU
 router.post('/payment', getPayment)
 
 // PARTE DO SECRETÁRIO
-router.post('/relatory/:id', hasRole(['secretario', 'presidente']), sendRelatory)
+router.post('/relatory-approve/:id', hasRole(['secretario', 'presidente']), approveRelatory)
+router.post('/relatory-repprove/:id', hasRole(['secretario', 'presidente']), repproveRelatory)
 
 // PARTE DO PRESIDENTE
 router.get('/products/:id', hasRole('presidente'), getProuducts)

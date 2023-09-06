@@ -99,7 +99,18 @@ export const resetAprove = createAsyncThunk('auth/reset', async (user, thunkAPI)
     }
 })
 
+// enviar recurso
 
+export const sendRecurso = createAsyncThunk('auth/sendRecurso', async (resource, thunkAPI) => {
+    try{
+        const response = await authService.sendRecurso(resource)
+        return response
+    }catch(error){
+        // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+})
 
 // slice para funções de autnticação de usuário
 export const authSlice = createSlice({
@@ -186,6 +197,20 @@ export const authSlice = createSlice({
                 state.user = action.payload
             })
             .addCase(resetAprove.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+            })
+            // enviar recurso
+            .addCase(sendRecurso.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(sendRecurso.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isSuccess = true
+                state.user = action.payload
+            })
+            .addCase(sendRecurso.rejected, (state, action) => {
                 state.isLoading = false
                 state.isError = true
                 state.message = action.payload

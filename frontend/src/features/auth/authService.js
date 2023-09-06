@@ -97,6 +97,27 @@ const resetAprove = async ({ id, token }) => {
     return response.data
 }
 
+// enviar recurso
+
+const sendRecurso = async (userData) => {
+
+    let token = userData.token
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+        },
+    }
+
+    const response = await axios.post(API_URL + 'recurso/' + userData.id, userData, config)
+
+    if (response.data) {
+        localStorage.setItem('user', JSON.stringify(response.data))
+    }
+
+    return response.data
+}
 
 
 // logout de usuário
@@ -113,7 +134,8 @@ const authService = {
     logout,
     updateUser,
     addProfilePhoto,
-    resetAprove
+    resetAprove,
+    sendRecurso
 }
 
 export default authService;

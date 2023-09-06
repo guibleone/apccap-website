@@ -1,7 +1,7 @@
 const express = require('express')
-const { registerUser, loginUser, deleteUser, updateUser, addProfilePhoto, restartAprove  } = require('../controllers/userControllers.js')
+const { registerUser, loginUser, deleteUser, updateUser, addProfilePhoto, restartAprove, handleRecurso  } = require('../controllers/userControllers.js')
 const { protect, hasRole } = require('../middlewares/authMiddleware.js')
-const { uploadProfilePhoto } = require('../middlewares/multer.js')
+const { uploadProfilePhoto, uploadRelatory } = require('../middlewares/multer.js')
 
 // incializa o router
 const router = express.Router()
@@ -10,6 +10,7 @@ const router = express.Router()
 router.post('/registrar', registerUser)
 router.post('/entrar', loginUser)
 router.post('/foto/:id', protect, uploadProfilePhoto.single("pathFoto"), addProfilePhoto)
+router.post('/recurso/:id', protect, uploadRelatory.single("path"), handleRecurso)
 
 
 // rotas DELETE

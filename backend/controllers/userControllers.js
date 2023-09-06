@@ -44,21 +44,7 @@ const registerUser = asyncHandler(async (req, res) => {
     })
 
     if (user) {
-        res.status(201).json({
-            _id: user._id,
-            name: user.name,
-            cpf: user.cpf,
-            email: user.email,
-            pathFoto: user.pathFoto,
-            acessLevel: user.acessLevel,
-            address: user.address,
-            role: user.role,
-            status: user.status,
-            selos: user.selos,
-            sequence_value: user.sequence_value,
-            relatory: user.relatory,
-            token: generateToken(user._id)
-        })
+        res.json({...user._doc, token: generateToken(user._id)})
     } else {
         res.status(400)
         throw new Error('Dados inválidos')
@@ -90,23 +76,9 @@ const addProfilePhoto = asyncHandler(async (req, res) => {
 
         user.pathFoto = url
 
-        const updatedUser = await user.save()
+        await user.save()
 
-        res.status(201).json({
-            _id: updatedUser._id,
-            name: updatedUser.name,
-            cpf: updatedUser.cpf,
-            email: updatedUser.email,
-            pathFoto: updatedUser.pathFoto,
-            acessLevel: updatedUser.acessLevel,
-            address: updatedUser.address,
-            role: updatedUser.role,
-            status: user.status,
-            selos: user.selos,
-            sequence_value: user.sequence_value,
-            relatory: user.relatory,
-            token: generateToken(updatedUser._id)
-        })
+        res.json({ ...user._doc, token: generateToken(user._id) })
 
     } else {
         res.status(404)
@@ -127,21 +99,7 @@ const loginUser = asyncHandler(async (req, res) => {
     const user = await User.findOne({ cpf })
 
     if (user && (await bcrypt.compare(password, user.password))) {
-        res.json({
-            _id: user._id,
-            name: user.name,
-            cpf: user.cpf,
-            email: user.email,
-            pathFoto: user.pathFoto,
-            acessLevel: user.acessLevel,
-            address: user.address,
-            role: user.role,
-            status: user.status,
-            selos: user.selos,
-            sequence_value: user.sequence_value,
-            relatory: user.relatory,
-            token: generateToken(user._id)
-        })
+        res.json({ ...user._doc, token: generateToken(user._id) })
     } else {
         res.status(401)
         throw new Error('CPF ou senha inválidos')
@@ -195,23 +153,10 @@ const updateUser = asyncHandler(async (req, res) => {
         user.acessLevel = req.body.acessLevel || user.acessLevel
         user.address = req.body.address || user.address
 
-        const updatedUser = await user.save()
+        await user.save()
 
-        res.json({
-            _id: updatedUser._id,
-            name: updatedUser.name,
-            cpf: updatedUser.cpf,
-            email: updatedUser.email,
-            pathFoto: updatedUser.pathFoto,
-            acessLevel: updatedUser.acessLevel,
-            address: updatedUser.address,
-            role: updatedUser.role,
-            status: user.status,
-            selos: user.selos,
-            sequence_value: user.sequence_value,
-            relatory: user.relatory,
-            token: generateToken(updatedUser._id)
-        })
+        res.json({ ...user._doc, token: generateToken(user._id) })
+
     } else {
         res.status(404)
         throw new Error('Usuário não encontrado')
@@ -249,29 +194,61 @@ const restartAprove = asyncHandler(async (req, res) => {
 
         await Document.deleteMany({ user: req.params.id })
 
-        const updatedUser = await user.save()
+        await user.save()
 
-        res.status(200).json({
-            _id: updatedUser._id,
-            name: updatedUser.name,
-            cpf: updatedUser.cpf,
-            email: updatedUser.email,
-            pathFoto: updatedUser.pathFoto,
-            acessLevel: updatedUser.acessLevel,
-            address: updatedUser.address,
-            role: updatedUser.role,
-            status: user.status,
-            selos: user.selos,
-            sequence_value: user.sequence_value,
-            relatory: user.relatory,
-            token: generateToken(updatedUser._id)
-        })
+        res.json({ ...user._doc, token: generateToken(user._id) })
 
     } catch (error) {
         res.status(400)
         throw new Error('Erro ao reiniciar aprovação')
     }
 })
+
+
+const handleRecurso = asyncHandler(async (req, res) => {
+
+    try {
+
+        if(req.file){     
+
+                const user = await User.findById(req.params.id)
+    
+                if (!user) {
+                    res.status(404)
+                    throw new Error('Usuário não encontrado')
+                }
+    
+                const storageRef = ref(storage, `conselhoRelatórios/${user._id}/recurso`)
+    
+                const metadata = {
+                    contentType: req.file.mimetype,
+                }
+    
+                const snapshot = await uploadBytesResumable(storageRef, req.file.buffer, metadata);
+    
+                const url = await getDownloadURL(snapshot.ref);
+    
+                user.analise.analise_pedido.recurso.path = url
+                user.analise.analise_pedido.recurso.time = null
+    
+                await user.save()
+    
+                res.json({ ...user._doc, token: generateToken(user._id) })
+        }
+
+    }catch(error){
+        res.status(400)
+        throw new Error('Erro ao enviar recurso')
+    }
+
+    
+
+})
+
+
+
+
+
 
 // gerar token
 const generateToken = (id) => {
@@ -287,5 +264,6 @@ module.exports = {
     deleteUser,
     updateUser,
     addProfilePhoto,
-    restartAprove
+    restartAprove,
+    handleRecurso
 }

@@ -199,7 +199,7 @@ function UserSingle() {
                 <Grid item md={4} sx={styleBox3}>
 
                     <Typography variant="h5" component="div">Documentos</Typography>
-                    <Box sx={{height:documents.length > 0 ? '200px' : '30px', paddingRight:'10px'}}>
+                    <Box sx={{maxHeight:documents.length > 0 ? '200px' : '30px', paddingRight:'10px'}}>
                         {documents.length > 0 ? documents.map((document) => (
                             <Box sx={
                                 {
