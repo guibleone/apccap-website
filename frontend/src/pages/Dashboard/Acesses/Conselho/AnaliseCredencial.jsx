@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom"
 import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { addRelatorys, deleteRelatorys, getDocumentsData, getUserData, resetStatus } from "../../../../features/admin/adminSlice"
+import { addRelatorys, approveRecurso, deleteRelatorys, getDocumentsData, getUserData, repproveRecurso, resetStatus, sendRecursoEmail } from "../../../../features/admin/adminSlice"
 import { Alert, Avatar, Box, Button, CircularProgress, Container, Divider, Grid, Typography, useMediaQuery } from "@mui/material"
 import { AiOutlineDelete, AiOutlineDownload } from "react-icons/ai"
 import { FcClock, FcPrivacy } from "react-icons/fc"
@@ -13,7 +13,7 @@ export default function AnaliseCredencial() {
     const dispatch = useDispatch()
 
     const { user } = useSelector((state) => state.auth)
-    const { userData, documentsData, isLoading, isSuccess, isError, message } = useSelector((state) => state.admin)
+    const { userData, documentsData, isLoading, isSuccess, isError, message, emailStatus } = useSelector((state) => state.admin)
 
     const matches = useMediaQuery('(min-width:800px)')
 
@@ -84,6 +84,38 @@ export default function AnaliseCredencial() {
         dispatch(deleteRelatorys(data))
     }
 
+    const handleRepproveRecurso = () => {
+
+        const data = {
+            id,
+            token: user.token
+        }
+
+        const emailData = {
+            email: userData.email,
+            result: 'REPROVADO'
+        }
+
+        dispatch(repproveRecurso(data))
+       //dispatch(sendRecursoEmail(emailData))
+    }
+
+    const handleApproveRecurso = () => {
+
+        const data = {
+            id,
+            token: user.token
+        }
+
+        const emailData = {
+            email: userData.email,
+            result: 'REPROVADO'
+        }
+
+        dispatch(approveRecurso(data))
+        //dispatch(sendRecursoEmail(emailData))
+    }
+
 
 
     useEffect(() => {
@@ -99,17 +131,23 @@ export default function AnaliseCredencial() {
 
     useEffect(() => {
 
-        if (isSuccess) {
-            toast.success(message, styleSuccess)
-        }
-
-        if (isError) {
+        if (isError && !emailStatus.isError) {
             toast.error(message, styleError)
         }
 
-        dispatch(resetStatus())
+        if (isSuccess && !emailStatus.isSuccess) {
+            toast.success(message, styleSuccess)
+        }
 
-    }, [isSuccess, isError, message])
+        if (emailStatus.isError) {
+            toast.error('Erro ao enviar email', styleError)
+        }
+
+        if (emailStatus.isSuccess) {
+            toast.success('Email enviado com sucesso', styleSuccess)
+        }
+
+    }, [isError, isSuccess, emailStatus.isError, emailStatus.isSuccess])
 
     if (isLoading) {
         return <Box sx={
@@ -333,27 +371,62 @@ export default function AnaliseCredencial() {
                 </Grid>
 
                 <Grid item xs={12} sm={12} lg={5.7} >
-                    {userData.analise && userData.analise.analise_pedido.recurso.path === '' ? (
-                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <FcClock size={50} />
-                            <Typography variant='h6'>{timeLeft}</Typography>
-                            <Typography variant='p'>Para invalidar recurso</Typography>
-                        </Box>
-                    ) :
-                        <>
+                    {userData.analise && userData.analise.analise_pedido.recurso.status && <>
+                        {userData.analise.analise_pedido.recurso.path === '' ? (
                             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                <Button href={userData.analise && userData.analise.analise_pedido.recurso.path} target="_blank" variant='outlined' >Baixar Recurso</Button>
+                                <FcClock size={50} />
+                                <Typography variant='h6'>{timeLeft}</Typography>
+                                <Typography variant='p'>Para invalidar recurso</Typography>
                             </Box>
-                        </>}
+                        ) :
+                            <>
+                                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                    <Typography variant='h6'>Recurso Produtor</Typography>
+                                    <Button href={userData.analise && userData.analise.analise_pedido.recurso.path} target="_blank" variant='outlined' >Baixar Recurso</Button>
+                                </Box>
+                            </>
+                        }
+                    </>}
                 </Grid>
 
                 <Grid item xs={12} sm={12} lg={2.3} >
                     {userData.analise && userData.analise.analise_pedido.recurso.status &&
                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
+
                             <Typography variant='h6'>Parecer do recurso</Typography>
-                            <Button fullWidth disabled={userData.analise.analise_pedido.recurso.path === ''} variant="outlined" color="error">Reprovar</Button>
-                            <Button fullWidth disabled={userData.analise.analise_pedido.recurso.path === ''} variant="outlined" color="success">Aprovar</Button>
+
+                            {userData.analise.analise_pedido.recurso.status === 'pendente' &&
+                                <>
+                                    {emailStatus.isLoading ? <CircularProgress sx={{ margin: '20px' }} size={60} /> :
+                                        <>
+                                            <Button
+                                                fullWidth
+                                                disabled={userData.analise.analise_pedido.recurso.path === ''}
+                                                onClick={handleRepproveRecurso} variant="outlined" color="error">Reprovar</Button>
+                                            <Button
+                                                fullWidth
+                                                disabled={userData.analise.analise_pedido.recurso.path === ''}
+                                                onClick={handleApproveRecurso} variant="outlined" color="success">Aprovar</Button>
+                                        </>
+                                    }
+                                </>
+                            }
+
+                            {userData.analise.analise_pedido.recurso.status === 'reprovado' &&
+                                <>
+                                    <Alert severity="error">Recurso reprovado</Alert>
+                                </>
+                            }
+
+                            {userData.analise.analise_pedido.recurso.status === 'aprovado' &&
+                                <>
+                                    <Alert severity="success">Recurso Aprovado</Alert>
+                                </>
+                            }
+
                         </Box>
+
+
                     }
 
                 </Grid>

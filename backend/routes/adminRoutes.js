@@ -1,10 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const { hasRole } = require('../middlewares/authMiddleware.js');
-const { getUserData, getUserDocuments, getUserResume,
+const { 
+    getUserData, getUserDocuments, getUserResume,
     deleteUser, alterRole, getUsers, aproveUser,
     getPayment, disapproveUser, getProuducts, aproveSelos, 
-    disaproveSelos, addRelatorys, deleteRelatorys, approveRelatory, repproveRelatory } = require('../controllers/adminControllers.js');
+    disaproveSelos, addRelatorys, deleteRelatorys, 
+    approveRelatory, repproveRelatory, approveRecurso,
+    repproveRecurso } = require('../controllers/adminControllers.js');
+
 const { uploadRelatory } = require('../middlewares/multer.js');
 
 // Pegar todos os usuários
@@ -38,6 +42,7 @@ router.post('/payment', getPayment)
 router.post('/relatory-approve/:id', hasRole(['secretario', 'presidente']), approveRelatory)
 router.post('/relatory-repprove/:id', hasRole(['secretario', 'presidente']), repproveRelatory)
 
+
 // PARTE DO PRESIDENTE
 router.get('/products/:id', hasRole('presidente'), getProuducts)
 router.post('/aproveSelos/:id', hasRole('presidente'), aproveSelos)
@@ -46,5 +51,7 @@ router.post('/disaproveSelos/:id', hasRole('presidente'), disaproveSelos)
 // PARTE DO CONSELHO
 router.post('/add-relatorys/:id', uploadRelatory.single('path'), hasRole('conselho'), addRelatorys)
 router.post('/delete-relatorys/:id', hasRole('conselho'), deleteRelatorys)
+router.post('/recurso-approve/:id', hasRole('conselho'), approveRecurso)
+router.post('/recurso-repprove/:id', hasRole('conselho'), repproveRecurso)
 
 module.exports = router;

@@ -219,7 +219,30 @@ export const deleteRelatorys = createAsyncThunk('conselho/deleteRelatorys', asyn
     } catch (error) {
         // caso ocorra algum erro
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
-        console.log(message)
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
+// aprovar recurso
+export const approveRecurso = createAsyncThunk('conselho/approveRecurso', async (user, thunkAPI) => {
+    try {
+        const response = await adminService.approveRecurso(user)
+        return response
+    } catch (error) {
+        // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
+//reporvar recurso
+export const repproveRecurso = createAsyncThunk('conselho/repproveRecurso', async (user, thunkAPI) => {
+    try {
+        const response = await adminService.repproveRecurso(user)
+        return response
+    } catch (error) {
+        // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
         return thunkAPI.rejectWithValue(message)
     }
 })
@@ -256,6 +279,17 @@ export const sendRelatoryEmail = createAsyncThunk('admin/relatoryEmail', async (
         return thunkAPI.rejectWithValue(message)
     }
 })
+
+export const sendRecursoEmail = createAsyncThunk('admin/recursoEmail', async (user, thunkAPI) => {
+    try {
+        const response = await adminService.sendRecursoEmail(user)
+        return response
+    } catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
 
 export const adminSlice = createSlice({
     name: 'admin',
@@ -565,6 +599,38 @@ export const adminSlice = createSlice({
                 state.message = action.payload
                 state.isLoading = false
             })
+            // aprovar recurso
+            .addCase(approveRecurso.pending, state => {
+                state.isLoading = true
+            })
+            .addCase(approveRecurso.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isError = false
+                state.isSuccess = true
+                state.userData = action.payload
+                state.message = 'Recurso aprovado com sucesso!'
+            })
+            .addCase(approveRecurso.rejected, (state, action) => {
+                state.isError = true
+                state.message = action.payload
+                state.isLoading = false
+            })
+            // reprovar recurso
+            .addCase(repproveRecurso.pending, state => {
+                state.isLoading = true
+            })
+            .addCase(repproveRecurso.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isError = false
+                state.isSuccess = true
+                state.userData = action.payload
+                state.message = 'Recurso reprovado com sucesso!'
+            })
+            .addCase(repproveRecurso.rejected, (state, action) => {
+                state.isError = true
+                state.message = action.payload
+                state.isLoading = false
+            })
             // enviar email de relatório
             .addCase(sendRelatoryEmail.pending, state => {
                 state.emailStatus.isLoading = true
@@ -578,6 +644,26 @@ export const adminSlice = createSlice({
                 state.emailStatus.message = 'Email enviado com sucesso!'
             })
             .addCase(sendRelatoryEmail.rejected, (state, action) => {
+                state.emailStatus.isError = true
+                state.emailStatus.isLoading = false
+                state.emailStatus.message = 'Erro ao enviar email!'
+            })
+            // enviar email de recurso
+            .addCase(sendRecursoEmail.pending, state => {
+                state.emailStatus.isLoading = true
+                state.isSuccess = false
+                state.isError = false
+                state.emailStatus.isError = false
+                state.emailStatus.isSuccess = false
+                state.emailStatus.message = ''
+            })
+            .addCase(sendRecursoEmail.fulfilled, (state, action) => {
+                state.emailStatus.isSuccess = true
+                state.emailStatus.isLoading = false
+                state.emailStatus.isError = false
+                state.emailStatus.message = 'Email enviado com sucesso!'
+            })
+            .addCase(sendRecursoEmail.rejected, (state, action) => {
                 state.emailStatus.isError = true
                 state.emailStatus.isLoading = false
                 state.emailStatus.message = 'Erro ao enviar email!'

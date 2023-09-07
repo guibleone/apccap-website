@@ -6,7 +6,7 @@ import { toast } from "react-toastify"
 import { resetDocuments } from "../../features/documents/documentsSlice"
 import { Button, Typography, Box, Stack, CircularProgress } from '@mui/material';
 import { FaDownload, FaTrash } from 'react-icons/fa'
-import {styleError, styleSuccess} from '../toastStyles'
+import { styleError, styleSuccess } from '../toastStyles'
 
 function Documents() {
 
@@ -71,18 +71,26 @@ function Documents() {
     <Box sx={
       {
         marginBottom: '20px',
+        maxWidth: '400px',
+        justifyContent: 'center',
+        gap:'5px'
+
       }
     }>
 
-      <Typography sx={
-        {
-          marginBottom: '20px',
-
-        }} variant='h5' >Documentos</Typography>
+      <Typography variant='h5' >Documentos</Typography>
+      <Typography variant="p" >Envie seus documentos para a análise do pedido</Typography>
 
       <form onSubmit={handleSubmit}>
-        <input onChange={onChange} type="file" ref={fileInputRef} />
-        <Button sx={{ margin: '10px 0' }} type="submit" variant="contained" color="primary">Adicionar</Button>
+        <Box sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+         
+        }}>
+          <input onChange={onChange} type="file" ref={fileInputRef} />
+          <Button fullWidth sx={{ margin: '10px 0' }} type="submit" variant="outlined" color="primary">Adicionar</Button>
+        </Box>
       </form>
 
       {documents && documents.length > 0 ? (<Box sx={
@@ -112,10 +120,11 @@ function Documents() {
             marginBottom: '20px',
 
           }} variant='h5' >Adicione algum documento</Typography>
-      )}
+      )
+      }
 
 
-    </Box>
+    </Box >
   )
 }
 

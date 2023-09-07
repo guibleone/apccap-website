@@ -68,7 +68,7 @@ export default function SecretaryLevel() {
         }
 
         dispatch(approveRelatory(data))
-        dispatch(sendRelatoryEmail(emailData))
+     //dispatch(sendRelatoryEmail(emailData))
 
     }
 
@@ -87,17 +87,17 @@ export default function SecretaryLevel() {
 
         dispatch(repproveRelatory(data))
 
-        dispatch(sendRelatoryEmail(emailData))
+       // dispatch(sendRelatoryEmail(emailData))
 
     }
 
     useEffect(() => {
 
-        if (isError) {
+        if (isError && !emailStatus.isError) {
             toast.error(message, styleError)
         }
 
-        if (isSuccess) {
+        if (isSuccess && !emailStatus.isSuccess) {
             toast.success(message, styleSuccess)
         }
 
@@ -132,7 +132,7 @@ export default function SecretaryLevel() {
         <Container sx={{ height: '100vh' }}>
             <Box>
                 <Typography variant='h5'>{userData.name} - {userData.cpf}</Typography>
-
+                {userData.analise && !userData.analise.analise_pedido.path && <Typography variant='h6'>Aguardando análise do conselho</Typography>}
                 <Box>
                     {userData.analise && userData.analise.analise_pedido.path && (
                         <>

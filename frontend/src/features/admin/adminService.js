@@ -232,6 +232,36 @@ const deleteRelatorys = async (data) => {
     return response.data
 }
 
+// aprovar recurso 
+
+const approveRecurso = async(data) => {
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${data.token}`
+        }
+    }
+
+    const response = await axios.post(API_URI + '/recurso-approve/' + data.id, data, config)
+    return response.data
+}
+
+// reprovar recurso
+
+const repproveRecurso = async(data) => {
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${data.token}`
+        }
+    }
+
+    const response = await axios.post(API_URI + '/recurso-repprove/' + data.id, data, config)
+    return response.data
+}
+
+
+
 // EMAILS
 
 const sendEmail = async (emailData) => {
@@ -246,6 +276,11 @@ const sendConvocationEmail = async (emailData) => {
 
 const sendRelatoryEmail = async (emailData) => {
     const response = await axios.post('/api/email/relatory', emailData)
+    return response.data
+}
+
+const sendRecursoEmail = async (emailData) => {
+    const response = await axios.post('/api/email/recurso', emailData)
     return response.data
 }
 
@@ -269,7 +304,10 @@ const adminService = {
     deleteRelatorys,
     approveRelatory,
     sendRelatoryEmail,
-    repproveRelatory
+    repproveRelatory,
+    approveRecurso,
+    sendRecursoEmail,
+    repproveRecurso
 }
 
 export default adminService

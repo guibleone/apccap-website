@@ -6,7 +6,7 @@ import { getProducts, getUserData, sendEmail, sendRelatory } from '../../../../f
 import { getSubscription } from '../../../../features/payments/paymentsSlice'
 import { useMediaQuery } from '@mui/material'
 import { useNavigate } from 'react-router'
-import { AiFillWarning } from 'react-icons/ai'
+import { AiFillWarning, AiOutlineDownload } from 'react-icons/ai'
 import { styleError, styleSuccess } from '../../../toastStyles'
 import { toast } from 'react-toastify'
 import { disapproveUser } from '../../../../features/admin/adminSlice'
@@ -125,7 +125,7 @@ export default function User() {
                 <Grid item xs={12} md={4} >
                     <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '10px', padding: '10px' }}>
 
-                        <Typography textAlign={'center'} variant="h6" >{`${produtor && produtor.name}`}</Typography>
+                        <Typography textAlign={'center'} variant="h5" >{`${produtor && produtor.name}`}</Typography>
 
 
 
@@ -143,10 +143,22 @@ export default function User() {
                 <Divider orientation={'vertical'} flexItem />
 
                 <Grid item xs={12} md={5} sx={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center', padding: '10px' }}  >
+                            <Typography textAlign={'center'} variant="h5" >Análises do Produtor</Typography>
+                            {produtor.analise && produtor.analise.analise_pedido.path && 
+                            <>
+                                <Button startIcon={<AiOutlineDownload />} fullWidth variant='outlined' color='primary' href={produtor.analise.analise_pedido.path}>Análise de pedido</Button>
+                            </>}
 
+                            {produtor.analise && produtor.analise.vistoria.path && 
+                            <>
+                                <Button startIcon={<AiOutlineDownload />}  fullWidth variant='outlined' color='primary' href={produtor.analise.vistoria.path}>Vistoria</Button>
+                            </>}
 
-                    <Typography textAlign={'center'} variant='h6'>{(produtor && produtor.relatory) ? produtor.relatory : 'Usuário não possui relatório'}</Typography>
-
+                            {produtor.analise && produtor.analise.analise_laboratorial.path && 
+                            <>
+                                <Button startIcon={<AiOutlineDownload />}  fullWidth variant='outlined' color='primary' href={produtor.analise.analise_laboratorial.path}>Análise Laboratorial</Button>
+                            </>}
+                
                 </Grid>
 
                 <Divider orientation="vertical" flexItem />

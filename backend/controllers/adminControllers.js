@@ -126,7 +126,7 @@ const deleteUser = asyncHandler(async (req, res) => {
             const storageRef = ref(storage, `conselhoRelatórios/${user._id}/analise_laboratorial`)
             await deleteObject(storageRef)
         }
-        if(user.analise.analise_pedido.recurso.path){
+        if (user.analise.analise_pedido.recurso.path) {
             const storageRef = ref(storage, `conselhoRelatórios/${user._id}/recurso`)
             await deleteObject(storageRef)
         }
@@ -298,6 +298,7 @@ const approveRelatory = asyncHandler(async (req, res) => {
 
         if (type === 'analise_laboratorial') {
             user.status = 'aprovado'
+            user.role = 'produtor'
             await user.save()
         }
 
@@ -326,7 +327,14 @@ const repproveRelatory = asyncHandler(async (req, res) => {
         }
 
         if (type === 'analise_pedido') {
-            user.analise.analise_pedido.recurso.status = true
+
+            if (user.analise.analise_pedido.recurso.path) {
+                const refStorage = ref(storage, `conselhoRelatórios/${user._id}/recurso`)
+                await deleteObject(refStorage)
+            }
+
+            user.analise.analise_pedido.recurso.path = ''
+            user.analise.analise_pedido.recurso.status = 'pendente'
             user.analise.analise_pedido.recurso.time = Date.now()
             await user.save()
         }
@@ -533,8 +541,68 @@ const deleteRelatorys = asyncHandler(async (req, res) => {
 })
 
 // aprovar recurso
+const approveRecurso = asyncHandler(async (req, res) => {
+    try {
 
-// desaprovar recurso
+        const user = await User.findById(req.params.id)
+
+        if (!user) {
+            res.status(404)
+            throw new Error('Usuário não encontrado')
+        }
+
+        if (!user.analise.analise_pedido.recurso.path) {
+            res.status(400)
+            throw new Error('Relatório não encontrado')
+        }
+
+        if (user.analise.analise_pedido.path) {
+            const refStorage = ref(storage, `conselhoRelatórios/${user._id}/analise_pedido`)
+            await deleteObject(refStorage)
+        }
+
+        user.analise.analise_pedido.recurso.status = 'aprovado'
+        user.analise.analise_pedido.status = 'pendente'
+        user.analise.analise_pedido.path = ''
+
+        await user.save()
+
+        res.status(200).json(user)
+
+
+    } catch (error) {
+        res.status(400)
+        throw new Error('Erro ao aprovar recurso')
+    }
+})
+// reprovar recurso
+const repproveRecurso = asyncHandler(async (req, res) => {
+    try {
+
+        const user = await User.findById(req.params.id)
+
+        if(!user){
+            res.status(404)
+            throw new Error('Usuário não encontrado')
+        }
+
+        if(!user.analise.analise_pedido.recurso.path){
+            res.status(400)
+            throw new Error('Recurso não encontrado')
+        }
+
+        user.analise.analise_pedido.recurso.status = 'reprovado'
+        user.status = 'reprovado'
+
+        await user.save()
+
+        res.status(200).json(user)
+
+    } catch (error) {
+        res.status(400)
+        throw new Error('Erro ao reprovar recurso')
+    }
+})
 
 module.exports = {
     getUsers,
@@ -552,5 +620,7 @@ module.exports = {
     disaproveSelos,
     addRelatorys,
     deleteRelatorys,
-    repproveRelatory
+    repproveRelatory,
+    approveRecurso,
+    repproveRecurso
 }

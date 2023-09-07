@@ -98,8 +98,6 @@ const senConvocationEmail = asyncHandler(async (req, res) => {
 
 const sendRelatoryEmail = asyncHandler(async (req, res) => {
 
-    const { method } = req;
-
     const { type, email, result } = req.body
 
     let title = ''
@@ -128,11 +126,49 @@ const sendRelatoryEmail = asyncHandler(async (req, res) => {
             from: 'Apccap <credencial.produtor@apccap.shop>',
             to: `${email}`, // TODO: change to `email
             subject: title, // TODO: change to `title
-            html:`<h4>Atenção Produtor, </h4>
+            html: `<h4>Atenção Produtor, </h4>
 
-                <p>Seu relatório de ${title} foi <h4>${result}</h4>.</p> 
+                <p>Seu relatório de ${title} foi <h4>${result}</h4></p> 
                 
-                <p>Para mais informações, entre em contato com a associação. Ou acesse o site <a href="www.apccap.shop">Apccap</a>. </p> 
+                <p>Para mais informações, entre em contato com a associação. Ou acesse o site <a href="www.apccap.shop">Apccap</a>.</p> 
+                
+                <p>Atenciosamente, </p>
+
+                <h4>Direção APCCAP</h4>
+
+                `
+        });
+
+        return res.status(200).send(data);
+
+    } catch (error) {
+        console.log(error)
+
+    }
+})
+
+const sendRecursoEmail = asyncHandler(async (req, res) => {
+
+    const { email, result } = req.body
+
+
+    const resend = new Resend(process.env.RESEND_API_KEY)
+
+    if (!email || !result) {
+        res.status(400)
+        throw new Error('Preencha todos os campos')
+    }
+
+    try {
+        const data = await resend.sendEmail({
+            from: 'Apccap <recurso.produtor@apccap.shop>',
+            to: `${email}`, // TODO: change to `email
+            subject: 'Análise do Recurso', // TODO: change to `title
+            html: `<h4>Atenção Produtor, </h4>
+
+                <p>Seu recurso da Análise do pedido foi <h4>${result}</h4></p> 
+                
+                <p>Para mais informações, entre em contato com a associação. Ou acesse o site <a href="www.apccap.shop">Apccap</a>.</p> 
                 
                 <p>Atenciosamente, </p>
 
@@ -150,4 +186,4 @@ const sendRelatoryEmail = asyncHandler(async (req, res) => {
 })
 
 
-module.exports = { sendEmail, senConvocationEmail, sendRelatoryEmail }
+module.exports = { sendEmail, senConvocationEmail, sendRelatoryEmail,sendRecursoEmail }

@@ -36,7 +36,8 @@ const userSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        default: 'analise',
+        default: '',
+        //analise, aprovado, reprovado
     },
     selos: {
         quantity: { type: Number, default: 0 },
@@ -55,7 +56,7 @@ const userSchema = new mongoose.Schema({
             recurso: {
                 path: { type: String, default: '' },
                 time: {type: Date, default: ''},
-                status: { type: Boolean, default: false },
+                status: { type: String, default: '' },
             }
         },
        vistoria: {

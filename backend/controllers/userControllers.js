@@ -182,6 +182,27 @@ const restartAprove = asyncHandler(async (req, res) => {
             throw new Error('Usuário já está em análise')
         }
 
+        if(user.analise.analise_pedido.recurso.path){
+            const storageRef = ref(storage, `conselhoRelatórios/${user._id}/recurso`)
+            await deleteObject(storageRef)
+
+            user.analise.analise_pedido.recurso.path = ''
+            user.analise.analise_pedido.recurso.time = null
+            user.analise.analise_pedido.recurso.status = ''
+            
+            await user.save()
+        }
+
+        if(user.analise.analise_pedido.path){
+            const storageRef = ref(storage, `conselhoRelatórios/${user._id}/analise_pedido`)
+            await deleteObject(storageRef)
+
+            user.analise.analise_pedido.status = ''
+            user.analise.analise_pedido.path = ''
+
+            await user.save()
+        }
+
         user.status = 'analise'
         user.relatory = ''
 
@@ -239,9 +260,7 @@ const handleRecurso = asyncHandler(async (req, res) => {
     }catch(error){
         res.status(400)
         throw new Error('Erro ao enviar recurso')
-    }
-
-    
+    }   
 
 })
 

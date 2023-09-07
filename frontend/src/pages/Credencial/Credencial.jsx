@@ -1,21 +1,25 @@
-import { Box, Container, CssBaseline, Typography, Button, CircularProgress, Link } from '@mui/material'
+import { Box, Container, CssBaseline, Typography, Button, CircularProgress, Link, Grid, Divider, useMediaQuery, Alert } from '@mui/material'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getDocuments } from '../../features/documents/documentsSlice'
 import Documents from '../MyPerfil/Documents'
-import { FcApproval, FcCancel, FcClock, FcHighPriority } from 'react-icons/fc'
+import { FcApproval, FcCancel, FcClock, FcHighPriority, FcPrivacy } from 'react-icons/fc'
 import { resetAprove, sendRecurso } from '../../features/auth/authSlice'
 import Mensalidade from './Mensalidade'
 import { toast } from 'react-toastify'
 import { styleError } from '../toastStyles'
+import { AiOutlineDownload } from 'react-icons/ai'
 
 
 function Producer() {
 
     const { user, isLoading } = useSelector((state) => state.auth)
+    const { payments } = useSelector((state) => state.payments)
+
     const fileInput = useRef(null);
 
     const dispatch = useDispatch()
+    const matches = useMediaQuery('(min-width:800px)')
 
     // informação do documento
     const [documentData, setDocumentData] = useState({
@@ -90,23 +94,42 @@ function Producer() {
         )
     }
 
+    if (isLoading) {
+        return <Box sx={
+            {
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh'
+            }
+        }>
+            <CircularProgress sx={
+                {
+                    marginBottom: '100px',
+                }
+            } size={100} />
+        </Box>
+    }
+
+
     return (
         <Container sx={{ minHeight: '100vh' }}>
             <CssBaseline />
 
+            {user.status === 'analise' && user.analise.analise_pedido.status === '' &&
+                <>
+                    <Documents />
+                </>
+            }
+
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center', padding: '20px' }}>
 
-                {user.status === 'analise' && !user.analise && user.analise.analise_pedido.recurso.status &&
-                    <>
-                        <Typography textAlign='center' variant='h4'>Seu cadastro está em análise <FcClock /></Typography>
-                        <Documents />
-                    </>
-                }
-
-                {user.status === 'analise' && user.analise && user.analise.analise_pedido.recurso.path === '' &&
+                {user.status === 'analise' && user.analise && user.analise.analise_pedido.status === 'reprovado' &&
+                    user.analise.analise_pedido.recurso.path === '' &&
                     <>
                         <Typography textAlign={'center'} variant='h5'>Seus documentos foram inválidados <FcHighPriority style={{ verticalAlign: 'bottom' }} size={35} /></Typography>
                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
+                            <Button variant='outlined' href={user.analise && user.analise.analise_pedido.path}>Análise do Pedido</Button>
                             <FcClock size={60} />
                             <Typography variant='h6'>{timeLeft}</Typography>
                             <Typography variant='p'>Tempo restante para o envio do recurso </Typography>
@@ -130,10 +153,18 @@ function Producer() {
                 {user.status === 'aprovado' && (
                     <>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center' }}>
-                            <Typography variant='h4'>Aprovado <FcApproval /> </Typography>
+                            <Typography variant='h5'>Aprovado <FcApproval style={{ verticalAlign: 'bottom' }} size={35} /> </Typography>
                             <Typography>{user.relatory}</Typography>
 
-                            <Typography textAlign={'center'} variant=''>Assine a nossa credencial para ter acesso a todas funcionalidades</Typography>
+                            {payments && payments.portal ?
+                                <>
+                                    <Typography textAlign={'center'} variant=''>Você já possui uma assinatura ativa</Typography>
+                                </>
+                                :
+                                <>
+                                    <Typography textAlign={'center'} variant=''>Assine a nossa credencial para ter acesso a todas funcionalidades</Typography>
+                                </>
+                            }
 
                             <Mensalidade />
 
@@ -144,26 +175,136 @@ function Producer() {
 
                 {user.status === 'reprovado' && (
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                        <Typography variant='h4'>Reprovado <FcCancel /> </Typography>
-                        <Typography>{user.relatory}</Typography>
+                        <Typography variant='h5'>Sua credencial foi reprovada <FcCancel /> </Typography>
+                        <Button
+                            disabled={isLoading}
+                            onClick={() => dispatch(resetAprove({ id: user._id, token: user.token }))}
+                            variant='outlined'
+                            fullWidth
+                        >
+                            {isLoading ? <CircularProgress color="success" size={24} /> : 'Tentar Novamente'}
+
+                        </Button>
                     </Box>
                 )}
             </Box>
 
-            <Box>
+            {(user.status === 'aprovado' || user.status === 'pendente') &&
+                <>
+                    <Typography textAlign='center' variant='h5'>Acompanhe o Processo</Typography>
 
-                {user.status === 'reprovado' &&
-                    <Button
-                        disabled={isLoading}
-                        onClick={() => dispatch(resetAprove({ id: user._id, token: user.token }))}
-                        variant='contained'
-                        fullWidth
-                    >
-                        {isLoading ? <CircularProgress color="success" size={24} /> : 'Tentar Novamente'}
 
-                    </Button>
-                }
-            </Box>
+                    <Grid container spacing={2} sx={{ marginTop: '20px', marginBottom: '40px' }} >
+
+                        <Grid item xs={12} sm={12} lg={3.9} >
+                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center' }}>
+
+                                <Typography variant='h6'>Análise do pedido</Typography>
+                                <Typography variant='p'>Parecer sobre os documentos do produtor</Typography>
+
+                                {user.analise && user.analise.analise_pedido.path && user.analise.analise_pedido.status !== 'pendente' ? (
+                                    <>
+                                        <Box sx={{ display: 'flex' }}>
+                                            <Button color="success" href={user.analise && user.analise.analise_pedido.path}><AiOutlineDownload size={25} /></Button>
+                                        </Box>
+
+                                        {user.analise && (
+                                            <>
+
+                                                {user.analise.analise_pedido.status === 'reprovado' &&
+                                                    <Alert severity="error">Relatório reprovado pela direção</Alert>
+                                                }
+
+                                                {user.analise.analise_pedido.status === 'aprovado' &&
+                                                    <Alert severity="success">Análise de relatório concluída</Alert>
+                                                }
+                                            </>
+                                        )}
+                                    </>
+
+                                ) :
+                                    <Alert severity="info">Aguarde o laudo</Alert>
+                                }
+                            </Box>
+
+                        </Grid>
+
+                        <Divider orientation="vertical" flexItem={matches} />
+
+                        <Grid item xs={12} sm={12} lg={3.9} >
+                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center' }}>
+
+                                <Typography variant='h6'>Vistoria</Typography>
+                                <Typography variant='p'>Parecer do técnico sobre a cadeia produtiva</Typography>
+
+                                {user.analise && user.analise.vistoria.path && user.analise.vistoria.status !== 'pendente' ? (
+                                    <>
+                                        <Box sx={{ display: 'flex' }}>
+                                            <Button color="success" href={user.analise && user.analise.vistoria.path}><AiOutlineDownload size={25} /></Button>
+                                        </Box>
+
+                                        {user.analise && (
+                                            <>
+
+                                                {user.analise.vistoria.status === 'reprovado' &&
+                                                    <Alert severity="error">Relatório reprovado pela direção</Alert>
+                                                }
+
+                                                {user.analise.vistoria.status === 'aprovado' &&
+                                                    <Alert severity="success">Análise de relatório concluída</Alert>
+                                                }
+                                            </>
+                                        )}
+                                    </>
+
+                                ) :
+                                    <Alert severity="info">Aguarde o laudo</Alert>
+                                }
+                            </Box>
+
+                        </Grid>
+
+                        <Divider orientation="vertical" flexItem={matches} />
+
+
+                        <Grid item xs={12} sm={12} lg={3.9} >
+                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center' }}>
+
+                                <Typography variant='h6'>Análise Laboratorial</Typography>
+                                <Typography variant='p'>Parecer do laboratório credenciado</Typography>
+
+                                {user.analise && user.analise.analise_laboratorial.path && user.analise.analise_laboratorial.status !== 'pendente' ? (
+                                    <>
+                                        <Box sx={{ display: 'flex' }}>
+                                            <Button color="success" href={user.analise && user.analise.analise_laboratorial.path}><AiOutlineDownload size={25} /></Button>
+                                        </Box>
+
+                                        {user.analise && (
+                                            <>
+
+                                                {user.analise.analise_laboratorial.status === 'reprovado' &&
+                                                    <Alert severity="error">Relatório reprovado pela direção</Alert>
+                                                }
+
+                                                {user.analise.analise_laboratorial.status === 'aprovado' &&
+                                                    <Alert severity="success">Análise de relatório concluída</Alert>
+                                                }
+                                            </>
+                                        )}
+
+                                    </>
+
+                                ) :
+                                    <Alert severity="info">Aguarde o laudo</Alert>
+                                }
+                            </Box>
+
+                        </Grid>
+
+                    </Grid>
+                </>
+            }
+
         </Container>
     )
 }

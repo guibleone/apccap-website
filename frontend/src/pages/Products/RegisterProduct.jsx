@@ -118,7 +118,7 @@ function RegisterProduct() {
       const userData = {
         id: user._id,
         token: user.token,
-        quantity: selos.quantity,   
+        quantity: selos.quantity,
       }
 
       dispatch(addSelosPayed(userData))
@@ -129,7 +129,7 @@ function RegisterProduct() {
     }
 
     if (query.get("canceled")) {
-      
+
       setMessagePayment("Pedido cancelado - compre novamente quando estiver pronto.")
 
       query.delete("canceled");
@@ -190,14 +190,15 @@ function RegisterProduct() {
             {(selos.status === 'pendente') && <Typography variant='p'><span style={{ color: 'red' }}> {selos.quantity}</span> selos estão pendentes. Por favor faça o pagamento.
               <Button variant='outlined' onClick={() => handlePayment()}>Pagar</Button>
             </Typography>}
-         
-            {messagePayment && messagePayment ===  "Pedido realizado com sucesso!" && <Alert color='success'>{messagePayment}</Alert>}
-            {messagePayment && messagePayment !==  "Pedido realizado com sucesso!" && <Alert color='error'>{messagePayment}</Alert>}
+
+            {messagePayment && messagePayment === "Pedido realizado com sucesso!" && <Alert color='success'>{messagePayment}</Alert>}
+            {messagePayment && messagePayment !== "Pedido realizado com sucesso!" && <Alert color='error'>{messagePayment}</Alert>}
 
             {(selos.status === 'reprovado') && <Typography variant='p' color={'error'}>Seus {selos.quantity} selos foram reprovados. Por favor peça-os novamente.</Typography>}
 
 
             <Button variant='contained' type='submit'>Cadastrar</Button>
+            <Typography variant='p'> {user.selos.endSelo ? `*Último selo cadastrado ${user.selos.endSelo}` : ''}</Typography>
 
           </Box>
 
