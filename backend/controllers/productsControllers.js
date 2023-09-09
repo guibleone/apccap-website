@@ -2,7 +2,7 @@ const asyncHandler = require('express-async-handler');
 const Product = require('../models/productModel.js');
 const User = require('../models/userModel.js');
 const Resume = require('../models/userResumeModel.js');
-const { ref, getDownloadURL, uploadBytesResumable } = require("firebase/storage");
+const { ref, getDownloadURL, uploadBytesResumable, deleteObject } = require("firebase/storage");
 const { storage } = require('../db/firebase.js')
 
 // pegar produtos
@@ -60,66 +60,123 @@ const generateSelos = ({ params }) => {
 // adicionar produtos
 const addProduct = asyncHandler(async (req, res) => {
 
-    const { name, quantity, description } = req.body
+    const { name, quantity, description } = req.body;
     const user = await User.findById(req.user._id)
+    console.log(req.files)
 
-
-    if (user.selos.newQuantity < quantity) {
-        res.status(400)
-        throw new Error('Quantidade de selos insuficiente')
+    // Checar se o usuário enviou arquivos
+    if (!req.files || req.files.length === 0) {
+        return res.status(400).json({ error: 'Nenhum arquivo foi selecionado' });
     }
-
-    if (user.selos.status === 'analise' && user.selos.newQuantity < 1) {
-        res.status(400)
-        throw new Error('Seus selos estão em análise')
-    }
-
-    if (user.selos.status === 'pendente' && user.selos.newQuantity < 1) {
-        res.status(400)
-        throw new Error('Seus selos estão pendentes')
-    }
-
+    
     if (!name || !quantity || !description) {
-        res.status(404)
-        throw new Error('Insira os dados corretamente')
+        return res.status(400).json({ error: 'Insira os dados corretamente' });
     }
-
+    // Criar um array para armazenar os metadados dos arquivos
+    const relatorys = [];
+    
+    // Upload os arquivos para o Cloud Storage
+    for (const file of req.files) {
+        const storageRef = ref(storage, `productRelatorys/${req.user._id}/${name}/${file.originalname}`);
+        const metadata = {
+            contentType: file.mimetype,
+        };
+    
+        try {
+            // Upload o arquivo para o Cloud Storage
+            const snapshot = await uploadBytesResumable(storageRef, file.buffer, metadata);
+    
+            // Pegar a URL do arquivo
+            const url = await getDownloadURL(snapshot.ref);
+    
+            // Armazenar os metadados do arquivo
+            relatorys.push({
+                name: file.originalname,
+                path: url,
+            });
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ error: 'Falha ao criar o produto' });
+        }
+    }
+    
+    // Criar o produto
     const product = await Product.create({
         name,
         description,
-        startSelo: !user.selos.endSelo ? `${user.sequence_value.toString().padStart(3, "0")}` + `${(1).toString().padStart(5, "0")}` :
-            `${user.selos.endSelo.slice(0, 3)}` + `${(parseInt(user.selos.endSelo.slice(-5)) + 1).toString().padStart(5, "0")}`,
-        endSelo: !user.selos.endSelo ? `${user.sequence_value.toString().padStart(3, "0")}` + `${(quantity).toString().padStart(5, "0")}` :
-            `${user.selos.endSelo.slice(0, 3)}` + `${(parseInt(user.selos.endSelo.slice(-5)) + parseInt(quantity)).toString().padStart(5, "0")}`,
-        producer: user._id
-    })
-
+        quantity,
+        relatorys,
+        producer: req.user._id,
+    });
+    
+    // Checar se o produto foi criado
     if (product) {
-        user.selos.newQuantity -= quantity
-        user.selos.startSelo = product.startSelo
-        user.selos.endSelo = product.endSelo
+        user.productsQuantity += 1
         await user.save()
-
-        res.status(201).json(product)
+        res.status(201).json(product);
+    } else {
+        res.status(500).json({ error: 'Failed to create the product' });
     }
+    
 
-    else {
-        res.status(400)
-        throw new Error('Dados inválidos')
-    }
+    /* const user = await User.findById(req.user._id)
+ 
+ 
+     if (user.selos.newQuantity < quantity) {
+         res.status(400)
+         throw new Error('Quantidade de selos insuficiente')
+     }
+ 
+     if (user.selos.status === 'analise' && user.selos.newQuantity < 1) {
+         res.status(400)
+         throw new Error('Seus selos estão em análise')
+     }
+ 
+     if (user.selos.status === 'pendente' && user.selos.newQuantity < 1) {
+         res.status(400)
+         throw new Error('Seus selos estão pendentes')
+     }
+ 
+     if (!name || !quantity || !description) {
+         res.status(404)
+         throw new Error('Insira os dados corretamente')
+     }
+ 
+     const product = await Product.create({
+         name,
+         description,
+         startSelo: !user.selos.endSelo ? `${user.sequence_value.toString().padStart(3, "0")}` + `${(1).toString().padStart(5, "0")}` :
+             `${user.selos.endSelo.slice(0, 3)}` + `${(parseInt(user.selos.endSelo.slice(-5)) + 1).toString().padStart(5, "0")}`,
+         endSelo: !user.selos.endSelo ? `${user.sequence_value.toString().padStart(3, "0")}` + `${(quantity).toString().padStart(5, "0")}` :
+             `${user.selos.endSelo.slice(0, 3)}` + `${(parseInt(user.selos.endSelo.slice(-5)) + parseInt(quantity)).toString().padStart(5, "0")}`,
+         producer: user._id
+     })
+ 
+     if (product) {
+         user.selos.newQuantity -= quantity
+         user.selos.startSelo = product.startSelo
+         user.selos.endSelo = product.endSelo
+         await user.save()
+ 
+         res.status(201).json(product)
+     }
+ 
+     else {
+         res.status(400)
+         throw new Error('Dados inválidos')
+     }*/
 })
 
 // atualizar produto
 const updateProduct = asyncHandler(async (req, res) => {
 
-    const { name, description } = req.body
+    const { description } = req.body
 
     const user = await User.findById(req.user._id)
 
     const product = await Product.findById(req.params.id)
 
     if (product) {
-        product.name = name
         product.producer = user._id
         product.description = description
 
@@ -231,6 +288,12 @@ const deleteProduct = asyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.id)
 
     if (product) {
+        if(product.relatorys.length > 0){
+            product.relatorys.forEach(async (relatory) => {
+                const refStorage = ref(storage, `productRelatorys/${req.user._id}/${product.name}/${relatory.name}`)
+                await deleteObject(refStorage)
+            })
+        }
         await product.deleteOne()
 
         res.json('Produto deletado com sucesso')
@@ -358,42 +421,43 @@ const addSelo = asyncHandler(async (req, res) => {
 // adicionar selos pagos
 
 const addSelosPayed = asyncHandler(async (req, res) => {
-  try{
+    try {
 
-    const { quantity, id } = req.body
+        const { quantity, id } = req.body
 
-    const user = await User.findById(id)
+        const user = await User.findById(id)
 
-    if (!user) return res.status(404).json({ error: 'Usuário não encontrado' })
+        if (!user) return res.status(404).json({ error: 'Usuário não encontrado' })
 
-    user.selos.status = 'aprovado'
-    user.selos.newQuantity += quantity
-    user.selos.quantity = 0
+        user.selos.status = 'aprovado'
+        user.selos.newQuantity += quantity
+        user.selos.quantity = 0
 
-    await user.save()
+        await user.save()
 
-    res.status(200).json({ message: 'Selos adicionados com sucesso' })
-  }catch(error){
-    res.status(404)
-    throw new Error('Usuário não encontrado')
-  }
+        res.status(200).json({ message: 'Selos adicionados com sucesso' })
+    } catch (error) {
+        res.status(404)
+        throw new Error('Usuário não encontrado')
+    }
 
 })
 
 
-    module.exports =
-    {
-        getProducts,
-        addProduct,
-        deleteProduct,
-        getSingleProduct,
-        updateProduct,
-        addPhoto,
-        trackProduct,
-        getProducer,
-        getProducerResume,
-        getSelos,
-        addSelo,
-        generateSelos,
-        addSelosPayed
-    }
+module.exports =
+{
+    getProducts,
+    addProduct,
+    deleteProduct,
+    getSingleProduct,
+    updateProduct,
+    addPhoto,
+    trackProduct,
+    getProducer,
+    getProducerResume,
+    getSelos,
+    addSelo,
+    generateSelos,
+    addSelosPayed,
+
+}

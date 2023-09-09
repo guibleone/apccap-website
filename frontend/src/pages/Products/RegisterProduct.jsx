@@ -1,17 +1,20 @@
 import { Box, Button, Container, Typography, CircularProgress, TextField, useMediaQuery, Divider, Alert, Select, MenuItem, InputLabel, FormControl, Grid, Card, CardMedia, CardContent, CardActions } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { getProducts, deleteProduct, addProduct, getSelos, clear, addSelo, addSelosPayed } from '../../features/products/productsSlice'
 import Selo from '../../components/Stripe/Selo'
 import ProductsPagination from '../../components/Pagination/Products'
+import {useNavigate} from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { AiOutlineEdit } from 'react-icons/ai'
+import { AiOutlineDropbox, AiOutlineEdit } from 'react-icons/ai'
 import { BiTrashAlt } from 'react-icons/bi'
 import { styleError, styleSuccess } from '../toastStyles'
+import { useDropzone } from 'react-dropzone'
 import axios from 'axios'
 
 function RegisterProduct() {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const { user } = useSelector(state => state.auth)
 
@@ -29,6 +32,9 @@ function RegisterProduct() {
   const { name, quantity, description } = inputData
 
   const [productsData, setProductsData] = useState([])
+
+  const inputRef = useRef(null)
+
 
   useEffect(() => {
     dispatch(getProducts())
@@ -68,24 +74,36 @@ function RegisterProduct() {
     }))
   }
 
-  const onSubmit = (e) => {
-    e.preventDefault()
 
+  const [files, setFiles] = useState([])
 
-    const userData = {
-      id: user._id,
-      token: user.token
+  // on drop arquivos
+  const onDrop = useCallback(async (acceptedFiles, rejectedFiles) => {
+
+    if (rejectedFiles.length > 0) {
+      // Handle files with invalid extensions here
+      console.error('Invalid file(s) dropped:', rejectedFiles);
+      return;
     }
 
-    const productData = {
-      name,
-      description,
-      quantity
-    }
+    setFiles(acceptedFiles)
+  }, []);
 
-    dispatch(addProduct({ productData, userData }))
+  // configurações do dropzone
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: 'application/pdf',
+    multiple: true,
+  });
 
-  }
+  // remover arquivos
+  const removeFile = (file) => {
+    const updatedFiles = files.filter((selectedFile) => selectedFile !== file);
+    setFiles(updatedFiles);
+  };
+
+
+
 
   const handlePayment = async (e) => {
 
@@ -139,6 +157,60 @@ function RegisterProduct() {
   }, [selos, messagePayment]);
 
 
+  const [isLoaded, setIsLoaded] = useState(false)
+
+  const handleSubmit = () => {
+
+    setIsLoaded(true)
+
+    const formData = new FormData();
+
+    formData.append('name', name);
+    formData.append('description', description);
+    formData.append('quantity', quantity);
+    formData.append('token', user.token);
+
+    for (let i = 0; i < files.length; i++) {
+      formData.append('files', files[i]);
+    }
+
+    axios.post('/api/products', formData, {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    })
+      .then((response) => {
+        toast.success(response.data.message, styleSuccess)
+        dispatch(getProducts())
+        setFormData({
+          name: '',
+          quantity: '',
+          description: '',
+        })
+        setFiles([])
+        setIsLoaded(false)
+      })
+      .catch((error) => {
+        console.log(error)
+        toast.error(error.response.data.error, styleError)
+      });
+  };
+
+  if (isLoaded) {
+    return <Box sx={
+      {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }
+    }>
+      <CircularProgress sx={
+        {
+          margin: '100px',
+        }
+      } size={100} />
+    </Box>
+  }
 
   if (isLoading) {
     return <Box sx={
@@ -163,7 +235,66 @@ function RegisterProduct() {
         minHeight: '100vh',
       }
     }>
+      <Typography sx={{ textAlign: 'center', margin: '20px 0' }} variant={matches ? 'h5' : 'h5'}>Cadastrar Produto</Typography>
 
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={6} lg={3.7}>
+          <FormControl fullWidth >
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <TextField placeholder="Informe o nome do produto" size='small' name='name' onChange={onChange} value={name} />
+              <TextField placeholder="Informe a descrição do produto" size='small' name='description' onChange={onChange} value={description} />
+              <TextField placeholder="Informe a quantidade de selos" size='small' name='quantity' onChange={onChange} />
+            </Box>
+          </FormControl>
+
+        </Grid>
+
+        <Divider orientation="vertical" flexItem sx={{ margin: '0 20px' }} />
+
+        <Grid item xs={12} md={6} lg={3.7}>
+
+          <Box sx={{
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px',
+            p: 1,
+            border: isDragActive ? '1px solid #E4E3E3' : '',
+            borderRadius: '5px',
+            boxShadow: isDragActive ? '0px 0px 5px 0px rgba(0,0,0,0.75)' : '',
+          }} {...getRootProps()}>
+            <input multiple {...getInputProps()} />
+            <Button variant='outlined' color='success'><AiOutlineDropbox size={80} /> </Button>
+            <Typography textAlign={'center'} variant='p'>Arraste e solte os arquivos ou clique para selecionar</Typography>
+          </Box>
+
+        </Grid>
+
+        <Divider orientation="vertical" flexItem sx={{ margin: '0 20px' }} />
+
+        <Grid item xs={12} md={6} lg={3.7}>
+
+          {files.length > 0 ? (
+            <div>
+              <h4>Arquivos selecionados</h4>
+              <ul>
+                {files.map((file) => (
+                  <li key={file.path}>
+                    {file.path}
+                    <Button variant='outlined' color='error' onClick={() => removeFile(file)}><BiTrashAlt /></Button>
+                  </li>
+                ))}
+              </ul>
+
+
+            </div>
+          ) :
+            <Typography variant='p'>Nenhum arquivo selecionado</Typography>
+          }
+        </Grid>
+
+        <Button sx={{ m: 2 }} fullWidth variant='outlined' onClick={handleSubmit}>Cadastrar</Button>
+
+      </Grid>
+
+      {/*
       <Box sx={{ marginBottom: '50px' }}>
 
         <form onSubmit={onSubmit}>
@@ -178,7 +309,7 @@ function RegisterProduct() {
           }>
 
             <Typography sx={{ textAlign: 'center' }} variant={matches ? 'h5' : 'h4'} component="h1" gutterBottom>Cadastrar Produto</Typography>
-
+           
             <TextField placeholder="Informe o nome do produto" size='small' name='name' onChange={onChange} value={name} />
             <TextField placeholder="Informe a descrição do produto" size='small' name='description' onChange={onChange} value={description} />
 
@@ -203,87 +334,106 @@ function RegisterProduct() {
           </Box>
 
         </form>
+        */}
 
-        <Divider sx={{ margin: '20px 0' }} />
-
-
-
-        {productsData.length === 0 ?
-
-          (<Typography variant="h4" component="h1" gutterBottom>Nenhum produto cadastrado</Typography>)
-
-          : (
-            <Box sx={
-              {
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '10px',
-                marginTop: '20px',
-              }
-            }>
-              <Typography sx={{ textAlign: 'center' }} variant={matches ? 'h5' : 'h4'} component="h1" >Seus Produtos</Typography>
+      <Divider sx={{ margin: '20px 0' }} />
 
 
-              <Grid
-                sx={{ margin: '10px 0', display: 'flex', flexDirection: matches ? 'column' : 'row', gap: matches ? '20px' : '0' }}
-                container={!matches}
-                rowSpacing={{ xs: 8, sm: 6, md: 3 }}
-                columnSpacing={{ xs: 8, sm: 6, md: 3 }}
-              >
+      {productsData.length === 0 ?
 
-                {productsData.map((product) => (
+        (<Typography variant="h5" gutterBottom>Nenhum produto cadastrado</Typography>)
 
-                  <Grid alignSelf={'center'} item key={product._id} md={3}>
-
-                    <Card
-                      sx={{
-                        maxWidth: matches ? 352 : 252,
-                        minWidth: 262,
-                        border: matches ? '1px solid #E4E3E3' : 'none',
-                        borderRadius: '5px',
-                      }}>
-
-                      <CardMedia
-                        sx={{ height: matches ? 252 : 252 }}
-                        image={product.path ? product.path : 'https://as1.ftcdn.net/jpg/02/68/55/60/220_F_268556012_c1WBaKFN5rjRxR2eyV33znK4qnYeKZjm.jpg'}
-                      />
-
-                      <CardContent>
-                        <Typography sx={{ textAlign: 'center' }} variant="h6" component="h1">{product.name}</Typography>
-                      </CardContent>
-
-                      <CardActions sx={{ display: 'flex', justifyContent: 'center', gap: '5px' }}>
-                        <Button variant='outlined' color='info' href={`/produto/${product._id}`}>
-                          <AiOutlineEdit size={20} />
-                        </Button>
-
-                        <Button variant='outlined' color='error' onClick={() => dispatch(deleteProduct({ id: product._id }))} >
-                          <BiTrashAlt size={20} />
-                        </Button>
-                      </CardActions>
-
-                    </Card>
-
-                  </Grid>
-                ))}
+        : (
+          <Box sx={
+            {
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '10px',
+              marginTop: '20px',
+            }
+          }>
+            <Typography sx={{ textAlign: 'center' }} variant={'h5'} component="h1" >Seus Produtos</Typography>
 
 
-              </Grid>
+            <Grid
+              sx={{ margin: '10px 0', display: 'flex', flexDirection: matches ? 'column' : 'row', gap: matches ? '20px' : '0' }}
+              container={!matches}
+              rowSpacing={{ xs: 8, sm: 6, md: 3 }}
+              columnSpacing={{ xs: 8, sm: 6, md: 3 }}
+            >
 
-            </Box>
-          )}
+              {productsData.map((product) => (
 
-        <ProductsPagination setProductsData={(p) => setProductsData(p)} />
+                <Grid alignSelf={'center'} item key={product._id} md={3}>
 
-        <Divider sx={{ margin: '20px 0' }} />
+                  <Card
+                    sx={{
+                      maxWidth: matches ? 352 : 252,
+                      minWidth: 262,
+                      border: matches ? '1px solid #E4E3E3' : 'none',
+                      borderRadius: '5px',
+                    }}>
 
-        <Selo />
+                    <CardMedia
+                      sx={{ height: matches ? 252 : 252 }}
+                      image={product.path ? product.path : 'https://as1.ftcdn.net/jpg/02/68/55/60/220_F_268556012_c1WBaKFN5rjRxR2eyV33znK4qnYeKZjm.jpg'}
+                    />
 
-        {(isError && !isSuccessSelos) && <Alert sx={{ margin: '10px 0' }} severity="error">{message}</Alert>}
+                    <CardContent>
+                      <Typography sx={{ textAlign: 'center' }} variant="h6" component="h1">{product.name}</Typography>
+                    </CardContent>
 
-      </Box>
+                    {product.status === 'aprovado' ?
+                      <>
+                        <CardActions sx={{ display: 'flex', justifyContent: 'center', gap: '5px' }}>
+                          <Button variant='outlined' color='info' href={`/produto/${product._id}`}>
+                            <AiOutlineEdit size={20} />
+                          </Button>
 
-    </Container>
+                          <Button variant='outlined' color='error' onClick={() => dispatch(deleteProduct({ id: product._id }))} >
+                            <BiTrashAlt size={20} />
+                          </Button>
+                        </CardActions>
+                      </> :
+                      <>
+                        {product.status === 'pendente' &&
+                          <CardActions sx={{ display: 'flex', justifyContent: 'center', gap: '5px' }}>
+                            <Button variant='outlined' onClick={()=> navigate(`/acompanhar-analise/${product._id}`)} color="warning">Acompanhar análise</Button>
+                          </CardActions>
+                        }
+                        {product.status === 'reprovado' && <>
+                          <Alert severity="warning">Seu produto foi reprovado.</Alert>
+                          <Button variant='outlined' color='error' onClick={() => dispatch(deleteProduct({ id: product._id }))} >
+                            <BiTrashAlt size={20} />
+                          </Button>
+                        </>
+                        }
+                      </>
+                    }
+
+
+                  </Card>
+
+                </Grid>
+              ))}
+
+
+            </Grid>
+
+          </Box>
+        )}
+
+      <ProductsPagination setProductsData={(p) => setProductsData(p)} />
+
+      <Divider sx={{ margin: '20px 0' }} />
+
+      {/*<Selo />*/}
+
+      {(isError && !isSuccessSelos) && <Alert sx={{ margin: '10px 0' }} severity="error">{message}</Alert>}
+
+
+
+    </Container >
   )
 }
 

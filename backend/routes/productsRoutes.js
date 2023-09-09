@@ -1,8 +1,8 @@
 const express = require('express');
 const { hasRole } = require('../middlewares/authMiddleware');
 const { getProducts, addProduct, deleteProduct, getSingleProduct, updateProduct, addPhoto, 
-    trackProduct, getProducer, getProducerResume, getSelos, addSelo, generateSelos, addSelosPayed } = require('../controllers/productsControllers');
-const { uploadProduct, uploadSelo } = require('../middlewares/multer');
+    trackProduct, getProducer, getProducerResume, getSelos, addSelo, generateSelos, addSelosPayed,addRelatorys } = require('../controllers/productsControllers');
+const { uploadProduct, uploadSelo, uploadRelatorys } = require('../middlewares/multer');
 
 
 const router = express.Router();
@@ -16,13 +16,13 @@ router.get('/selo/:id',hasRole('produtor'), getSelos)
 router.post('/selo/:id', uploadSelo.single("pathRelatory"),  hasRole('produtor'), addSelo)
 
 // pegar produtos
-router.get('/', hasRole('produtor'), getProducts) 
+router.get('/', hasRole(['produtor','conselho']), getProducts) 
 
 // pegar único produto
 router.get('/:id', hasRole('produtor'), getSingleProduct)
 
-// adcionar produtos
-router.post('/', hasRole('produtor'), addProduct)
+// adicionar produtos
+router.post('/', uploadRelatorys.array('files'), hasRole('produtor'), addProduct)
 
 // deletar produtos
 router.delete('/:id', hasRole('produtor'), deleteProduct)
@@ -40,7 +40,7 @@ router.post('/rastrear', trackProduct)
 router.post('/selo-generate', generateSelos)
 
 // adicionar selos pagos
-
 router.post('/selo-pago', addSelosPayed)
+
 
 module.exports = router;

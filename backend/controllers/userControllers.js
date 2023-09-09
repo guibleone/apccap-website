@@ -264,6 +264,32 @@ const handleRecurso = asyncHandler(async (req, res) => {
 
 })
 
+// se tornar um produtor 
+
+const becomeProducer = asyncHandler(async (req, res) => {
+    try {
+
+        const user = await User.findById(req.user._id)
+
+        if (!user) {
+            res.status(404)
+            throw new Error('Usuário não encontrado')
+        }
+
+        user.status = 'analise'
+
+        await user.save()
+
+        res.json({ ...user._doc, token: generateToken(user._id) })
+
+    } catch (error) {
+        res.status(400)
+        throw new Error('Erro ao se tornar produtor')
+    }
+
+})
+
+
 
 
 
@@ -284,5 +310,6 @@ module.exports = {
     updateUser,
     addProfilePhoto,
     restartAprove,
-    handleRecurso
+    handleRecurso,
+    becomeProducer
 }

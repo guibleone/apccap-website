@@ -18,22 +18,27 @@ export const getProducts = async () => {
     return response.data;
 }
 
-// adicionar produtos
-export const addProduct = async (product) => {
-    const user = JSON.parse(localStorage.getItem('user'));
 
-    const token = user.token;
+export const addProduct = async (productData) => {
+    console.log('Received Product Data:', productData); // Add this line for debugging
+  
     const config = {
-        headers: {
-            'Content-type': 'application/json',
-            Authorization: `Bearer ${token}`
-        }
+      headers: {
+        'Content-type': 'multipart/form-data',
+        Authorization: `Bearer ${productData.token}`,
+      },
+    };
+  
+    try {
+      const response = await axios.post(API_URI, productData, config);
+      console.log('Response Data:', response.data); // Add this line for debugging
+      return response.data;
+    } catch (error) {
+      console.error('Error:', error); // Add this line for debugging
+      throw error;
     }
-
-    const response = await axios.post(API_URI, product, config);
-    return response.data;
-}
-
+  };
+  
 // deletar produtos
 export const deleteProduct = async (product) => {
     const user = JSON.parse(localStorage.getItem('user'));

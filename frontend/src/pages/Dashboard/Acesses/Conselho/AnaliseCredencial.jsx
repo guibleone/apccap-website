@@ -33,8 +33,12 @@ export default function AnaliseCredencial() {
                 const distance = targetDate.getTime() - now;
 
                 if (distance <= 0) {
-                    //dispatch(repproveRecurso())
-                    setTimeLeft('Time has expired');
+                    const data = {
+                        id,
+                        token: user.token
+                    }
+                    dispatch(repproveRecurso(data))
+                    setTimeLeft('Tempo esgotado!');
                     clearInterval(interval);
                 } else {
                     const days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -97,7 +101,7 @@ export default function AnaliseCredencial() {
         }
 
         dispatch(repproveRecurso(data))
-       //dispatch(sendRecursoEmail(emailData))
+        //dispatch(sendRecursoEmail(emailData))
     }
 
     const handleApproveRecurso = () => {

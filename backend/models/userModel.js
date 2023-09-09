@@ -39,13 +39,17 @@ const userSchema = new mongoose.Schema({
         default: '',
         //analise, aprovado, reprovado
     },
+    productsQuantity: {
+        type: Number,
+        default: 0
+    },
     selos: {
         quantity: { type: Number, default: 0 },
         newQuantity: { type: Number, default: 0 },
         startSelo: { type: String },
         endSelo: { type: String },
         status: { type: String, default: '' },
-        pathRelatory: { type: String },
+        relatorys:{ type: [String], default:[] },
     },
     sequence_value: { type: Number },
     relatory: { type: String },

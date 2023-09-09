@@ -100,6 +100,18 @@ function SingleProduct() {
         </Box>
     }
 
+    if(productData && productData.status === 'pendente'){
+        return <Box sx={
+            {
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+            }
+        }>
+            <Typography variant='h5'>Produto pendente de aprovação</Typography>
+        </Box>
+    }
+
     return (
 
         <Container sx={{
@@ -160,8 +172,6 @@ function SingleProduct() {
                         }>
 
                             <Typography sx={{ textAlign: 'center' }} variant='h5'>Lote: {`${productData.startSelo} - ${productData.endSelo}`}</Typography>
-                            <Typography variant='h5'>Nome</Typography>
-                            <TextField onChange={onChange} size='small' defaultValue={productData ? productData.name : ''} name='name' />
 
                             <Typography variant='h5'>Descrição</Typography>
                             <TextField onChange={onChange} size='small' defaultValue={productData ? productData.description : ''} name='description' />

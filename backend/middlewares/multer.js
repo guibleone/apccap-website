@@ -92,6 +92,17 @@ const fileFilterRelatory = (req, file, cb) => {
   }
 };
 
+// configura o filtro (relatórios)
+const fileFilterRelatorys = (req, file, cb) => {
+  if (file.mimetype === 'application/pdf') {
+    file.originalname = Buffer.from(file.originalname, 'latin1').toString('utf8');
+    cb(null, true);
+  } else {
+    const error = new Error('Formato de arquivo inválido');
+    error.statusCode = 400;
+    cb(error);
+  }
+};
 
 
 // configura o tamanho máximo do arquivo (relatório)
@@ -102,6 +113,16 @@ const uploadRelatory = multer({
   },
   fileFilter: fileFilterRelatory,
 });
+
+// configura o tamanho máximo do arquivo (relatórios)
+const uploadRelatorys = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    quantity: 10,
+  },
+  fileFilter: fileFilterRelatorys,
+});
+
 
 
 // configura o tamanho máximo do arquivo (foto de perfil)
@@ -151,4 +172,4 @@ const uploadSelo = multer({
 });
 
 
-module.exports = {uploadProfilePhoto, uploadDoc, uploadProduct, uploadExcel, uploadSelo, uploadRelatory};
+module.exports = {uploadProfilePhoto, uploadDoc, uploadProduct, uploadExcel, uploadSelo, uploadRelatory,uploadRelatorys};

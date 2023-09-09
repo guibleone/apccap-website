@@ -119,6 +119,27 @@ const sendRecurso = async (userData) => {
     return response.data
 }
 
+// se tornar um produtor
+
+const becomeProducer = async (token) => {
+
+console.log(token)
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+
+    }
+
+    const response = await axios.post(API_URL + 'become-producer',token, config)
+
+    if (response.data) {
+        localStorage.setItem('user', JSON.stringify(response.data))
+    }
+
+    return response.data
+}
+
 
 // logout de usuário
 const logout = async () => {
@@ -135,7 +156,8 @@ const authService = {
     updateUser,
     addProfilePhoto,
     resetAprove,
-    sendRecurso
+    sendRecurso,
+    becomeProducer
 }
 
 export default authService;

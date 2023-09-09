@@ -1,12 +1,14 @@
 import { Box, Button, Container, Divider, Grid, Typography } from '@mui/material'
 import { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import UsersPagination from '../../../../components/Pagination/Users'
+import { getProducts } from '../../../../features/products/productsSlice'
 
 
 export default function Conselho() {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const [users, setUsers] = useState([])
     const { users: usersData } = useSelector((state) => state.admin)
@@ -18,6 +20,7 @@ export default function Conselho() {
         }
 
     }, [usersData])
+
 
     return (
 
@@ -62,9 +65,8 @@ export default function Conselho() {
 
 
             <Grid item xs={12} sm={12} lg={12}>
-                
-                <Typography variant='h5'>Pedidos de selos</Typography>
-                <Typography variant='p'>Selos para análise</Typography>
+
+                <Typography variant='h5'>Produtos para análise</Typography>
 
                 {users && users.map((user) => (
 
@@ -73,7 +75,7 @@ export default function Conselho() {
                             marginTop: '10px',
                         }}
                     >
-                        {(user.status === 'aprovado' && user.selos.status === 'analise') && (
+                        {user.productsQuantity >= 1 &&  (
                             <>
                                 <Typography variant="h6" >{`${user.name}`}</Typography>
                                 <Button variant="outlined" onClick={() => navigate(`/analise-selos/${user._id}`)} >Ver Dados</Button>

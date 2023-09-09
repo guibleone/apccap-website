@@ -2,14 +2,14 @@ import { useEffect, useState, useRef } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
-import { reset, updateUser, addProfilePhoto } from '../../features/auth/authSlice'
+import { reset, updateUser, addProfilePhoto, becomeProducer } from '../../features/auth/authSlice'
 import './Styles.css'
 import Resume from "./Resume"
 import { getResume } from "../../features/resume/resumeSlice"
 import { getDocuments } from "../../features/documents/documentsSlice"
 import { Button, Stack, Avatar, Typography, Divider, Box, Container, CssBaseline, TextField, CircularProgress, Grid } from '@mui/material'
 import { useMediaQuery } from "@mui/material"
-import {styleError, styleSuccess} from '../toastStyles'
+import { styleError, styleSuccess } from '../toastStyles'
 
 
 function Informations() {
@@ -89,12 +89,27 @@ function Informations() {
         dispatch(updateUser(inputData))
     }
 
+      // se tornar produtor
+
+      const handleBecomeProducer = () => {
+
+        dispatch(becomeProducer(user.token))
+
+    }
+
     return (
         <Container sx={{ minHeight: '100vh' }}>
             <CssBaseline />
             <Box>
 
-                <Button variant="contained" color="success" fullWidth href="/credencial-produtor">Credencial</Button>
+                {user.status === '' ? 
+                <>
+                    <Button onClick={handleBecomeProducer} variant="outlined" color="info" fullWidth>Se torne um produtor!</Button>
+                </> : 
+                <>
+                    <Button variant="contained" color="success" fullWidth href="/credencial-produtor">Credencial</Button>
+                </>}
+
 
                 <Divider sx={{ margin: '20px 0' }} />
 
@@ -176,7 +191,7 @@ function Informations() {
 
 
                 <Typography sx={
-                    { margin: '20px 0', textAlign:'center' }
+                    { margin: '20px 0', textAlign: 'center' }
                 } variant="h5" color="text.primary">Endereço </Typography>
 
 
@@ -192,13 +207,13 @@ function Informations() {
                         <TextField label='Complemento' size="small" fullWidth value={address ? address.complemento : ''} type="text" name="complemento" id="complemento" placeholder="Complemento" onChange={onChangeAddress} />
                     </Stack>
 
-                    <Stack sx={{margin:'10px 0'}} spacing={2} direction={"column"} alignItems="center">
+                    <Stack sx={{ margin: '10px 0' }} spacing={2} direction={"column"} alignItems="center">
                         <TextField label='Bairro' size="small" fullWidth value={address ? address.bairro : ''} type="text" name="bairro" id="bairro" placeholder="Bairro" onChange={onChangeAddress} />
 
-                        <TextField  fullWidth label='Cidade' size="small" value={address ? address.cidade : ''} type="text" name="cidade" id="cidade" placeholder="Cidade" onChange={onChangeAddress} />
+                        <TextField fullWidth label='Cidade' size="small" value={address ? address.cidade : ''} type="text" name="cidade" id="cidade" placeholder="Cidade" onChange={onChangeAddress} />
 
                         <TextField fullWidth label='Estado' size="small" value={address ? address.estado : ''} type="text" name="estado" id="estado" placeholder="Estado" onChange={onChangeAddress} />
-                      
+
                     </Stack>
 
                     <Button fullWidth type="submit" variant="contained" color="primary">Atualizar</Button>

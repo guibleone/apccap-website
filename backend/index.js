@@ -15,6 +15,8 @@ const emailRouter = require('./routes/emailRoutes.js')
 const spreadSheetRouter = require('./routes/spreadSheetsRoutes.js')
 const path = require('path')
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
+const multer = require('multer');
+const { uploadRelatorys } = require('./middlewares/multer.js')
 
 // inicializar o expresss
 const app = express()
@@ -37,6 +39,16 @@ app.use('/api/products', productsRouter)
 app.use('/api/payment', paymentRouter)
 app.use('/api/email', emailRouter)
 app.use('/api/planilha', spreadSheetRouter)
+
+const storage = multer.memoryStorage(); // Use memory storage for simplicity, you can configure it to save files to disk
+const upload = multer({ storage });
+
+app.post('/api/upload', uploadRelatorys.array('files'), (req, res) => {
+  console.log(req.body);
+  console.log(req.files);
+  res.json({ message: 'Files uploaded successfully' });
+});
+
 
 const dirname = path.resolve();
 

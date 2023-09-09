@@ -9,6 +9,7 @@ import Mensalidade from './Mensalidade'
 import { toast } from 'react-toastify'
 import { styleError } from '../toastStyles'
 import { AiOutlineDownload } from 'react-icons/ai'
+import { repproveRecurso } from '../../features/admin/adminSlice'
 
 
 function Producer() {
@@ -40,6 +41,8 @@ function Producer() {
     }
 
 
+
+
     const recursoTime = user.analise?.analise_pedido?.recurso?.time;
 
     const [timeLeft, setTimeLeft] = useState('');
@@ -54,8 +57,13 @@ function Producer() {
                 const distance = targetDate.getTime() - now;
 
                 if (distance <= 0) {
-                    //dispatch(repproveRecurso())
-                    setTimeLeft('Time has expired');
+                    const data = {
+                        id: user._id,
+                        token: user.token
+                    }
+
+                    dispatch(repproveRecurso(data))
+                    setTimeLeft('Tempo esgotado!');
                     clearInterval(interval);
                 } else {
                     const days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -189,7 +197,7 @@ function Producer() {
                 )}
             </Box>
 
-            {(user.status === 'aprovado' || user.status === 'pendente') &&
+            {(user.status === 'aprovado' || user.status === 'analise') &&
                 <>
                     <Typography textAlign='center' variant='h5'>Acompanhe o Processo</Typography>
 
