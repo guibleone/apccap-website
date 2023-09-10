@@ -307,7 +307,7 @@ const adminService = {
     repproveRelatory,
     approveRecurso,
     sendRecursoEmail,
-    repproveRecurso
+    repproveRecurso,
 }
 
 export default adminService

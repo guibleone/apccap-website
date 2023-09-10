@@ -4,10 +4,10 @@ import { useSelector, useDispatch } from 'react-redux'
 import { getProducts, deleteProduct, addProduct, getSelos, clear, addSelo, addSelosPayed } from '../../features/products/productsSlice'
 import Selo from '../../components/Stripe/Selo'
 import ProductsPagination from '../../components/Pagination/Products'
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { AiOutlineDropbox, AiOutlineEdit } from 'react-icons/ai'
-import { BiTrashAlt } from 'react-icons/bi'
+import { BiFile, BiTrashAlt } from 'react-icons/bi'
 import { styleError, styleSuccess } from '../toastStyles'
 import { useDropzone } from 'react-dropzone'
 import axios from 'axios'
@@ -54,11 +54,11 @@ function RegisterProduct() {
 
   useEffect(() => {
 
-    if (isSuccess) {
+    if (isSuccess && message !== 'Selo inválido') {
       toast.success(message, styleSuccess)
     }
 
-    if (isError) {
+    if (isError && message !== 'Selo inválido') {
       toast.error(message, styleError)
     }
 
@@ -105,23 +105,26 @@ function RegisterProduct() {
 
 
 
-  const handlePayment = async (e) => {
-
-    if (!selos.newQuantity) {
-      console.log('Informe uma quantidade válida')
-    }
-
+  const handlePayment = async ({ id, quantity }) => {
     try {
+      console.log('id: ', id)
+
+      localStorage.setItem('id', JSON.stringify(id))
+
       const response = await axios.post('/api/payment/comprar-selos', {
-        quantity: selos.quantity,
+        quantity,
         userId: user._id,
       })
+
+
       if (response.data) {
         window.location.href = response.data.url;
+
       }
 
     } catch (error) {
       console.log('Erro no pagamento: ', error)
+      localStorage.removeItem('id')
     }
   }
 
@@ -130,17 +133,20 @@ function RegisterProduct() {
   useEffect(() => {
 
     const query = new URLSearchParams(window.location.search);
+    const id = JSON.parse(localStorage.getItem('id'))
 
-    if (query.get("success") && (selos && selos.quantity >= 0 && selos.status === 'pendente')) {
+    if (query.get("success") && id && user.token) {
 
-      const userData = {
-        id: user._id,
+      const productData = {
+        productId: id,
+        userId: user._id,
         token: user.token,
-        quantity: selos.quantity,
       }
 
-      dispatch(addSelosPayed(userData))
+      dispatch(addSelosPayed(productData))
       setMessagePayment("Pedido realizado com sucesso!");
+
+      localStorage.removeItem('id')
 
       query.delete("success");
 
@@ -380,26 +386,41 @@ function RegisterProduct() {
                     />
 
                     <CardContent>
-                      <Typography sx={{ textAlign: 'center' }} variant="h6" component="h1">{product.name}</Typography>
+                      <Box nowrap>
+                      <Typography sx={{ textAlign: 'center' }} variant="h6" nowrap >{product.name}</Typography>
+                      </Box>
                     </CardContent>
 
                     {product.status === 'aprovado' ?
                       <>
-                        <CardActions sx={{ display: 'flex', justifyContent: 'center', gap: '5px' }}>
-                          <Button variant='outlined' color='info' href={`/produto/${product._id}`}>
+                        <CardActions  sx={{ display: 'flex', justifyContent: 'space-around' }}>
+
+                          <Button fullWidth variant='outlined' onClick={() => navigate(`/acompanhar-analise/${product._id}`)} color="warning">
+                            <BiFile size={20} />
+                          </Button>
+
+                          <Button sx={{marginLeft:'7px'}} fullWidth variant='outlined' color='info' href={`/produto/${product._id}`}>
                             <AiOutlineEdit size={20} />
                           </Button>
 
-                          <Button variant='outlined' color='error' onClick={() => dispatch(deleteProduct({ id: product._id }))} >
+                          <Button fullWidth variant='outlined' color='error' onClick={() => dispatch(deleteProduct({ id: product._id }))} >
                             <BiTrashAlt size={20} />
                           </Button>
                         </CardActions>
                       </> :
                       <>
-                        {product.status === 'pendente' &&
+                        {product.analise.analise_laboratorial.path === '' &&
                           <CardActions sx={{ display: 'flex', justifyContent: 'center', gap: '5px' }}>
-                            <Button variant='outlined' onClick={()=> navigate(`/acompanhar-analise/${product._id}`)} color="warning">Acompanhar análise</Button>
+                            <Button variant='outlined' onClick={() => navigate(`/acompanhar-analise/${product._id}`)} color="warning">Acompanhar análise</Button>
                           </CardActions>
+                        }
+                        {product.status === 'pendente' && <>
+                          <CardActions sx={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
+                            <Button variant='outlined' color='success' onClick={() => handlePayment({ id: product._id, quantity: product.selo.quantity })}>
+                              Pagar Selos
+                            </Button>
+                          </CardActions>
+                        </>
                         }
                         {product.status === 'reprovado' && <>
                           <Alert severity="warning">Seu produto foi reprovado.</Alert>

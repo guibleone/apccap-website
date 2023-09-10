@@ -28,20 +28,20 @@ const productSchema = new mongoose.Schema({
     analise: {
         analise_pedido: {
             path: { type: String, default: '' },
-            status: { type: String, default: 'pendente' },
+            status: { type: String, default: '' },
         },
         vistoria: {
             path: { type: String, default: '' },
-            status: { type: String, default: 'pendente' },
+            status: { type: String, default: '' },
         },
         analise_laboratorial: {
             path: { type: String, default: '' },
-            status: { type: String, default: 'pendente' },
+            status: { type: String, default: '' },
         },
     },
     status: {
         type: String,
-        default: 'pendente',
+        default: '',
     },
     description: {
         type: String,

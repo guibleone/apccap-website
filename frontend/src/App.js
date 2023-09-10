@@ -26,7 +26,8 @@ import AllSpreadSheets from './pages/Dashboard/Acesses/Tesoureiro/AllSpreadSheet
 import SeloRelatory from './pages/Dashboard/Acesses/Presidente/SeloRelatory';
 import AnaliseCredencial from './pages/Dashboard/Acesses/Conselho/AnaliseCredencial';
 import ProductAnalise from './pages/Products/ProductAnalise';
-import AnaliseProduct from './pages/Dashboard/Acesses/Conselho/AnaliseProduct';
+import UserProducts from './pages/Dashboard/Acesses/Conselho/Products/UserProducts';
+import SingleUserProduct from './pages/Dashboard/Acesses/Conselho/Products/SingleUserProduct';
 
 function App() {
   return (
@@ -53,8 +54,9 @@ function App() {
           <Route path='/quem-somos' element={<QuemSomos />} />
           <Route path='/balancete' element={<StripeBalance />} />
           <Route path='/analise-credencial/:id' element={<AnaliseCredencial />} />
-          <Route path='/analise-produto/:id' element={<AnaliseProduct />} />
           <Route path='/acompanhar-analise/:id' element={<ProductAnalise />} />
+          <Route path='/produtos-usuario/:id' element={<UserProducts />} />
+          <Route path='/unico-produto-usuario/:id' element={<SingleUserProduct />} />
           <Route path='*' element={<h1>Not Found 404</h1>} />
         </Routes> 
         <Footer />

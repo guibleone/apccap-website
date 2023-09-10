@@ -44,12 +44,8 @@ const userSchema = new mongoose.Schema({
         default: 0
     },
     selos: {
-        quantity: { type: Number, default: 0 },
-        newQuantity: { type: Number, default: 0 },
-        startSelo: { type: String },
-        endSelo: { type: String },
-        status: { type: String, default: '' },
-        relatorys:{ type: [String], default:[] },
+        startSelo: { type: String, default: '' },
+        endSelo: { type: String, default: '' },
     },
     sequence_value: { type: Number },
     relatory: { type: String },

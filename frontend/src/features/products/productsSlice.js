@@ -169,7 +169,7 @@ export const addSelosPayed = createAsyncThunk('products/addSelosPayed', async (u
 
     try {
         const response = await productsService.addSelosPayed(user)
-        thunkAPI.dispatch(getSelos(user)) // salva vidas // dispatch para atualizar a lista de produtos
+        thunkAPI.dispatch(getProducts(user)) // salva vidas // dispatch para atualizar a lista de produtos
         return response
     } catch (error) {
         // caso ocorra algum erro
@@ -180,7 +180,45 @@ export const addSelosPayed = createAsyncThunk('products/addSelosPayed', async (u
 
 })
 
+// adicionar relatórios de produtos
 
+export const addRelatorysProducts = createAsyncThunk('products/addRelatorysProducts', async (user, thunkAPI) => {
+
+    try {
+        const response = await productsService.addRelatorysProducts(user)
+        return response
+    } catch (error) {
+        // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message);
+    }
+})
+
+// deletar relatórios de produtos
+
+export const deleteRelatorysProducts = createAsyncThunk('products/deleteRelatorysProducts', async (user, thunkAPI) => {
+    try {
+        const response = await productsService.deleteRelatorysProducts(user)
+        return response
+    } catch (error) {
+        // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message);
+    }
+})
+
+// aprovar relatórios de produtos
+
+export const approveProductRelatory = createAsyncThunk('products/approveProductRelatory', async (user, thunkAPI) => {
+    try {
+        const response = await productsService.approveProductRelatory(user)
+        return response
+    } catch (error) {
+        // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message);
+    }
+})
 
 const productsSlice = createSlice({
     name: 'products',
@@ -413,8 +451,55 @@ const productsSlice = createSlice({
                 state.isSuccess = false;
                 state.isError = true;
                 state.message = action.payload;
-            }
-            )
+            })
+            // adicionar relatórios de produtos
+            .addCase(addRelatorysProducts.pending, state => {
+                state.isLoading = true
+            })
+            .addCase(addRelatorysProducts.fulfilled, (state, action) => {
+                state.isSuccess = true
+                state.isLoading = false
+                state.isError = false
+                state.productData = action.payload
+            })
+            .addCase(addRelatorysProducts.rejected, (state, action) => {
+                state.isSuccess = false
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+            })
+            // deletar relatórios de produtos
+            .addCase(deleteRelatorysProducts.pending, state => {
+                state.isLoading = true
+            })
+            .addCase(deleteRelatorysProducts.fulfilled, (state, action) => {
+                state.isSuccess = true
+                state.isLoading = false
+                state.isError = false
+                state.productData = action.payload
+            })
+            .addCase(deleteRelatorysProducts.rejected, (state, action) => {
+                state.isSuccess = false
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+            })
+            // aprovar relatórios de produtos
+            .addCase(approveProductRelatory.pending, state => {
+                state.isLoading = true
+            })
+            .addCase(approveProductRelatory.fulfilled, (state, action) => {
+                state.isSuccess = true
+                state.isLoading = false
+                state.isError = false
+                state.productData = action.payload
+            })
+            .addCase(approveProductRelatory.rejected, (state, action) => {
+                state.isSuccess = false
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+            })
     }
 })
 

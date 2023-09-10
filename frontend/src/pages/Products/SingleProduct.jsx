@@ -171,7 +171,7 @@ function SingleProduct() {
                             }
                         }>
 
-                            <Typography sx={{ textAlign: 'center' }} variant='h5'>Lote: {`${productData.startSelo} - ${productData.endSelo}`}</Typography>
+                            <Typography sx={{ textAlign: 'center' }} variant='h5'>Lote: {`${productData.selo && productData.selo.startSelo} - ${productData.selo && productData.selo.endSelo}`}</Typography>
 
                             <Typography variant='h5'>Descrição</Typography>
                             <TextField onChange={onChange} size='small' defaultValue={productData ? productData.description : ''} name='description' />

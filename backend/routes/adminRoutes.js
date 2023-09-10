@@ -44,7 +44,7 @@ router.post('/relatory-repprove/:id', hasRole(['secretario', 'presidente']), rep
 
 
 // PARTE DO PRESIDENTE
-router.get('/products/:id', hasRole('presidente'), getProuducts)
+router.get('/products/:id', hasRole(['presidente','conselho']), getProuducts)
 router.post('/aproveSelos/:id', hasRole('presidente'), aproveSelos)
 router.post('/disaproveSelos/:id', hasRole('presidente'), disaproveSelos)
 

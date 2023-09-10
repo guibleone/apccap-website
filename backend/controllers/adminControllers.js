@@ -148,15 +148,27 @@ const deleteUser = asyncHandler(async (req, res) => {
 
         if (products) {
             products.map(async (product) => {
-                if (product.path) {
-                    const storageRef = ref(storage, `productsPhotos/${product.producer}/${product.name}.jpg`)
-                    await deleteObject(storageRef)
-                }
-                if(product.relatorys){
-                    product.relatorys.map(async (relatory) => {
-                        const storageRef = ref(storage, `productsRelatorys/${product.producer}/${product.name}/${relatory.name}`)
-                        await deleteObject(storageRef)
+                if (product.relatorys.length > 0) {
+                    product.relatorys.forEach(async (relatory) => {
+                        const refStorage = ref(storage, `productRelatorys/${product.producer}/${product.name}/${relatory.name}`)
+                        await deleteObject(refStorage)
                     })
+                }
+                if (product.analise.analise_pedido.path) {
+                    const refStorage = ref(storage, `productsRelatorysConselho/${product.producer}/${product.name}/analise_pedido`)
+                    await deleteObject(refStorage)
+                }
+                if (product.analise.vistoria.path) {
+                    const refStorage = ref(storage, `productsRelatorysConselho/${product.producer}/${product.name}/vistoria`)
+                    await deleteObject(refStorage)
+                }
+                if (product.analise.analise_laboratorial.path) {
+                    const refStorage = ref(storage, `productsRelatorysConselho/${product.producer}/${product.name}/analise_laboratorial`)
+                    await deleteObject(refStorage)
+                }
+                if (product.path) {
+                    const refStorage = ref(storage, `productsPhotos/${product.producer}/${product.name}.jpg`)
+                    await deleteObject(refStorage)
                 }
             })
         }
@@ -611,50 +623,6 @@ const repproveRecurso = asyncHandler(async (req, res) => {
     }
 })
 
-const addRelatorysProducts = asyncHandler(async (req, res) => {
-    try {
-        const { type } = req.body;
-
-        const product = await Products.findById(req.params.id);
-
-        if (!req.file) {
-            return res.status(400).json({ error: 'Insira o relatório' });
-        }
-
-        if (!type) {
-            return res.status(400).json({ error: 'Insira o tipo de relatório' });
-        }
-
-        if (!product) {
-            return res.status(400).json({ error: 'Produto não encontrado' });
-        }
-
-        const refStorage = ref(storage, `productsRelatorysConselho/${product.producer}/${product.name}/${type}`);
-
-        const metadata = {
-            contentType: 'application/pdf',
-        };
-
-        const snapshot = await uploadBytesResumable(refStorage, req.file.buffer, metadata);
-
-        const url = await getDownloadURL(snapshot.ref);
-
-        if (!url) {
-            return res.status(400).json({ error: 'Algo de errado aconteceu' });
-        }
-
-        product.analise[type].path = url;
-        product.analise[type].status = 'pendente'
-
-        
-        await product.save();
-
-        return res.status(200).json(product);
-
-    } catch (error) {
-        return res.status(400).json({ error: 'Erro ao adicionar relatórios' });
-    }
-});
 
 module.exports = {
     getUsers,
@@ -674,5 +642,6 @@ module.exports = {
     deleteRelatorys,
     repproveRelatory,
     approveRecurso,
-    repproveRecurso
+    repproveRecurso,
+
 }

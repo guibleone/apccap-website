@@ -247,6 +247,7 @@ export const repproveRecurso = createAsyncThunk('conselho/repproveRecurso', asyn
     }
 })
 
+
 // EMAIL
 export const sendEmail = createAsyncThunk('admin/email', async (user, thunkAPI) => {
     try {

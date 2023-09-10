@@ -24,7 +24,9 @@ function Traceability() {
     e.preventDefault()
 
     dispatch(trackProduct({ selo }))
+
   }
+
 
   if (isLoading) {
     return <Box sx={

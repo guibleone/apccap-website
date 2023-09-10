@@ -78,7 +78,7 @@ export default function Conselho() {
                         {user.productsQuantity >= 1 &&  (
                             <>
                                 <Typography variant="h6" >{`${user.name}`}</Typography>
-                                <Button variant="outlined" onClick={() => navigate(`/analise-selos/${user._id}`)} >Ver Dados</Button>
+                                <Button variant="outlined" onClick={() => navigate(`/produtos-usuario/${user._id}`)} >Ver Dados</Button>
                             </>
                         )}
 

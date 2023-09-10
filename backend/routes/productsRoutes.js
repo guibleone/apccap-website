@@ -1,8 +1,11 @@
 const express = require('express');
 const { hasRole } = require('../middlewares/authMiddleware');
 const { getProducts, addProduct, deleteProduct, getSingleProduct, updateProduct, addPhoto, 
-    trackProduct, getProducer, getProducerResume, getSelos, addSelo, generateSelos, addSelosPayed,addRelatorys } = require('../controllers/productsControllers');
-const { uploadProduct, uploadSelo, uploadRelatorys } = require('../middlewares/multer');
+    trackProduct, getProducer, getProducerResume, 
+    getSelos, addSelo, generateSelos, addSelosPayed, 
+    addRelatorysProducts, deleteRelatorysProducts,
+    approveProductRelatory} = require('../controllers/productsControllers');
+const { uploadProduct, uploadSelo, uploadRelatorys, uploadRelatory, } = require('../middlewares/multer');
 
 
 const router = express.Router();
@@ -19,7 +22,7 @@ router.post('/selo/:id', uploadSelo.single("pathRelatory"),  hasRole('produtor')
 router.get('/', hasRole(['produtor','conselho']), getProducts) 
 
 // pegar único produto
-router.get('/:id', hasRole('produtor'), getSingleProduct)
+router.get('/:id', hasRole(['produtor','conselho']), getSingleProduct)
 
 // adicionar produtos
 router.post('/', uploadRelatorys.array('files'), hasRole('produtor'), addProduct)
@@ -41,6 +44,10 @@ router.post('/selo-generate', generateSelos)
 
 // adicionar selos pagos
 router.post('/selo-pago', addSelosPayed)
+
+router.post('/add-product-relatorys/:id', uploadRelatory.single('path'), hasRole('conselho'), addRelatorysProducts)
+router.post('/delete-product-relatorys/:id', hasRole('conselho'), deleteRelatorysProducts)
+router.post('/approve-product-relatorys/:id', hasRole('conselho'), approveProductRelatory)
 
 
 module.exports = router;

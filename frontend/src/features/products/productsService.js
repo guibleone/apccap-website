@@ -164,8 +164,6 @@ export const addSelo = async (userData) => {
     return response.data
 }
 
-
-
 // adicionar selos pagos
 export const addSelosPayed = async (userData) => {
 
@@ -173,6 +171,50 @@ export const addSelosPayed = async (userData) => {
     return response.data
 }
 
+// adicionar relatórios de produtos
+
+const addRelatorysProducts = async (data) => {
+
+    const config = {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${data.token}`
+        }
+    }
+
+    const response = await axios.post(API_URI + '/add-product-relatorys/' + data.id, data, config)
+    return response.data
+}
+
+
+// deletar relatórios de produtos
+
+const deleteRelatorysProducts = async (data) => {
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${data.token}`
+        }
+    }
+
+    const response = await axios.post(API_URI + '/delete-product-relatorys/' + data.id, data, config)
+    return response.data
+}
+
+
+// aprovar relatórios de produtos
+
+const approveProductRelatory = async (data) => {
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${data.token}`
+        }
+    }
+
+    const response = await axios.post(API_URI + '/approve-product-relatorys/' + data.id, data, config)
+    return response.data
+}
 
 
 // exportar todos os métodos
@@ -189,7 +231,10 @@ const productsService = {
     getProducerResume,
     getSelos,
     addSelo,
-    addSelosPayed
+    addSelosPayed,
+    addRelatorysProducts,
+    deleteRelatorysProducts,
+    approveProductRelatory
 }
 
 export default productsService;
