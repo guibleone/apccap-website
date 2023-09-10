@@ -1,7 +1,7 @@
 import { Box, Button, Container, Typography, CircularProgress, TextField, useMediaQuery, Divider, Alert, Select, MenuItem, InputLabel, FormControl, Grid, Card, CardMedia, CardContent, CardActions } from '@mui/material'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { getProducts, deleteProduct, addProduct, getSelos, clear, addSelo, addSelosPayed } from '../../features/products/productsSlice'
+import { getProducts, deleteProduct, addProduct, getSelos, clear, addSelo, addSelosPayed, reset } from '../../features/products/productsSlice'
 import Selo from '../../components/Stripe/Selo'
 import ProductsPagination from '../../components/Pagination/Products'
 import { useNavigate } from 'react-router-dom'
@@ -37,6 +37,7 @@ function RegisterProduct() {
 
 
   useEffect(() => {
+    dispatch(reset())
     dispatch(getProducts())
   }, [])
 
@@ -74,7 +75,6 @@ function RegisterProduct() {
     }))
   }
 
-
   const [files, setFiles] = useState([])
 
   // on drop arquivos
@@ -101,9 +101,6 @@ function RegisterProduct() {
     const updatedFiles = files.filter((selectedFile) => selectedFile !== file);
     setFiles(updatedFiles);
   };
-
-
-
 
   const handlePayment = async ({ id, quantity }) => {
     try {
@@ -288,8 +285,6 @@ function RegisterProduct() {
                   </li>
                 ))}
               </ul>
-
-
             </div>
           ) :
             <Typography variant='p'>Nenhum arquivo selecionado</Typography>
@@ -299,48 +294,6 @@ function RegisterProduct() {
         <Button sx={{ m: 2 }} fullWidth variant='outlined' onClick={handleSubmit}>Cadastrar</Button>
 
       </Grid>
-
-      {/*
-      <Box sx={{ marginBottom: '50px' }}>
-
-        <form onSubmit={onSubmit}>
-
-          <Box sx={
-            {
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '10px',
-              margin: '20px 0'
-            }
-          }>
-
-            <Typography sx={{ textAlign: 'center' }} variant={matches ? 'h5' : 'h4'} component="h1" gutterBottom>Cadastrar Produto</Typography>
-           
-            <TextField placeholder="Informe o nome do produto" size='small' name='name' onChange={onChange} value={name} />
-            <TextField placeholder="Informe a descrição do produto" size='small' name='description' onChange={onChange} value={description} />
-
-            <TextField disabled={selos.newQuantity === 0} placeholder="Informe a quantidade de selos" size='small' name='quantity' onChange={onChange} />
-
-            {selos.newQuantity >= 0 && <Typography variant='p'>Você possui <span style={{ color: 'green' }}> {selos.newQuantity}</span> selos disponíveis.</Typography>}
-
-            {(selos.status === 'analise') && <Typography variant='p'><span style={{ color: 'red' }}> {selos.quantity}</span> selos estão em análise. Por favor aguarde.</Typography>}
-            {(selos.status === 'pendente') && <Typography variant='p'><span style={{ color: 'red' }}> {selos.quantity}</span> selos estão pendentes. Por favor faça o pagamento.
-              <Button variant='outlined' onClick={() => handlePayment()}>Pagar</Button>
-            </Typography>}
-
-            {messagePayment && messagePayment === "Pedido realizado com sucesso!" && <Alert color='success'>{messagePayment}</Alert>}
-            {messagePayment && messagePayment !== "Pedido realizado com sucesso!" && <Alert color='error'>{messagePayment}</Alert>}
-
-            {(selos.status === 'reprovado') && <Typography variant='p' color={'error'}>Seus {selos.quantity} selos foram reprovados. Por favor peça-os novamente.</Typography>}
-
-
-            <Button variant='contained' type='submit'>Cadastrar</Button>
-            <Typography variant='p'> {user.selos.endSelo ? `*Último selo cadastrado ${user.selos.endSelo}` : ''}</Typography>
-
-          </Box>
-
-        </form>
-        */}
 
       <Divider sx={{ margin: '20px 0' }} />
 
@@ -387,19 +340,19 @@ function RegisterProduct() {
 
                     <CardContent>
                       <Box nowrap>
-                      <Typography sx={{ textAlign: 'center' }} variant="h6" nowrap >{product.name}</Typography>
+                        <Typography sx={{ textAlign: 'center' }} variant="h6" nowrap >{product.name}</Typography>
                       </Box>
                     </CardContent>
 
                     {product.status === 'aprovado' ?
                       <>
-                        <CardActions  sx={{ display: 'flex', justifyContent: 'space-around' }}>
+                        <CardActions sx={{ display: 'flex', justifyContent: 'space-around' }}>
 
                           <Button fullWidth variant='outlined' onClick={() => navigate(`/acompanhar-analise/${product._id}`)} color="warning">
                             <BiFile size={20} />
                           </Button>
 
-                          <Button sx={{marginLeft:'7px'}} fullWidth variant='outlined' color='info' href={`/produto/${product._id}`}>
+                          <Button sx={{ marginLeft: '7px' }} fullWidth variant='outlined' color='info' href={`/produto/${product._id}`}>
                             <AiOutlineEdit size={20} />
                           </Button>
 
@@ -409,7 +362,7 @@ function RegisterProduct() {
                         </CardActions>
                       </> :
                       <>
-                        {product.analise.analise_laboratorial.path === '' &&
+                        {product.status === '' &&
                           <CardActions sx={{ display: 'flex', justifyContent: 'center', gap: '5px' }}>
                             <Button variant='outlined' onClick={() => navigate(`/acompanhar-analise/${product._id}`)} color="warning">Acompanhar análise</Button>
                           </CardActions>
@@ -423,10 +376,15 @@ function RegisterProduct() {
                         </>
                         }
                         {product.status === 'reprovado' && <>
-                          <Alert severity="warning">Seu produto foi reprovado.</Alert>
-                          <Button variant='outlined' color='error' onClick={() => dispatch(deleteProduct({ id: product._id }))} >
-                            <BiTrashAlt size={20} />
-                          </Button>
+                          <Alert severity="error">Seu produto foi reprovado.</Alert>
+                          <CardActions sx={{ display: 'flex', justifyContent: 'center', gap: '5px' }}>
+                            <Button variant='outlined' color='error' onClick={() => dispatch(deleteProduct({ id: product._id }))} >
+                              <BiTrashAlt size={20} />
+                            </Button>
+                            <Button variant='outlined' onClick={() => navigate(`/acompanhar-analise/${product._id}`)} color="warning">
+                              <BiFile size={20} />
+                            </Button>
+                          </CardActions>
                         </>
                         }
                       </>

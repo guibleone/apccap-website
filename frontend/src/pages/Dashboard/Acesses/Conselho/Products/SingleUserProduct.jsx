@@ -1,18 +1,16 @@
-import { Alert, Avatar, Box, Button, Card, CardActions, CardContent, CardMedia, CircularProgress, Container, Divider, Grid, Typography, useMediaQuery } from '@mui/material'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Alert, Box, Button, CircularProgress, Container, Divider, Grid, Typography, useMediaQuery } from '@mui/material'
+import { useParams } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { getProducts, getUserData } from '../../../../../features/admin/adminSlice'
-import { BiTrashAlt } from 'react-icons/bi'
-import { AiOutlineDelete, AiOutlineDownload, AiOutlineEdit } from 'react-icons/ai'
-import { addRelatorysProducts, approveProductRelatory, deleteRelatorysProducts, getSingleProduct } from '../../../../../features/products/productsSlice'
+import {  sendProductRelatoryEmail } from '../../../../../features/admin/adminSlice'
+import { AiOutlineDelete, AiOutlineDownload, } from 'react-icons/ai'
+import { addRelatorysProducts, approveProductRelatory, deleteRelatorysProducts, getSingleProduct, repproveProductRelatory } from '../../../../../features/products/productsSlice'
 import { toast } from 'react-toastify'
 import { styleError } from '../../../../toastStyles'
 import { FcPrivacy } from 'react-icons/fc'
 
 
 export default function SingleUserProduct() {
-  const navigate = useNavigate()
   const dispatch = useDispatch()
 
   const { productData, isLoading } = useSelector((state) => state.products)
@@ -67,6 +65,37 @@ export default function SingleUserProduct() {
     }
 
     dispatch(approveProductRelatory(data))
+
+    const emailData = {
+      email: userData.email,
+      result: 'APROVADO',
+      type: type,
+      produto: productData.name
+    }
+
+    dispatch(sendProductRelatoryEmail(emailData))
+
+
+  }
+
+  const repproveRelatory = (type) => {
+    const data = {
+      id,
+      token: user.token,
+      type
+    }
+
+    dispatch(repproveProductRelatory(data))
+
+    const emailData = {
+      email: userData.email,
+      result: 'REPROVADO',
+      type: type,
+      produto: productData.name
+    }
+
+    dispatch(sendProductRelatoryEmail(emailData))
+
   }
 
   useEffect(() => {
@@ -137,7 +166,7 @@ export default function SingleUserProduct() {
                 </>) : (
                 <>
                   {productData.analise && productData.analise.analise_pedido.status === 'pendente' &&
-                    <Box sx={{ display: 'flex' }}>
+                     <Box sx={{ display: 'flex', gap:'5px' }}>
                       <Button color="success" href={productData.analise && productData.analise.analise_pedido.path}><AiOutlineDownload size={25} /></Button>
                       <Button onClick={() => handleDelete('analise_pedido')} color="error"><AiOutlineDelete size={25} /></Button>
                     </Box>
@@ -146,8 +175,8 @@ export default function SingleUserProduct() {
                   {productData.analise && (
                     <>
                       {productData.analise.analise_pedido.status === 'pendente' &&
-                        <Box>
-                          <Button variant='outlined' color='error'>Reprovar</Button>
+                        <Box sx={{ display: 'flex', gap:'5px' }}>
+                          <Button onClick={() => repproveRelatory('analise_pedido')} variant='outlined' color='error'>Reprovar</Button>
                           <Button onClick={() => approveRelatory('analise_pedido')} variant='outlined' color='success'>Aprovar</Button>
                         </Box>
                       }
@@ -189,7 +218,7 @@ export default function SingleUserProduct() {
                 : (
                   <>
                     {productData.analise && productData.analise.vistoria.status === 'pendente' &&
-                      <Box sx={{ display: 'flex' }}>
+                       <Box sx={{ display: 'flex', gap:'5px' }}>
                         <Button color="success" href={productData.analise && productData.analise.vistoria.path}><AiOutlineDownload size={25} /></Button>
                         <Button onClick={() => handleDelete('vistoria')} color="error"><AiOutlineDelete size={25} /></Button>
                       </Box>
@@ -197,8 +226,8 @@ export default function SingleUserProduct() {
                     {productData.analise && (
                       <>
                         {productData.analise.vistoria.status === 'pendente' &&
-                          <Box>
-                            <Button variant='outlined' color='error'>Reprovar</Button>
+                           <Box sx={{ display: 'flex', gap:'5px' }}>
+                            <Button onClick={() => repproveRelatory('vistoria')} variant='outlined' color='error'>Reprovar</Button>
                             <Button onClick={() => approveRelatory('vistoria')} variant='outlined' color='success'>Aprovar</Button>
                           </Box>
                         }
@@ -236,7 +265,7 @@ export default function SingleUserProduct() {
                 ) : (
                   <>
                     {productData.analise && productData.analise.analise_laboratorial.status === 'pendente' &&
-                      <Box sx={{ display: 'flex' }}>
+                       <Box sx={{ display: 'flex', gap:'5px' }}>
                         <Button color="success" href={productData.analise && productData.analise.analise_laboratorial.path}><AiOutlineDownload size={25} /></Button>
                         <Button onClick={() => handleDelete('analise_laboratorial')} color="error"><AiOutlineDelete size={25} /></Button>
                       </Box>
@@ -245,8 +274,8 @@ export default function SingleUserProduct() {
                     {productData.analise && (
                       <>
                         {productData.analise.analise_laboratorial.status === 'pendente' &&
-                          <Box>
-                            <Button variant='outlined' color='error'>Reprovar</Button>
+                           <Box sx={{ display: 'flex', gap:'5px' }}>
+                            <Button onClick={() => repproveRelatory('analise_laboratorial')} variant='outlined' color='error'>Reprovar</Button>
                             <Button onClick={() => approveRelatory('analise_laboratorial')} variant='outlined' color='success'>Aprovar</Button>
                           </Box>
                         }

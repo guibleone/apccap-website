@@ -119,53 +119,6 @@ const addProduct = asyncHandler(async (req, res) => {
         res.status(500).json({ error: 'Failed to create the product' });
     }
 
-
-    /* const user = await User.findById(req.user._id)
- 
- 
-     if (user.selos.newQuantity < quantity) {
-         res.status(400)
-         throw new Error('Quantidade de selos insuficiente')
-     }
- 
-     if (user.selos.status === 'analise' && user.selos.newQuantity < 1) {
-         res.status(400)
-         throw new Error('Seus selos estão em análise')
-     }
- 
-     if (user.selos.status === 'pendente' && user.selos.newQuantity < 1) {
-         res.status(400)
-         throw new Error('Seus selos estão pendentes')
-     }
- 
-     if (!name || !quantity || !description) {
-         res.status(404)
-         throw new Error('Insira os dados corretamente')
-     }
- 
-     const product = await Product.create({
-         name,
-         description,
-         startSelo: !user.selos.endSelo ? `${user.sequence_value.toString().padStart(3, "0")}` + `${(1).toString().padStart(5, "0")}` :
-             `${user.selos.endSelo.slice(0, 3)}` + `${(parseInt(user.selos.endSelo.slice(-5)) + 1).toString().padStart(5, "0")}`,
-         endSelo: !user.selos.endSelo ? `${user.sequence_value.toString().padStart(3, "0")}` + `${(quantity).toString().padStart(5, "0")}` :
-             `${user.selos.endSelo.slice(0, 3)}` + `${(parseInt(user.selos.endSelo.slice(-5)) + parseInt(quantity)).toString().padStart(5, "0")}`,
-         producer: user._id
-     })
- 
-     if (product) {
-         user.selos.newQuantity -= quantity
-         user.selos.startSelo = product.startSelo
-         user.selos.endSelo = product.endSelo
-         await user.save()
- 
-         res.status(201).json(product)
-     }
- 
-     else {
-         res.status(400)
-         throw new Error('Dados inválidos')
-     }*/
 })
 
 // atualizar produto
@@ -231,7 +184,7 @@ const addPhoto = asyncHandler(async (req, res) => {
 const trackProduct = asyncHandler(async (req, res) => {
 
     const { selo } = req.body
-    
+
     if (!selo) {
         res.status(404)
         throw new Error('Selo inválido')
@@ -286,38 +239,41 @@ const trackProduct = asyncHandler(async (req, res) => {
 
 // deletar produtos
 const deleteProduct = asyncHandler(async (req, res) => {
+
     const product = await Product.findById(req.params.id)
 
-    if (product) {
-        if (product.relatorys.length > 0) {
-            product.relatorys.forEach(async (relatory) => {
-                const refStorage = ref(storage, `productRelatorys/${product.producer}/${product.name}/${relatory.name}`)
-                await deleteObject(refStorage)
-            })
-        }
-        if (product.analise.analise_pedido.path) {
-            const refStorage = ref(storage, `productsRelatorysConselho/${product.producer}/${product.name}/analise_pedido`)
-            await deleteObject(refStorage)
-        }
-        if (product.analise.vistoria.path) {
-            const refStorage = ref(storage, `productsRelatorysConselho/${product.producer}/${product.name}/vistoria`)
-            await deleteObject(refStorage)
-        }
-        if (product.analise.analise_laboratorial.path) {
-            const refStorage = ref(storage, `productsRelatorysConselho/${product.producer}/${product.name}/analise_laboratorial`)
-            await deleteObject(refStorage)
-        }
-        if (product.path) {
-            const refStorage = ref(storage, `productsPhotos/${product.producer}/${product.name}.jpg`)
-            await deleteObject(refStorage)
-        }
-        await product.deleteOne()
-
-        res.json('Produto deletado com sucesso')
-    } else {
+    if (!product) {
         res.status(404)
         throw new Error('Produto não encontrado')
     }
+
+    if (product.relatorys.length > 0) {
+        product.relatorys.forEach(async (relatory) => {
+            const refStorage = ref(storage, `productRelatorys/${product.producer}/${product.name}/${relatory.name}`)
+            await deleteObject(refStorage)
+        })
+    }
+    if (product.analise.analise_pedido.path) {
+        const refStorage = ref(storage, `productsRelatorysConselho/${product.producer}/${product.name}/analise_pedido`)
+        await deleteObject(refStorage)
+    }
+    if (product.analise.vistoria.path) {
+        const refStorage = ref(storage, `productsRelatorysConselho/${product.producer}/${product.name}/vistoria`)
+        await deleteObject(refStorage)
+    }
+    if (product.analise.analise_laboratorial.path) {
+        const refStorage = ref(storage, `productsRelatorysConselho/${product.producer}/${product.name}/analise_laboratorial`)
+        await deleteObject(refStorage)
+    }
+    if (product.path) {
+        const refStorage = ref(storage, `productsPhotos/${product.producer}/${product.name}.jpg`)
+        await deleteObject(refStorage)
+    }
+
+    await product.deleteOne()
+
+    res.status(200).json('Produto deletado com sucesso')
+
 })
 
 // pegar dados do usuário
@@ -457,7 +413,7 @@ const addSelosPayed = asyncHandler(async (req, res) => {
 
         user.selos.startSelo = product.selo.startSelo
         user.selos.endSelo = product.selo.endSelo
-   
+
         await product.save()
         await user.save()
 
@@ -466,8 +422,8 @@ const addSelosPayed = asyncHandler(async (req, res) => {
         res.status(404)
         throw new Error('Usuário não encontrado')
     }
-
 })
+
 //  CONSELHO
 
 // adicionar relatórios de produtos
@@ -591,43 +547,29 @@ const repproveProductRelatory = asyncHandler(async (req, res) => {
     try {
         const { type } = req.body
 
-        const product = await User.findById(req.params.id)
+        const product = await Product.findById(req.params.id)
+        const user = await User.findById(product.producer)
 
         if (!product) {
             res.status(404)
             throw new Error('Usuário não encontrado')
         }
 
-        if (type === 'analise_pedido') {
+        product.analise[type].status = 'reprovado'
+        product.status = 'reprovado'
 
-            if (product.analise.analise_pedido.recurso.path) {
-                const refStorage = ref(storage, `conselhoRelatórios/${product._id}/recurso`)
-                await deleteObject(refStorage)
-            }
+        user.productsQuantity -= 1
 
-            product.analise.analise_pedido.recurso.path = ''
-            product.analise.analise_pedido.recurso.status = 'pendente'
-            product.analise.analise_pedido.recurso.time = Date.now()
-            await user.save()
-        }
-
-        if (user.analise.analise_laboratorial.status === 'reprovado' || user.analise.vistoria.status === 'reprovado') {
-            user.status = 'reprovado'
-            await user.save()
-        }
-
-        user.analise[type].status = 'reprovado'
+        await product.save()
         await user.save()
 
-        res.status(200).json(user)
+        res.status(200).json(product)
 
     } catch (error) {
         res.status(400)
         throw new Error('Erro ao reprovar relatório')
     }
 })
-
-
 
 module.exports =
 {
@@ -646,6 +588,6 @@ module.exports =
     addSelosPayed,
     addRelatorysProducts,
     deleteRelatorysProducts,
-    approveProductRelatory
-
+    approveProductRelatory,
+    repproveProductRelatory
 }

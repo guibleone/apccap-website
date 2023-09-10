@@ -123,8 +123,6 @@ const uploadRelatorys = multer({
   fileFilter: fileFilterRelatorys,
 });
 
-
-
 // configura o tamanho máximo do arquivo (foto de perfil)
 const uploadProfilePhoto = multer({
   storage: multer.memoryStorage(),

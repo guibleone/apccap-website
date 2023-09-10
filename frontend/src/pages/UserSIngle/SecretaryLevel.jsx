@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Typography, TextareaAutosize, Container, Button, Divider, CircularProgress, useMediaQuery, Modal, Alert } from '@mui/material'
+import { Box, Typography, Container, Button, CircularProgress, useMediaQuery, Modal, Alert } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { FaDownload } from 'react-icons/fa'
-import { downloadDocument } from '../../features/documents/documentsSlice'
 import { toast } from 'react-toastify'
 import { approveRelatory, repproveRelatory, sendRelatoryEmail } from '../../features/admin/adminSlice'
 import { AiFillWarning } from 'react-icons/ai'
 import { styleError, styleSuccess } from '../toastStyles'
-import { FcClock } from 'react-icons/fc'
 
 export default function SecretaryLevel() {
 
     const { user } = useSelector((state) => state.auth)
-    const { userData, documentsData, isLoading, isSuccess, isError, emailStatus, message } = useSelector((state) => state.admin)
-    const dispatch = useDispatch()
+    const { userData, isLoading, isSuccess, isError, emailStatus, message } = useSelector((state) => state.admin)
 
-    const documents = documentsData ? documentsData : []
+    const dispatch = useDispatch()
 
     const matches = useMediaQuery('(min-width:600px)');
 
@@ -68,7 +65,7 @@ export default function SecretaryLevel() {
         }
 
         dispatch(approveRelatory(data))
-     //dispatch(sendRelatoryEmail(emailData))
+        dispatch(sendRelatoryEmail(emailData))
 
     }
 
@@ -87,7 +84,7 @@ export default function SecretaryLevel() {
 
         dispatch(repproveRelatory(data))
 
-       // dispatch(sendRelatoryEmail(emailData))
+       dispatch(sendRelatoryEmail(emailData))
 
     }
 

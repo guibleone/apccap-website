@@ -147,6 +147,61 @@ const sendRelatoryEmail = asyncHandler(async (req, res) => {
     }
 })
 
+const sendProductRelatoryEmail = asyncHandler(async (req, res) => {
+
+    const { type, email, result, produto } = req.body
+
+    let title = ''
+    let typeEmail = ''
+
+    if (type === 'analise_pedido') {
+        title = `Análise de Pedido - ${produto}`
+        typeEmail = "Análise de Pedido"
+    }
+
+    if (type === 'vistoria') {
+        title = `Vistoria - ${produto}`
+        typeEmail = 'Vistoria'
+    }
+
+    if (type === 'analise_laboratorial') {
+        title = `Análise Laboratorial - ${produto}`
+        typeEmail = "Análise Laboratorial"
+    }
+
+    const resend = new Resend(process.env.RESEND_API_KEY)
+
+    if (!email || !type) {
+        res.status(400)
+        throw new Error('Preencha todos os campos')
+    }
+
+    try {
+        const data = await resend.sendEmail({
+            from: 'Apccap <produto.analise@apccap.shop>',
+            to: `${email}`, // TODO: change to `email
+            subject: title, // TODO: change to `title
+            html: `<h4>Atenção Produtor, </h4>
+
+                <p>O relatório do produto ${produto} na ${typeEmail} foi <h4>${result}</h4></p> 
+                
+                <p>Para mais informações, entre em contato com a associação. Ou acesse o site <a href="www.apccap.shop">Apccap</a>.</p> 
+                
+                <p>Atenciosamente, </p>
+
+                <h4>Direção APCCAP</h4>
+
+                `
+        });
+
+        return res.status(200).send(data);
+
+    } catch (error) {
+        console.log(error)
+
+    }
+})
+
 const sendRecursoEmail = asyncHandler(async (req, res) => {
 
     const { email, result } = req.body
@@ -186,4 +241,4 @@ const sendRecursoEmail = asyncHandler(async (req, res) => {
 })
 
 
-module.exports = { sendEmail, senConvocationEmail, sendRelatoryEmail,sendRecursoEmail }
+module.exports = { sendEmail, senConvocationEmail, sendRelatoryEmail,sendRecursoEmail,sendProductRelatoryEmail }

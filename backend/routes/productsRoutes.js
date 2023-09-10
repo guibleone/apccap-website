@@ -4,7 +4,7 @@ const { getProducts, addProduct, deleteProduct, getSingleProduct, updateProduct,
     trackProduct, getProducer, getProducerResume, 
     getSelos, addSelo, generateSelos, addSelosPayed, 
     addRelatorysProducts, deleteRelatorysProducts,
-    approveProductRelatory} = require('../controllers/productsControllers');
+    approveProductRelatory, repproveProductRelatory} = require('../controllers/productsControllers');
 const { uploadProduct, uploadSelo, uploadRelatorys, uploadRelatory, } = require('../middlewares/multer');
 
 
@@ -25,7 +25,7 @@ router.get('/', hasRole(['produtor','conselho']), getProducts)
 router.get('/:id', hasRole(['produtor','conselho']), getSingleProduct)
 
 // adicionar produtos
-router.post('/', uploadRelatorys.array('files'), hasRole('produtor'), addProduct)
+router.post('/', uploadRelatorys.array('files', 10), hasRole('produtor'), addProduct)
 
 // deletar produtos
 router.delete('/:id', hasRole('produtor'), deleteProduct)
@@ -48,6 +48,7 @@ router.post('/selo-pago', addSelosPayed)
 router.post('/add-product-relatorys/:id', uploadRelatory.single('path'), hasRole('conselho'), addRelatorysProducts)
 router.post('/delete-product-relatorys/:id', hasRole('conselho'), deleteRelatorysProducts)
 router.post('/approve-product-relatorys/:id', hasRole('conselho'), approveProductRelatory)
+router.post('/repprove-product-relatorys/:id', hasRole('conselho'), repproveProductRelatory)
 
 
 module.exports = router;

@@ -45,7 +45,7 @@ function SingleProducer() {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                height: '100vh'
+                minHeight: '100vh'
             }
         }>
             <CircularProgress sx={

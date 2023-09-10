@@ -220,6 +220,20 @@ export const approveProductRelatory = createAsyncThunk('products/approveProductR
     }
 })
 
+// repprove relatórios de produtos
+
+export const repproveProductRelatory = createAsyncThunk('products/repproveProductRelatory', async (user, thunkAPI) => {
+    try {
+        const response = await productsService.repproveProductRelatory(user)
+        return response
+    } catch (error) {
+        // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message);
+    }
+})
+
+
 const productsSlice = createSlice({
     name: 'products',
     initialState,
@@ -495,6 +509,22 @@ const productsSlice = createSlice({
                 state.productData = action.payload
             })
             .addCase(approveProductRelatory.rejected, (state, action) => {
+                state.isSuccess = false
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+            })
+            // reprovar relatórios de produtos
+            .addCase(repproveProductRelatory.pending, state => {
+                state.isLoading = true
+            })
+            .addCase(repproveProductRelatory.fulfilled, (state, action) => {
+                state.isSuccess = true
+                state.isLoading = false
+                state.isError = false
+                state.productData = action.payload
+            })
+            .addCase(repproveProductRelatory.rejected, (state, action) => {
                 state.isSuccess = false
                 state.isLoading = false
                 state.isError = true

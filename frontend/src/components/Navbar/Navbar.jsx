@@ -85,7 +85,7 @@ function Navbar() {
             gap: '15px',
           }
         }>
-          <a style={linkStyle} href="/rastreabilidade">Rastreabilidade</a>
+          <Link style={linkStyle} to="/rastreabilidade">Rastreabilidade</Link>
 
           <Link style={linkStyle} to="/festival-cachaca">Festival da Cachaça</Link>
 

@@ -117,7 +117,6 @@ function NavMenu() {
                 </DrawerHeader>
                 <Divider />
                 <List>
-
                     <ListItem >
                         <ListItemIcon>
                             <TbHome2 />
@@ -127,19 +126,19 @@ function NavMenu() {
                                 color: 'inherit',
                                 textDecoration: 'none',
                             }
-                        } to="/">Início</Link>
+                        } href="/">Início</Link>
                     </ListItem>
 
                     <ListItem >
                         <ListItemIcon>
                             <TbSearch />
                         </ListItemIcon>
-                        <Link style={
+                        <a style={
                             {
                                 color: 'inherit',
                                 textDecoration: 'none',
                             }
-                        } to="/rastreabilidade">Rastreabilidade</Link>
+                        } href="/rastreabilidade">Rastreabilidade</a>
                     </ListItem>
 
                     <ListItem >

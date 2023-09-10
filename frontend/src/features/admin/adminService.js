@@ -284,7 +284,10 @@ const sendRecursoEmail = async (emailData) => {
     return response.data
 }
 
-
+const sendProductRelatoryEmail = async (emailData) => {
+    const response = await axios.post('/api/email/produto', emailData)
+    return response.data
+}
 const adminService = {
     getUserData,
     getResumeData,
@@ -308,6 +311,7 @@ const adminService = {
     approveRecurso,
     sendRecursoEmail,
     repproveRecurso,
+    sendProductRelatoryEmail
 }
 
 export default adminService

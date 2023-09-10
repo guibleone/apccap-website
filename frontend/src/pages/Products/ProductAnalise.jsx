@@ -24,6 +24,23 @@ export default function ProductAnalise() {
 
     }, [id, dispatch]);
 
+    if (isLoading) {
+        return <Box sx={
+          {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }
+        }>
+          <CircularProgress sx={
+            {
+              margin: '100px',
+            }
+          } size={100} />
+        </Box>
+      }
+    
+
     return (
         <Container sx={{minHeight:'100vh'}}>
 

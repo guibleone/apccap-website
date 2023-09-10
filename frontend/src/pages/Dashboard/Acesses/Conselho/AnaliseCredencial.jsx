@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom"
 import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { addRelatorys, approveRecurso, deleteRelatorys, getDocumentsData, getUserData, repproveRecurso, resetStatus, sendRecursoEmail } from "../../../../features/admin/adminSlice"
+import { addRelatorys, approveRecurso, deleteRelatorys, getDocumentsData, getUserData, repproveRecurso, sendRecursoEmail } from "../../../../features/admin/adminSlice"
 import { Alert, Avatar, Box, Button, CircularProgress, Container, Divider, Grid, Typography, useMediaQuery } from "@mui/material"
 import { AiOutlineDelete, AiOutlineDownload } from "react-icons/ai"
 import { FcClock, FcPrivacy } from "react-icons/fc"
@@ -101,7 +101,7 @@ export default function AnaliseCredencial() {
         }
 
         dispatch(repproveRecurso(data))
-        //dispatch(sendRecursoEmail(emailData))
+        dispatch(sendRecursoEmail(emailData))
     }
 
     const handleApproveRecurso = () => {
@@ -117,7 +117,7 @@ export default function AnaliseCredencial() {
         }
 
         dispatch(approveRecurso(data))
-        //dispatch(sendRecursoEmail(emailData))
+        dispatch(sendRecursoEmail(emailData))
     }
 
 

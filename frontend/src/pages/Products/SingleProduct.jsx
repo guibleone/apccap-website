@@ -4,9 +4,8 @@ import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { getSingleProduct, updateProduct, addProductPhoto, getSelos } from '../../features/products/productsSlice'
 
-
 function SingleProduct() {
-    const { productData, isLoading, isError, message, selos } = useSelector((state) => state.products)
+    const { productData, isLoading, isError, message } = useSelector((state) => state.products)
 
     const { id } = useParams()
 
@@ -90,6 +89,7 @@ function SingleProduct() {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
+                minHeight: '100vh'
             }
         }>
             <CircularProgress sx={

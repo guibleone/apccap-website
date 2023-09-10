@@ -1,7 +1,7 @@
-import { Box, Container, Typography, CircularProgress, Button, Link, TextField, Alert } from '@mui/material'
+import { Box, Container, Typography, CircularProgress, Button, TextField, Alert } from '@mui/material'
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'
-import { FcOk, FcHighPriority } from "react-icons/fc";
+import { FcOk } from "react-icons/fc";
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { reset, trackProduct } from '../../features/products/productsSlice';
@@ -15,6 +15,7 @@ function Traceability() {
   const navigate = useNavigate()
 
   useEffect(() => {
+    dispatch(reset())
     window.scrollTo(0, 0)
   }, [])
 
@@ -98,10 +99,7 @@ function Traceability() {
 
       </Box>
       }
-
-
-
-
+      
     </Container>
 
   )

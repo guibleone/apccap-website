@@ -291,6 +291,17 @@ export const sendRecursoEmail = createAsyncThunk('admin/recursoEmail', async (us
     }
 })
 
+export const sendProductRelatoryEmail = createAsyncThunk('admin/produtoEmail', async (user, thunkAPI) => {
+    try {
+        const response = await adminService.sendProductRelatoryEmail(user)
+        return response
+    } catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
+
 
 export const adminSlice = createSlice({
     name: 'admin',
@@ -665,6 +676,26 @@ export const adminSlice = createSlice({
                 state.emailStatus.message = 'Email enviado com sucesso!'
             })
             .addCase(sendRecursoEmail.rejected, (state, action) => {
+                state.emailStatus.isError = true
+                state.emailStatus.isLoading = false
+                state.emailStatus.message = 'Erro ao enviar email!'
+            })
+            // enviar email de relatório do produto
+            .addCase(sendProductRelatoryEmail.pending, state => {
+                state.emailStatus.isLoading = true
+                state.isSuccess = false
+                state.isError = false
+                state.emailStatus.isError = false
+                state.emailStatus.isSuccess = false
+                state.emailStatus.message = ''
+            })
+            .addCase(sendProductRelatoryEmail.fulfilled, (state, action) => {
+                state.emailStatus.isSuccess = true
+                state.emailStatus.isLoading = false
+                state.emailStatus.isError = false
+                state.emailStatus.message = 'Email enviado com sucesso!'
+            })
+            .addCase(sendProductRelatoryEmail.rejected, (state, action) => {
                 state.emailStatus.isError = true
                 state.emailStatus.isLoading = false
                 state.emailStatus.message = 'Erro ao enviar email!'

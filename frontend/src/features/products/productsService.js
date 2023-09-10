@@ -216,6 +216,21 @@ const approveProductRelatory = async (data) => {
     return response.data
 }
 
+// reprovar relatórios de produtos
+
+const repproveProductRelatory = async (data) => {
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${data.token}`
+        }
+    }
+
+    const response = await axios.post(API_URI + '/repprove-product-relatorys/' + data.id, data, config)
+    return response.data
+}
+
+
 
 // exportar todos os métodos
 
@@ -234,7 +249,8 @@ const productsService = {
     addSelosPayed,
     addRelatorysProducts,
     deleteRelatorysProducts,
-    approveProductRelatory
+    approveProductRelatory,
+    repproveProductRelatory
 }
 
 export default productsService;
