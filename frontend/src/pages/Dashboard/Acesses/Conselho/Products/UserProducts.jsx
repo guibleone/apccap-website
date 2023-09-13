@@ -95,7 +95,6 @@ export default function UserProducts() {
 
 
                                                 <CardActions sx={{ display: 'flex', justifyContent: 'center', gap: '5px' }}>
-
                                                     <Button variant='outlined' color='warning' onClick={() => navigate(`/unico-produto-usuario/${product._id}`)}>Ver Produto</Button>
                                                 </CardActions>
                                             </Card>

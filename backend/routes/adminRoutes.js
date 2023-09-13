@@ -38,9 +38,7 @@ router.put('/user/disapprove/:id', hasRole(['admin', 'presidente']), disapproveU
 // receber pagamento de selos
 router.post('/payment', getPayment)
 
-// PARTE DO SECRETÁRIO
-router.post('/relatory-approve/:id', hasRole(['secretario', 'presidente']), approveRelatory)
-router.post('/relatory-repprove/:id', hasRole(['secretario', 'presidente']), repproveRelatory)
+
 
 
 // PARTE DO PRESIDENTE
@@ -53,5 +51,8 @@ router.post('/add-relatorys/:id', uploadRelatory.single('path'), hasRole('consel
 router.post('/delete-relatorys/:id', hasRole('conselho'), deleteRelatorys)
 router.post('/recurso-approve/:id', hasRole('conselho'), approveRecurso)
 router.post('/recurso-repprove/:id', hasRole('conselho'), repproveRecurso)
+router.post('/relatory-approve/:id', hasRole(['conselho', 'presidente']), approveRelatory)
+router.post('/relatory-repprove/:id', hasRole(['conselho', 'presidente']), repproveRelatory)
+
 
 module.exports = router;

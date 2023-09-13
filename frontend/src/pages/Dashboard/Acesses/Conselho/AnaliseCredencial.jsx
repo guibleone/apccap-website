@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom"
 import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { addRelatorys, approveRecurso, deleteRelatorys, getDocumentsData, getUserData, repproveRecurso, sendRecursoEmail } from "../../../../features/admin/adminSlice"
-import { Alert, Avatar, Box, Button, CircularProgress, Container, Divider, Grid, Typography, useMediaQuery } from "@mui/material"
-import { AiOutlineDelete, AiOutlineDownload } from "react-icons/ai"
+import { addRelatorys, approveRecurso, approveRelatory, deleteRelatorys, getDocumentsData, getUserData, repproveRecurso, repproveRelatory, resetEmailStatus, sendRecursoEmail, sendRelatoryEmail } from "../../../../features/admin/adminSlice"
+import { Alert, Avatar, Box, Button, CircularProgress, Container, Divider, Grid, Modal, Typography, useMediaQuery } from "@mui/material"
+import { AiFillWarning, AiOutlineDelete, AiOutlineDownload } from "react-icons/ai"
 import { FcClock, FcPrivacy } from "react-icons/fc"
 import { toast } from "react-toastify"
 import { styleError, styleSuccess } from '../../../toastStyles'
@@ -22,6 +22,37 @@ export default function AnaliseCredencial() {
     const recursoTime = userData.analise?.analise_pedido?.recurso?.time;
 
     const [timeLeft, setTimeLeft] = useState('');
+
+    const [openApprove, setOpenApprove] = useState(false)
+    const [openRepprove, setOpenRepprove] = useState(false)
+    const [type, setType] = useState('')
+
+    const handleOpenApprove = () => setOpenApprove(!openApprove)
+    const handleOpenRepprove = () => setOpenRepprove(!openRepprove)
+
+    const style = matches ? {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+
+    } : {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: '90%',
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+
+    }
 
     useEffect(() => {
         if (recursoTime) {
@@ -100,8 +131,7 @@ export default function AnaliseCredencial() {
             result: 'REPROVADO'
         }
 
-        dispatch(repproveRecurso(data))
-        dispatch(sendRecursoEmail(emailData))
+        dispatch(repproveRecurso(data)) && dispatch(sendRecursoEmail(emailData))
     }
 
     const handleApproveRecurso = () => {
@@ -116,11 +146,47 @@ export default function AnaliseCredencial() {
             result: 'REPROVADO'
         }
 
-        dispatch(approveRecurso(data))
-        dispatch(sendRecursoEmail(emailData))
+        dispatch(approveRecurso(data)) && dispatch(sendRecursoEmail(emailData))
     }
 
 
+    const handleApprove = async () => {
+
+        const data = {
+            id: userData._id,
+            type: type,
+            token: user.token
+        }
+
+        const emailData = {
+            email: userData.email,
+            result: 'APROVADO',
+            type: type
+        }
+
+        dispatch(approveRelatory(data)) && dispatch(sendRelatoryEmail(emailData))
+
+        setOpenApprove(false)
+    }
+
+    const handleRepprove = async () => {
+        const data = {
+            id: userData._id,
+            type: type,
+            token: user.token
+        }
+
+        const emailData = {
+            email: userData.email,
+            result: 'REPROVADO',
+            type: type
+        }
+
+        dispatch(repproveRelatory(data))  && dispatch(sendRelatoryEmail(emailData))
+
+        setOpenRepprove(false)
+
+    }
 
     useEffect(() => {
 
@@ -150,6 +216,8 @@ export default function AnaliseCredencial() {
         if (emailStatus.isSuccess) {
             toast.success('Email enviado com sucesso', styleSuccess)
         }
+
+        dispatch(resetEmailStatus())
 
     }, [isError, isSuccess, emailStatus.isError, emailStatus.isSuccess])
 
@@ -249,15 +317,21 @@ export default function AnaliseCredencial() {
                                     {userData.analise && (
                                         <>
                                             {userData.analise.analise_pedido.status === 'pendente' &&
-                                                <Alert severity="warning">Aguardando parecer da direção</Alert>
+                                                <Box sx={{ display: 'flex', gap: '5px' }}>
+                                                    <Button onClick={() => { handleOpenRepprove(); setType('analise_pedido'); }} color='error'>Reprovar</Button>
+                                                    <Button onClick={() => { handleOpenApprove(); setType('analise_pedido'); }} color='success'>Aprovar</Button>
+                                                </Box>
                                             }
 
-                                            {userData.analise.analise_pedido.status === 'reprovado' &&
-                                                <Alert severity="error">Relatório reprovado pela direção</Alert>
+                                            {userData.analise && userData.analise.analise_pedido.status === 'aprovado' &&
+                                                <>
+                                                    <Alert severity="success">Análise aprovada !</Alert>
+                                                </>
                                             }
-
-                                            {userData.analise.analise_pedido.status === 'aprovado' &&
-                                                <Alert severity="success">Análise de relatório concluída</Alert>
+                                            {userData.analise && userData.analise.analise_pedido.status === 'reprovado' &&
+                                                <>
+                                                    <Alert severity="error">Análise reprovada !</Alert>
+                                                </>
                                             }
                                         </>
                                     )}
@@ -296,16 +370,22 @@ export default function AnaliseCredencial() {
                                         }
                                         {userData.analise && (
                                             <>
-                                                {userData.analise.vistoria.status === 'pendente' &&
-                                                    <Alert severity="warning">Aguardando parecer da direção</Alert>
+                                                {userData.analise.vistoria.status === 'pendente' && <>
+                                                    <Box sx={{ display: 'flex', gap: '5px' }}>
+                                                        <Button onClick={() => { handleOpenRepprove(); setType('vistoria'); }} color='error'>Reprovar</Button>
+                                                        <Button onClick={() => { handleOpenApprove(); setType('vistoria'); }} color='success'>Aprovar</Button>
+                                                    </Box>
+                                                </>
                                                 }
-
-                                                {userData.analise.vistoria.status === 'reprovado' &&
-                                                    <Alert severity="error">Relatório reprovado pela direção</Alert>
+                                                {userData.analise && userData.analise.vistoria.status === 'aprovado' &&
+                                                    <>
+                                                        <Alert severity="success">Análise aprovada !</Alert>
+                                                    </>
                                                 }
-
-                                                {userData.analise.vistoria.status === 'aprovado' &&
-                                                    <Alert severity="success">Análise de relatório concluída</Alert>
+                                                {userData.analise && userData.analise.vistoria.status === 'reprovado' &&
+                                                    <>
+                                                        <Alert severity="error">Análise reprovada !</Alert>
+                                                    </>
                                                 }
                                             </>
                                         )}
@@ -341,16 +421,21 @@ export default function AnaliseCredencial() {
 
                                         {userData.analise && (
                                             <>
-                                                {userData.analise.analise_laboratorial.status === 'pendente' &&
-                                                    <Alert severity="warning">Aguardando parecer da direção</Alert>
+                                                {userData.analise && userData.analise.analise_laboratorial.status === 'pendente' &&
+                                                    <Box sx={{ display: 'flex', gap: '5px' }}>
+                                                        <Button onClick={() => { handleOpenRepprove(); setType('analise_laboratorial'); }} color='error'>Reprovar</Button>
+                                                        <Button onClick={() => { handleOpenApprove(); setType('analise_laboratorial'); }} color='success'>Aprovar</Button>
+                                                    </Box>
                                                 }
-
-                                                {userData.analise.analise_laboratorial.status === 'reprovado' &&
-                                                    <Alert severity="error">Relatório reprovado pela direção</Alert>
+                                                {userData.analise && userData.analise.analise_laboratorial.status === 'aprovado' &&
+                                                    <>
+                                                        <Alert severity="success">Análise aprovada !</Alert>
+                                                    </>
                                                 }
-
-                                                {userData.analise.analise_laboratorial.status === 'aprovado' &&
-                                                    <Alert severity="success">Análise de relatório concluída</Alert>
+                                                {userData.analise && userData.analise.analise_laboratorial.status === 'reprovado' &&
+                                                    <>
+                                                        <Alert severity="error">Análise reprovada !</Alert>
+                                                    </>
                                                 }
                                             </>
                                         )}
@@ -436,6 +521,78 @@ export default function AnaliseCredencial() {
                 </Grid>
 
             </Grid>
+
+
+            <Modal
+                open={openApprove}
+                onClose={handleOpenApprove}
+            >
+                <Box sx={style}>
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '10px'
+                    }}>
+                        <Box display={'flex'} justifyContent={'space-between'}>
+                            <Typography variant="h6" >Tem certeza ? </Typography>
+                            <AiFillWarning color='red' size={30} />
+                        </Box>
+
+                        <Typography variant="h7" > Essa ação é permanente. </Typography>
+                        <Typography color='error' variant="p" > Será enviado um email ao produtor.</Typography>
+
+                        <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+                            <Button color='error' variant='contained' onClick={handleOpenApprove}>Cancelar</Button>
+
+                            <Button
+                                disabled={isLoading}
+                                color="success"
+                                variant='contained'
+                                onClick={handleApprove}
+                            >
+                                {isLoading ? <CircularProgress color="success" size={24} /> : 'Aprovar'}
+                            </Button>
+
+                        </Box>
+                    </Box>
+                </Box>
+            </Modal>
+
+
+            <Modal
+                open={openRepprove}
+                onClose={handleOpenRepprove}
+            >
+                <Box sx={style}>
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '10px'
+                    }}>
+                        <Box display={'flex'} justifyContent={'space-between'}>
+                            <Typography variant="h6" >Tem certeza ? </Typography>
+                            <AiFillWarning color='red' size={30} />
+                        </Box>
+
+                        <Typography variant="h7" > Essa ação é permanente. </Typography>
+                        <Typography color='error' variant="p" > Será enviado um email ao produtor.</Typography>
+
+                        <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+                            <Button color='error' variant='contained' onClick={handleOpenRepprove}>Cancelar</Button>
+
+                            <Button
+                                disabled={isLoading}
+                                color="success"
+                                variant='contained'
+                                onClick={handleRepprove}
+                            >
+                                {isLoading ? <CircularProgress color="success" size={24} /> : 'Reprovar'}
+                            </Button>
+
+                        </Box>
+                    </Box>
+                </Box>
+            </Modal>
 
 
         </Container>

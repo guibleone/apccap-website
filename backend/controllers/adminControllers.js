@@ -133,10 +133,11 @@ const deleteUser = asyncHandler(async (req, res) => {
         }
 
         if (documents) {
-            documents.map(async (document) => {
-                const storageRef = ref(storage, `documents/${document.user}/${document.name}`)
+           documents.map(async (document) => {
+                const storageRef = ref(storage, `documents/${user._id}/${document.type}/${document.name}`)
                 await deleteObject(storageRef)
             })
+
         }
 
         if (spreadSheets) {

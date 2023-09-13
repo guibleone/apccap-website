@@ -1,4 +1,4 @@
-import { Box, Button, Container, Typography, CircularProgress, TextField, useMediaQuery, Divider, Alert, Select, MenuItem, InputLabel, FormControl, Grid, Card, CardMedia, CardContent, CardActions } from '@mui/material'
+import { Box, Button, Container, Typography, CircularProgress, TextField, useMediaQuery, Divider, Alert, Select, MenuItem, InputLabel, FormControl, Grid, Card, CardMedia, CardContent, CardActions, Modal } from '@mui/material'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { getProducts, deleteProduct, addProduct, getSelos, clear, addSelo, addSelosPayed, reset } from '../../features/products/productsSlice'
@@ -6,13 +6,14 @@ import Selo from '../../components/Stripe/Selo'
 import ProductsPagination from '../../components/Pagination/Products'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { AiOutlineDropbox, AiOutlineEdit } from 'react-icons/ai'
+import { AiFillRedEnvelope, AiFillWarning, AiOutlineDropbox, AiOutlineEdit } from 'react-icons/ai'
 import { BiFile, BiTrashAlt } from 'react-icons/bi'
 import { styleError, styleSuccess } from '../toastStyles'
 import { useDropzone } from 'react-dropzone'
 import axios from 'axios'
 
 function RegisterProduct() {
+  
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -20,6 +21,9 @@ function RegisterProduct() {
 
   const { isLoading, isError, message, isSuccess, isSuccessSelos, selos } = useSelector(state => state.products)
   const { payments } = useSelector(state => state.payments)
+
+  const [openViewDocuments, setOpenViewDocuments] = useState(false)
+  const handleOpenViewDocuments = () => setOpenViewDocuments(!openViewDocuments)
 
   const matches = useMediaQuery('(max-width:600px)')
 
@@ -33,8 +37,29 @@ function RegisterProduct() {
 
   const [productsData, setProductsData] = useState([])
 
-  const inputRef = useRef(null)
+  const style = !matches ? {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
 
+} : {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '90%',
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+
+}
 
   useEffect(() => {
     dispatch(reset())
@@ -82,7 +107,7 @@ function RegisterProduct() {
 
     if (rejectedFiles.length > 0) {
       // Handle files with invalid extensions here
-      console.error('Invalid file(s) dropped:', rejectedFiles);
+      console.error('Arquivos inválidos', rejectedFiles);
       return;
     }
 
@@ -153,6 +178,8 @@ function RegisterProduct() {
 
       setMessagePayment("Pedido cancelado - compre novamente quando estiver pronto.")
 
+      localStorage.removeItem('id')
+
       query.delete("canceled");
     }
 
@@ -163,6 +190,22 @@ function RegisterProduct() {
   const [isLoaded, setIsLoaded] = useState(false)
 
   const handleSubmit = () => {
+
+
+    if(!name || !description || !quantity || !files) {
+      toast.error('Preencha todos os campos', styleError)
+      return
+    }
+
+    if(files.length < 4) {
+      toast.error('Insira todos documentos', styleError)
+      return
+    }
+
+    if(files.length > 4) {
+      toast.error('Insira apenas 4 documentos', styleError)
+      return
+    }
 
     setIsLoaded(true)
 
@@ -268,6 +311,7 @@ function RegisterProduct() {
             <Typography textAlign={'center'} variant='p'>Arraste e solte os arquivos ou clique para selecionar</Typography>
           </Box>
 
+          <Button fullWidth variant='outlined' onClick={handleOpenViewDocuments} >ver documentos</Button>
         </Grid>
 
         <Divider orientation="vertical" flexItem sx={{ margin: '0 20px' }} />
@@ -291,7 +335,7 @@ function RegisterProduct() {
           }
         </Grid>
 
-        <Button sx={{ m: 2 }} fullWidth variant='outlined' onClick={handleSubmit}>Cadastrar</Button>
+        <Button sx={{ m: 2 }} fullWidth color='success' variant='outlined' onClick={handleSubmit}>Cadastrar</Button>
 
       </Grid>
 
@@ -323,12 +367,10 @@ function RegisterProduct() {
 
               {productsData.map((product) => (
 
-                <Grid alignSelf={'center'} item key={product._id} md={3}>
+                <Grid  item key={product._id} md={3}>
 
                   <Card
                     sx={{
-                      maxWidth: matches ? 352 : 252,
-                      minWidth: 262,
                       border: matches ? '1px solid #E4E3E3' : 'none',
                       borderRadius: '5px',
                     }}>
@@ -376,7 +418,6 @@ function RegisterProduct() {
                         </>
                         }
                         {product.status === 'reprovado' && <>
-                          <Alert severity="error">Seu produto foi reprovado.</Alert>
                           <CardActions sx={{ display: 'flex', justifyContent: 'center', gap: '5px' }}>
                             <Button variant='outlined' color='error' onClick={() => dispatch(deleteProduct({ id: product._id }))} >
                               <BiTrashAlt size={20} />
@@ -385,13 +426,18 @@ function RegisterProduct() {
                               <BiFile size={20} />
                             </Button>
                           </CardActions>
+                          
                         </>
                         }
                       </>
                     }
 
-
                   </Card>
+                  
+                  {product.status === 'reprovado' && 
+                  <Alert sx={{margin:'10px 0'}} severity="error">Seu produto foi reprovado.</Alert>
+                  }
+
 
                 </Grid>
               ))}
@@ -406,9 +452,38 @@ function RegisterProduct() {
 
       <Divider sx={{ margin: '20px 0' }} />
 
-      {/*<Selo />*/}
 
-      {(isError && !isSuccessSelos) && <Alert sx={{ margin: '10px 0' }} severity="error">{message}</Alert>}
+      <Modal
+                open={openViewDocuments}
+                onClose={handleOpenViewDocuments}
+            >
+                <Box sx={style}>
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '10px'
+                    }}>
+                        <Box display={'flex'} justifyContent={'space-between'}>
+                            <Typography variant="h6" >Documentos Necessários</Typography>
+                            <AiFillRedEnvelope size={30} />
+                        </Box>
+
+                        <Typography variant="h7" > Para a aprovação do produto são requiridos os segunites documentos.</Typography>
+
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                            <Typography variant="h7" > - Cartão de CNPJ e CPF</Typography>
+                            <Typography variant="h7" > - Inscrição nos órgãopúblicos de regulação</Typography>
+                            <Typography variant="h7" > - Anotação de responsabilidade técnica (ART)</Typography>
+                            <Typography variant="h7" > - Informações sobre a propriedade</Typography>
+                        </Box>
+            
+                        <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+                            <Button color='info' variant='contained' onClick={handleOpenViewDocuments}>Voltar</Button>
+                        </Box>
+                    </Box>
+                </Box>
+            </Modal>
+
 
 
 

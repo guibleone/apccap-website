@@ -5,6 +5,10 @@ const fileSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    type: {
+        type: String,
+        default: ""
+    },
     path: {
         type: String,
         required: true,

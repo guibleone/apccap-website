@@ -260,6 +260,7 @@ const productsSlice = createSlice({
                 state.isLoading = true
             })
             .addCase(getProducts.fulfilled, (state, action) => {
+                state.pending = false
                 state.isLoading = false
                 state.isError = false
                 state.productsData = action.payload

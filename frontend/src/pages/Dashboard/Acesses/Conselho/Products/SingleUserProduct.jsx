@@ -1,12 +1,12 @@
-import { Alert, Box, Button, CircularProgress, Container, Divider, Grid, Typography, useMediaQuery } from '@mui/material'
+import { Alert, Box, Button, CircularProgress, Container, Divider, Grid, Modal, Typography, useMediaQuery } from '@mui/material'
 import { useParams } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import {  sendProductRelatoryEmail } from '../../../../../features/admin/adminSlice'
-import { AiOutlineDelete, AiOutlineDownload, } from 'react-icons/ai'
+import { getUserData, resetEmailStatus, sendProductRelatoryEmail } from '../../../../../features/admin/adminSlice'
+import { AiFillWarning, AiOutlineDelete, AiOutlineDownload, } from 'react-icons/ai'
 import { addRelatorysProducts, approveProductRelatory, deleteRelatorysProducts, getSingleProduct, repproveProductRelatory } from '../../../../../features/products/productsSlice'
 import { toast } from 'react-toastify'
-import { styleError } from '../../../../toastStyles'
+import { styleError, styleSuccess } from '../../../../toastStyles'
 import { FcPrivacy } from 'react-icons/fc'
 
 
@@ -14,6 +14,8 @@ export default function SingleUserProduct() {
   const dispatch = useDispatch()
 
   const { productData, isLoading } = useSelector((state) => state.products)
+  const { userData, isSuccess, isError, message, emailStatus } = useSelector((state) => state.admin)
+  const { user } = useSelector((state) => state.auth)
 
   const { id } = useParams()
 
@@ -21,10 +23,37 @@ export default function SingleUserProduct() {
 
   const fileInput = useRef(null)
 
+  const [openApprove, setOpenApprove] = useState(false)
+  const [openRepprove, setOpenRepprove] = useState(false)
+  const [type, setType] = useState('')
 
-  const { userData } = useSelector((state) => state.admin)
-  const { user } = useSelector((state) => state.auth)
+  const handleOpenApprove = () => setOpenApprove(!openApprove)
+  const handleOpenRepprove = () => setOpenRepprove(!openRepprove)
 
+
+  const style = matches ? {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+
+  } : {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '90%',
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+
+  }
 
   // informação do documento
   const [documentData, setDocumentData] = useState({
@@ -46,7 +75,7 @@ export default function SingleUserProduct() {
     dispatch(addRelatorysProducts(documentData))
   }
 
-  const handleDelete = (type) => {
+  const handleDelete = () => {
 
     const data = {
       id,
@@ -57,14 +86,12 @@ export default function SingleUserProduct() {
     dispatch(deleteRelatorysProducts(data))
   }
 
-  const approveRelatory = (type) => {
+  const approveRelatory = () => {
     const data = {
       id,
       token: user.token,
       type
     }
-
-    dispatch(approveProductRelatory(data))
 
     const emailData = {
       email: userData.email,
@@ -73,19 +100,18 @@ export default function SingleUserProduct() {
       produto: productData.name
     }
 
-    dispatch(sendProductRelatoryEmail(emailData))
+    dispatch(approveProductRelatory(data)) && dispatch(sendProductRelatoryEmail(emailData))
 
-
+    setOpenApprove(false)
   }
 
-  const repproveRelatory = (type) => {
+  const repproveRelatory = () => {
+
     const data = {
       id,
       token: user.token,
       type
     }
-
-    dispatch(repproveProductRelatory(data))
 
     const emailData = {
       email: userData.email,
@@ -94,7 +120,9 @@ export default function SingleUserProduct() {
       produto: productData.name
     }
 
-    dispatch(sendProductRelatoryEmail(emailData))
+    dispatch(repproveProductRelatory(data)) && dispatch(sendProductRelatoryEmail(emailData))
+
+    setOpenRepprove(false)
 
   }
 
@@ -102,7 +130,38 @@ export default function SingleUserProduct() {
 
     dispatch(getSingleProduct(id))
 
-  }, [id, dispatch]);
+  }, []);
+
+  useEffect(() => {
+
+    if (productData.producer) {
+      dispatch(getUserData({ id: productData.producer, token: user.token }))
+    }
+
+  }, [productData]);
+
+  useEffect(() => {
+
+    if (isError && !emailStatus.isError) {
+      toast.error(message, styleError)
+    }
+
+    if (isSuccess && !emailStatus.isSuccess) {
+      toast.success(message, styleSuccess)
+    }
+
+    if (emailStatus.isError) {
+      toast.error('Erro ao enviar email', styleError)
+    }
+
+    if (emailStatus.isSuccess) {
+      toast.success('Email enviado com sucesso', styleSuccess)
+    }
+
+    dispatch(resetEmailStatus())
+
+  }, [isError, isSuccess, emailStatus.isError, emailStatus.isSuccess])
+
 
   if (isLoading) {
     return <Box sx={
@@ -120,7 +179,6 @@ export default function SingleUserProduct() {
       } size={100} />
     </Box>
   }
-
 
   return (
     <Container sx={{ minHeight: '100vh' }}>
@@ -166,7 +224,7 @@ export default function SingleUserProduct() {
                 </>) : (
                 <>
                   {productData.analise && productData.analise.analise_pedido.status === 'pendente' &&
-                     <Box sx={{ display: 'flex', gap:'5px' }}>
+                    <Box sx={{ display: 'flex', gap: '5px' }}>
                       <Button color="success" href={productData.analise && productData.analise.analise_pedido.path}><AiOutlineDownload size={25} /></Button>
                       <Button onClick={() => handleDelete('analise_pedido')} color="error"><AiOutlineDelete size={25} /></Button>
                     </Box>
@@ -175,9 +233,9 @@ export default function SingleUserProduct() {
                   {productData.analise && (
                     <>
                       {productData.analise.analise_pedido.status === 'pendente' &&
-                        <Box sx={{ display: 'flex', gap:'5px' }}>
-                          <Button onClick={() => repproveRelatory('analise_pedido')} variant='outlined' color='error'>Reprovar</Button>
-                          <Button onClick={() => approveRelatory('analise_pedido')} variant='outlined' color='success'>Aprovar</Button>
+                        <Box sx={{ display: 'flex', gap: '5px' }}>
+                          <Button onClick={() => { handleOpenRepprove(); setType('analise_pedido'); }} color='error'>Reprovar</Button>
+                          <Button onClick={() => { handleOpenApprove(); setType('analise_pedido'); }} color='success'>Aprovar</Button>
                         </Box>
                       }
 
@@ -218,7 +276,7 @@ export default function SingleUserProduct() {
                 : (
                   <>
                     {productData.analise && productData.analise.vistoria.status === 'pendente' &&
-                       <Box sx={{ display: 'flex', gap:'5px' }}>
+                      <Box sx={{ display: 'flex', gap: '5px' }}>
                         <Button color="success" href={productData.analise && productData.analise.vistoria.path}><AiOutlineDownload size={25} /></Button>
                         <Button onClick={() => handleDelete('vistoria')} color="error"><AiOutlineDelete size={25} /></Button>
                       </Box>
@@ -226,9 +284,9 @@ export default function SingleUserProduct() {
                     {productData.analise && (
                       <>
                         {productData.analise.vistoria.status === 'pendente' &&
-                           <Box sx={{ display: 'flex', gap:'5px' }}>
-                            <Button onClick={() => repproveRelatory('vistoria')} variant='outlined' color='error'>Reprovar</Button>
-                            <Button onClick={() => approveRelatory('vistoria')} variant='outlined' color='success'>Aprovar</Button>
+                          <Box sx={{ display: 'flex', gap: '5px' }}>
+                            <Button onClick={() => { handleOpenRepprove(); setType('vistoria'); }} color='error'>Reprovar</Button>
+                            <Button onClick={() => { handleOpenApprove(); setType('vistoria'); }} color='success'>Aprovar</Button>
                           </Box>
                         }
 
@@ -265,7 +323,7 @@ export default function SingleUserProduct() {
                 ) : (
                   <>
                     {productData.analise && productData.analise.analise_laboratorial.status === 'pendente' &&
-                       <Box sx={{ display: 'flex', gap:'5px' }}>
+                      <Box sx={{ display: 'flex', gap: '5px' }}>
                         <Button color="success" href={productData.analise && productData.analise.analise_laboratorial.path}><AiOutlineDownload size={25} /></Button>
                         <Button onClick={() => handleDelete('analise_laboratorial')} color="error"><AiOutlineDelete size={25} /></Button>
                       </Box>
@@ -274,9 +332,9 @@ export default function SingleUserProduct() {
                     {productData.analise && (
                       <>
                         {productData.analise.analise_laboratorial.status === 'pendente' &&
-                           <Box sx={{ display: 'flex', gap:'5px' }}>
-                            <Button onClick={() => repproveRelatory('analise_laboratorial')} variant='outlined' color='error'>Reprovar</Button>
-                            <Button onClick={() => approveRelatory('analise_laboratorial')} variant='outlined' color='success'>Aprovar</Button>
+                          <Box sx={{ display: 'flex', gap: '5px' }}>
+                            <Button onClick={() => { handleOpenRepprove(); setType('analise_laboratorial'); }} color='error'>Reprovar</Button>
+                            <Button onClick={() => { handleOpenApprove(); setType('analise_laboratorial'); }} color='success'>Aprovar</Button>
                           </Box>
                         }
 
@@ -295,6 +353,78 @@ export default function SingleUserProduct() {
           </form>
         </Grid>
       </Grid>
+
+
+      <Modal
+        open={openApprove}
+        onClose={handleOpenApprove}
+      >
+        <Box sx={style}>
+          <Box sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '10px'
+          }}>
+            <Box display={'flex'} justifyContent={'space-between'}>
+              <Typography variant="h6" >Tem certeza ? </Typography>
+              <AiFillWarning color='red' size={30} />
+            </Box>
+
+            <Typography variant="h7" > Essa ação é permanente. </Typography>
+            <Typography color='error' variant="p" > Será enviado um email ao produtor.</Typography>
+
+            <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+              <Button color='error' variant='contained' onClick={handleOpenApprove}>Cancelar</Button>
+
+              <Button
+                disabled={isLoading}
+                color="success"
+                variant='contained'
+                onClick={approveRelatory}
+              >
+                {isLoading ? <CircularProgress color="success" size={24} /> : 'Aprovar'}
+              </Button>
+
+            </Box>
+          </Box>
+        </Box>
+      </Modal>
+
+
+      <Modal
+        open={openRepprove}
+        onClose={handleOpenRepprove}
+      >
+        <Box sx={style}>
+          <Box sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '10px'
+          }}>
+            <Box display={'flex'} justifyContent={'space-between'}>
+              <Typography variant="h6" >Tem certeza ? </Typography>
+              <AiFillWarning color='red' size={30} />
+            </Box>
+
+            <Typography variant="h7" > Essa ação é permanente. </Typography>
+            <Typography color='error' variant="p" > Será enviado um email ao produtor.</Typography>
+
+            <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+              <Button color='error' variant='contained' onClick={handleOpenRepprove}>Cancelar</Button>
+
+              <Button
+                disabled={isLoading}
+                color="success"
+                variant='contained'
+                onClick={repproveRelatory}
+              >
+                {isLoading ? <CircularProgress color="success" size={24} /> : 'Reprovar'}
+              </Button>
+
+            </Box>
+          </Box>
+        </Box>
+      </Modal>
 
     </Container>
 

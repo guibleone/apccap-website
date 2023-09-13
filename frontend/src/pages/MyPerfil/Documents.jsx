@@ -1,12 +1,14 @@
-import { useRef, useState } from "react"
+import { useCallback, useRef, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { addDocument, deleteDocument, downloadDocument } from "../../features/documents/documentsSlice"
 import { useEffect } from "react"
 import { toast } from "react-toastify"
 import { resetDocuments } from "../../features/documents/documentsSlice"
-import { Button, Typography, Box, Stack, CircularProgress } from '@mui/material';
+import { Button, Typography, Box, Stack, CircularProgress, Grid, Divider, Alert } from '@mui/material';
 import { FaDownload, FaTrash } from 'react-icons/fa'
 import { styleError, styleSuccess } from '../toastStyles'
+import { useDropzone } from "react-dropzone"
+import { AiOutlineDropbox } from "react-icons/ai"
 
 function Documents() {
 
@@ -19,6 +21,7 @@ function Documents() {
   const [documentData, setDocumentData] = useState({
     name: '',
     path: '',
+    type: '',
     user: user._id,
     token: user.token
   })
@@ -26,20 +29,40 @@ function Documents() {
   // estados do documento
   const { isError, isLoading, isSuccess, message } = useSelector((state) => state.documents)
 
-  // referência do input file
-  const fileInputRef = useRef(null)
+  const [types, setTypes] = useState([])
 
-  // função para pegar o arquivo
-  const onChange = () => {
-    setDocumentData({ ...documentData, name: fileInputRef.current.files[0].name, path: fileInputRef.current.files[0] })
-  }
 
-  // função para enviar o arquivo
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    dispatch(addDocument(documentData))
+  const handleDocument = (type) => {
 
-  }
+    if (type && documentData.name && documentData.path) {
+      dispatch(addDocument({ ...documentData, type }));
+    }
+    else {
+      toast.error('Selecione um arquivo', styleError)
+    }
+
+    setDocumentData({ ...documentData, name: '', path: '', type: '' })
+  };
+
+  // on drop arquivos
+  const onDrop = useCallback(async (acceptedFiles, rejectedFiles) => {
+
+    if (rejectedFiles.length > 0) {
+      // Handle files with invalid extensions here
+      toast.error('Arquivos inválidos', rejectedFiles);
+      return;
+    }
+
+    setDocumentData({ ...documentData, name: acceptedFiles[0].name, path: acceptedFiles[0] })
+
+  }, []);
+
+  // configurações do dropzone
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: 'application/pdf',
+    multiple: true,
+  });
 
   useEffect(() => {
     if (documents && isError) {
@@ -50,6 +73,16 @@ function Documents() {
 
   }, [isError, isSuccess, message, documents, dispatch])
 
+  useEffect(() => {
+    if (documents && documents.length > 0) {
+      setTypes(documents.map((document) => document.type))
+    }
+
+  }, [documents]);
+
+  useEffect(() => {
+    console.log(types);
+  }, [types]);
 
   if (isLoading) {
     return <Box sx={
@@ -71,58 +104,153 @@ function Documents() {
     <Box sx={
       {
         marginBottom: '20px',
-        maxWidth: '400px',
-        justifyContent: 'center',
-        gap:'5px'
-
+        gap: '5px'
       }
     }>
 
-      <Typography variant='h5' >Documentos</Typography>
-      <Typography variant="p" >Envie seus documentos para a análise do pedido</Typography>
+      <Typography variant='h5' textAlign={'center'} >Documentos</Typography>
 
-      <form onSubmit={handleSubmit}>
-        <Box sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-         
-        }}>
-          <input onChange={onChange} type="file" ref={fileInputRef} />
-          <Button fullWidth sx={{ margin: '10px 0' }} type="submit" variant="outlined" color="primary">Adicionar</Button>
-        </Box>
-      </form>
+      <Grid container spacing={2} sx={{marginTop:'20px'}}>
 
-      {documents && documents.length > 0 ? (<Box sx={
-        {
-          marginBottom: '20px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '10px'
-        }
-      }>
+        <Grid item xs={12} sm={6} lg={2.5}>
+          {types.includes('cnpj_cpf') ?
+            <>
+              <Box sx={{
+                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px',
+                p: 1,
+                borderRadius: '5px',
+              }}>
+                <Typography textAlign={'center'} variant='h7'>Cartão de CNPJ e CPF</Typography>
+                <Alert color='success'>Adicionado</Alert>
+              </Box>
+            </> :
+            <>
+              <Box sx={{
+                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px',
+                p: 1,
+                border: isDragActive ? '1px solid #E4E3E3' : '',
+                borderRadius: '5px',
+                boxShadow: isDragActive ? '0px 0px 5px 0px rgba(0,0,0,0.75)' : '',
+                minHeight: '220px',
+              }} {...getRootProps()}>
+                <Typography textAlign={'center'} variant='h7'>Cartão de CNPJ e CPF</Typography>
+                <input {...getInputProps()} />
+                <Button variant='outlined' color='success'><AiOutlineDropbox size={80} /> </Button>
+                <Typography textAlign={'center'} variant='p'>Arraste e solte os arquivos ou clique para selecionar</Typography>
+              </Box>
 
-        {documents.map((document) => (
+              <Button fullWidth variant='outlined' onClick={() => handleDocument('cnpj_cpf')} color='warning'>Adicionar</Button>
+              
+            </>
+          }
 
-          <div key={document._id}>
-            <Stack spacing={1} direction="row" alignItems="center">
-              <p>{document.name}</p>
-              <Button variant="contained" color="success" onClick={() => dispatch(downloadDocument(document))}><FaDownload /> </Button>
-              <Button variant="contained" color="error" onClick={() => dispatch(deleteDocument({ document: document._id }))}><FaTrash /> </Button>
-            </Stack>
-          </div>
+        </Grid>
 
-        ))
-        }
-      </Box>) : (
-        <Typography sx={
-          {
-            marginBottom: '20px',
+        <Divider sx={{margin:'0 20px'}} orientation="vertical" flexItem />
 
-          }} variant='h5' >Adicione algum documento</Typography>
-      )
-      }
+        <Grid item xs={12} sm={6} lg={2.5}>
+          {types.includes('mapa') ?
+            <>
+              <Box sx={{
+                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px',
+                p: 1,
+                borderRadius: '5px',
+              }}>
+                <Typography textAlign={'center'} variant='h7'>MAPA</Typography>
+                <Alert color='success'>Adicionado</Alert>
+              </Box>
+            </> :
+            <>
+              <Box sx={{
+                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px',
+                p: 1,
+                border: isDragActive ? '1px solid #E4E3E3' : '',
+                borderRadius: '5px',
+                boxShadow: isDragActive ? '0px 0px 5px 0px rgba(0,0,0,0.75)' : '',
+                minHeight: '220px',
+              }} {...getRootProps()}>
+                <Typography textAlign={'center'} variant='h7'>MAPA</Typography>
+                <input {...getInputProps()} />
+                <Button variant='outlined' color='success'><AiOutlineDropbox size={80} /> </Button>
+                <Typography textAlign={'center'} variant='p'>Arraste e solte os arquivos ou clique para selecionar</Typography>
+              </Box>
+              <Button fullWidth variant='outlined' onClick={() => handleDocument('mapa')} color='warning'>Adicionar</Button>
 
+            </>}
+        </Grid>
+
+        <Divider sx={{margin:'0 20px'}} orientation="vertical" flexItem />
+
+        <Grid item xs={12} sm={6} lg={2.5}>
+          {types.includes('art') ?
+            <>
+              <Box sx={{
+                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px',
+                p: 1,
+                borderRadius: '5px',
+              }}>
+                <Typography textAlign={'center'} variant='h7'>ART</Typography>
+                <Alert color='success'>Adicionado</Alert>
+              </Box>
+            </> :
+            <>
+              <Box sx={{
+                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px',
+                p: 1,
+                border: isDragActive ? '1px solid #E4E3E3' : '',
+                borderRadius: '5px',
+                boxShadow: isDragActive ? '0px 0px 5px 0px rgba(0,0,0,0.75)' : '',
+                minHeight: '220px',
+              }} {...getRootProps()}>
+                <Typography textAlign={'center'} variant='h7'>ART</Typography>
+                <input {...getInputProps()} />
+                <Button variant='outlined' color='success'><AiOutlineDropbox size={80} /> </Button>
+                <Typography textAlign={'center'} variant='p'>Arraste e solte os arquivos ou clique para selecionar</Typography>
+              </Box>
+              <Button fullWidth variant='outlined' onClick={() => handleDocument('art')} color='warning'>Adicionar</Button>
+
+            </>}
+
+        </Grid>
+
+        <Divider sx={{margin:'0 20px'}} orientation="vertical" flexItem />
+
+        <Grid item xs={12} sm={6} lg={2.5}>
+          {types.includes('parecer') ?
+            <>
+              <Box sx={{
+                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px',
+                p: 1,
+                borderRadius: '5px',
+              }}>
+                <Typography textAlign={'center'} variant='h7'>Parecer Técnico</Typography>
+                <Alert color='success'>Adicionado</Alert>
+              </Box>
+            </> :
+            <>
+              <Box sx={{
+                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px',
+                p: 1,
+                border: isDragActive ? '1px solid #E4E3E3' : '',
+                borderRadius: '5px',
+                boxShadow: isDragActive ? '0px 0px 5px 0px rgba(0,0,0,0.75)' : '',
+                minHeight: '220px',
+              }} {...getRootProps()}>
+                <Typography textAlign={'center'} variant='h7'>Parecer Técnico</Typography>
+                <input {...getInputProps()} />
+                <Button variant='outlined' color='success'><AiOutlineDropbox size={80} /> </Button>
+                <Typography textAlign={'center'} variant='p'>Arraste e solte os arquivos ou clique para selecionar</Typography>
+              </Box>
+
+              <Button fullWidth variant='outlined' onClick={() => handleDocument('parecer')} color='warning'>Adicionar</Button>
+
+            </>}
+        </Grid>
+
+      </Grid>
+
+
+      
 
     </Box >
   )

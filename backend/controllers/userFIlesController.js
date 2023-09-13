@@ -51,7 +51,7 @@ const addDocument = asyncHandler(async (req, res) => {
 
     if (user) {
 
-        const refStorage = ref(storage, `documents/${user._id}/${req.body.name}`)
+        const refStorage = ref(storage, `documents/${user._id}/${req.body.type}/${req.body.name}`)
 
         const metadata = {
             contentType: 'application/pdf',
@@ -70,17 +70,13 @@ const addDocument = asyncHandler(async (req, res) => {
             name: req.body.name,
             path: url,
             user: req.body.user,
+            type: req.body.type
         }
 
         const createdDocument = await Document.create(document)
 
         if (createdDocument) {
-            res.status(201).json({
-                _id: createdDocument._id,
-                name: createdDocument.name,
-                path: createdDocument.path,
-                user: createdDocument.user,
-            })
+            res.status(201).json(createdDocument)
         } else {
             res.status(400)
             throw new Error('Dados inválidos')
