@@ -1,5 +1,8 @@
 const asyncHandler = require('express-async-handler');
 const Reunion = require('../models/reunionModel.js');
+const { ref, getDownloadURL, uploadBytesResumable, deleteObject } = require("firebase/storage");
+const { storage } = require('../db/firebase.js');
+
 
 // criar reunião
 const createReunion = asyncHandler(async (req, res) => {
@@ -71,14 +74,97 @@ const finishReunion = asyncHandler(async (req, res) => {
 
 const addReunionAta = asyncHandler(async (req, res) => {
 
+    const reunion = await Reunion.findById(req.params.id)
+
     if (!req.file) {
         res.status(400)
         throw new Error('Selecione um arquivo válido')
-    
+
     }
 
-    console.log(req.file)
+    if (!reunion) {
+        res.status(404)
+        throw new Error('Reunião não encontrada')
+    }
+
+    const storageRef = ref(storage, `reunionsAtas/${reunion._id}/${req.file.originalname}`)
+    const metadata = {
+        contentType: 'application/pdf',
+    }
+
+    const snapshot = await uploadBytesResumable(storageRef, req.file.buffer, metadata);
+
+    const url = await getDownloadURL(snapshot.ref);
+
+    if (!url) {
+        res.status(400)
+        throw new Error('Algo de errado aconteceu')
+    }
+
+    reunion.ata.path = url
+    reunion.ata.originalname = req.file.originalname
+
+    await reunion.save()
+
+    res.json('Ata adicionada com sucesso')
+
+})
+
+// deletar ata
+
+const deleteReunionAta = asyncHandler(async (req, res) => {
+    try {
+        const { id } = req.body
+
+        const reunion = await Reunion.findById(id)
+
+        if (reunion.ata.path) {
+            const storageRef = ref(storage, `reunionsAtas/${reunion._id}/${reunion.ata.originalname}`)
+            await deleteObject(storageRef)
+        }
+
+        reunion.ata.path = ''
+        reunion.ata.originalname = ''
+
+        await reunion.save()
+
+        res.json('Ata deletada' )
+
+    } catch (error) {
+        res.status(500)
+        throw new Error('Erro ao deletar ata')
+    }
+
 })
 
 
-module.exports = { createReunion, getReunions, finishReunion,addReunionAta }
+// deletar reunião
+
+const deleteReunion = asyncHandler(async (req, res) => {
+    try {
+        const id = req.params.id
+
+        const reunion = await Reunion.findById(id)
+
+        if (reunion.ata.path) {
+            const storageRef = ref(storage, `reunionsAtas/${reunion._id}/${reunion.ata.originalname}`)
+            await deleteObject(storageRef)
+        }
+
+        reunion.remove()
+        await reunion.save()
+
+        res.json({ message: 'Reunião deletada' })
+
+    } catch (error) {
+        res.status(500)
+        throw new Error('Erro ao deletar reunião')
+    }
+})
+
+
+
+module.exports = { 
+    createReunion, getReunions, finishReunion, 
+    addReunionAta, deleteReunion,deleteReunionAta 
+}

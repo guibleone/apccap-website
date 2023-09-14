@@ -24,8 +24,14 @@ const reunionSchema = mongoose.Schema({
         required: false
     },
     ata:{
-        type: String,
-        required: false
+        path: {
+            type: String,
+            required: false
+        },
+        originalname: {
+            type: String,
+            required: false
+        }
     },
     
 })

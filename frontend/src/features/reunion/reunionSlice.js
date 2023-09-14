@@ -59,6 +59,39 @@ export const finishReunion = createAsyncThunk('reunion/finishReunion', async (re
 })
 
 
+// adicioanr ata de reunião
+
+export const addReunionAta = createAsyncThunk('reunion/addReunionAta', async (reunion, thunkAPI) => {
+    try {
+        const response = await reunionService.addReunionAta(reunion);
+        thunkAPI.dispatch(getReunions(reunion.token));
+        return response;
+    }
+    catch (error) {
+        // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message);
+
+    }
+})
+
+// deletar ata de reunião
+
+export const deleteReunionAta = createAsyncThunk('reunion/deleteReunionAta', async (reunion, thunkAPI) => {
+    try {
+        const response = await reunionService.deleteReunionAta(reunion);
+        thunkAPI.dispatch(getReunions(reunion.token));
+        return response;
+    }
+    catch (error) {
+        // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message);
+
+    }
+})
+
+
 
 
 export const reunionSlice = createSlice({
@@ -102,7 +135,7 @@ export const reunionSlice = createSlice({
             })
             .addCase(getReunions.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.isSuccess = true;
+                state.isSuccess = false;
                 state.isError = false;
                 state.message = '';
                 state.reunionData = action.payload;
@@ -127,6 +160,44 @@ export const reunionSlice = createSlice({
                 state.message = action.payload;
             })
             .addCase(finishReunion.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = false;
+                state.isError = true;
+                state.message = action.payload;
+            })
+            // adicionar ata da reunião
+            .addCase(addReunionAta.pending, (state) => {
+                state.isLoading = true;
+                state.isSuccess = false;
+                state.isError = false;
+                state.message = '';
+            })
+            .addCase(addReunionAta.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.isError = false;
+                state.message = 'Ata adicionada com sucesso'
+            })
+            .addCase(addReunionAta.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = false;
+                state.isError = true;
+                state.message = action.payload;
+            })
+            // deletar ata da reunião
+            .addCase(deleteReunionAta.pending, (state) => {
+                state.isLoading = true;
+                state.isSuccess = false;
+                state.isError = false;
+                state.message = '';
+            })
+            .addCase(deleteReunionAta.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.isError = false;
+                state.message = 'Ata deletada com sucesso'
+            })
+            .addCase(deleteReunionAta.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isSuccess = false;
                 state.isError = true;

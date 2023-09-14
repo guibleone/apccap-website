@@ -2,10 +2,10 @@ import { Box, Container, Typography, Button, Grid, Divider, Modal, useMediaQuery
 import ReunionPaginationSecretary from '../../../components/Pagination/ReunionsSecretary'
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getReunions } from '../../../features/reunion/reunionSlice'
+import { addReunionAta, deleteReunionAta, getReunions, reset } from '../../../features/reunion/reunionSlice'
 import { AiFillBook, AiFillWarning, AiOutlineDropbox } from 'react-icons/ai'
 import { useDropzone } from 'react-dropzone'
-import { styleError } from '../../toastStyles'
+import { styleError, styleSuccess } from '../../toastStyles'
 import { toast } from 'react-toastify'
 
 export default function Secretary() {
@@ -14,7 +14,7 @@ export default function Secretary() {
 
   const matches = useMediaQuery('(min-width:600px)');
 
-  const { isLoading } = useSelector((state) => state.reunions)
+  const { isLoading, isSuccess, isError, message } = useSelector((state) => state.reunions)
 
   const handleOpenAta = () => setOpeneAta(!openAta)
   const handleOpenRepprove = () => setOpenRepprove(!openRepprove)
@@ -72,13 +72,31 @@ export default function Secretary() {
 
   const handleAddAta = () => {
 
-    if(!file) return toast.error('Selecione um arquivo', styleError)
-    //dispatch(finishReunion({ reunionId: 1, ata: 'ata' }))
-    handleOpenAta()
-    console.log(file)
+    if (!file) return toast.error('Selecione um arquivo', styleError)
 
-    setFile([])
+    const reunionData = {
+      id,
+      ata: file[0],
+      token: user.token
+    }
+
+    dispatch(addReunionAta(reunionData))
+
+    handleOpenAta()
+
+    setFile(null)
     setId(null)
+
+  }
+
+  const handleDeleteAta = (id) => {
+
+    const reunionData = {
+      id,
+      token: user.token
+    }
+
+    dispatch(deleteReunionAta(reunionData))
 
   }
 
@@ -87,6 +105,40 @@ export default function Secretary() {
     dispatch(getReunions(user.token))
 
   }, [])
+
+  useEffect(() => {
+
+    if (isError) {
+      toast.error(message, styleError)
+    }
+
+    if (isSuccess) {
+      toast.success(message, styleSuccess)
+    }
+
+    dispatch(reset())
+
+
+  }, [])
+
+
+  if (isLoading) {
+
+    return <Box sx={
+      {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh'
+      }
+    }>
+      <CircularProgress sx={
+        {
+          marginBottom: '100px',
+        }
+      } size={100} />
+    </Box>
+  }
 
 
   return (
@@ -112,8 +164,14 @@ export default function Secretary() {
                   <Typography variant='h7'>Data: {reunion.date}</Typography>
                   <Typography variant='h7'>Tipo: {reunion.type}</Typography>
                   <Box sx={{ display: 'flex', gap: '10px' }}>
-                    <Button variant='outlined' color='success' onClick={() => { handleOpenAta(); setFile(null);setId(reunion._id) }} >Adicionar Ata</Button>
-                    <Button variant='outlined' color='error' >Excluir</Button>
+                    {reunion.ata.path ?
+                      <>
+                        <Button variant='outlined' color='warning' href={reunion.ata} target='_blank' >Visualizar</Button>
+                        <Button variant='outlined' color='success' onClick={() => {handleDeleteAta(reunion._id)}} >Deletar</Button>
+                      </>
+                      :
+                      <Button variant='outlined' color='success' onClick={() => { handleOpenAta(); setFile(null); setId(reunion._id) }} >Adicionar Ata</Button>
+                    }
                   </Box>
                 </Box>
 
