@@ -37,24 +37,20 @@ const sendEmail = asyncHandler(async (req, res) => {
 
 const senConvocationEmail = asyncHandler(async (req, res) => {
 
-    const { typeReunion } = req.body
+    const { typeReunion, title } = req.body
 
     let roles = []
-    let title = ''
 
     if (typeReunion.administrativa) {
         roles.push('presidente', 'secretario', 'admin', 'tesoureiro')
-        title = 'Convocação Reunião Administrativa'
     }
 
     if (typeReunion.assembleia_ordinal) {
         roles.push('presidente', 'secretario', 'admin', 'tesoureiro', 'produtor')
-        title = 'Convocação Assembleia Ordinária'
     }
 
     if (typeReunion.assembleia_extraordinaria) {
         roles.push('presidente', 'secretario', 'admin', 'tesoureiro', 'produtor')
-        title = 'Convocação Assembleia Extraordinária'
     }
 
     const usersAssociates = await User.find({ role: { $in: roles } })

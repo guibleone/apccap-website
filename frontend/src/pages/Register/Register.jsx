@@ -6,13 +6,39 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import {
   Button, Typography, Box, Container, CssBaseline, TextField, CircularProgress,
-  Avatar, FormControlLabel, Checkbox, Grid, Link, LockOutlinedIcon
+  Avatar, FormControlLabel, Checkbox, Grid, Link, LockOutlinedIcon, Modal, useMediaQuery
 } from '@mui/material';
-import { AiFillLock } from 'react-icons/ai'
+import { AiFillLock, AiFillWarning, AiOutlinePaperClip } from 'react-icons/ai'
 import { styleError, styleSuccess } from '../toastStyles'
 
 
 function Register() {
+
+  const matches = useMediaQuery('(min-width:600px)');
+
+  const style = matches ? {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+
+  } : {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '90%',
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+
+  }
 
   const [formData, setFormData] = useState({
     name: '',
@@ -25,10 +51,21 @@ function Register() {
   const resume = useSelector((state) => state.resume.resume)
   const { name, cpf, email, password, password2 } = formData
 
-  const { user, isError, isLoading, isSuccess, message,pending } = useSelector((state) => state.auth)
+  const { user, isError, isLoading, isSuccess, message, pending } = useSelector((state) => state.auth)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
+
+  const [acceptTerms, setAcceptTerms] = useState(false);
+  const [openTerms, setOpenTerms] = useState(false);
+
+  const handleOpenTerms = () => (setOpenTerms(!openTerms))
+
+  const handleAcceptTermsToggle = () => {
+    setAcceptTerms(!acceptTerms);
+  };
+
 
   useEffect(() => {
     if (isError) {
@@ -170,8 +207,16 @@ function Register() {
               />
             </Grid>
           </Grid>
+
+          <Grid item xs={12}>
+            <Checkbox sx={{marginLeft:'-10px'}} checked={acceptTerms} onClick={handleAcceptTermsToggle} />
+            <Typography variant='caption'>
+              Li e concordo com os <Link sx={{ cursor: 'pointer' }} onClick={handleOpenTerms} >termos</Link> de uso
+            </Typography>
+          </Grid>
+
           <Button
-            disabled={pending}
+            disabled={pending || !acceptTerms}
             type="submit"
             fullWidth
             variant="contained"
@@ -189,6 +234,40 @@ function Register() {
           </Grid>
         </Box>
       </Box>
+
+
+      <Modal
+        open={openTerms}
+        onClose={handleOpenTerms}
+      >
+        <Box sx={style}>
+          <Box sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '10px'
+          }}>
+            <Box display={'flex'} justifyContent={'space-between'}>
+              <Typography variant="h6" >Termos de Uso</Typography>
+              <AiOutlinePaperClip size={30} />
+            </Box>
+            <Typography variant="body1" >
+              Lorem ipsum dolor si
+              amet, consectetur adipiscing elit. Nullam
+              ac ante mollis quam tristique convallis
+            </Typography>
+            <Typography variant="body1" >
+              Lorem ipsum dolor si
+              amet, consectetur adipiscing elit. Nullam
+              ac ante mollis quam tristique convallis
+            </Typography>
+            <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+              <Button color='info' variant='contained' onClick={handleOpenTerms}>Voltar</Button>
+            </Box>
+          </Box>
+        </Box>
+      </Modal>
+
+
     </Container>
   )
 }

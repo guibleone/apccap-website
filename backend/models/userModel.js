@@ -77,6 +77,5 @@ userSchema.plugin(autoIncrementID, {
     field: 'sequence_value'
 })
 
-
 module.exports = mongoose.model('User', userSchema)
 

@@ -23,7 +23,6 @@ import QuemSomos from './pages/QuemSomos/QuemSomos';
 import User from './pages/Dashboard/Acesses/Presidente/SingleUserCredenciado';
 import StripeBalance from './pages/Dashboard/Acesses/Tesoureiro/StripeBalance';
 import AllSpreadSheets from './pages/Dashboard/Acesses/Tesoureiro/AllSpreadSheets';
-import SeloRelatory from './pages/Dashboard/Acesses/Presidente/SeloRelatory';
 import AnaliseCredencial from './pages/Dashboard/Acesses/Conselho/AnaliseCredencial';
 import ProductAnalise from './pages/Products/ProductAnalise';
 import UserProducts from './pages/Dashboard/Acesses/Conselho/Products/UserProducts';
@@ -41,7 +40,6 @@ function App() {
           <Route path='/meu-perfil' element={<Informations />} />
           <Route path='/blog' element={<Blog />} />
           <Route path={`/usuario/:id`} element={<UserSingle /> } />
-          <Route path={`/usuario/selo/:id`} element={<SeloRelatory /> } />
           <Route path={`/usuario-credenciado/:id`} element={<User /> } />
           <Route path={`/produtos`} element={<RegisterProduct />} />
           <Route path={`/produto/:id`} element={<SingleProduct />}/>

@@ -13,6 +13,7 @@ const productsRouter = require('./routes/productsRoutes.js')
 const paymentRouter = require('./routes/paymentRoutes.js')
 const emailRouter = require('./routes/emailRoutes.js')
 const spreadSheetRouter = require('./routes/spreadSheetsRoutes.js')
+const reunionRouter = require('./routes/reunionRoutes.js')
 const path = require('path')
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 const multer = require('multer');
@@ -39,6 +40,7 @@ app.use('/api/products', productsRouter)
 app.use('/api/payment', paymentRouter)
 app.use('/api/email', emailRouter)
 app.use('/api/planilha', spreadSheetRouter)
+app.use('/api/reunion', reunionRouter)
 
 const storage = multer.memoryStorage(); // Use memory storage for simplicity, you can configure it to save files to disk
 const upload = multer({ storage });
