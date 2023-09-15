@@ -59,7 +59,7 @@ const finishReunion = async (reunionData) => {
 // adicionar ata de reunião
 
 const addReunionAta = async (reunionData) => {
-
+    console.log(reunionData)
     let token = reunionData.token
 
     // pegar o token do usuário
@@ -81,7 +81,7 @@ const addReunionAta = async (reunionData) => {
 const deleteReunionAta = async (reunionData) => {
     
     let token = reunionData.token
-console.log(reunionData)
+
     // pegar o token do usuário
 
     const config = {

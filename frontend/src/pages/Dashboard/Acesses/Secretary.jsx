@@ -15,6 +15,7 @@ export default function Secretary() {
   const matches = useMediaQuery('(min-width:600px)');
 
   const { isLoading, isSuccess, isError, message } = useSelector((state) => state.reunions)
+  const { user } = useSelector((state) => state.auth)
 
   const handleOpenAta = () => setOpeneAta(!openAta)
   const handleOpenRepprove = () => setOpenRepprove(!openRepprove)
@@ -46,7 +47,6 @@ export default function Secretary() {
   const dispatch = useDispatch()
   const [reunions, setReunions] = useState([])
 
-  const { user } = useSelector((state) => state.auth)
 
   const [file, setFile] = useState(null)
   const [id, setId] = useState(null)
@@ -164,9 +164,9 @@ export default function Secretary() {
                   <Typography variant='h7'>Data: {reunion.date}</Typography>
                   <Typography variant='h7'>Tipo: {reunion.type}</Typography>
                   <Box sx={{ display: 'flex', gap: '10px' }}>
-                    {reunion.ata.path ?
+                    {reunion.ata && reunion.ata.path ?
                       <>
-                        <Button variant='outlined' color='warning' href={reunion.ata} target='_blank' >Visualizar</Button>
+                        <Button variant='outlined' color='warning' href={reunion.ata && reunion.ata.path} target='_blank' >Visualizar</Button>
                         <Button variant='outlined' color='success' onClick={() => {handleDeleteAta(reunion._id)}} >Deletar</Button>
                       </>
                       :
