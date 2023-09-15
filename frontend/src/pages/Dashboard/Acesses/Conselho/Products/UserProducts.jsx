@@ -49,6 +49,13 @@ export default function UserProducts() {
                         }
                     </Box>
                 </Grid>
+
+                <Grid item xs={12} md={6} lg={3}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', padding: '10px' }}>
+                        <Typography variant='body'> {userData && userData.resumo ? userData.resumo : 'Usário não possui resumo de produtor' }</Typography>
+                    </Box>
+                </Grid>
+
             </Grid>
 
             <Divider sx={{ margin: '10px 0' }} />
@@ -58,9 +65,9 @@ export default function UserProducts() {
                 (<Typography variant="h5" gutterBottom>Nenhum produto cadastrado</Typography>)
 
                 : (
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px',overflow:'hidden'  }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px', overflow: 'hidden' }}>
 
-                        <Typography sx={{ textAlign: 'center', padding:1,  }} variant={'h5'} >Produtos Para Análise</Typography>
+                        <Typography sx={{ textAlign: 'center', padding: 1, }} variant={'h5'} >Produtos Para Análise</Typography>
 
                         <Grid
                             sx={{ margin: '10px 0', display: 'flex', flexDirection: matches ? 'column' : 'row', gap: matches ? '20px' : '0' }}
@@ -105,7 +112,7 @@ export default function UserProducts() {
                             ))}
                         </Grid>
                     </Box>
-                    )}
+                )}
         </Container>
     )
 }

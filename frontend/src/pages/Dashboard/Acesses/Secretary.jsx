@@ -167,7 +167,7 @@ export default function Secretary() {
                     {reunion.ata && reunion.ata.path ?
                       <>
                         <Button variant='outlined' color='warning' href={reunion.ata && reunion.ata.path} target='_blank' >Visualizar</Button>
-                        <Button variant='outlined' color='success' onClick={() => {handleDeleteAta(reunion._id)}} >Deletar</Button>
+                        <Button variant='outlined' color='error' onClick={() => {handleDeleteAta(reunion._id)}} >Deletar</Button>
                       </>
                       :
                       <Button variant='outlined' color='success' onClick={() => { handleOpenAta(); setFile(null); setId(reunion._id) }} >Adicionar Ata</Button>

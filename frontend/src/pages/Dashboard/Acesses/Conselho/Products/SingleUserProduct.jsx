@@ -185,9 +185,18 @@ export default function SingleUserProduct() {
 
       <Grid container spacing={2}>
         <Grid item xs={12} sm={12} lg={3} >
+          <Typography variant='h5'>Informações do Produto</Typography>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px'}}>
+            <Typography variant='p'><strong>Nome:</strong> {productData.name}</Typography>
+            <Typography variant='p'><strong>Descrição:</strong> {productData.description}</Typography>
+            <Typography variant='p'><strong>Produtor:</strong> {userData.name}</Typography>
+            <Typography variant='p'><strong>Selos Pedidos:</strong> {productData.selo && productData.selo.quantity}</Typography>
+          </Box>
+        </Grid>
+        <Grid item xs={12} sm={12} lg={3} >
           <Typography variant='h5'>Documentos</Typography>
 
-          <Box sx={{ height: '80px' }}>
+          <Box sx={{ height: '80px', paddingRight:1 }}>
             {productData.relatorys && productData.relatorys.length > 0 ? productData.relatorys.map((doc) => (
               <>
                 <Box key={doc._id} sx={{ display: 'flex', justifyContent: 'space-between' }}>

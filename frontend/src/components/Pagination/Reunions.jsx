@@ -3,43 +3,56 @@ import { useEffect, useState } from 'react'
 import { useSelector } from "react-redux"
 
 
-export default function ReunionPagination({ setReunionData }) {
+export default function ReunionPagination({ setReunionData, status, type, date }) {
+    console.log(date)
 
     const { reunionData } = useSelector((state) => state.reunions)
-
-    const service = {
-        getData: ({ from, to }) => {
-            return new Promise((resolve, reject) => {
-                
-                const filteredData = reunionData
-                    .filter((reunion) => reunion.status === 'agendada')
-                    .sort((a, b) => new Date(a.date) - new Date(b.date));
-
-                const data = filteredData.slice(from, to);
-
-                resolve({
-                    count: filteredData.length, 
-                    data: data,
-                });
-            });
-        },
-    };
 
     const pageSize = 4;
 
     const [pagination, setPagination] = useState({
-        count: 0, 
+        count: 0,
         from: 0,
         to: pageSize,
     });
 
     useEffect(() => {
+
+        const service = {
+            getData: ({ from, to }) => {
+                return new Promise((resolve, reject) => {
+
+                    const filteredData = (reunionData || [])
+                        .filter(reunion => (!status || reunion.status === status))
+                        .filter(reunion => (!type || reunion.type === type))
+                        .sort((a, b) => {
+                            if (date === 'nova') {
+                                return a.date.localeCompare(b.date); // Sort in ascending order
+                            }
+                            if (date === '') {
+                                return a.date.localeCompare(b.date); // Sort in ascending order
+                            } else {
+                                return b.date.localeCompare(a.date); // Sort in descending order
+                            }
+                        });
+
+                    const data = (filteredData?.slice(from, to))
+
+                    resolve({
+                        count: (filteredData?.length),
+                        data: data,
+                    });
+                });
+            },
+        };
+
         service.getData({ from: pagination.from, to: pagination.to }).then(response => {
             setPagination({ ...pagination, count: response.count })
 
             setReunionData(response.data)
         })
-    }, [pagination.from, pagination.to, reunionData])
+
+    }, [pagination.from, pagination.to, reunionData, status, type, date])
 
     const handlePageChange = (event, page) => {
         const from = (page - 1) * pageSize

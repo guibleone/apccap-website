@@ -106,7 +106,7 @@ export default function User() {
         window.scrollTo(0, 0)
     }, [])
 
-    if (isLoadingPayment) {
+    if (isLoadingPayment || isLoadingAdmin) {
         return <Box sx={
             {
                 display: 'flex',
@@ -167,11 +167,11 @@ export default function User() {
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItens: 'center', gap: '10px', padding: '10px' }}>
 
 
-                        <Typography textAlign={'center'} variant='h7'>Status {produtor && produtor.status ?
+                        <Typography textAlign={'center'} variant='h7'>Status Credencial {produtor && produtor.status ?
                             (<FcOk style={{ verticalAlign: 'bottom' }} size={25} />) : (<FcCancel style={{ verticalAlign: 'bottom' }} size={25} />)}
                         </Typography>
 
-                        <Typography sx={{ textAlign: 'center' }} variant='h7'>Assinatura {payments && payments.subscription ?
+                        <Typography sx={{ textAlign: 'center' }} variant='h7'>Assinatura Mensal {payments && payments.subscription ?
                             (<FcOk style={{ verticalAlign: 'bottom' }} size={25} />) : (<FcCancel style={{ verticalAlign: 'bottom' }} size={25} />)}
                         </Typography>
 
@@ -264,7 +264,7 @@ export default function User() {
 
                                 <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                     <Typography variant="p" >{product.description}</Typography>
-                                    <Typography variant="p" >{product.startSelo} - {product.endSelo}</Typography>
+                                    <Typography variant="p" >{(product.selo && product.selo.startSelo) ? `${product.selo.startSelo} - ${product.selo.endSelo}` : 'Produto em análise'}</Typography>
                                 </CardContent>
 
                             </Card>

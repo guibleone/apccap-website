@@ -1,4 +1,4 @@
-import { Box, Container, Typography, Button, TextareaAutosize, Divider, CircularProgress, FormGroup, Checkbox, FormControlLabel, TextField, Grid } from '@mui/material'
+import { Box, Container, Typography, Button, TextareaAutosize, Divider, CircularProgress, FormGroup, Checkbox, FormControlLabel, TextField, Grid, Select, MenuItem, InputLabel, Alert } from '@mui/material'
 import { useState, useEffect } from 'react'
 import UsersPagination from '../../../../components/Pagination/Users'
 import DatePicker from "react-datepicker";
@@ -18,26 +18,38 @@ setDefaultLocale('ptBR')
 
 export default function President() {
 
+  // estados
   const [users, setUsers] = useState([])
   const [startDate, setStartDate] = useState(new Date());
 
+  // redux
   const { emailStatus } = useSelector((state) => state.admin)
   const { user } = useSelector((state) => state.auth)
 
   const [reunions, setReunions] = useState([])
 
+  // redux
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
+  // mensagem e título
   const [message, setMessage] = useState('')
   const [title, setTitle] = useState('')
 
+  // selecionar os tipos de reunião
+  const [selectStatus, setSelectStatus] = useState('')
+  const [selectedType, setSelectType] = useState('')
+  const [selectedDate, setSelectedDate] = useState('')
+
+
+  // tipos de reunião
   const [typeReunion, setTypeReunion] = useState({
     administrativa: false,
     assembleia_ordinal: false,
     assembleia_extraordinaria: false
   })
 
+  // selecionar os tipos de reunião
   const handleChange = (event) => {
 
     const selectedType = event.target.name
@@ -50,6 +62,7 @@ export default function President() {
 
   }
 
+  // enviar email
   const handleSendEmail = () => {
     if (!message) return toast.error('Preencha a menssagem', styleError)
     if (!title) return toast.error('Preencha o título', styleError)
@@ -67,6 +80,7 @@ export default function President() {
     //dispatch(sendConvocationEmail({ message, date: startDate.toLocaleString(), typeReunion, title }))
   }
 
+  // concluir reunião
   const handleFinishReunion = (id) => {
 
     const reunions = {
@@ -78,12 +92,14 @@ export default function President() {
 
   }
 
+  // pegar reuniões
   useEffect(() => {
 
     dispatch(getReunions(user.token))
 
   }, [])
 
+  // toast
   useEffect(() => {
 
     if (emailStatus.isSuccess) {
@@ -100,12 +116,6 @@ export default function President() {
 
   return (
     <Container>
-
-      <Box>
-        <Typography variant='h5'>Bem vindo de volta, Presidente</Typography>
-      </Box>
-
-      <Divider sx={{ margin: '20px 0' }} />
 
       <Grid container spacing={2} >
         <Grid item xs={12} lg={12}>
@@ -180,17 +190,88 @@ export default function President() {
                   <Typography variant='h7'>Data: {reunion.date}</Typography>
                   <Typography variant='h7'>Tipo: {reunion.type}</Typography>
                   <Box sx={{ display: 'flex', gap: '10px' }}>
-                    <Button variant='outlined' color='success' onClick={() => handleFinishReunion(reunion._id)} >Concluir</Button>
+
+                    {reunion.status === 'concluida' && reunion.ata && reunion.ata.path &&
+                      <Button variant='outlined' color='warning' href={reunion.ata && reunion.ata.path} target='_blank' >Ver ata</Button>
+                    }
+
+                    {reunion.status === 'concluida' && !reunion.ata  &&
+                      <Alert severity="warning">Reunião sem ata</Alert>
+                    }
+
+                    {reunion.status === 'agendada' && <Button variant='outlined' color='success' onClick={() => handleFinishReunion(reunion._id)} >Concluir</Button>}
+
+
                   </Box>
                 </Box>
 
               </Grid>
             ))
-          : <Typography variant='h7'>Nenhuma reunião marcada</Typography>}
+          :
+            <Grid item sm={12} lg={3}>
+              <Typography variant='h7'>Nenhuma reunião marcada</Typography>
+            </Grid>
+        }
+
+
+        <Grid container spacing={2} sx={{ margin: '20px 0' }} >
+
+          <Grid item xs={12} lg={4}>
+            <TextField
+              value={selectStatus}
+              onChange={(e) => setSelectStatus(e.target.value)}
+              select
+              label="Status"
+              fullWidth
+            >
+              <MenuItem key={0} value=''>Todos</MenuItem>
+              <MenuItem key={1} value='concluida'>Concluída</MenuItem>
+              <MenuItem key={2} value='agendada'>Agendada</MenuItem>
+
+            </TextField>
+
+          </Grid>
+
+          <Grid item xs={12} lg={4}>
+            <TextField
+              value={selectedType}
+              onChange={(e) => setSelectType(e.target.value)}
+              select
+              label="Tipo de Reunião"
+              fullWidth
+            >
+              <MenuItem key={0} value=''>Todos</MenuItem>
+              <MenuItem key={1} value='administrativa'>Administrativa</MenuItem>
+              <MenuItem key={2} value='assembleia_ordinal'>Assembleia Ordinária</MenuItem>
+              <MenuItem key={3} value='assembleia_extraordinaria'>Assembleia Extraordinária</MenuItem>
+
+            </TextField>
+
+          </Grid>
+
+          <Grid item xs={12} lg={4}>
+            <TextField
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+              select
+              label="Data da Reunião"
+              fullWidth
+            >
+              <MenuItem key={0} value=''>Todos</MenuItem>
+              <MenuItem key={1} value='antiga'>Da mais antiga</MenuItem>
+              <MenuItem key={2} value='nova'>Da mais nova</MenuItem>
+            </TextField>
+
+          </Grid>
+
+        </Grid>
 
       </Grid>
 
-      <ReunionPagination setReunionData={(r) => setReunions(r)} />
+
+
+
+      <ReunionPagination setReunionData={(r) => setReunions(r)} status={selectStatus} type={selectedType} date={selectedDate} />
 
 
 

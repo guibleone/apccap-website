@@ -182,7 +182,7 @@ export default function AnaliseCredencial() {
             type: type
         }
 
-        dispatch(repproveRelatory(data))  && dispatch(sendRelatoryEmail(emailData))
+        dispatch(repproveRelatory(data)) && dispatch(sendRelatoryEmail(emailData))
 
         setOpenRepprove(false)
 
@@ -259,19 +259,21 @@ export default function AnaliseCredencial() {
                 <Grid item xs={12} sm={8} lg={3}>
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                         <Typography variant='h5'>Endereço</Typography>
-                        {userData.address && (
+                        {userData.address ? (
                             <>
                                 <Typography variant='p'>{userData.address.logradouro}, {userData.address.numero}</Typography>
                                 <Typography variant='p'>{userData.address.cidade} / {userData.address.estado}</Typography>
                                 <Typography variant='p'>{userData.address.cep}</Typography>
-                            </>)}
+                            </>) :
+                            <Typography variant='p'>Nenhum endereço registrado</Typography>
+                        }
                     </Box>
                 </Grid>
 
                 <Grid item xs={12} sm={12} lg={3} >
                     <Typography variant='h5'>Documentos</Typography>
 
-                    <Box sx={{ height: '80px' }}>
+                    <Box sx={{ height: '80px', paddingRight:1}}>
                         {documentsData && documentsData.length > 0 ? documentsData.map((doc) => (
                             <>
                                 <Box key={doc._id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
