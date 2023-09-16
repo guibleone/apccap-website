@@ -7,7 +7,7 @@ const {
     getPayment, disapproveUser, getProuducts, aproveSelos, 
     disaproveSelos, addRelatorys, deleteRelatorys, 
     approveRelatory, repproveRelatory, approveRecurso,
-    repproveRecurso } = require('../controllers/adminControllers.js');
+    repproveRecurso, associateProducer } = require('../controllers/adminControllers.js');
 
 const { uploadRelatory } = require('../middlewares/multer.js');
 
@@ -37,7 +37,6 @@ router.put('/user/disapprove/:id', hasRole(['admin', 'presidente']), disapproveU
 
 // receber pagamento de selos
 router.post('/payment', getPayment)
-
 
 
 

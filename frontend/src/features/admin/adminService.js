@@ -261,7 +261,6 @@ const repproveRecurso = async(data) => {
 }
 
 
-
 // EMAILS
 
 const sendEmail = async (emailData) => {
@@ -311,7 +310,7 @@ const adminService = {
     approveRecurso,
     sendRecursoEmail,
     repproveRecurso,
-    sendProductRelatoryEmail
+    sendProductRelatoryEmail,
 }
 
 export default adminService

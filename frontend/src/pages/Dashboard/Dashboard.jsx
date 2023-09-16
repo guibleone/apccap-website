@@ -56,7 +56,7 @@ function Dashboard() {
 
   }, [])
 
-  if (isLoading || (!payments && user && user.role === 'produtor')) {
+  if (isLoading) {
 
     return <Box sx={
       {

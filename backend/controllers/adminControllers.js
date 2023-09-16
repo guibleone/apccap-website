@@ -101,7 +101,7 @@ const deleteUser = asyncHandler(async (req, res) => {
             res.status(404)
             throw new Error('Usuário não encontrado')
         }
-        
+
 
         if (user.pathFoto) {
             const storageRef = ref(storage, `profilePhotos/${user._id}`)
@@ -133,7 +133,7 @@ const deleteUser = asyncHandler(async (req, res) => {
         }
 
         if (documents) {
-           documents.map(async (document) => {
+            documents.map(async (document) => {
                 const storageRef = ref(storage, `documents/${user._id}/${document.type}/${document.name}`)
                 await deleteObject(storageRef)
             })
@@ -202,6 +202,12 @@ const alterRole = asyncHandler(async (req, res) => {
         if (!req.body.role) {
             res.status(400)
             throw new Error('Informe o nível de acesso')
+        }
+
+        if(user.oldRole){
+            user.oldRole = ''
+
+            await user.save()
         }
 
         user.role = req.body.role
@@ -601,12 +607,12 @@ const repproveRecurso = asyncHandler(async (req, res) => {
 
         const user = await User.findById(req.params.id)
 
-        if(!user){
+        if (!user) {
             res.status(404)
             throw new Error('Usuário não encontrado')
         }
 
-        if(!user.analise.analise_pedido.recurso.path){
+        if (!user.analise.analise_pedido.recurso.path) {
             res.status(400)
             throw new Error('Recurso não encontrado')
         }
@@ -623,6 +629,8 @@ const repproveRecurso = asyncHandler(async (req, res) => {
         throw new Error('Erro ao reprovar recurso')
     }
 })
+
+
 
 
 module.exports = {
@@ -644,5 +652,6 @@ module.exports = {
     repproveRelatory,
     approveRecurso,
     repproveRecurso,
+    
 
 }

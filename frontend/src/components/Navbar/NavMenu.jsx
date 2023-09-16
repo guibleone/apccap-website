@@ -5,14 +5,15 @@ import {
     CssBaseline, Drawer, Divider, List, ListItem, ListItemIcon, ListItemText, Button, Avatar
 } from '@mui/material';
 import {
-    TbMenu2, TbArrowNarrowLeft, TbArrowNarrowRight, 
+    TbMenu2, TbArrowNarrowLeft, TbArrowNarrowRight,
     TbSearch, TbHome2, TbUsers, TbNews
 } from "react-icons/tb";
 import { MdLiquor } from "react-icons/md";
 
-import { useNavigate,Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'
 import { logout } from '../../features/auth/authSlice';
+import ButtonChangeRole from '../ChangeRole/ButtonChangeRole';
 
 
 const drawerWidth = 240;
@@ -81,7 +82,7 @@ function NavMenu() {
                             flexGrow: 1,
                             fontSize: '1.3rem',
                             fontWeight: 'bold',
-                           
+
                         }
                     } to="/">APCCAP</Link>
 
@@ -203,14 +204,14 @@ function NavMenu() {
                                 <Button variant="contained" color="primary" href="/registrar">Registrar</Button>
                             </>
                         ) : (
-                            <>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px' }}>
                                 <Link style={
                                     {
                                         color: 'inherit',
                                         textDecoration: 'none',
                                     }
                                 }
-                                 to="/meu-perfil">
+                                    to="/meu-perfil">
 
                                     <Avatar src={user.pathFoto ? user.pathFoto : 'https://placehold.co/600x400'} alt="Foto de Perfil"
 
@@ -218,8 +219,14 @@ function NavMenu() {
 
                                 </Link>
 
-                                <Button variant="contained" color="error" onClick={() => dispatch(logout(), navigate('/'))}>Sair</Button>
-                            </>
+                                <Button fullWidth variant="contained" color="error" onClick={() => dispatch(logout(), navigate('/'))}>Sair</Button>
+
+                                {user && (
+                                    ((user.role !== 'admin') || user.oldRole)
+                                        ? <ButtonChangeRole />
+                                        : null
+                                )}
+                            </Box>
 
                         )}
 

@@ -123,7 +123,7 @@ const sendRecurso = async (userData) => {
 
 const becomeProducer = async (token) => {
 
-console.log(token)
+    console.log(token)
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -131,7 +131,7 @@ console.log(token)
 
     }
 
-    const response = await axios.post(API_URL + 'become-producer',token, config)
+    const response = await axios.post(API_URL + 'become-producer', token, config)
 
     if (response.data) {
         localStorage.setItem('user', JSON.stringify(response.data))
@@ -141,12 +141,35 @@ console.log(token)
 }
 
 
+// associção se tornar produtor e vice versa
+
+const associateProducer = async (data) => {
+
+    const config = {
+
+        headers: {
+            Authorization: `Bearer ${data.token}`
+        }
+
+    }
+
+    const response = await axios.post(API_URL + '/associate-producer', data, config)
+    
+    if (response.data) {
+        localStorage.setItem('user', JSON.stringify(response.data))
+    }
+
+    return response.data
+}
+
+
+
 // logout de usuário
 const logout = async () => {
     localStorage.removeItem('user')
     localStorage.removeItem('resume')
     localStorage.removeItem('documents')
- 
+
 }
 
 const authService = {
@@ -157,7 +180,8 @@ const authService = {
     addProfilePhoto,
     resetAprove,
     sendRecurso,
-    becomeProducer
+    becomeProducer,
+    associateProducer
 }
 
 export default authService;

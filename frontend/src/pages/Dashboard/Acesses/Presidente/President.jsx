@@ -13,6 +13,9 @@ import UsersCredenciados from './UsersCredenciados';
 import { useNavigate } from 'react-router-dom';
 import { createReunion, finishReunion, getReunions } from '../../../../features/reunion/reunionSlice';
 import ReunionPagination from '../../../../components/Pagination/Reunions';
+import { BsTrash } from 'react-icons/bs'
+import { associateProducer } from '../../../../features/auth/authSlice';
+import ButtonChangeRole from '../../../../components/ChangeRole/ButtonChangeRole';
 registerLocale('pt-BR', ptBR)
 setDefaultLocale('ptBR')
 
@@ -24,7 +27,7 @@ export default function President() {
 
   // redux
   const { emailStatus } = useSelector((state) => state.admin)
-  const { user } = useSelector((state) => state.auth)
+  const { user, isLoading: isLoadingAuth } = useSelector((state) => state.auth)
 
   const [reunions, setReunions] = useState([])
 
@@ -92,6 +95,7 @@ export default function President() {
 
   }
 
+
   // pegar reuniões
   useEffect(() => {
 
@@ -118,6 +122,7 @@ export default function President() {
     <Container>
 
       <Grid container spacing={2} >
+
         <Grid item xs={12} lg={12}>
           <Typography textAlign={'center'} variant='h5'>Convocar Reuniões</Typography>
         </Grid>
@@ -192,10 +197,13 @@ export default function President() {
                   <Box sx={{ display: 'flex', gap: '10px' }}>
 
                     {reunion.status === 'concluida' && reunion.ata && reunion.ata.path &&
-                      <Button variant='outlined' color='warning' href={reunion.ata && reunion.ata.path} target='_blank' >Ver ata</Button>
+                      <>
+                        <Button variant='outlined' color='warning' href={reunion.ata && reunion.ata.path} target='_blank' >Ver ata</Button>
+                        <Button variant='outlined' color='error' startIcon={<BsTrash />} >Excluir</Button>
+                      </>
                     }
 
-                    {reunion.status === 'concluida' && !reunion.ata  &&
+                    {reunion.status === 'concluida' && !reunion.ata &&
                       <Alert severity="warning">Reunião sem ata</Alert>
                     }
 
@@ -208,9 +216,9 @@ export default function President() {
               </Grid>
             ))
           :
-            <Grid item sm={12} lg={3}>
-              <Typography variant='h7'>Nenhuma reunião marcada</Typography>
-            </Grid>
+          <Grid item sm={12} lg={3}>
+            <Typography variant='h7'>Nenhuma reunião marcada</Typography>
+          </Grid>
         }
 
 

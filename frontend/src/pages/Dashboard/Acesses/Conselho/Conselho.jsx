@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import UsersPagination from '../../../../components/Pagination/Users'
 import { getProducts } from '../../../../features/products/productsSlice'
+import ButtonChangeRole from '../../../../components/ChangeRole/ButtonChangeRole'
 
 
 export default function Conselho() {
@@ -29,7 +30,6 @@ export default function Conselho() {
             <Grid item xs={12} sm={12} lg={12}>
                 <Typography variant='h5'>Conselho regulador</Typography>
                 <Typography variant='p'>Seja bem vindo, </Typography>
-
                 <Divider sx={{ margin: '10px 0' }} />
             </Grid>
 
@@ -75,7 +75,7 @@ export default function Conselho() {
                             marginTop: '10px',
                         }}
                     >
-                        {user.productsQuantity >= 1 &&  (
+                        {user.productsQuantity >= 1 && (
                             <>
                                 <Typography variant="h6" >{`${user.name}`}</Typography>
                                 <Button variant="outlined" onClick={() => navigate(`/produtos-usuario/${user._id}`)} >Ver Dados</Button>

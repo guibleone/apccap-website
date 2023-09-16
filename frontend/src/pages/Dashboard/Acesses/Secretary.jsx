@@ -7,6 +7,7 @@ import { AiFillBook, AiFillWarning, AiOutlineDropbox } from 'react-icons/ai'
 import { useDropzone } from 'react-dropzone'
 import { styleError, styleSuccess } from '../../toastStyles'
 import { toast } from 'react-toastify'
+import ButtonChangeRole from '../../../components/ChangeRole/ButtonChangeRole'
 
 export default function Secretary() {
   const [openAta, setOpeneAta] = useState(false)
@@ -147,6 +148,7 @@ export default function Secretary() {
         <Typography variant='h5'>Bem vindo de volta, Secretário (a)</Typography>
         <Typography variant='p'>Você pode fazer os relatórios da associção.</Typography>
       </Box>
+
 
       <Divider sx={{ my: 2 }} />
 

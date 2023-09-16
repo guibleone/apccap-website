@@ -44,7 +44,11 @@ const registerUser = asyncHandler(async (req, res) => {
     })
 
     if (user) {
-        res.json({...user._doc, token: generateToken(user._id)})
+        user.token = generateToken(user._id)
+
+        await user.save()
+
+        res.json(user)
     } else {
         res.status(400)
         throw new Error('Dados inválidos')
@@ -78,7 +82,7 @@ const addProfilePhoto = asyncHandler(async (req, res) => {
 
         await user.save()
 
-        res.json({ ...user._doc, token: generateToken(user._id) })
+        res.json(user)
 
     } else {
         res.status(404)
@@ -99,7 +103,11 @@ const loginUser = asyncHandler(async (req, res) => {
     const user = await User.findOne({ cpf })
 
     if (user && (await bcrypt.compare(password, user.password))) {
-        res.json({ ...user._doc, token: generateToken(user._id) })
+        user.token = generateToken(user._id)
+
+        await user.save()
+
+        res.json(user)
     } else {
         res.status(401)
         throw new Error('CPF ou senha inválidos')
@@ -155,7 +163,7 @@ const updateUser = asyncHandler(async (req, res) => {
 
         await user.save()
 
-        res.json({ ...user._doc, token: generateToken(user._id) })
+        res.json(user)
 
     } else {
         res.status(404)
@@ -217,7 +225,7 @@ const restartAprove = asyncHandler(async (req, res) => {
 
         await user.save()
 
-        res.json({ ...user._doc, token: generateToken(user._id) })
+        res.json(user)
 
     } catch (error) {
         res.status(400)
@@ -254,7 +262,7 @@ const handleRecurso = asyncHandler(async (req, res) => {
     
                 await user.save()
     
-                res.json({ ...user._doc, token: generateToken(user._id) })
+                res.json(user)
         }
 
     }catch(error){
@@ -290,6 +298,51 @@ const becomeProducer = asyncHandler(async (req, res) => {
 })
 
 
+// associção ter acesso produtor
+const associateProducer = asyncHandler(async (req, res) => {
+    try {
+        const { id } = req.body;
+
+        if (!id) {
+            res.status(400).json({ error: 'Informe o id do usuário' });
+            return;
+        }
+
+        const user = await User.findById(id);
+
+        if (!user) {
+            res.status(404).json({ error: 'Usuário não encontrado' });
+            return;
+        }
+
+        if(user.oldRole === 'produtor'){
+            res.status(400).json({ error: 'Usuário já é produtor' });
+            return;
+        }
+
+        if (user.oldRole) {
+            user.role = user.oldRole;
+            user.oldRole = '';
+
+            await user.save();
+
+            res.json(user)
+            return;
+        }
+
+        user.oldRole = user.role;
+        user.role = 'produtor';
+
+        await user.save();
+        
+        res.json(user)
+        return;
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Erro ao associar produtor' });
+    }
+});
 
 
 
@@ -298,7 +351,7 @@ const becomeProducer = asyncHandler(async (req, res) => {
 // gerar token
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
-        expiresIn: '30d'
+        expiresIn: '1d'
     })
 }
 
@@ -311,5 +364,6 @@ module.exports = {
     addProfilePhoto,
     restartAprove,
     handleRecurso,
-    becomeProducer
+    becomeProducer,
+    associateProducer
 }

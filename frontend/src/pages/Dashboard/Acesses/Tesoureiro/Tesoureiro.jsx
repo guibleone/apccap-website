@@ -6,6 +6,7 @@ import { resetSpreadSheet, getSpreadSheets } from '../../../../features/spreadSh
 import ConcludedSpread from './ConcludedSpread'
 import AddExcelSpread from './AddExcelSpread'
 import { useNavigate } from 'react-router-dom'
+import ButtonChangeRole from '../../../../components/ChangeRole/ButtonChangeRole'
 
 export default function Tesoureiro() {
   const navigate = useNavigate()

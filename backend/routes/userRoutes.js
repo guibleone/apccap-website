@@ -1,5 +1,7 @@
 const express = require('express')
-const { registerUser, loginUser, deleteUser, updateUser, addProfilePhoto, restartAprove, handleRecurso, becomeProducer  } = require('../controllers/userControllers.js')
+const { registerUser, loginUser, deleteUser, 
+    updateUser, addProfilePhoto, restartAprove, 
+    handleRecurso, becomeProducer, associateProducer  } = require('../controllers/userControllers.js')
 const { protect, hasRole } = require('../middlewares/authMiddleware.js')
 const { uploadProfilePhoto, uploadRelatory } = require('../middlewares/multer.js')
 
@@ -13,6 +15,8 @@ router.post('/foto/:id', protect, uploadProfilePhoto.single("pathFoto"), addProf
 router.post('/recurso/:id', protect, uploadRelatory.single("path"), handleRecurso)
 router.post('/become-producer', hasRole('user'), becomeProducer)
 
+// associação ter accesso de produtor
+router.post('/associate-producer', hasRole(['produtor','presidente', 'secretario', 'conselho','tesoureiro']), associateProducer)
 
 // rotas DELETE
 router.delete('/:id', deleteUser)

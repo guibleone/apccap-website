@@ -9,6 +9,7 @@ import { reset as resetSpreadsheet } from "../../features/spreadSheet/spreadShee
 import { Button, Container, Box, Typography, CssBaseline, Avatar, Grid } from '@mui/material'
 import { useMediaQuery } from "@mui/material"
 import NavMenu from "./NavMenu"
+import ButtonChangeRole from "../ChangeRole/ButtonChangeRole"
 
 
 function Navbar() {
@@ -130,6 +131,8 @@ function Navbar() {
                     sx={{ width: 36, height: 36 }} />
 
                 </Link>
+
+
                 <Button variant="outlined" color="error" sx={
                   {
                     color: 'inherit',
@@ -138,6 +141,11 @@ function Navbar() {
                   }
                 } onClick={onLogout}>Sair</Button>
 
+                {user && (
+                  ((user.role !== 'admin' ) || user.oldRole)
+                    ? <ButtonChangeRole />
+                    : null
+                )}
 
               </Box>
             </Box>

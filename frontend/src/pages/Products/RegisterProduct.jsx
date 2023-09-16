@@ -11,13 +11,15 @@ import { BiFile, BiTrashAlt } from 'react-icons/bi'
 import { styleError, styleSuccess } from '../toastStyles'
 import { useDropzone } from 'react-dropzone'
 import axios from 'axios'
+import { associateProducer } from '../../features/auth/authSlice'
+import ButtonChangeRole from '../../components/ChangeRole/ButtonChangeRole'
 
 function RegisterProduct() {
   
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const { user } = useSelector(state => state.auth)
+  const { user, isLoading: isLoadingAuth } = useSelector(state => state.auth)
 
   const { isLoading, isError, message, isSuccess, isSuccessSelos, selos } = useSelector(state => state.products)
   const { payments } = useSelector(state => state.payments)
@@ -242,6 +244,7 @@ function RegisterProduct() {
       });
   };
 
+
   if (isLoaded) {
     return <Box sx={
       {
@@ -281,6 +284,7 @@ function RegisterProduct() {
         minHeight: '100vh',
       }
     }>
+
       <Typography sx={{ textAlign: 'center', margin: '20px 0' }} variant={matches ? 'h5' : 'h5'}>Cadastrar Produto</Typography>
 
       <Grid container spacing={2}>

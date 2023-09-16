@@ -34,6 +34,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: "user"
     },
+    oldRole: {
+        type: String,
+    },
     status: {
         type: String,
         default: '',
@@ -46,6 +49,10 @@ const userSchema = new mongoose.Schema({
     selos: {
         startSelo: { type: String, default: '' },
         endSelo: { type: String, default: '' },
+    },
+    token: {
+        type: String,
+        default: ''
     },
     sequence_value: { type: Number },
     relatory: { type: String },
