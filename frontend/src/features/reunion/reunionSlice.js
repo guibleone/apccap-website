@@ -75,11 +75,11 @@ export const addReunionAta = createAsyncThunk('reunion/addReunionAta', async (re
     }
 })
 
-// deletar ata de reunião
+// assinar ata
 
-export const deleteReunionAta = createAsyncThunk('reunion/deleteReunionAta', async (reunion, thunkAPI) => {
+export const signAta = createAsyncThunk('reunion/signAta', async (reunion, thunkAPI) => {
     try {
-        const response = await reunionService.deleteReunionAta(reunion);
+        const response = await reunionService.signAta(reunion);
         thunkAPI.dispatch(getReunions(reunion.token));
         return response;
     }
@@ -91,7 +91,21 @@ export const deleteReunionAta = createAsyncThunk('reunion/deleteReunionAta', asy
     }
 })
 
+// deletar reunião
 
+export const deleteReunion = createAsyncThunk('reunion/deleteReunion', async (reunion, thunkAPI) => {
+    try {
+        const response = await reunionService.deleteReunion(reunion);
+        thunkAPI.dispatch(getReunions(reunion.token));
+        return response;
+    }
+    catch (error) {
+        // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message);
+
+    }
+})
 
 
 export const reunionSlice = createSlice({
@@ -184,20 +198,39 @@ export const reunionSlice = createSlice({
                 state.isError = true;
                 state.message = action.payload;
             })
-            // deletar ata da reunião
-            .addCase(deleteReunionAta.pending, (state) => {
+            // assinar ata da reunião
+            .addCase(signAta.pending, (state) => {
                 state.isLoading = true;
                 state.isSuccess = false;
                 state.isError = false;
                 state.message = '';
             })
-            .addCase(deleteReunionAta.fulfilled, (state, action) => {
+            .addCase(signAta.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.isSuccess = true;
                 state.isError = false;
-                state.message = 'Ata deletada com sucesso'
+                state.message = 'Ata assinada com sucesso'
             })
-            .addCase(deleteReunionAta.rejected, (state, action) => {
+            .addCase(signAta.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = false;
+                state.isError = true;
+                state.message = action.payload;
+            })
+            // deletar reunião
+            .addCase(deleteReunion.pending, (state) => {
+                state.isLoading = true;
+                state.isSuccess = false;
+                state.isError = false;
+                state.message = '';
+            })
+            .addCase(deleteReunion.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.isError = false;
+                state.message = 'Reunião deletada com sucesso'
+            })
+            .addCase(deleteReunion.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isSuccess = false;
                 state.isError = true;

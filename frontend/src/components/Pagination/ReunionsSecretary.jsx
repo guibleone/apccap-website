@@ -12,7 +12,7 @@ export default function ReunionPaginationSecretary({ setReunionData }) {
             return new Promise((resolve, reject) => {
                 
                 const filteredData = reunionData
-                    .filter((reunion) => reunion.status === 'concluida')
+                    .filter((reunion) => reunion.status === 'nao_assinada')
                     .sort((a, b) => new Date(a.date) - new Date(b.date));
 
                 const data = filteredData.slice(from, to);

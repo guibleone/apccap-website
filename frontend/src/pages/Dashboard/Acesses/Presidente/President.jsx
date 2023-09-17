@@ -11,11 +11,12 @@ import { sendConvocationEmail, resetEmailStatus } from '../../../../features/adm
 import { styleError, styleSuccess } from '../../../toastStyles'
 import UsersCredenciados from './UsersCredenciados';
 import { useNavigate } from 'react-router-dom';
-import { createReunion, finishReunion, getReunions } from '../../../../features/reunion/reunionSlice';
+import { createReunion, finishReunion, getReunions, signAta } from '../../../../features/reunion/reunionSlice';
 import ReunionPagination from '../../../../components/Pagination/Reunions';
 import { BsTrash } from 'react-icons/bs'
 import { associateProducer } from '../../../../features/auth/authSlice';
 import ButtonChangeRole from '../../../../components/ChangeRole/ButtonChangeRole';
+import Reunion from '../../../../components/Reunions/Reunion';
 registerLocale('pt-BR', ptBR)
 setDefaultLocale('ptBR')
 
@@ -83,17 +84,6 @@ export default function President() {
     //dispatch(sendConvocationEmail({ message, date: startDate.toLocaleString(), typeReunion, title }))
   }
 
-  // concluir reunião
-  const handleFinishReunion = (id) => {
-
-    const reunions = {
-      id,
-      token: user.token
-    }
-
-    dispatch(finishReunion(reunions))
-
-  }
 
 
   // pegar reuniões
@@ -181,105 +171,8 @@ export default function President() {
 
       <Divider orientation='vertical' flexItem sx={{ m: 2 }} />
 
-      <Grid container spacing={2}>
-        <Grid item xs={12} lg={12}>
-          <Typography textAlign={'center'} variant='h5'>Reuniões Convocadas</Typography>
-        </Grid>
 
-        {reunions && reunions.length > 0 ?
-          reunions
-            .map((reunion, index) => (
-              <Grid item sm={12} lg={3} key={index}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  <Typography variant='h6'>{reunion.title}</Typography>
-                  <Typography variant='h7'>Data: {reunion.date}</Typography>
-                  <Typography variant='h7'>Tipo: {reunion.type}</Typography>
-                  <Box sx={{ display: 'flex', gap: '10px' }}>
-
-                    {reunion.status === 'concluida' && reunion.ata && reunion.ata.path &&
-                      <>
-                        <Button variant='outlined' color='warning' href={reunion.ata && reunion.ata.path} target='_blank' >Ver ata</Button>
-                        <Button variant='outlined' color='error' startIcon={<BsTrash />} >Excluir</Button>
-                      </>
-                    }
-
-                    {reunion.status === 'concluida' && !reunion.ata &&
-                      <Alert severity="warning">Reunião sem ata</Alert>
-                    }
-
-                    {reunion.status === 'agendada' && <Button variant='outlined' color='success' onClick={() => handleFinishReunion(reunion._id)} >Concluir</Button>}
-
-
-                  </Box>
-                </Box>
-
-              </Grid>
-            ))
-          :
-          <Grid item sm={12} lg={3}>
-            <Typography variant='h7'>Nenhuma reunião marcada</Typography>
-          </Grid>
-        }
-
-
-        <Grid container spacing={2} sx={{ margin: '20px 0' }} >
-
-          <Grid item xs={12} lg={4}>
-            <TextField
-              value={selectStatus}
-              onChange={(e) => setSelectStatus(e.target.value)}
-              select
-              label="Status"
-              fullWidth
-            >
-              <MenuItem key={0} value=''>Todos</MenuItem>
-              <MenuItem key={1} value='concluida'>Concluída</MenuItem>
-              <MenuItem key={2} value='agendada'>Agendada</MenuItem>
-
-            </TextField>
-
-          </Grid>
-
-          <Grid item xs={12} lg={4}>
-            <TextField
-              value={selectedType}
-              onChange={(e) => setSelectType(e.target.value)}
-              select
-              label="Tipo de Reunião"
-              fullWidth
-            >
-              <MenuItem key={0} value=''>Todos</MenuItem>
-              <MenuItem key={1} value='administrativa'>Administrativa</MenuItem>
-              <MenuItem key={2} value='assembleia_ordinal'>Assembleia Ordinária</MenuItem>
-              <MenuItem key={3} value='assembleia_extraordinaria'>Assembleia Extraordinária</MenuItem>
-
-            </TextField>
-
-          </Grid>
-
-          <Grid item xs={12} lg={4}>
-            <TextField
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              select
-              label="Data da Reunião"
-              fullWidth
-            >
-              <MenuItem key={0} value=''>Todos</MenuItem>
-              <MenuItem key={1} value='antiga'>Da mais antiga</MenuItem>
-              <MenuItem key={2} value='nova'>Da mais nova</MenuItem>
-            </TextField>
-
-          </Grid>
-
-        </Grid>
-
-      </Grid>
-
-
-
-
-      <ReunionPagination setReunionData={(r) => setReunions(r)} status={selectStatus} type={selectedType} date={selectedDate} />
+      <Reunion />
 
 
 

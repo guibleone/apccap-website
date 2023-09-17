@@ -7,6 +7,7 @@ import ConcludedSpread from './ConcludedSpread'
 import AddExcelSpread from './AddExcelSpread'
 import { useNavigate } from 'react-router-dom'
 import ButtonChangeRole from '../../../../components/ChangeRole/ButtonChangeRole'
+import Reunion from '../../../../components/Reunions/Reunion'
 
 export default function Tesoureiro() {
   const navigate = useNavigate()
@@ -45,6 +46,8 @@ export default function Tesoureiro() {
       <Divider sx={{ margin: '20px 0' }} />
 
       <Button sx={{margin:'20px 0'}}fullWidth onClick={()=>navigate('/balancete')} variant='outlined' color='success'>Faturamento</Button>
+
+      <Reunion />
 
     </Box>
   )

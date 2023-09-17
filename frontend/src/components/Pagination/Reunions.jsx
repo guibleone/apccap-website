@@ -1,10 +1,12 @@
 import { Box, Pagination } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useSelector } from "react-redux"
+import { getReunions } from '../../features/reunion/reunionSlice'
+import { useDispatch } from 'react-redux'
 
 
-export default function ReunionPagination({ setReunionData, status, type, date }) {
-    console.log(date)
+export default function ReunionPagination({ setReunionData, status, type, date, token }) {
+    const dispatch = useDispatch()
 
     const { reunionData } = useSelector((state) => state.reunions)
 
@@ -15,6 +17,14 @@ export default function ReunionPagination({ setReunionData, status, type, date }
         from: 0,
         to: pageSize,
     });
+
+        // pegar reuniões
+        useEffect(() => {
+
+            dispatch(getReunions(token))
+    
+        }, [token])
+    
 
     useEffect(() => {
 

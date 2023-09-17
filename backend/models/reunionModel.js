@@ -23,6 +23,14 @@ const reunionSchema = mongoose.Schema({
         type: String,
         required: false
     },
+    assinaturas: {
+        type: Array,
+        required: false
+    },
+    assinaturas_faltantes: {
+        type: Number,
+        required: false
+    },
     ata:{
         path: {
             type: String,

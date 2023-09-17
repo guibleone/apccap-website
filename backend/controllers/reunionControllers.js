@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const Reunion = require('../models/reunionModel.js');
+const User = require('../models/userModel.js');
 const { ref, getDownloadURL, uploadBytesResumable, deleteObject } = require("firebase/storage");
 const { storage } = require('../db/firebase.js');
 
@@ -38,11 +39,8 @@ const getReunions = asyncHandler(async (req, res) => {
     try {
         const reunions = await Reunion.find({}).sort({ date: 1 });
 
-        if (reunions.length > 0) {
-            res.json(reunions);
-        } else {
-            res.status(404).json({ message: 'Reuniões não encontradas' });
-        }
+        res.json(reunions)
+
     } catch (error) {
         res.status(500).json({ message: 'Erro ao buscar reuniões' });
     }
@@ -57,7 +55,7 @@ const finishReunion = asyncHandler(async (req, res) => {
         const reunion = await Reunion.findById(id)
 
         if (reunion) {
-            reunion.status = 'concluida'
+            reunion.status = 'requer_ata'
             await reunion.save()
             res.json({ message: 'Reunião concluída' })
         } else {
@@ -75,6 +73,7 @@ const finishReunion = asyncHandler(async (req, res) => {
 const addReunionAta = asyncHandler(async (req, res) => {
 
     const reunion = await Reunion.findById(req.params.id)
+    const numberAssociates = await User.countDocuments({ role: { $in: ['presidente', 'secretario', 'tesoureiro', 'conselho'] } });
 
     if (!req.file) {
         res.status(400)
@@ -103,12 +102,62 @@ const addReunionAta = asyncHandler(async (req, res) => {
 
     reunion.ata.path = url
     reunion.ata.originalname = req.file.originalname
+    reunion.assinaturas_faltantes = numberAssociates
+    reunion.status = 'nao_assinada'
 
     await reunion.save()
 
-    res.json('Ata adicionada com sucesso')
+    res.status(200).json('Ata adicionada com sucesso')
 
 })
+
+
+const signAta = asyncHandler(async (req, res) => {
+    try {
+        const { id, role } = req.body
+
+        if (!id || !role) {
+            res.status(400)
+            throw new Error('Dados inválidos')
+        }
+
+        const reunion = await Reunion.findById(id)
+
+        // produtor assina ata ?
+        const numberAssociates = await User.countDocuments({ role: { $in: ['presidente', 'secretario', 'tesoureiro', 'conselho'] } });
+
+
+        if (reunion.assinaturas.includes(role)) {
+            res.status(400)
+            throw new Error('Você já assinou a ata')
+        }
+
+        if (reunion.status === 'assinada') {
+            res.status(400)
+            throw new Error('Ata já assinada')
+        }
+
+        reunion.assinaturas.push(role)
+        reunion.assinaturas_faltantes -= 1
+
+        if (reunion.assinaturas.length === numberAssociates) {
+            reunion.status = 'assinada'
+            reunion.assinaturas_faltantes = 0
+
+            await reunion.save()
+        }
+
+        await reunion.save()
+
+        res.status(200).json(reunion)
+
+
+    } catch (error) {
+        res.status(500)
+        throw new Error('Erro ao assinar ata')
+    }
+})
+
 
 // deletar ata
 
@@ -128,7 +177,7 @@ const deleteReunionAta = asyncHandler(async (req, res) => {
 
         await reunion.save()
 
-        res.json('Ata deletada' )
+        res.json('Ata deletada')
 
     } catch (error) {
         res.status(500)
@@ -136,7 +185,6 @@ const deleteReunionAta = asyncHandler(async (req, res) => {
     }
 
 })
-
 
 // deletar reunião
 
@@ -146,15 +194,14 @@ const deleteReunion = asyncHandler(async (req, res) => {
 
         const reunion = await Reunion.findById(id)
 
-        if (reunion.ata.path) {
+        if (reunion && reunion.ata.path) {
             const storageRef = ref(storage, `reunionsAtas/${reunion._id}/${reunion.ata.originalname}`)
             await deleteObject(storageRef)
         }
 
-        reunion.remove()
-        await reunion.save()
+        await Reunion.findByIdAndDelete(id)
 
-        res.json({ message: 'Reunião deletada' })
+        res.status(200).json({ message: 'Reunião deletada' })
 
     } catch (error) {
         res.status(500)
@@ -164,7 +211,8 @@ const deleteReunion = asyncHandler(async (req, res) => {
 
 
 
-module.exports = { 
-    createReunion, getReunions, finishReunion, 
-    addReunionAta, deleteReunion,deleteReunionAta 
+module.exports = {
+    createReunion, getReunions, finishReunion,
+    addReunionAta, deleteReunion, deleteReunionAta,
+    signAta
 }

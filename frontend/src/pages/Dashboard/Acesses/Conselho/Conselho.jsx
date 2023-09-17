@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import UsersPagination from '../../../../components/Pagination/Users'
 import { getProducts } from '../../../../features/products/productsSlice'
 import ButtonChangeRole from '../../../../components/ChangeRole/ButtonChangeRole'
+import Reunion from '../../../../components/Reunions/Reunion'
 
 
 export default function Conselho() {
@@ -92,6 +93,8 @@ export default function Conselho() {
                 <Divider sx={{ margin: '10px 0' }} />
 
             </Grid>
+
+            <Reunion  />
 
 
 

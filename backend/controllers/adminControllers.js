@@ -601,6 +601,7 @@ const approveRecurso = asyncHandler(async (req, res) => {
         throw new Error('Erro ao aprovar recurso')
     }
 })
+
 // reprovar recurso
 const repproveRecurso = asyncHandler(async (req, res) => {
     try {
@@ -629,8 +630,6 @@ const repproveRecurso = asyncHandler(async (req, res) => {
         throw new Error('Erro ao reprovar recurso')
     }
 })
-
-
 
 
 module.exports = {

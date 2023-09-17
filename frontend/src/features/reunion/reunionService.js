@@ -76,32 +76,54 @@ const addReunionAta = async (reunionData) => {
 
 }
 
-// deletar ata de reunião
+// assinar ata
 
-const deleteReunionAta = async (reunionData) => {
-    
+const signAta = async (reunionData) => {
+
     let token = reunionData.token
 
     // pegar o token do usuário
 
     const config = {
-        headers: { 
+        headers: {
             Authorization: `Bearer ${token}`,
         },
     }
 
-    const response = await axios.post(API_URL + '/delete-ata/' + reunionData.id, reunionData, config);
+    const response = await axios.post(API_URL + '/sign-ata', reunionData, config);
     return response.data;
 
 }
 
+// delete reunião
+
+const deleteReunion = async (reunionData) => {
+
+    let token = reunionData.token
+
+    // pegar o token do usuário
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+
+    const response = await axios.delete(API_URL + '/' + reunionData.id, config);
+    return response.data;
+
+}
+
+    
 
 const reunionService = {
     createReunion,
     getReunions,
     finishReunion,
     addReunionAta,
-    deleteReunionAta
+    signAta,
+    deleteReunion
+    
 }
 
 export default reunionService;
