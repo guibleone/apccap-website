@@ -1,4 +1,4 @@
-import { Box, Grid, Typography, Button, MenuItem, TextField, Alert, Modal, useMediaQuery, CircularProgress } from '@mui/material'
+import { Box, Grid, Typography, Button, MenuItem, TextField, Alert, Modal, useMediaQuery, CircularProgress, Link } from '@mui/material'
 import React, { useCallback } from 'react'
 import ReunionPagination from '../Pagination/Reunions'
 import { useEffect, useState } from 'react'
@@ -10,9 +10,8 @@ import { addReunionAta } from '../../features/reunion/reunionSlice'
 import { useDropzone } from 'react-dropzone'
 import { AiFillBook, AiFillWarning, AiOutlineDropbox } from 'react-icons/ai'
 import { reset } from '../../features/reunion/reunionSlice'
-import { BsTrash } from 'react-icons/bs'
-
-
+import { BsPen, BsTrash } from 'react-icons/bs'
+import { FcCheckmark, FcCancel } from 'react-icons/fc'
 
 
 export default function Reunion() {
@@ -49,6 +48,9 @@ export default function Reunion() {
     const [selectStatus, setSelectStatus] = useState('')
     const [selectedType, setSelectType] = useState('')
     const [selectedDate, setSelectedDate] = useState('')
+    const [assinaturas, setAssinaturas] = useState([])
+
+    const expectedAssinaturs = ["secretario", 'conselho', 'presidente', 'tesoureiro']
 
     const [openAta, setOpeneAta] = useState(false)
     const handleOpenAta = () => setOpeneAta(!openAta)
@@ -56,7 +58,12 @@ export default function Reunion() {
     const [openDelete, setOpenDelete] = useState(false)
     const handleOpenDelete = () => setOpenDelete(!openDelete)
 
+    const [openDetailsSign, setOpenDetailsSign] = useState(false)
+    const handleOpenDetailsSign = () => setOpenDetailsSign(!openDetailsSign)
+
     const { user } = useSelector((state) => state.auth)
+    const { payments } = useSelector((state) => state.payments)
+
     const dispatch = useDispatch()
 
 
@@ -147,7 +154,6 @@ export default function Reunion() {
 
     }, [isError, isSuccess])
 
-
     return (
         <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
@@ -163,7 +169,13 @@ export default function Reunion() {
                                     <Typography variant='h6'>{reunion.title}</Typography>
                                     <Typography variant='h7'>Data: {reunion.date}</Typography>
                                     <Typography variant='h7'>Tipo: {reunion.type}</Typography>
-                                    {(reunion.ata && reunion.assinaturas_faltantes > 0) && <Typography variant='h7'>Assinaturas Restantes: {reunion.assinaturas_faltantes}</Typography>}
+                                    {(reunion.ata && reunion.assinaturas_faltantes > 0) &&
+                                        <Box sx={{ display: 'flex', gap: '5px' }}>
+                                            <Link sx={{ cursor: 'pointer' }} onClick={() => { handleOpenDetailsSign(); setAssinaturas(reunion.assinaturas) }}>
+                                                Assinaturas Restantes
+                                            </Link>
+                                        </Box>}
+
                                     <Box sx={{ display: 'flex', gap: '10px' }}>
 
                                         {user.role === 'presidente' && <>
@@ -416,6 +428,47 @@ export default function Reunion() {
                                 {isLoading ? <CircularProgress color="success" size={24} /> : 'Deletar'}
                             </Button>
 
+                        </Box>
+                    </Box>
+                </Box>
+            </Modal>
+
+
+            <Modal
+                open={openDetailsSign}
+            >
+                <Box sx={style}>
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '10px',
+                    }}>
+
+                        <Box display={'flex'} justifyContent={'space-between'}>
+                            <Typography variant="h6" >Status das assinaturas </Typography>
+                            <BsPen size={30} />
+                        </Box>
+
+
+                        {assinaturas && assinaturas.length > 0 ?
+                            expectedAssinaturs.map((assinatura, index) => (
+                                <Box key={index} sx={{ display: 'flex', gap: '5px' }}>
+                                    <Typography variant='p'>{assinatura.charAt(0).toUpperCase() + assinatura.slice(1)}
+                                        {assinaturas.includes(assinatura) ?
+                                            <FcCheckmark style={{ verticalAlign: 'bottom' }} size={30} />
+                                            :
+                                            <FcCancel style={{ verticalAlign: 'bottom' }} size={30} />
+                                        }
+                                    </Typography>
+                                </Box>
+                            ))
+                            :
+                            <Typography variant='p'>Nenhuma assinatura</Typography>
+                        }
+
+
+                        <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+                            <Button color='info' variant='outlined' onClick={handleOpenDetailsSign}>Voltar</Button>
                         </Box>
                     </Box>
                 </Box>
