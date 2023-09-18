@@ -8,15 +8,92 @@ const { storage } = require('../db/firebase.js');
 // criar reunião
 const createReunion = asyncHandler(async (req, res) => {
     try {
-        const { title, message, date, typeReunion } = req.body
+
+        const { title, message, date, typeReunion, pautas } = req.body
+
+        let type = ''
+
+        const nomeMembros = []
 
         if (typeReunion.administrativa) {
             type = 'administrativa'
+
+            const associates = await User.find({ role: { $in: ['presidente', 'secretario', 'tesoureiro', 'conselho'] } })
+
+            associates.forEach(associate => {
+                nomeMembros.push(`${associate.name} - ${associate.role}`)
+            })
+        }
+
+        if (typeReunion.assembleia_ordinal) {
+            type = 'assembleia_ordinal'
+
+            const associates = await User.find({ role: { $in: ['presidente', 'secretario', 'tesoureiro', 'conselho', 'produtor'] } })
+
+            associates.forEach(associate => {
+                nomeMembros.push(`${associate.name} - ${associate.role}`)
+            })
+        }
+
+        if (typeReunion.assembleia_extraordinaria) {
+            type = 'assembleia_extraordinaria'
+
+            const associates = await User.find({ role: { $in: ['presidente', 'secretario', 'tesoureiro', 'conselho', 'produtor'] } })
+
+            associates.forEach(associate => {
+                nomeMembros.push(`${associate.name} - ${associate.role}`)
+            })
+        }
+
+        const reunion = await Reunion.create({
+            title,
+            message,
+            date,
+            type,
+            status: 'agendada',
+            membros: {
+                convocados: nomeMembros,
+                presentes: [],
+                faltantes: []
+            },
+            pautas: pautas?.map(pauta => {
+                return {
+                    nome: pauta.nome,
+                    descricao: pauta.descricao,
+                    votos: []
+                }
+            })
+        })
+
+
+
+        res.json(reunion)
+
+        /*const { title, message, date, typeReunion } = req.body
+ 
+
+        const membros = {
+            nome:[],
+            role:[]
+        }
+
+        if (typeReunion.administrativa) {
+            type = 'administrativa'
+            associates = await User.find({ role: { $in: ['presidente', 'secretario', 'tesoureiro', 'conselho'] } })
         } else if (typeReunion.assembleia_ordinal) {
             type = 'assembleia_ordinal'
         } else if (typeReunion.assembleia_extraordinaria) {
             type = 'assembleia_extraordinaria'
         }
+
+
+        associates.forEach(associate => {
+            membros.push({
+                nome: associate.name,
+                role: associate.role,
+            })})
+
+        console.log(membros)
 
         const reunion = await Reunion.create({
             title,
@@ -26,7 +103,7 @@ const createReunion = asyncHandler(async (req, res) => {
             status: 'agendada'
         })
 
-        res.status(201).json(reunion)
+        res.status(201).json(reunion)*/
     }
     catch (error) {
         res.status(400)
@@ -209,10 +286,40 @@ const deleteReunion = asyncHandler(async (req, res) => {
     }
 })
 
+// lista de presença
 
+const presenceList = asyncHandler(async (req, res) => {
+    try {
+        const { presence } = req.body
+
+        const reunion = await Reunion.findById(req.params.id)
+
+        if (!reunion) {
+            res.status(404)
+            throw new Error('Reunião não encontrada')
+        }
+        for (const memberName in presence) {
+            if (Object.hasOwnProperty.call(presence, memberName) && presence[memberName]) {
+                reunion.membros.presentes.push(memberName)
+            }
+        }
+
+        reunion.membros.faltantes = reunion.membros.convocados.filter(member => !reunion.membros.presentes.includes(member))
+
+        await reunion.save()
+
+        res.status(200).json('Lista de presença atualizada')
+
+    }
+
+    catch (error) {
+        res.status(500)
+        throw new Error('Erro ao listar presença')
+    }
+})
 
 module.exports = {
     createReunion, getReunions, finishReunion,
     addReunionAta, deleteReunion, deleteReunionAta,
-    signAta
+    signAta, presenceList
 }

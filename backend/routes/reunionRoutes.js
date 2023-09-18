@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { hasRole } = require('../middlewares/authMiddleware.js')
-const { createReunion, getReunions, finishReunion, addReunionAta, deleteReunion, deleteReunionAta, signAta } = require('../controllers/reunionControllers.js')
+const { createReunion, getReunions, finishReunion, addReunionAta, deleteReunion, deleteReunionAta, signAta,presenceList } = require('../controllers/reunionControllers.js')
 const { uploadRelatory } = require('../middlewares/multer.js');
 
 // criar reunião
@@ -24,5 +24,8 @@ router.post('/sign-ata', signAta)
 
 // deletar reunião
 router.route('/:id').delete(hasRole('presidente'), deleteReunion)
+
+// lista de presença
+router.post('/presence/:id', presenceList)
 
 module.exports = router

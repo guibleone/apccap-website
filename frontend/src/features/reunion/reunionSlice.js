@@ -107,6 +107,21 @@ export const deleteReunion = createAsyncThunk('reunion/deleteReunion', async (re
     }
 })
 
+// lista de presença
+
+export const presenceList = createAsyncThunk('reunion/presenceList', async (reunion, thunkAPI) => {
+    try {
+        const response = await reunionService.presenceList(reunion);
+        thunkAPI.dispatch(getReunions(reunion.token));
+        return response;
+    }
+    catch (error) {
+        // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message);
+
+    }
+})
 
 export const reunionSlice = createSlice({
     name: 'reunion',
@@ -231,6 +246,25 @@ export const reunionSlice = createSlice({
                 state.message = 'Reunião deletada com sucesso'
             })
             .addCase(deleteReunion.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = false;
+                state.isError = true;
+                state.message = action.payload;
+            })
+            // lista de presença
+            .addCase(presenceList.pending, (state) => {
+                state.isLoading = true;
+                state.isSuccess = false;
+                state.isError = false;
+                state.message = '';
+            })
+            .addCase(presenceList.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.isError = false;
+                state.message = 'Lista de presença enviada'
+            })
+            .addCase(presenceList.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isSuccess = false;
                 state.isError = true;

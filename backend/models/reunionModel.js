@@ -23,14 +23,34 @@ const reunionSchema = mongoose.Schema({
         type: String,
         required: false
     },
-    assinaturas: {
-        type: Array,
-        required: false
+    membros:{
+        convocados:{
+            type: Array,
+            required: false
+        },
+        presentes:{
+            type: Array,
+            required: false
+        },
+        faltantes:{
+            type: Array,
+            required: false
+        }
     },
-    assinaturas_faltantes: {
-        type: Number,
-        required: false
-    },
+    pautas: [{
+        nome: {
+            type: String,
+            required: false
+        },
+        descricao: {
+            type: String,
+            required: false
+        },
+        votos: {
+            type: Array,
+            required: false
+        },
+    }],
     ata:{
         path: {
             type: String,
@@ -39,7 +59,15 @@ const reunionSchema = mongoose.Schema({
         originalname: {
             type: String,
             required: false
-        }
+        },
+        assinaturas: {
+            type: Array,
+            required: false
+        },
+        assinaturas_restantes: {
+            type: Array,
+            required: false
+        },
     },
     
 })

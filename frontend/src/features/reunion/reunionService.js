@@ -114,6 +114,26 @@ const deleteReunion = async (reunionData) => {
 
 }
 
+// lista de presença
+
+const presenceList = async (reunionData) => {
+
+    let token = reunionData.token
+
+    // pegar o token do usuário
+
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+    }
+
+    const response = await axios.post(API_URL + '/presence/' + reunionData.id, reunionData, config);
+    return response.data;
+
+}
+
     
 
 const reunionService = {
@@ -122,7 +142,8 @@ const reunionService = {
     finishReunion,
     addReunionAta,
     signAta,
-    deleteReunion
+    deleteReunion,
+    presenceList
     
 }
 
