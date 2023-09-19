@@ -50,8 +50,7 @@ export default function Reunion() {
     const [selectedDate, setSelectedDate] = useState('')
     const [assinaturas, setAssinaturas] = useState([])
     const [members, setMembers] = useState([])
-
-    const expectedAssinaturs = ["secretario", 'conselho', 'presidente', 'tesoureiro']
+    const [expectedAssinaturas, setExpectedAssinaturas] = useState([])
 
     const [openAta, setOpeneAta] = useState(false)
     const handleOpenAta = () => setOpeneAta(!openAta)
@@ -203,9 +202,9 @@ export default function Reunion() {
                                     <Typography variant='h7'>Data: {reunion.date}</Typography>
                                     <Typography variant='h7'>Tipo: {reunion.type}</Typography>
 
-                                   {(reunion.ata.path && reunion.ata.assinaturas_restantes > 0) &&
-                                      <Box sx={{ display: 'flex', gap: '5px' }}>
-                                            <Link sx={{ cursor: 'pointer' }} onClick={() => { handleOpenDetailsSign(); setAssinaturas(reunion.assinaturas) }}>
+                                    {(reunion.ata.path && reunion.ata.assinaturas_restantes.length > 0) &&
+                                        <Box sx={{ display: 'flex', gap: '5px' }}>
+                                            <Link sx={{ cursor: 'pointer' }} onClick={() => { handleOpenDetailsSign(); setAssinaturas(reunion.ata.assinaturas); setExpectedAssinaturas(reunion.membros.presentes) }}>
                                                 Assinaturas Restantes
                                             </Link>
                                         </Box>}
@@ -217,21 +216,29 @@ export default function Reunion() {
                                                 <>
                                                     <Button variant='outlined' color='warning' href={reunion.ata && reunion.ata.path} target='_blank' >Ver ata</Button>
 
-                                                    {!reunion.ata.assinaturas.includes((`${user.name} - ${user.role}`)) && reunion.membros.presentes.includes(`${user.name} - ${user.role}`) ? <Button variant='outlined' color='success' onClick={() => {
+                                                    {reunion.ata.path && !reunion.ata.assinaturas.includes((`${user.name} - ${user.role}`)) && reunion.membros.presentes.includes(`${user.name} - ${user.role}`) &&
 
-                                                        const reunionData = {
-                                                            id: reunion._id,
-                                                            role: user.role,
-                                                            token: user.token
-                                                        }
+                                                        <Button variant='outlined' color='success' onClick={() => {
+                                                            const reunionData = {
+                                                                id: reunion._id,
+                                                                memberName: `${user.name} - ${user.role}`,
+                                                                token: user.token
+                                                            }
 
-                                                        dispatch(signAta(reunionData))
+                                                            dispatch(signAta(reunionData))
 
-                                                    }} >Assinar</Button> :
-                                                        <Alert severity="success" >
-                                                            <Typography variant='h7'>Assinado</Typography>
-                                                        </Alert>
+                                                        }} >Assinar</Button>
                                                     }
+
+                                                    {!reunion.ata === 'assinada' && reunion.ata.assinaturas.includes(`${user.name} - ${user.role}`) &&
+                                                        <Grid item xs={12} lg={7}>
+                                                            <Alert severity="success" >
+                                                                Assinado
+                                                            </Alert>
+                                                        </Grid>
+                                                    }
+
+
                                                 </>
                                             }
 
@@ -253,47 +260,57 @@ export default function Reunion() {
                                         </>}
 
                                         {user.role === 'secretario' &&
-                                            <>
+                                            <Grid container spacing={2}>
                                                 {reunion.ata && reunion.ata.path ?
-                                                    <>
+                                                    <Grid item xs={12} lg={12}>
                                                         <Button variant='outlined' color='warning' href={reunion.ata && reunion.ata.path} target='_blank' >Visualizar</Button>
-                                                    </>
+                                                    </Grid>
                                                     :
                                                     <Box>
 
-                                                        {reunion.membros && reunion.membros.convocados.length > 0 && !reunion.membros.presentes &&
+                                                        {reunion.membros && reunion.membros.convocados.length > 0 && reunion.membros.presentes.length < 1 ?
                                                             <Button variant='outlined' color='warning'
                                                                 onClick={() => { handleOpenList(); setMembers(reunion.membros.convocados); setId(reunion._id) }} >
                                                                 Lista de Presença</Button>
+                                                            :
+                                                            <Button variant='outlined' color='success' onClick={() => { handleOpenAta(); setFile(null); setId(reunion._id) }} >Adicionar Ata</Button>
                                                         }
-
-                                                        <Button disabled={reunion.membros.presentes <= 0} variant='outlined' color='success' onClick={() => { handleOpenAta(); setFile(null); setId(reunion._id) }} >Adicionar Ata</Button>
-
                                                     </Box>
                                                 }
 
 
+                                                {reunion.ata.path && !reunion.ata.assinaturas.includes((`${user.name} - ${user.role}`)) && reunion.membros.presentes.includes(`${user.name} - ${user.role}`) &&
 
-                                                {reunion.ata.path && !reunion.ata.assinaturas.includes((`${user.name} - ${user.role}`)) && reunion.membros.presentes.includes(`${user.name} - ${user.role}`) && <Button variant='outlined' color='success' onClick={() => {
+                                                    <Button variant='outlined' color='success' onClick={() => {
+                                                        const reunionData = {
+                                                            id: reunion._id,
+                                                            memberName: `${user.name} - ${user.role}`,
+                                                            token: user.token
+                                                        }
 
-                                                    const reunionData = {
-                                                        id: reunion._id,
-                                                        role: user.role,
-                                                        token: user.token
-                                                    }
+                                                        dispatch(signAta(reunionData))
 
-                                                    dispatch(signAta(reunionData))
-
-                                                }} >Assinar</Button>
+                                                    }} >Assinar</Button>
                                                 }
 
-                                                {reunion.ata.assinaturas.includes(user.role) &&
-                                                    <Alert severity="success" >
-                                                        <Typography variant='h7'>Assinado</Typography>
-                                                    </Alert>
+                                                {!reunion.ata === 'assinada' && reunion.ata.assinaturas.includes(`${user.name} - ${user.role}`) &&
+                                                    <Grid item xs={12} lg={7}>
+                                                        <Alert severity="success" >
+                                                            Assinado
+                                                        </Alert>
+                                                    </Grid>
                                                 }
 
-                                            </>}
+
+                                                {reunion.status === 'assinada' &&
+                                                    <Grid item xs={12} lg={12}>
+                                                        <Alert severity="success">Ata Assinada</Alert>
+                                                    </Grid>
+
+                                                }
+
+
+                                            </Grid>}
 
                                         {user.role !== 'presidente' && user.role !== 'secretario' &&
                                             <>
@@ -303,7 +320,7 @@ export default function Reunion() {
                                                     </>
                                                 }
 
-                                                {!reunion.ata.assinaturas.includes((`${user.name} - ${user.role}`)) && reunion.membros.presentes.includes(`${user.name} - ${user.role}`) && reunion.ata && <Button variant='outlined' color='success' onClick={() => {
+                                                {!reunion.ata.assinaturas.includes((`${user.name} - ${user.role}`)) && reunion.membros.presentes.includes(`${user.name} - ${user.role}`) && reunion.ata.path && <Button variant='outlined' color='success' onClick={() => {
 
                                                     const reunionData = {
                                                         id: reunion._id,
@@ -316,7 +333,7 @@ export default function Reunion() {
                                                 }} >Assinar</Button>
                                                 }
 
-                                                {reunion.ata.assinaturas.includes(user.role) &&
+                                                {reunion.ata.assinaturas.includes((`${user.name} - ${user.role}`)) &&
                                                     <Alert severity="success" >
                                                         <Typography variant='h7'>Assinado</Typography>
                                                     </Alert>
@@ -480,7 +497,7 @@ export default function Reunion() {
             </Modal>
 
 
-            {/*  <Modal
+            {<Modal
                 open={openDetailsSign}
             >
                 <Box sx={style}>
@@ -495,12 +512,11 @@ export default function Reunion() {
                             <BsPen size={30} />
                         </Box>
 
-
                         {assinaturas && assinaturas.length > 0 ?
-                            expectedAssinaturs.map((assinatura, index) => (
+                            expectedAssinaturas.map((assinatura, index) => (
                                 <Box key={index} sx={{ display: 'flex', gap: '5px' }}>
                                     <Typography variant='p'>{assinatura.charAt(0).toUpperCase() + assinatura.slice(1)}
-                                        {assinaturas.membros.convocados.includes(assinatura) ?
+                                        {assinaturas.includes(assinatura) ?
                                             <FcCheckmark style={{ verticalAlign: 'bottom' }} size={30} />
                                             :
                                             <FcCancel style={{ verticalAlign: 'bottom' }} size={30} />
@@ -519,7 +535,7 @@ export default function Reunion() {
                     </Box>
                 </Box>
             </Modal>
-                     */}
+            }
 
 
             <Modal
@@ -533,32 +549,32 @@ export default function Reunion() {
                     </Box>
 
                     <Box sx={{ maxHeight: '300px' }}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                        {members && members.length > 0 ? (
-                            members.map((member, index) => (
-                                <Box key={index} sx={{ display: 'flex', gap: '5px' }}>
-                                    <Typography variant="body1">
-                                        {member}
-                                        <Checkbox
-                                            checked={presence[member] || false}
-                                            onChange={() => togglePresence(member)}
-                                        />
-                                    </Typography>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                            {members && members.length > 0 ? (
+                                members.map((member, index) => (
+                                    <Box key={index} sx={{ display: 'flex', gap: '5px' }}>
+                                        <Typography variant="body1">
+                                            {member}
+                                            <Checkbox
+                                                checked={presence[member] || false}
+                                                onChange={() => togglePresence(member)}
+                                            />
+                                        </Typography>
 
-                                </Box>
-                            ))
-                        ) : (
-                            <Typography variant="body1">Nenhum membro</Typography>
-                        )}
+                                    </Box>
+                                ))
+                            ) : (
+                                <Typography variant="body1">Nenhum membro</Typography>
+                            )}
+                        </Box>
+                    </Box>
+
+
+                    <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+                        <Button color='info' variant='outlined' onClick={handleOpenList}>Voltar</Button>
+                        <Button color='success' variant='outlined' onClick={handlePresenceList}>Salvar</Button>
                     </Box>
                 </Box>
-
-
-                <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
-                    <Button color='info' variant='outlined' onClick={handleOpenList}>Voltar</Button>
-                    <Button color='success' variant='outlined' onClick={handlePresenceList}>Salvar</Button>
-                </Box>
-        </Box>
 
             </Modal >
 

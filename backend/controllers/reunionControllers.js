@@ -191,20 +191,16 @@ const addReunionAta = asyncHandler(async (req, res) => {
 
 const signAta = asyncHandler(async (req, res) => {
     try {
-        const { id, role } = req.body
+        const { id, memberName } = req.body
 
-        if (!id || !role) {
+        if (!id || !memberName) {
             res.status(400)
             throw new Error('Dados inválidos')
         }
 
         const reunion = await Reunion.findById(id)
 
-        // produtor assina ata ?
-        const numberAssociates = await User.countDocuments({ role: { $in: ['presidente', 'secretario', 'tesoureiro', 'conselho'] } });
-
-
-        if (reunion.assinaturas.includes(role)) {
+        if (reunion.ata.assinaturas.includes(memberName)) {
             res.status(400)
             throw new Error('Você já assinou a ata')
         }
@@ -214,12 +210,12 @@ const signAta = asyncHandler(async (req, res) => {
             throw new Error('Ata já assinada')
         }
 
-        reunion.assinaturas.push(role)
-        reunion.assinaturas_faltantes -= 1
+        reunion.ata.assinaturas.push(memberName)
+        reunion.ata.assinaturas_restantes = reunion.membros.presentes.filter(member => !reunion.ata.assinaturas.includes(member))
 
-        if (reunion.assinaturas.length === numberAssociates) {
+        if (reunion.ata.assinaturas.length === reunion.membros.presentes.length) {
             reunion.status = 'assinada'
-            reunion.assinaturas_faltantes = 0
+            reunion.ata.assinaturas_faltantes = []
 
             await reunion.save()
         }
