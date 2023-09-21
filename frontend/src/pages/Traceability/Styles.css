@@ -1,0 +1,238 @@
+.box{
+    min-height: 100vh;
+    background-color: #FAF8F8;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 160px;
+}
+
+.text-side-produto {
+    color: #140C9F;
+    max-width: 444px;
+    display: flex;
+    flex-direction: column;
+    gap:25px;
+    margin-bottom: 150px;
+}
+
+.text-side h1{
+    font-weight: 900;
+}
+
+.text-side h4{
+    font-weight: 600;
+}
+
+.rastrear-produto{
+    display: flex;
+    gap: 10px;
+    
+}
+
+.rastrear-produto input{
+    color: #140C9F;
+    width: 80%;
+    border: #140C9F 1px solid;
+    padding: 15px;
+}
+
+
+.rastrear-produto button{
+    background-color: #140C9F;
+    color: #FAF8F8;
+    border: none;
+    padding: 15px;
+    cursor: pointer;
+    border: #140C9F 1px solid;
+    font-size: 16px;
+}
+
+.error{
+    color: #D0302F;
+    width: 80%;
+    display: flex; 
+}
+
+.menssagem{
+    display: flex;
+    font-size: 14px;
+    gap: 15px;
+    align-items: center;
+}
+
+/* container da busca por código */
+.rastreio-lado {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 30px;
+    position: relative;
+    height: 180px;
+    margin-bottom: 150px;
+    margin-right: 50px;
+}
+
+.rastreio-lado input{
+    color: #140C9F;
+    padding: 15px;
+}
+
+.triangulo {
+    color: #BF232C;
+    rotate: -25deg;
+    position: absolute;
+    bottom: 15px;
+
+}
+
+.check {
+    color: #140C9F;
+    rotate: 7deg;
+    position: absolute;
+    right: 3px;
+    bottom: 78px
+;
+}
+
+/* parte que mostra o produto */
+
+.box-produto{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    min-height: 100vh;
+    padding: 0;
+    background-color: #FAF8F8;
+
+}
+
+.produtos-information {
+    display: flex;
+    flex-direction: column;
+    max-width: 465px;
+    gap:50px;
+    margin-bottom: 150px;
+}
+
+.produto-esquerdo{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    position: relative;
+    padding: 50px;
+    height: 500px;
+}
+
+.check-mark{
+    position: absolute;
+    top: 150px;
+    left: 470px;
+    z-index: 1;
+    width: 205px;
+}
+
+.foto-produto {
+    max-width: 275px;
+    max-height: 275px;
+    z-index: 2;
+}
+
+.elipse{
+    position: absolute;
+    width: 465px;
+    height: 465px;
+    top: 255px;
+    left: 265px;
+    z-index: 0;
+}
+
+.foto-produtor{
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%; 
+    top: 600px;
+    left: 250px;
+}
+
+/* Styles for screens up to 768px (typical mobile screens) */
+@media (max-width: 768px) {
+    .box {
+        flex-direction: column; /* Stack elements vertically on smaller screens */
+        padding: 80px 20px; /* Adjust padding for mobile *//* Center align text content */
+    }
+
+    .text-side-produto {
+        max-width: 100%; /* Make it full width for mobile */
+        margin-bottom: 50px; /* Adjust margin for mobile */
+    }
+
+    .text-side-produto h1 {
+        font-size: 26px; /* Reduce font-size for mobile */
+    }
+
+    .text-side-produto h4 {
+        font-size: 14px; /* Reduce font-size for mobile */
+    }
+
+    .rastrear-produto input {
+       width: 100%;
+    }
+
+    .rastreio-lado {
+       /* Adjust padding for mobile */
+        margin-right: 0; /* Remove right margin for mobile */ /* Let content dictate height */
+        margin-bottom: 50px; /* Adjust margin for mobile */
+    }
+
+    .rastrear-produto{
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .box-produto {
+        flex-direction: column;
+    }
+
+    .produto-esquerdo {
+        padding-top: 160px;
+    }
+
+    .check-mark {
+        top: 120px; /* Adjust top position for smaller screens */
+        left: 240px; /* Adjust left position for smaller screens */
+        width: 100px;
+        z-index: 4;
+    }
+    .foto-produto{
+        width: 200px;
+        height: 200px;
+        z-index: 3;
+    }
+
+    .elipse{
+        width: 250px;
+        height: 250px;
+        left: 68px;
+        top: 165px;
+    }
+
+    .foto-produtor {
+        width: 80px; /* Adjust width for smaller screens */
+        height: 80px; /* Adjust height for smaller screens */
+        top: 350px; /* Adjust top position for smaller screens */
+        left: 55px; /* Adjust left position for smaller screens */
+    }
+
+    .produtos-information{
+        gap:16px;
+    }
+
+    .nome, .sobre, .sobre-production {
+        font-size: 90%; /* Adjust font-size for smaller screens */
+    }
+    
+}

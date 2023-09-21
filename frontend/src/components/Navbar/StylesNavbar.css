@@ -1,0 +1,122 @@
+.navbar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 20px;
+    background-color: #FAF8F8;
+    box-sizing: border-box;
+}
+
+.links-centrais {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+
+}
+
+.links {
+    text-decoration: none;
+    color: #140C9F;
+}
+
+.links:hover {
+    color: #140C9F;
+    text-decoration: underline;
+    text-underline-offset: 5px;
+    text-decoration-thickness: 3px;
+
+}
+
+.actions {
+    display: flex;
+    gap: 5px;
+}
+
+.actions input {
+    background-color: #FAF8F8;
+    color: #140C9F;
+    border: none;
+    width: 100%;
+    border: #FAF8F8 1px solid;
+    padding: 5px;
+}
+
+.actions input::placeholder {
+    color: #140C9F;
+}
+
+.actions input:focus {
+    border: #140C9F 1px solid;
+
+}
+
+.actions button {
+    background-color: #140C9F;
+    color: #FAF8F8;
+    border: none;
+    padding: 5px;
+    width: 100%;
+    cursor: pointer;
+    border: #140C9F 1px solid;
+}
+
+.actions button:hover {
+    background-color: #140C9F;
+    color: #FAF8F8;
+    border: #FAF8F8 1px solid;
+}
+
+.pesquisar {
+    display: flex;
+    width: 100%;
+}
+
+.pesquisar .icon {
+    color: #140C9F;
+    font-size: 20px;
+}
+
+/* Dropdown.css */
+.dropdown {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    padding: 12px 16px;
+    z-index: 1;
+    right: 20px;
+}
+
+.link-content {
+    text-decoration: none;
+    color: #140C9F;
+}
+
+.link-content:hover {
+    text-decoration: underline;
+    text-underline-offset: 5px;
+    text-decoration-thickness: 3px;
+}
+
+.dropdown-content .sair {
+    background-color: #BF232C;
+}
+
+.dropdown-content .sair:hover {
+    background-color: #BF232C;
+}
+
+.dropdown:hover .dropdown-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}

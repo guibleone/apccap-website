@@ -81,7 +81,6 @@ function Producer() {
         }
     }, [recursoTime]);
 
-
     useEffect(() => {
 
         if (user) {
@@ -90,6 +89,9 @@ function Producer() {
 
     }, [user])
 
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [])
 
     if (!user) {
         return (

@@ -1,0 +1,121 @@
+/* esiilos da pagina de login */
+.container-login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap:64px;
+  min-height: 100vh;
+  padding: 80px 160px;
+  background-color: #FAF8F8;
+}
+
+/* estilos do formulario */
+.title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #0F0A70;
+    gap: 20px;
+}
+
+.title h1{
+    font-size: 40px;
+    font-weight: 900;
+}
+
+.title p{
+    font-size: 20px;
+    font-weight: 400;
+    text-align: center;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 50%;
+}
+
+.cpf {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.cpf input {
+    color: #140C9F;
+    width: 100%;
+    border: #140C9F 1px solid;
+    padding: 15px;
+}
+
+.cpf label {
+    align-self: flex-start;
+    color: #140C9F;
+}
+
+.senha {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.senha label {
+    align-self: flex-start;
+    color: #140C9F;
+}
+
+.senha input {
+    color: #140C9F;
+    width: 100%;
+    border: #140C9F 1px solid;
+    padding: 15px;
+}
+
+.esqueci-senha {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.form .actions-login{
+    display: flex;
+    gap: 20px;
+    justify-content: flex-end;
+}
+
+.form .actions-login .cadastrar {
+    background-color: #FAF8F8;
+    color: #140C9F;
+    padding: 15px;
+    cursor: pointer;
+    border: #140C9F 1px solid;
+    font-size: 16px;
+    font-weight: 600;
+    width: 130px;
+}
+
+.form .actions-login .cadastrar:hover {
+    background-color: #140C9F;
+    color: #FAF8F8;
+}
+
+.form .actions-login .entrar {
+    background-color: #140C9F;
+    color: #FAF8F8;
+    padding: 15px;
+    cursor: pointer;
+    border: #140C9F 1px solid;
+    font-size: 16px;
+    width: 130px;
+    font-weight: 600;
+}
+
+.form .actions-login .entrar:hover {
+    background-color: #FAF8F8;
+    color: #140C9F;
+}

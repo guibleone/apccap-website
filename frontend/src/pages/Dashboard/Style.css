@@ -1,0 +1,164 @@
+/* container do header */
+.container {
+    background-color: #FAF8F8;
+    min-height: 100vh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+/* texto do lado */
+.text-side {
+    width: 552px;
+    display: flex;
+    flex-direction: column;
+    gap:20px
+}
+
+.text-side .rastrear {
+    display: flex;
+    gap: 10px;
+    color: #140C9F;
+    border-bottom: #FAF8F8 4px solid;
+    width: 140px;
+    padding-bottom: 10px;
+    cursor: pointer;
+}
+
+.text-side .rastrear h3{
+    color: #140C9F;
+}
+
+.text-side .rastrear .link{
+    color: #140C9F;
+    text-decoration: none;
+    display: flex;
+    gap:10px;
+}
+
+
+.text-side h1 {
+    color: #140C9F;
+}
+
+.text-side .rastrear:hover {
+    border-bottom: #140C9F 4px solid;
+}
+
+
+/* container da busca por código */
+.rastreio {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 30px;
+    position: relative;
+    height: 180px;
+}
+
+.rastreio input{
+    color: #140C9F;
+    width: 110%;
+    padding: 15px;
+}
+
+.triangulo {
+    color: #BF232C;
+    rotate: -25deg;
+    position: absolute;
+    bottom: 15px;
+
+}
+
+.check {
+    color: #140C9F;
+    rotate: 7deg;
+    position: absolute;
+    right: 3px;
+    bottom: 78px
+;
+}
+
+/*container do festival */
+
+.festival {
+    display: flex;
+    justify-content: space-around;
+    gap: 15px;
+    padding: 160px;
+    height: 100%;
+    background-color: #EE771E;
+    align-items: center;
+}
+
+
+.texto-festival h1{
+    color: #FAF8F8;
+    font-size: 48px;
+}
+
+.texto-festival h3{
+    color: #FAF8F8;
+    font-size: 20px;
+}
+.logo-festival{
+    width: 287px;
+    height: 301px;
+}
+
+/* media query */
+
+@media (max-width: 768px) {
+
+    .container {
+        flex-direction: column;
+        max-width: 768px;
+    }
+    
+    .text-side {
+        width: 90%;
+        max-width: 552px; 
+    }
+
+    .text-side h1 {
+        font-size: 24px;
+    }
+
+    .rastreio {
+        width: 100%;
+        max-width: 552px;
+        margin-bottom: 150px;
+    }
+    .rastreio input {
+        width: 100%;
+    }
+
+    .festival {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding: 60px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .texto-festival {
+        text-align: center;
+      
+    }
+
+    .texto-festival h1{
+        font-size: 26px;
+    }
+
+    .texto-festival h3{
+        font-size: 16px;
+    }
+
+    .logo-festival {
+        width: 60%;
+        height: auto; /* To maintain the image's aspect ratio */
+        display: block; /* Ensures that width and height are applied correctly */
+        margin: 0 auto; /* Center horizontally */
+    }
+}

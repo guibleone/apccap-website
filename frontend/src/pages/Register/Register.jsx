@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import { AiFillLock, AiFillWarning, AiOutlinePaperClip } from 'react-icons/ai'
 import { styleError, styleSuccess } from '../toastStyles'
+import './Style.css'
 
 
 function Register() {
@@ -134,8 +135,153 @@ function Register() {
     </Box>
   }
   return (
-    <Container component="main" maxWidth="xs">
+    <Box sx={{
+      backgroundColor: '#FAF8F8',
+      minHeight: '100vh',
+    }}>
       <CssBaseline />
+
+      <Grid container spacing={2} p={matches ? 9 : 0} pt={matches ? 0 : 9} >
+        <Grid item xs={12} lg={12}>
+          <div className='title'>
+            <h1>
+              Cadastro
+            </h1>
+
+            <p>
+              Para você que  não é um produtor associado, cumpre com os <br />
+              <Link style={{ color: '#140C9F', fontWeight: 700, textDecorationColor: '#140C9F' }} >requisitos </Link> e deseja se associar.
+            </p>
+          </div>
+        </Grid>
+
+        <Grid container spacing={2} p={5}  >
+          <Grid item xs={12}>
+            <Typography pb={1} variant='h5' sx={{ fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: '220px' }}>
+              Dados Pessoais
+            </Typography>
+          </Grid>
+
+          <Grid item xs={12} lg={6} mt={5}>
+            <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+              Nome Completo
+            </Typography>
+            <TextField
+              autoComplete="name"
+              required
+              fullWidth
+              placeholder='André Luiz'
+              autoFocus
+              onChange={onChange} type="text" id="name" name="name" value={name}
+              sx={
+                {
+                  '& .MuiInputBase-root': {
+                    borderRadius: '0px',
+                  },
+                }
+              }
+            />
+
+            <Typography variant='body1' pb={2} mt={2} sx={{ fontWeight: 540 }}>
+              E-mail
+            </Typography>
+
+            <TextField
+              required
+              fullWidth
+              id="email"
+              placeholder='appcap@gmail.com'
+              name="email"
+              onChange={onChange} type='email' value={email}
+
+              sx={
+                {
+                  '& .MuiInputBase-root': {
+                    borderRadius: '0px',
+                  },
+                }
+              }
+            />
+
+              <Box sx={{ display: 'flex', gap: '10px', flexDirection:!matches ? 'column' : 'row' }}>
+                <Grid item xs={12} lg={6} mt={3}>
+                <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+                  CEP
+                </Typography>
+
+                <TextField
+                  required
+                  fullWidth
+                  id="cep"
+                  placeholder='00000-000'
+                  name="cep"
+                  autoComplete="cep" onChange={onChange} type="number"
+                  sx={
+                    {
+                      '& .MuiInputBase-root': {
+                        borderRadius: '0px',
+                      },
+                    }
+                  }
+                />
+              </Grid>
+
+
+              <Grid item xs={12} lg={6} mt={3}>
+
+                <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+                  Número
+                </Typography>
+
+                <TextField
+                  required
+                  fullWidth
+                  id="number"
+                  placeholder='000'
+                  name="number"
+                  autoComplete="number" onChange={onChange} type="number"
+                  sx={
+                    {
+                      '& .MuiInputBase-root': {
+                        borderRadius: '0px',
+                      },
+                    }
+                  }
+                />
+                
+              </Grid>
+              
+              </Box>
+              
+       
+          </Grid>
+
+          <Grid item xs={12} lg={6} mt={5}>
+            <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+              CPF
+            </Typography>
+            <TextField
+              required
+              fullWidth
+              id="cpf"
+              label="CPF"
+              name="cpf"
+              autoComplete="cpf" onChange={onChange} type="number" value={cpf}
+
+            />
+          </Grid>
+
+        </Grid>
+
+      </Grid>
+
+
+
+
+
+
+
+      {/*
       <Box
         sx={{
           marginTop: 8,
@@ -266,9 +412,9 @@ function Register() {
           </Box>
         </Box>
       </Modal>
+      */}
 
-
-    </Container>
+    </Box>
   )
 }
 

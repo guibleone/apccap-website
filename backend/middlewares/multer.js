@@ -109,7 +109,7 @@ const fileFilterRelatorys = (req, file, cb) => {
 const uploadRelatory = multer({
   storage: multer.memoryStorage(),
   limits: {
-    fileSize: 1024 * 1024 * 10,
+    fileSize: 2048 * 2048 * 10,
   },
   fileFilter: fileFilterRelatory,
 });

@@ -4,9 +4,11 @@ import { loginUser, reset } from '../../features/auth/authSlice'
 import { getResume } from '../../features/resume/resumeSlice'
 import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
-import { Button, Typography, Box, Container, CssBaseline, TextField, CircularProgress, Avatar,Grid,Link  } from '@mui/material';
+import { Button, Typography, Box, Container, CssBaseline, TextField, CircularProgress, Avatar, Grid } from '@mui/material';
+import { Link } from 'react-router-dom'
 import { AiFillUnlock } from 'react-icons/ai'
 import { styleError, styleSuccess } from '../toastStyles'
+import './Style.css'
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -60,9 +62,60 @@ function Login() {
 
 
   return (
-    <Container component="main" maxWidth="xs">
-    <CssBaseline />
-    <Box
+    <Box >
+      <CssBaseline />
+      <div className="container-login">
+        <div className="title">
+          <h1>Login</h1>
+          <p>
+            Para você que é um produtor já associado <br />
+            ou iniciou o processo de associação.
+          </p>
+        </div>
+
+        <div className="form">
+          <div className="cpf">
+            <label htmlFor="cpf">CPF</label>
+            <input required
+              id="cpf"
+              name="cpf"
+              autoComplete="cpf"
+              onChange={onChange}
+              type="number"
+              value={cpf}
+              placeholder="000.000.000-00"
+            />
+          </div>
+          <div className="senha">
+            <label htmlFor="password">Senha</label>
+            <input placeholder="*******"
+              name="password"
+              label="Senha"
+              type="password"
+              id="password"
+              autoComplete="new-password"
+              onChange={onChange} value={password} />
+          </div>
+
+          <div className="esqueci-senha">
+            <Link to="/" style={{ color: '#140C9F', textDecoration: 'none', cursor: 'pointer' }}>Esqueci minha senha</Link>
+          </div>
+
+
+          <div className="actions-login">
+            <button className="cadastrar" onClick={() => navigate('/registrar')}>Cadastrar</button>
+            <button disabled={pending} style={{backgroundColor: pending && '#FAF8F8' }} className="entrar" onClick={onSubmit}>
+              {pending ? <CircularProgress size={25} color="success" /> : 'Entrar'}
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+
+
+
+      {/*<Box
       sx={{
         marginTop: 8,
         display: 'flex',
@@ -71,14 +124,7 @@ function Login() {
         minHeight: '100vh'
       }}
     >
-      <Avatar sx={{ m: 1, bgcolor: 'green' }}>
-        <AiFillUnlock />
-      </Avatar>
-
-      <Typography component="h1" variant="h5">
-        Entrar
-      </Typography>
-
+    
       <Box component="form" noValidate onSubmit={onSubmit} sx={{ mt: 3 }}>
         <Grid container spacing={2}>
           <Grid item xs={12} >
@@ -126,9 +172,11 @@ function Login() {
         </Grid>
       </Box>
     </Box>
-  </Container>
+    */}
 
-  
+    </Box>
+
+
   )
 }
 

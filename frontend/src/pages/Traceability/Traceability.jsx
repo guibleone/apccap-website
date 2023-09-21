@@ -1,15 +1,18 @@
-import { Box, Container, Typography, CircularProgress, Button, TextField, Alert } from '@mui/material'
+import { Box, Container, Typography, CircularProgress, Button, TextField, Alert, CssBaseline, Avatar } from '@mui/material'
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'
-import { FcOk } from "react-icons/fc";
+import { FcApproval, FcOk } from "react-icons/fc";
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { reset, trackProduct } from '../../features/products/productsSlice';
+import { getProducer, getProducerResume, reset, trackProduct } from '../../features/products/productsSlice';
+import './Styles.css'
+import { AiFillCheckCircle, AiFillInfoCircle } from 'react-icons/ai';
+import { BsExclamationTriangle } from 'react-icons/bs';
 
 
 function Traceability() {
 
-  const { productData, isLoading, isError, message } = useSelector((state) => state.products)
+  const { productData, producer, producerResume, isLoading, isError, message } = useSelector((state) => state.products)
   const dispatch = useDispatch()
 
   const navigate = useNavigate()
@@ -29,13 +32,27 @@ function Traceability() {
   }
 
 
+  useEffect(() => {
+
+    if (productData && Object.keys(productData).length > 0) {
+      console.log(productData)
+
+      const id = productData.producer
+      dispatch(getProducer(id))
+      dispatch(getProducerResume(id))
+    }
+
+
+  }, [productData])
+
   if (isLoading) {
     return <Box sx={
       {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100vh'
+        height: '100vh',
+        backgroundColor: '#FAF8F8'
       }
     }>
       <CircularProgress sx={
@@ -47,60 +64,130 @@ function Traceability() {
   }
 
   if ((productData && Object.keys(productData).length <= 0)) {
-    return (<Container sx={
-      {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '10px',
-        minHeight: '100vh',
-        marginTop: '10px',
-      }
-    }>
+    return (
 
-      <Typography variant="h4" component="h1" gutterBottom>Rastreie produtos oficiais</Typography>
-      <TextField type="number" name='selo' placeholder="Digite o selo do produto" value={selo} onChange={(e) => setSelo(e.target.value)} />
-      <Button disabled={isLoading} onClick={onTrack} variant="contained" color="success">
-        {isLoading ? <CircularProgress size={25} color="success" /> : 'Rastrear'}
-      </Button>
+      <Box>
+        <CssBaseline />
+        <div className="box">
+          <div className="text-side-produto">
+            <h1>
+              Verifique com procedência a cachaça que comprou.
+            </h1>
+            <h4>
+              Na embalagem do produto, próximo ao selo de notoriedade, identifique a sequência de oito digitos. Insira-os no campo a baixo e clique em rastrear.
+            </h4>
 
-      {isError && <Alert severity="error" sx={{ width: '100%' }}>{message}</Alert>}
+            <div className="rastrear-produto">
+              <input type='number' value={selo}
+                onChange={(e) => setSelo(e.target.value)}
+                placeholder={"000.000000"}
+                style={{ border: isError && '#D0302F 1px solid' }}
+              />
+              <button onClick={onTrack}>Rastrear</button>
+            </div>
 
-    </Container>
+            <div className='error'>
+              {isError &&
+                <div className='menssagem'>
 
+                  <AiFillInfoCircle size={25} />
+
+
+                  Produto não encontrado.
+
+                  <br />
+
+                  Tente novamente ou reporte sua compra
+
+
+                </div>
+              }
+            </div>
+
+          </div>
+
+          <div className="rastreio-lado">
+
+            <label htmlFor="codigo">Código </label>
+            <input type='number'
+            placeholder={"000.000000"} />
+
+            <div className="triangulo">
+              <BsExclamationTriangle size={50} />
+            </div>
+
+            <div className="check">
+              <AiFillCheckCircle size={100} />
+            </div>
+
+          </div>
+        </div>
+      </Box>
     )
   }
 
   return (
-    <Container sx={
-      {
-        minHeight: '100vh',
-        marginTop: '10px',
+    <Box>
+      <CssBaseline />
+
+      {!isError &&
+        <div className="box-produto">
+
+          <img src={require('../../imgs/Check.png')} alt="check" className="check-mark"  />
+
+          <div className="produto-esquerdo">
+            <img className="foto-produto" src={productData.path ? productData.path : 'https://placehold.co/300x300'} alt="Foto do produto" />
+          </div>
+
+          <img src={require('../../imgs/Ellipse.png')} alt="elipse" className="elipse" />
+
+          <img src={producer.pathFoto ? producer.pathFoto : 'https://placehold.co/300x300'} alt="Foto do produto" className='foto-produtor' />
+
+          <div className="produtos-information">
+            <div className="nome">
+              <h2>
+                Nome do Produto
+              </h2>
+              <h3>
+                {productData.name}
+              </h3>
+            </div>
+
+            <div className="sobre">
+              <h2>
+                Descrição do Produto
+              </h2>
+              <h3>
+                {productData.description}
+              </h3>
+            </div>
+
+            <div className="sobre-production">
+              <h2>
+                Sobre o Produtor
+              </h2>
+         
+                {producerResume && producerResume[0]  ? <h3>{producerResume[0].body}</h3> : <h3>Sem descrição.</h3>}
+                
+            </div>
+          </div>
+
+          {/*  <Typography variant='h4'> Produto Oficial </Typography>
+
+          <img width={300} src={productData.path ? productData.path : 'https://placehold.co/300x300'} alt="Foto do produto" />
+
+          <Typography variant='h5'> {productData.name} </Typography>
+          <Typography variant='h5'> {productData.description} </Typography>
+
+          <Button variant='contained' onClick={() => navigate(`/produtor/${productData.producer}`)} sx={{ textDecoration: 'none', width: '300px' }} >Produtor</Button>
+          <Button sx={{ width: '300px' }} variant='contained' color='success' onClick={() => dispatch(reset()) && navigate('/rastreabilidade')}> Voltar </Button>
+
+          */}
+
+        </div>
       }
-    }>
-      {!isError && <Box sx={
-        {
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '10px',
-          alignItems: 'center',
-          textAlign: 'center',
-        }
-      }>
 
-        <Typography variant='h4'> Produto Oficial <FcOk size={45} style={{ verticalAlign: 'bottom' }} /></Typography>
-
-        <img width={300} src={productData.path ? productData.path : 'https://placehold.co/300x300'} alt="Foto do produto" />
-
-        <Typography variant='h5'> {productData.name} </Typography>
-        <Typography variant='h5'> {productData.description} </Typography>
-
-        <Button variant='contained' onClick={() => navigate(`/produtor/${productData.producer}`)} sx={{ textDecoration: 'none', width: '300px' }} >Produtor</Button>
-        <Button sx={{ width: '300px' }} variant='contained' color='success' onClick={() => dispatch(reset()) && navigate('/rastreabilidade')}> Voltar </Button>
-
-      </Box>
-      }
-      
-    </Container>
+    </Box>
 
   )
 }

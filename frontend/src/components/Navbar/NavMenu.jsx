@@ -65,11 +65,11 @@ function NavMenu() {
 
 
     return (
-        <Box sx={{ display: 'flex', marginBottom: '100px' }}>
+        <Box sx={{ display: 'flex' }}>
             <CssBaseline />
             <AppBar sx={
                 {
-                    backgroundColor: '#003DF2',
+                    backgroundColor: '#140C9F',
 
                 }
             } position="fixed" open={open}>
@@ -127,19 +127,19 @@ function NavMenu() {
                                 color: 'inherit',
                                 textDecoration: 'none',
                             }
-                        } href="/">Início</Link>
+                        } to="/">Início</Link>
                     </ListItem>
 
                     <ListItem >
                         <ListItemIcon>
                             <TbSearch />
                         </ListItemIcon>
-                        <a style={
+                        <Link style={
                             {
                                 color: 'inherit',
                                 textDecoration: 'none',
                             }
-                        } href="/rastreabilidade">Rastreabilidade</a>
+                        } to="/rastreabilidade">Rastreabilidade</Link>
                     </ListItem>
 
                     <ListItem >

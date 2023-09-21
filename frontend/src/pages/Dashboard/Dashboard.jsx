@@ -12,6 +12,10 @@ import Admin from "./Acesses/Admin"
 import { getSubscription } from "../../features/payments/paymentsSlice"
 import { FcLock } from 'react-icons/fc'
 import Conselho from "./Acesses/Conselho/Conselho";
+import { CiCircleCheck } from 'react-icons/ci'
+import './Style.css'
+import { BsExclamationTriangle } from "react-icons/bs";
+import { AiFillCheckCircle } from "react-icons/ai";
 
 function Dashboard() {
 
@@ -19,7 +23,7 @@ function Dashboard() {
 
   const { isLoading } = useSelector((state) => state.admin)
   const { isLoading: productLoading } = useSelector((state) => state.products)
-  const { payments } = useSelector((state) => state.payments)
+  const { payments, isLoading: isLoadingPayments } = useSelector((state) => state.payments)
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -29,6 +33,7 @@ function Dashboard() {
   const [selo, setSelo] = useState('')
 
   const onTrack = (e) => {
+
     e.preventDefault()
 
     dispatch(trackProduct({ selo }))
@@ -37,16 +42,26 @@ function Dashboard() {
 
   }
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      dispatch(trackProduct({ selo }))
+
+      navigate('/rastreabilidade')
+    }
+  }
+
+
+
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
 
   useEffect(() => {
 
-    if (user && (user.role === "admin" || user.role === 'secretario' || user.role === 'presidente' || user.role==='conselho')) {
+    if (user && (user.role === "admin" || user.role === 'secretario' || user.role === 'presidente' || user.role === 'conselho')) {
       dispatch(listUsers(user.token))
     }
-    if (user && (user.role === 'produtor')) {
+    if (user) {
       const userData = {
         email: user.email,
         token: user.token
@@ -56,7 +71,7 @@ function Dashboard() {
 
   }, [])
 
-  if (isLoading) {
+  if (isLoadingPayments) {
 
     return <Box sx={
       {
@@ -90,7 +105,7 @@ function Dashboard() {
 
   if ((payments && user && payments.subscription !== 'active' && user.role === 'produtor') || (user && user.status === 'reprovado')) {
     return (
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh', padding:'20px', gap:'10px' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh', padding: '20px', gap: '10px' }}>
         <FcLock size={100} />
         <Typography textAlign={'center'} variant="h5">Acesso negado</Typography>
         <Typography textAlign={'center'} variant="p">Verifique a situação da sua credencial</Typography>
@@ -101,29 +116,76 @@ function Dashboard() {
 
 
   return (
-    <Container sx={{ minHeight: '100vh', marginTop: '10px', }}>
+    <Box>
       <CssBaseline />
 
       {(!user || user.role === 'user') ? (
+        <>
+          <header>
+            <div className="container">
+              <div className="text-side">
+                <h1>
+                  Busque pela cachaça que adiquiriu e saiba mais sobre sua procedência.
+                </h1>
+                <div className="rastrear">
+                  <Link onClick={() => navigate('/rastreabilidade')} className="link">
+                    <h3>
+                      Rastrear
+                    </h3>
+                    <div>
+                      <CiCircleCheck size={30} />
+                    </div>
 
-        <Box sx={
-          {
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '10px',
-          }
-        }>
+                  </Link>
 
-          <Typography variant="h4" component="h1" gutterBottom>Rastreie produtos oficiais</Typography>
-          <TextField type="number"  name='selo' placeholder="Digite o selo do produto" value={selo} onChange={(e) => setSelo(e.target.value)} />
-          <Button disabled={productLoading} onClick={onTrack} variant="contained" color="success">
-            {productLoading ? <CircularProgress size={25} color="success" /> : 'Rastrear'}
-          </Button>
 
-        </Box>
+                </div>
+              </div>
+
+              <div className="rastreio">
+
+                <label htmlFor="codigo">Código </label>
+                <input type='number' value={selo}
+                  onChange={(e) => setSelo(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder={"000.000000"} />
+
+                <div className="triangulo">
+                  <BsExclamationTriangle size={50} />
+                </div>
+
+                <div className="check">
+                  <AiFillCheckCircle size={100} />
+                </div>
+
+
+              </div>
+
+            </div>
+          </header>
+
+          <section className="festival">
+            <div className="texto-festival">
+              <h1>
+                Festival da Cachaça
+              </h1>
+              <h3>
+                19, 20 e 21 de Setembro
+              </h3>
+
+            </div>
+
+            <div className="image-festival">
+              <img src={require('../../imgs/logo-branco.png')} alt="logo" className="logo-festival" />
+            </div>
+          </section>
+
+
+        </>
+
 
       ) : (
-        <>
+        <Container>
 
           {(user.role === "admin") && (
             <Admin />
@@ -145,14 +207,14 @@ function Dashboard() {
             <President />
           )}
 
-          {(user.role === 'conselho') &&(
+          {(user.role === 'conselho') && (
             <Conselho />
           )}
 
-        </>
+        </Container>
       )}
 
-    </Container>
+    </Box>
 
   )
 }

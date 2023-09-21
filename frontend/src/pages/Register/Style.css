@@ -1,0 +1,44 @@
+/* esiilos da pagina de login */
+.container-registro {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 80px 160px;
+    background-color: #FAF8F8;
+}
+
+/* estilos do formulario */
+.container-registro .title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #0F0A70;
+    gap: 20px;
+}
+
+.container-registro .title h1 {
+    font-size: 40px;
+    font-weight: 900;
+}
+
+.container-registro .title p {
+    font-size: 20px;
+    font-weight: 400;
+    text-align: center;
+}
+
+/* dados pessoais */
+
+.dados-pessoais {
+    display: flex;
+    gap: 20px;
+    justify-content: flex-start;
+}
+
+.dados-pessoais .title {
+}
+
+.dados-pessoais .title h1 {
+    font-size: 30px;
+    font-weight: 900;
+}
