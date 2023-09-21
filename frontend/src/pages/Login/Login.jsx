@@ -4,13 +4,15 @@ import { loginUser, reset } from '../../features/auth/authSlice'
 import { getResume } from '../../features/resume/resumeSlice'
 import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
-import { Button, Typography, Box, Container, CssBaseline, TextField, CircularProgress, Avatar, Grid } from '@mui/material';
+import { Button, Typography, Box, Container, CssBaseline, TextField, CircularProgress, Avatar, Grid, useMediaQuery } from '@mui/material';
 import { Link } from 'react-router-dom'
 import { AiFillUnlock } from 'react-icons/ai'
 import { styleError, styleSuccess } from '../toastStyles'
 import './Style.css'
 
 function Login() {
+  const matches = useMediaQuery('(min-width:600px)');
+
   const [formData, setFormData] = useState({
     cpf: '',
     password: ''
@@ -62,119 +64,100 @@ function Login() {
 
 
   return (
-    <Box >
+    <Box sx={{
+      backgroundColor: '#FAF8F8',
+      minHeight: '100vh',
+    }}>
       <CssBaseline />
-      <div className="container-login">
-        <div className="title">
-          <h1>Login</h1>
-          <p>
-            Para você que é um produtor já associado <br />
-            ou iniciou o processo de associação.
-          </p>
-        </div>
+      <Container>
 
-        <div className="form">
-          <div className="cpf">
-            <label htmlFor="cpf">CPF</label>
-            <input required
+        <Grid container spacing={2} p={matches ? 9 : 0} pt={9} >
+          <Grid item xs={12} lg={12}>
+            <div className="title">
+              <h1>Login</h1>
+              <p>
+                Para você que é um produtor já associado {matches ? <br /> : null}
+                ou iniciou o processo de associação.
+              </p>
+            </div>
+          </Grid>
+
+          <Grid item xs={12} lg={12} mt={5} >
+            <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+              CPF
+            </Typography>
+            <TextField
               id="cpf"
               name="cpf"
               autoComplete="cpf"
               onChange={onChange}
               type="number"
               value={cpf}
-              placeholder="000.000.000-00"
-            />
-          </div>
-          <div className="senha">
-            <label htmlFor="password">Senha</label>
-            <input placeholder="*******"
-              name="password"
-              label="Senha"
-              type="password"
-              id="password"
-              autoComplete="new-password"
-              onChange={onChange} value={password} />
-          </div>
-
-          <div className="esqueci-senha">
-            <Link to="/" style={{ color: '#140C9F', textDecoration: 'none', cursor: 'pointer' }}>Esqueci minha senha</Link>
-          </div>
-
-
-          <div className="actions-login">
-            <button className="cadastrar" onClick={() => navigate('/registrar')}>Cadastrar</button>
-            <button disabled={pending} style={{backgroundColor: pending && '#FAF8F8' }} className="entrar" onClick={onSubmit}>
-              {pending ? <CircularProgress size={25} color="success" /> : 'Entrar'}
-            </button>
-          </div>
-
-        </div>
-      </div>
-
-
-
-
-      {/*<Box
-      sx={{
-        marginTop: 8,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        minHeight: '100vh'
-      }}
-    >
-    
-      <Box component="form" noValidate onSubmit={onSubmit} sx={{ mt: 3 }}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} >
-            <TextField
-              required
               fullWidth
-              id="cpf"
-              label="CPF"
-              name="cpf"
-              autoComplete="cpf" onChange={onChange} type="number" value={cpf}
+              placeholder="000.000.000-00"
+              sx={
+                {
+                  '& .MuiInputBase-root': {
+                    borderRadius: '0px',
+                  },
+                }
+              }
             />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={12} lg={12} mt={5} >
+            <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+              Senha
+            </Typography>
             <TextField
-              required
-              fullWidth
-              name="password"
-              label="Senha"
-              type="password"
               id="password"
+              name="password"
+              placeholder="*******"
+              type="password"
               autoComplete="new-password"
               onChange={onChange} value={password}
+              fullWidth
+              sx={
+                {
+                  '& .MuiInputBase-root': {
+                    borderRadius: '0px',
+                  },
+                }
+              }
+
             />
+
           </Grid>
-   
-        </Grid>
 
-        <Button
-          disabled={pending}
-          type="submit"
-          fullWidth
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
-        >
-          {pending ? <CircularProgress size={25} color="success" /> : 'Entrar'}
+          <Grid item xs={12} lg={12} mt={5} >
 
-        </Button>
-        <Grid container justifyContent="flex-end">
-          <Grid item>
-            <Link href="/registrar" variant="body2">
-              Não possui conta ? Cadastre-se
-            </Link>
+            <div className="esqueci-senha">
+              <Link to="/" style={{ color: '#140C9F', textDecoration: 'none', cursor: 'pointer' }}>Esqueci minha senha</Link>
+            </div>
+
           </Grid>
-        </Grid>
-      </Box>
-    </Box>
-    */}
 
-    </Box>
+          <Grid item xs={12} lg={12} mt={5} >
+            <Box sx={{
+              display: 'flex',
+              gap: '1rem',
+              justifyContent: 'flex-end',
+             
+            }}>
+    
+            <button style={{padding:'20px'}} className="cadastrar" onClick={() => navigate('/registrar')}>Cadastrar</button>
+              <button disabled={pending} style={{ backgroundColor: pending && '#FAF8F8' }} className="entrar" onClick={onSubmit}>
+                {pending ? <CircularProgress size={25} color="success" /> : 'Entrar'}
+              </button>
+            </Box>
+
+          </Grid>
+
+        </Grid>
+      </Container>
+  
+
+    </Box >
 
 
   )

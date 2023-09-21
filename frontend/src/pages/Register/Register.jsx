@@ -6,9 +6,9 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import {
   Button, Typography, Box, Container, CssBaseline, TextField, CircularProgress,
-  Avatar, FormControlLabel, Checkbox, Grid, Link, LockOutlinedIcon, Modal, useMediaQuery
+  Avatar, FormControlLabel, Checkbox, Grid, Link, LockOutlinedIcon, Modal, useMediaQuery, Select, MenuItem
 } from '@mui/material';
-import { AiFillLock, AiFillWarning, AiOutlinePaperClip } from 'react-icons/ai'
+import { AiFillInfoCircle, AiFillLock, AiFillWarning, AiOutlinePaperClip } from 'react-icons/ai'
 import { styleError, styleSuccess } from '../toastStyles'
 import './Style.css'
 
@@ -92,6 +92,10 @@ function Register() {
   }, [user, isError, isSuccess, message, navigate, dispatch, resume])
 
 
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -141,7 +145,7 @@ function Register() {
     }}>
       <CssBaseline />
 
-      <Grid container spacing={2} p={matches ? 9 : 0} pt={matches ? 0 : 9} >
+      <Grid container spacing={2} p={matches ? 9 : 0} pt={9} >
         <Grid item xs={12} lg={12}>
           <div className='title'>
             <h1>
@@ -203,8 +207,8 @@ function Register() {
               }
             />
 
-              <Box sx={{ display: 'flex', gap: '10px', flexDirection:!matches ? 'column' : 'row' }}>
-                <Grid item xs={12} lg={6} mt={3}>
+            <Box sx={{ display: 'flex', gap: '10px', flexDirection: !matches ? 'column' : 'row' }}>
+              <Grid item xs={12} lg={6} mt={3}>
                 <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
                   CEP
                 </Typography>
@@ -248,12 +252,62 @@ function Register() {
                     }
                   }
                 />
-                
               </Grid>
-              
-              </Box>
-              
-       
+
+            </Box>
+
+            <Grid item xs={12} lg={12} mt={3}>
+              <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+                Logradouro
+              </Typography>
+              <TextField
+                required
+                fullWidth
+                id="logradouro"
+                placeholder='Rua das Flores'
+                name="logradouro"
+                autoComplete="logradouro" onChange={onChange} type="text"
+                sx={
+                  {
+                    '& .MuiInputBase-root': {
+                      borderRadius: '0px',
+                    },
+                  }
+                }
+              />
+
+            </Grid>
+
+            <Grid item xs={12} lg={12} mt={3}>
+              <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+                Senha
+              </Typography>
+
+              <TextField
+                required
+                fullWidth
+                id="password"
+                placeholder='*******'
+                name="password"
+                type="password"
+                autoComplete="new-password"
+                onChange={onChange}
+                value={password}
+
+                sx={
+                  {
+                    '& .MuiInputBase-root': {
+                      borderRadius: '0px',
+                    },
+                  }
+                }
+              />
+
+              <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }} mt={3}>
+                <AiFillInfoCircle size={25} style={{ verticalAlign: 'bottom' }} /> Mínimo 8 caractéres
+              </Typography>
+
+            </Grid>
           </Grid>
 
           <Grid item xs={12} lg={6} mt={5}>
@@ -264,14 +318,183 @@ function Register() {
               required
               fullWidth
               id="cpf"
-              label="CPF"
+              placeholder='000.000.000-00'
               name="cpf"
-              autoComplete="cpf" onChange={onChange} type="number" value={cpf}
-
+              autoComplete="cpf" onChange={onChange} type="number"
+              value={cpf}
+              sx={
+                {
+                  '& .MuiInputBase-root': {
+                    borderRadius: '0px',
+                  },
+                }
+              }
             />
+
+            <Box sx={{ display: 'flex', gap: '10px', flexDirection: !matches ? 'column' : 'row' }}>
+              <Grid item xs={12} lg={6} mt={2}>
+                <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+                  Telefone
+                </Typography>
+
+                <TextField
+                  required
+                  fullWidth
+                  id="telefone"
+                  placeholder='(19) 3261-5485'
+                  name="telefone"
+                  autoComplete="telefone" onChange={onChange} type="number"
+                  sx={
+                    {
+                      '& .MuiInputBase-root': {
+                        borderRadius: '0px',
+                      },
+                    }
+                  }
+                />
+              </Grid>
+
+
+              <Grid item xs={12} lg={6} mt={2}>
+
+                <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+                  Celular
+                </Typography>
+
+                <TextField
+                  required
+                  fullWidth
+                  id="celular"
+                  placeholder='(19) 99999-9999'
+                  name="celular"
+                  autoComplete="celular" onChange={onChange} type="number"
+                  sx={
+                    {
+                      '& .MuiInputBase-root': {
+                        borderRadius: '0px',
+                      },
+                    }
+                  }
+                />
+
+              </Grid>
+            </Box>
+
+            <Grid item xs={12} lg={12} mt={3}>
+              <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+                Estado
+              </Typography>
+
+              <Select fullWidth
+                sx={
+                  {
+                    '& .MuiInputBase-root': {
+                      borderRadius: '0px',
+                    },
+                  }
+                }
+              >
+                <MenuItem value={'SP'}>São Paulo</MenuItem>
+                <MenuItem value={'RJ'}>Rio de Janeiro</MenuItem>
+                <MenuItem value={'MG'}>Minas Gerais</MenuItem>
+              </Select>
+            </Grid>
+
+            <Grid item xs={12} lg={12} mt={3}>
+              <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+                Cidade
+              </Typography>
+
+              <TextField
+                required
+                fullWidth
+                id="cidade"
+                placeholder='Campinas'
+                name="cidade"
+                autoComplete="cidade" onChange={onChange} type="text"
+                sx={
+                  {
+                    '& .MuiInputBase-root': {
+                      borderRadius: '0px',
+                    },
+                  }
+                }
+              />
+            </Grid>
+
+            <Grid item xs={12} lg={12} mt={3}>
+              <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+                Confirmar senha
+              </Typography>
+
+              <TextField
+                required
+                fullWidth
+                id="password2"
+                placeholder='*******'
+                name="password2"
+                type="password"
+                autoComplete="new-password"
+                onChange={onChange}
+                value={password2}
+
+                sx={
+                  {
+                    '& .MuiInputBase-root': {
+                      borderRadius: '0px',
+                    },
+                  }
+                }
+              />
+
+            </Grid>
+
           </Grid>
 
         </Grid>
+
+        <Grid container spacing={2} p={5}  >
+          <Grid item xs={12}>
+            <Typography pb={1} variant='h5' sx={{ fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: '220px' }}>
+              Propriedade
+            </Typography>
+          </Grid>
+
+          <Grid item xs={12} lg={6} mt={5}>
+            <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+              CPF do Proprietário
+            </Typography>
+
+            <TextField
+              required
+              fullWidth
+              id="cpfProprietario"
+              placeholder='000.000.000-00'
+              name="cpfProprietario"
+              autoComplete="cpfProprietario" onChange={onChange} type="number"
+              sx={
+                {
+                  '& .MuiInputBase-root': {
+                    borderRadius: '0px',
+                  },
+                }
+              }
+            />
+
+            <Checkbox sx={{ marginLeft: '-10px',marginTop:'-3px' }} />
+            <Typography  variant='caption'
+            sx={{
+              varticalAlign: 'bottom',
+              fontSize: '1rem'
+            }}
+            >
+              Mesmo CPF
+            </Typography>
+
+
+          </Grid>
+        </Grid>
+
 
       </Grid>
 
@@ -414,7 +637,7 @@ function Register() {
       </Modal>
       */}
 
-    </Box>
+    </Box >
   )
 }
 

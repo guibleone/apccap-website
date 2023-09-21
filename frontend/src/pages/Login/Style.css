@@ -88,7 +88,7 @@
     justify-content: flex-end;
 }
 
-.form .actions-login .cadastrar {
+ .cadastrar {
     background-color: #FAF8F8;
     color: #140C9F;
     padding: 15px;
@@ -99,12 +99,12 @@
     width: 130px;
 }
 
-.form .actions-login .cadastrar:hover {
+ .cadastrar:hover {
     background-color: #140C9F;
     color: #FAF8F8;
 }
 
-.form .actions-login .entrar {
+.entrar {
     background-color: #140C9F;
     color: #FAF8F8;
     padding: 15px;
@@ -115,7 +115,7 @@
     font-weight: 600;
 }
 
-.form .actions-login .entrar:hover {
+.entrar:hover {
     background-color: #FAF8F8;
     color: #140C9F;
 }
