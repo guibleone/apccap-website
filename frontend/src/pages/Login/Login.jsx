@@ -43,6 +43,11 @@ function Login() {
 
   }, [user, isError, isLoading, isSuccess, message, navigate, dispatch])
 
+  useEffect(() => {
+    window.scrollTo(0, 0)
+
+  }, [])
+
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -67,6 +72,7 @@ function Login() {
     <Box sx={{
       backgroundColor: '#FAF8F8',
       minHeight: '100vh',
+      paddingBottom:'120px'
     }}>
       <CssBaseline />
       <Container>
@@ -142,12 +148,12 @@ function Login() {
               display: 'flex',
               gap: '1rem',
               justifyContent: 'flex-end',
-             
+
             }}>
-    
-            <button style={{padding:'20px'}} className="cadastrar" onClick={() => navigate('/registrar')}>Cadastrar</button>
-              <button disabled={pending} style={{ backgroundColor: pending && '#FAF8F8' }} className="entrar" onClick={onSubmit}>
-                {pending ? <CircularProgress size={25} color="success" /> : 'Entrar'}
+
+              <button className='button-purple' onClick={() => navigate('/registrar')}>Cadastrar</button>
+              <button className='button-white' disabled={pending} style={{ backgroundColor: pending && '#FAF8F8' }} onClick={onSubmit}>
+                {pending ? <CircularProgress size={20} color="success" /> : 'Entrar'}
               </button>
             </Box>
 
@@ -155,7 +161,7 @@ function Login() {
 
         </Grid>
       </Container>
-  
+
 
     </Box >
 

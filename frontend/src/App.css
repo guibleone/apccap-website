@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap');
 
 * {
     margin: 0;
@@ -6,6 +6,25 @@
     outline: 0;
     box-sizing: border-box;
     font-family: 'Montserrat', sans-serif;
+}
+
+:root {
+    --main-purple: #140C9F;
+    --main-purple-light: #2A1A92;
+    --main-purple-dark: #0A0845;
+    --main-purple-darker: #0A0845;
+    --main-white: #FAF8F8;
+    --main-white-light: #F2F2F2;
+    --main-orange: #EE771E;
+    --main-orange-light: #F2A03D;
+    --main-red: #BF232C
+}
+
+h1,
+h2,
+h3,
+h4 {
+    color: var(--main-purple);
 }
 
 html {
@@ -17,4 +36,55 @@ html {
 ::-webkit-scrollbar {
     width: 15px;
     background: transparent;
+}
+
+.button-purple {
+    background-color: var(--main-purple);
+    color: var(--main-white);
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.button-purple:hover {
+    background-color: var(--main-white);
+    color: var(--main-purple);
+}
+
+.button-white {
+    background-color: var(--main-white);
+    color: var(--main-purple);
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.button-white:hover {
+    background-color: var(--main-purple);
+    color: var(--main-white);
+}
+
+.button-red {
+    background-color: var(--main-red);
+    color: var(--main-white);
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border: none;
+}
+
+.button-red:hover {
+    background-color: var(--main-white);
+    color: var(--main-red);
+}
+
+.small {
+    font-size: 0.8rem;
+    padding: 10px;
 }

@@ -1,10 +1,9 @@
 .box{
-    min-height: 100vh;
     background-color: #FAF8F8;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 160px;
+    padding: 80px 160px;
 }
 
 .text-side-produto {
@@ -63,36 +62,7 @@
 
 /* container da busca por código */
 .rastreio-lado {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    padding: 30px;
-    position: relative;
-    height: 180px;
-    margin-bottom: 150px;
-    margin-right: 50px;
-}
-
-.rastreio-lado input{
-    color: #140C9F;
-    padding: 15px;
-}
-
-.triangulo {
-    color: #BF232C;
-    rotate: -25deg;
-    position: absolute;
-    bottom: 15px;
-
-}
-
-.check {
-    color: #140C9F;
-    rotate: 7deg;
-    position: absolute;
-    right: 3px;
-    bottom: 78px
-;
+    margin-bottom: 100px;
 }
 
 /* parte que mostra o produto */
@@ -182,8 +152,8 @@
 
     .rastreio-lado {
        /* Adjust padding for mobile */
-        margin-right: 0; /* Remove right margin for mobile */ /* Let content dictate height */
-        margin-bottom: 50px; /* Adjust margin for mobile */
+/* Adjust margin for mobile */
+margin-left: auto;
     }
 
     .rastrear-produto{

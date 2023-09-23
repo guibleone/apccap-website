@@ -21,6 +21,15 @@ const userSchema = new mongoose.Schema({
         required: [true, "Insira o email"],
         unique: true
     },
+    dados_pessoais: {
+        type: mongoose.SchemaTypes.Mixed,
+    },
+    propriedade: {
+        type: mongoose.SchemaTypes.Mixed,
+    },
+    marca: {
+        type: mongoose.SchemaTypes.Mixed,
+    },
     pathFoto: {
         type: String
     },
@@ -62,18 +71,18 @@ const userSchema = new mongoose.Schema({
             status: { type: String, default: '' },
             recurso: {
                 path: { type: String, default: '' },
-                time: {type: Date, default: ''},
+                time: { type: Date, default: '' },
                 status: { type: String, default: '' },
             }
         },
-       vistoria: {
+        vistoria: {
             path: { type: String, default: '' },
             status: { type: String, default: '' },
-       },
-       analise_laboratorial: {
+        },
+        analise_laboratorial: {
             path: { type: String, default: '' },
             status: { type: String, default: '' },
-       },
+        },
     },
 }, {
     timestamps: true

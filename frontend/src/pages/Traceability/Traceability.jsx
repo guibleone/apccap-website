@@ -70,10 +70,10 @@ function Traceability() {
         <CssBaseline />
         <div className="box">
           <div className="text-side-produto">
-            <h1>
+            <h1 style={{ fontWeight: 700 }}>
               Verifique com procedência a cachaça que comprou.
             </h1>
-            <h4>
+            <h4 style={{ fontWeight: 400 }}>
               Na embalagem do produto, próximo ao selo de notoriedade, identifique a sequência de oito digitos. Insira-os no campo a baixo e clique em rastrear.
             </h4>
 
@@ -83,7 +83,7 @@ function Traceability() {
                 placeholder={"000.000000"}
                 style={{ border: isError && '#D0302F 1px solid' }}
               />
-              <button onClick={onTrack}>Rastrear</button>
+              <button className='button-purple' onClick={onTrack}>Rastrear</button>
             </div>
 
             <div className='error'>
@@ -106,21 +106,15 @@ function Traceability() {
 
           </div>
 
+
           <div className="rastreio-lado">
 
-            <label htmlFor="codigo">Código </label>
-            <input type='number'
-            placeholder={"000.000000"} />
-
-            <div className="triangulo">
-              <BsExclamationTriangle size={50} />
-            </div>
-
-            <div className="check">
-              <AiFillCheckCircle size={100} />
-            </div>
+            <img src={require('../../imgs/codigo-exemplo.png')} alt="rastreio" className="rastreio-img" />
 
           </div>
+
+
+
         </div>
       </Box>
     )
@@ -132,17 +126,17 @@ function Traceability() {
 
       {!isError &&
         <div className="box-produto">
+          <div>
+            <img src={require('../../imgs/Check.png')} alt="check" className="check-mark" />
 
-          <img src={require('../../imgs/Check.png')} alt="check" className="check-mark"  />
+            <div className="produto-esquerdo">
+              <img className="foto-produto" src={productData.path ? productData.path : 'https://placehold.co/300x300'} alt="Foto do produto" />
+            </div>
 
-          <div className="produto-esquerdo">
-            <img className="foto-produto" src={productData.path ? productData.path : 'https://placehold.co/300x300'} alt="Foto do produto" />
+            <img src={require('../../imgs/Ellipse.png')} alt="elipse" className="elipse" />
+
+            <img src={producer.pathFoto ? producer.pathFoto : 'https://placehold.co/300x300'} alt="Foto do produto" className='foto-produtor' />
           </div>
-
-          <img src={require('../../imgs/Ellipse.png')} alt="elipse" className="elipse" />
-
-          <img src={producer.pathFoto ? producer.pathFoto : 'https://placehold.co/300x300'} alt="Foto do produto" className='foto-produtor' />
-
           <div className="produtos-information">
             <div className="nome">
               <h2>
@@ -166,9 +160,9 @@ function Traceability() {
               <h2>
                 Sobre o Produtor
               </h2>
-         
-                {producerResume && producerResume[0]  ? <h3>{producerResume[0].body}</h3> : <h3>Sem descrição.</h3>}
-                
+
+              {producerResume && producerResume[0] ? <h3>{producerResume[0].body}</h3> : <h3>Sem descrição.</h3>}
+
             </div>
           </div>
 

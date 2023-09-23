@@ -1,10 +1,9 @@
 /* container do header */
-.container {
-    background-color: #FAF8F8;
-    min-height: 100vh;
+.header {
+    background-color: var(--main-white);
     display: flex;
     justify-content: space-around;
-    align-items: center;
+    padding: 80px 10px 120px 10px;
 }
 
 /* texto do lado */
@@ -12,71 +11,50 @@
     width: 552px;
     display: flex;
     flex-direction: column;
-    gap:20px
+    gap: 20px;
+    color: var(--main-purple);
 }
 
 .text-side .rastrear {
     display: flex;
     gap: 10px;
-    color: #140C9F;
-    border-bottom: #FAF8F8 4px solid;
+    color: var(--main-purple);
     width: 140px;
     padding-bottom: 10px;
     cursor: pointer;
+    position: relative;
 }
 
-.text-side .rastrear h3{
-    color: #140C9F;
+
+.animated-border {
+    width: 100%;
+    height: 4px;
+    background-color: var(--main-purple);
+    /* Change to your desired border color */
+    animation: borderAnimation 3s linear infinite;
+    /* Adjust animation duration as needed */
+    position: absolute;
+    bottom: 0;
+
 }
 
-.text-side .rastrear .link{
-    color: #140C9F;
+.text-side .rastrear h3 {
+    color: var(--main-purple);
+}
+
+.text-side .rastrear .link {
+    color: var(--main-purple);
     text-decoration: none;
     display: flex;
-    gap:10px;
+    gap: 10px;
 }
 
+.text-side .rastrear :hover {
+    color: var(--main-orange);
+}
 
 .text-side h1 {
-    color: #140C9F;
-}
-
-.text-side .rastrear:hover {
-    border-bottom: #140C9F 4px solid;
-}
-
-
-/* container da busca por código */
-.rastreio {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    padding: 30px;
-    position: relative;
-    height: 180px;
-}
-
-.rastreio input{
-    color: #140C9F;
-    width: 110%;
-    padding: 15px;
-}
-
-.triangulo {
-    color: #BF232C;
-    rotate: -25deg;
-    position: absolute;
-    bottom: 15px;
-
-}
-
-.check {
-    color: #140C9F;
-    rotate: 7deg;
-    position: absolute;
-    right: 3px;
-    bottom: 78px
-;
+    color: var(--main-purple);
 }
 
 /*container do festival */
@@ -85,80 +63,186 @@
     display: flex;
     justify-content: space-around;
     gap: 15px;
-    padding: 160px;
+    padding: 80px 0px;
     height: 100%;
-    background-color: #EE771E;
+    background-color: var(--main-orange);
     align-items: center;
 }
 
 
-.texto-festival h1{
-    color: #FAF8F8;
+.texto-festival h1 {
+    color: var(--main-white);
     font-size: 48px;
 }
 
-.texto-festival h3{
-    color: #FAF8F8;
+.texto-festival h3 {
+    color: var(--main-white);
     font-size: 20px;
 }
-.logo-festival{
+
+.logo-festival {
     width: 287px;
     height: 301px;
+}
+
+/* associação */
+
+.associação {
+    background-color: var(--main-white);
+    padding: 80px 0px 80px 3px;
+    display: flex;
+    align-items: center;
+}
+
+/* produtores */
+
+.produtores {
+    background-color: var(--main-white);
+    padding: 80px 0px 80px 3px;
+    display: flex;
+    align-items: center;
+}
+
+/* nao associado */
+
+.nao-associado {
+    background-color: var(--main-white);
+    padding: 80px 0 80px 0px;
+    display: flex;
+    align-items: center;
+}
+
+.saiba-mais {
+    text-decoration: none;
+    color: var(--main-purple);
+}
+
+.saiba-mais:hover {
+    color: var(--main-purple);
+    text-decoration: underline;
+    text-underline-offset: 5px;
+    text-decoration-thickness: 3px;
+}
+
+.ver-mais {
+    border-bottom: 3px solid var(--main-white);
+    padding: 10px;
+}
+
+.ver-mais:hover {
+    border-bottom: 3px solid var(--main-purple);
+    padding: 10px;
+}
+
+/* notícias */
+
+.noticias {
+    background-color: var(--main-white);
+    display: flex;
+    padding: 80px 0px 120px 0px;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 64px;
+}
+
+.temas {
+    color: #0B0B0B;
+    text-decoration: none;
+}
+
+.temas:hover {
+    color: #0B0B0B;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    cursor: pointer;
+}
+
+@keyframes borderAnimation {
+    0% {
+        width: 100%;
+        right: 0;
+    }
+
+    50% {
+        width: 0;
+    }
+
+    100% {
+        width: 100%;
+        left: 0;
+    }
 }
 
 /* media query */
 
 @media (max-width: 768px) {
 
-    .container {
+    .header {
         flex-direction: column;
-        max-width: 768px;
     }
-    
+
     .text-side {
-        width: 90%;
-        max-width: 552px; 
+        width: 100%;
     }
 
-    .text-side h1 {
+    h1 {
         font-size: 24px;
-    }
-
-    .rastreio {
-        width: 100%;
-        max-width: 552px;
-        margin-bottom: 150px;
-    }
-    .rastreio input {
-        width: 100%;
     }
 
     .festival {
         display: flex;
         flex-direction: column;
         gap: 20px;
-        padding: 60px;
+        padding: 30px;
         align-items: center;
-        justify-content: center;
     }
 
     .texto-festival {
         text-align: center;
-      
+
     }
 
-    .texto-festival h1{
+    .texto-festival h1 {
         font-size: 26px;
     }
 
-    .texto-festival h3{
+    .texto-festival h3 {
         font-size: 16px;
     }
 
     .logo-festival {
         width: 60%;
-        height: auto; /* To maintain the image's aspect ratio */
-        display: block; /* Ensures that width and height are applied correctly */
-        margin: 0 auto; /* Center horizontally */
+        height: auto;
+        /* To maintain the image's aspect ratio */
+        display: block;
+        /* Ensures that width and height are applied correctly */
+        margin: 0 auto;
+        /* Center horizontally */
+    }
+
+    .rastreio img {
+        width: 100%;
+        height: auto;
+        /* To maintain the image's aspect ratio */
+        display: block;
+        /* Ensures that width and height are applied correctly */
+        margin-left: 66px;
+        /* Center horizontally */
+    }
+
+    .produtores {
+        padding: 0px
+    }
+
+    .associação {
+        padding: 10px 0;
+    }
+
+    .nao-associado {
+        padding: 10px 0;
+    }
+
+    .noticias {
+        padding: 10px 0;
     }
 }

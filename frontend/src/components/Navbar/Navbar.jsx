@@ -96,25 +96,35 @@ function Navbar() {
         <div className="actions">
 
           <div className="pesquisar">
-            <CiSearch size={30} style={{ color: '#140C9F' }} />
+            <CiSearch size={30} style={{ color: '#140C9F', marginTop: '6px' }} />
             <input type="text" placeholder="Pesquisar" />
           </div>
 
           {!user ? (
-            <button onClick={() => navigate('/entrar')}>Associado</button>
+            <button className="button-purple" onClick={() => navigate('/entrar')}>Associado</button>
           ) : (
             <div class="dropdown">
               <Avatar src={(user && user.pathFoto) ? user.pathFoto : 'https://placehold.co/600x400'} alt="Foto de Perfil"
                 sx={{ width: 36, height: 36 }} />
 
               <div class="dropdown-content">
-                <Link className="link-content" to="/meu-perfil">Meu Perfil</Link>
+
+                <Link className="link-content" to="/meu-perfil">
+                  <Avatar src={(user && user.pathFoto) ? user.pathFoto : 'https://placehold.co/600x400'} alt="Foto de Perfil"
+                    sx={{ width: 28, height: 28 }} />
+                  <h4 style={{ fontWeight: 400 }}>Meu Perfil</h4>
+                </Link>
+
+                <Divider />
+
                 {user && (
                   ((user.role !== 'admin' && (user.role !== 'user')) || user.oldRole)
                     ? <ButtonChangeRole />
                     : null
                 )}
-                <button className="sair" onClick={onLogout}>Sair</button>
+
+                <button className="button-red" onClick={onLogout}>Sair</button>
+                
               </div>
             </div>
           )}

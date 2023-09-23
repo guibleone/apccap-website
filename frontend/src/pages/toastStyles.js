@@ -6,7 +6,6 @@ const styleError = {
     pauseOnHover: true,
     draggable: true,
     progress: undefined,
-    theme: "colored",
 }
 
 const styleSuccess = {
@@ -17,7 +16,6 @@ const styleSuccess = {
     pauseOnHover: true,
     draggable: true,
     progress: undefined,
-    theme: "colored",
 }
 
 export { styleError, styleSuccess }

@@ -33,7 +33,7 @@ export default function ButtonChangeRole() {
         <>
             <CssBaseline />
             <button
-            style={{backgroundColor: '#ffffff', color: '#140C9F', border: '1px solid #140C9F', padding: '5px', cursor: 'pointer'}}
+            className='button-white small'
                 onClick={handleAssociateProducer}
                 disabled={timer}
             >

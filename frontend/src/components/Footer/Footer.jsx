@@ -37,7 +37,6 @@ function Footer() {
           </Box>
         </Grid>
 
-
         <Grid item xs={12} sm={8} sx={{ display: 'flex', flexDirection: matches ? 'column' : 'row', gap: '20px' }}  >
           <Grid item xs={12} sm={2}>
             <Typography variant="h6" gutterBottom>

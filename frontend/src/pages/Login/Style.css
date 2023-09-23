@@ -6,7 +6,7 @@
   gap:64px;
   min-height: 100vh;
   padding: 80px 160px;
-  background-color: #FAF8F8;
+  background-color: var(--main-white);
 }
 
 /* estilos do formulario */
@@ -45,15 +45,15 @@
 }
 
 .cpf input {
-    color: #140C9F;
+    color: var(--main-purple);
     width: 100%;
-    border: #140C9F 1px solid;
+    border: var(--main-purple) 1px solid;
     padding: 15px;
 }
 
 .cpf label {
     align-self: flex-start;
-    color: #140C9F;
+    color: var(--main-purple);
 }
 
 .senha {
@@ -66,13 +66,13 @@
 
 .senha label {
     align-self: flex-start;
-    color: #140C9F;
+    color: var(--main-purple);
 }
 
 .senha input {
-    color: #140C9F;
+    color: var(--main-purple);
     width: 100%;
-    border: #140C9F 1px solid;
+    border: var(--main-purple) 1px solid;
     padding: 15px;
 }
 
@@ -89,33 +89,33 @@
 }
 
  .cadastrar {
-    background-color: #FAF8F8;
-    color: #140C9F;
+    background-color: var(--main-white);
+    color: var(--main-purple);
     padding: 15px;
     cursor: pointer;
-    border: #140C9F 1px solid;
+    border: var(--main-purple) 1px solid;
     font-size: 16px;
     font-weight: 600;
     width: 130px;
 }
 
  .cadastrar:hover {
-    background-color: #140C9F;
-    color: #FAF8F8;
+    background-color: var(--main-purple);
+    color: var(--main-white);
 }
 
 .entrar {
-    background-color: #140C9F;
-    color: #FAF8F8;
+    background-color: var(--main-purple);
+    color: var(--main-white);
     padding: 15px;
     cursor: pointer;
-    border: #140C9F 1px solid;
+    border: var(--main-purple) 1px solid;
     font-size: 16px;
     width: 130px;
     font-weight: 600;
 }
 
 .entrar:hover {
-    background-color: #FAF8F8;
-    color: #140C9F;
+    background-color: var(--main-white);
+    color: var(--main-purple);
 }

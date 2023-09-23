@@ -32,6 +32,7 @@ function Informations() {
         address: user.address
 
     })
+    
 
     const { name, email, cpf } = inputData
 
