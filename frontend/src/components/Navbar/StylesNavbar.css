@@ -27,6 +27,17 @@
     text-decoration-thickness: 3px;
 }
 
+.sair{
+    text-decoration: none;
+    color: var(--main-purple-darke);
+}
+
+.sair:hover {
+    color: var(--main-purple-dark);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+}
+
 .actions {
     display: flex;
     gap: 5px;

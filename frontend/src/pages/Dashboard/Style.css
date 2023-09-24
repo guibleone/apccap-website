@@ -147,7 +147,8 @@
 
 .temas {
     color: #0B0B0B;
-    text-decoration: none;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
 }
 
 .temas:hover {

@@ -16,7 +16,7 @@ const jwt = require('jsonwebtoken')
 // pegar usuário
 const getUsers = asyncHandler(async (req, res) => {
     try {
-        const users = await User.find({}).select('-password')
+        const users = await User.find({}).select('-dados_pessoais.password')
         // const token = req.user.token
 
         if (users) {
@@ -35,7 +35,7 @@ const getUsers = asyncHandler(async (req, res) => {
 const getUserData = asyncHandler(async (req, res) => {
     try {
 
-        const user = await User.findById(req.params.id).select('-password')
+        const user = await User.findById(req.params.id).select('-dados_pessoais.password')
 
         if (user) {
             res.status(200).json(user)
@@ -129,6 +129,11 @@ const deleteUser = asyncHandler(async (req, res) => {
         }
         if (user.analise.analise_pedido.recurso.path) {
             const storageRef = ref(storage, `conselhoRelatórios/${user._id}/recurso`)
+            await deleteObject(storageRef)
+        }
+
+        if(user.marca.logo){
+            const storageRef = ref(storage, `logos/${user._id}`)
             await deleteObject(storageRef)
         }
 

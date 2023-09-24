@@ -4,8 +4,19 @@ const API_URL = '/api/users/'
 
 
 // registrar usuário
-const registerUser = async (userData) => {
-    const response = await axios.post(API_URL + 'registrar', userData);
+const registerUser = async ({ userData, logo }) => {
+
+    const formData = new FormData();
+    formData.append('userData', JSON.stringify(userData));
+    formData.append('logo', logo);
+
+    const config = {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    }
+
+    const response = await axios.post(API_URL + 'registrar', formData, config);
 
     if (response.data) {
         localStorage.setItem('user', JSON.stringify(response.data));
@@ -34,19 +45,25 @@ const loginUser = async (userData) => {
 }
 
 // atualizar usuário
-const updateUser = async (userData) => {
+const updateUser = async ({ userData, logo }) => {
 
     let token = userData.token
+
+
+    const formData = new FormData();
+    formData.append('userData', JSON.stringify(userData));
+    formData.append('logo', logo);
 
     // pegar o token do usuário 
 
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
         },
     }
 
-    const response = await axios.put(API_URL + userData.id, userData, config)
+    const response = await axios.put(API_URL + userData.id, formData, config)
 
     if (response.data) {
         localStorage.setItem('user', JSON.stringify(response.data))
@@ -61,6 +78,9 @@ const addProfilePhoto = async (userData) => {
 
     let token = userData.token
 
+    const formData = new FormData();
+    formData.append('pathFoto', userData.pathFoto);
+
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -68,7 +88,7 @@ const addProfilePhoto = async (userData) => {
         },
     }
 
-    const response = await axios.post(API_URL + 'foto/' + userData.id, userData, config)
+    const response = await axios.post(API_URL + 'foto/' + userData.id, formData, config)
 
     if (response.data) {
         localStorage.setItem('user', JSON.stringify(response.data))
@@ -154,7 +174,7 @@ const associateProducer = async (data) => {
     }
 
     const response = await axios.post(API_URL + '/associate-producer', data, config)
-    
+
     if (response.data) {
         localStorage.setItem('user', JSON.stringify(response.data))
     }

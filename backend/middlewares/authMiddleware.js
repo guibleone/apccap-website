@@ -18,7 +18,7 @@ const protect = asyncHandler(async (req, res, next) => {
       const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
       // Pegar usuário pelo token
-      req.user = await User.findById(decoded.id).select('-password')
+      req.user = await User.findById(decoded.userId).select('-password')
 
       next()
     } catch (error) {
@@ -48,12 +48,11 @@ const hasRole = (roles) => {
       try {
 
         token = req.headers.authorization.split(' ')[1]
-
         // Verificar token
-        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)   
 
         // Pegar usuário pelo token
-        const user = await User.findById(decoded.id).select('-password')
+        const user = await User.findById(decoded.userId).select('-dados_pessoais.password')
         req.user = user
 
         if (!user || !roles.includes(user.role)) {

@@ -14,9 +14,10 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'
 import { logout } from '../../features/auth/authSlice';
 import ButtonChangeRole from '../ChangeRole/ButtonChangeRole';
+import { AiOutlineClose } from 'react-icons/ai';
 
 
-const drawerWidth = 240;
+const drawerWidth = '65%';
 
 
 const AppBar = styled(MuiAppBar, {
@@ -68,11 +69,11 @@ function NavMenu() {
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
             <AppBar position="fixed" open={open} sx={{
-                backgroundColor:'#140C9F'
+                backgroundColor: '#140C9F'
             }}>
                 <Toolbar>
-  
-                <Link style={{flexGrow:1}} className="logo" to='/'>
+
+                    <Link style={{ flexGrow: 1 }} className="logo" to='/'>
                         <svg xmlns="http://www.w3.org/2000/svg" width="151" height="20" viewBox="0 0 151 28" fill="none">
                             <path d="M14.036 4.58165L8.82963 17.2918H19.2037L14.036 4.58165ZM11.0496 1.25121H17.2899L28.2006 26.748H23.033L20.6203 20.8527H7.45087L5.07693 26.748H0.0615234L11.0496 1.25121Z" fill="#FAF8F8" />
                             <path d="M42.1744 13.502C44.2668 13.502 45.7024 13.1761 46.4811 12.5258C47.2598 11.8747 47.6483 10.7585 47.6483 9.17643C47.6483 7.51697 47.2663 6.38104 46.5008 5.76862C45.7345 5.1562 44.2923 4.84999 42.1744 4.84999H34.7093V13.502H42.1744ZM29.9614 1.25121H42.4419C45.811 1.25121 48.3126 1.86363 49.9457 3.08929C51.5796 4.31413 52.3962 6.34317 52.3962 9.17643C52.3962 12.7242 51.1071 15.0718 48.5299 16.2201C47.2532 16.8078 45.211 17.1008 42.404 17.1008H34.7093V26.748H29.9614V1.25121Z" fill="#FAF8F8" />
@@ -107,17 +108,81 @@ function NavMenu() {
                 variant="persistent"
                 anchor="right"
                 open={open}
+                PaperProps={{
+                    sx: {
+                        backgroundColor: "#140C9F",
+                        color: "#FAF8F8",
+                    }
+                }}
             >
-                <DrawerHeader>
-                    <IconButton onClick={handleDrawerClose}>
+                <DrawerHeader sx={{
+                    backgroundColor: '#140C9F',
+                    color: '#FAF8F8',
+                }}>
+                    <IconButton style={{ color: '#FAF8F8', }} onClick={handleDrawerClose}>
                         {theme.direction === 'rtl' ? <TbArrowNarrowLeft /> : <TbArrowNarrowRight />}
                     </IconButton>
                 </DrawerHeader>
                 <Divider />
-                <List>
+                <List sx={{
+                    backgroundColor: '#140C9F',
+                    color: '#FAF8F8',
+                }}>
+                    {user && (
+                        <>
+                            <ListItem >
+                                <Box sx={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
+
+                                    <Link style={
+                                        {
+                                            color: 'inherit',
+                                            textDecoration: 'none',
+                                        }
+                                    }
+                                        to="/meu-perfil">
+
+                                        <Avatar src={user.pathFoto ? user.pathFoto : 'https://placehold.co/600x400'} alt="Foto de Perfil"
+
+                                            sx={{ width: 46, height: 46 }} />
+
+                                    </Link>
+
+                                    <Box>
+                                        <Link style={
+                                            {
+                                                color: 'inherit',
+                                                textDecoration: 'none',
+                                            }
+                                        }>
+
+                                            <Typography variant="subtitle1" component="div" sx={{ color: '#FAF8F8' }}>
+                                                {user.dados_pessoais.name}
+                                            </Typography>
+
+                                        </Link>
+
+                                        <h5 style={{ color: '#FAF8F8', fontWeight: 300 }}>
+                                            {user.role}
+                                        </h5>
+
+                                    </Box>
+
+                                    <Box sx={{ justifySelf: 'flex-end' }}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="10" viewBox="0 0 10 5" fill="none">
+                                            <path d="M9 0.984375L5.64018 3.78422C5.26934 4.09326 4.73066 4.09326 4.35982 3.78422L1 0.984376" stroke="#FAF8F8" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+
+                                    </Box>
+
+                                </Box>
+
+                            </ListItem>
+                        </>)}
+
                     <ListItem >
+
                         <ListItemIcon>
-                            <TbHome2 />
+                            <TbHome2 style={{ color: "#FAF8F8" }} />
                         </ListItemIcon>
                         <Link style={
                             {
@@ -129,7 +194,7 @@ function NavMenu() {
 
                     <ListItem >
                         <ListItemIcon>
-                            <TbSearch />
+                            <TbSearch style={{ color: "#FAF8F8" }} h />
                         </ListItemIcon>
                         <Link style={
                             {
@@ -141,7 +206,7 @@ function NavMenu() {
 
                     <ListItem >
                         <ListItemIcon>
-                            <MdLiquor />
+                            <MdLiquor style={{ color: "#FAF8F8" }} />
                         </ListItemIcon>
                         <Link style={
                             {
@@ -152,11 +217,9 @@ function NavMenu() {
                         } to="/festival-cachaca">Festival da Cachaça</Link>
                     </ListItem>
 
-                    <Divider />
-
                     <ListItem >
                         <ListItemIcon>
-                            <TbUsers />
+                            <TbUsers style={{ color: "#FAF8F8" }} />
                         </ListItemIcon>
                         <Link style={
                             {
@@ -169,7 +232,7 @@ function NavMenu() {
 
                     <ListItem >
                         <ListItemIcon>
-                            <TbNews />
+                            <TbNews style={{ color: "#FAF8F8" }} />
                         </ListItemIcon>
                         <Link style={
                             {
@@ -180,58 +243,43 @@ function NavMenu() {
                         } to="/blog">Blog</Link>
                     </ListItem>
 
-
-
                 </List>
-                <Divider />
+
                 <List>
 
-                    <Box sx={
-                        {
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            gap: '10px',
-                            marginBlock: '10px',
-                        }
-                    }>
-                        {!user ? (
-                            <>
-                                <Button variant="contained" color="success" href="/entrar">Entrar</Button>
-                                <Button variant="contained" color="primary" href="/registrar">Registrar</Button>
-                            </>
-                        ) : (
-                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px' }}>
-                                <Link style={
-                                    {
-                                        color: 'inherit',
-                                        textDecoration: 'none',
-                                    }
+                    {user && (
+                        ((user.role !== 'admin' && (user.role !== 'user')) || user.oldRole)
+                            ? <ListItem >
+                                <ButtonChangeRole />
+                            </ListItem>
+                            : null
+                    )}
+
+                    {!user ? (
+                        <>
+                            <ListItem style={{display:'flex', justifyContent:'center'}}>
+                                <button className='button-white' onClick={() => navigate('/entrar')}>Associado</button>
+                            </ListItem>
+                        </>
+                    ) : (
+
+                        <ListItem >
+                             <ListItemIcon>
+                            <AiOutlineClose style={{ color: "#FAF8F8" }} />
+                        </ListItemIcon>
+                            <Link style={
+                                {
+                                    color: 'inherit',
+                                    textDecoration: 'none',
                                 }
-                                    to="/meu-perfil">
+                            } onClick={() => dispatch(logout())}>Sair</Link>
+                        </ListItem>
+                    )}
 
-                                    <Avatar src={user.pathFoto ? user.pathFoto : 'https://placehold.co/600x400'} alt="Foto de Perfil"
-
-                                        sx={{ width: 36, height: 36 }} />
-
-                                </Link>
-
-                                <Button fullWidth variant="contained" color="error" onClick={() => dispatch(logout(), navigate('/'))}>Sair</Button>
-
-                                {user && (
-                                    ((user.role !== 'admin') || user.oldRole)
-                                        ? <ButtonChangeRole />
-                                        : null
-                                )}
-                            </Box>
-
-                        )}
-
-                    </Box>
 
                 </List>
             </Drawer>
-        </Box>
+        </Box >
     )
 }
 

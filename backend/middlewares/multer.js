@@ -8,6 +8,9 @@ const fileFilterFoto = (req, file, cb) => {
     file.mimetype === "image/jpeg" ||
     file.mimetype === "image/png"
   ) {
+    file.originalname = Buffer.from(file.originalname, 'latin1').toString(
+      'utf8',
+    )
     cb(null, true);
   } else {
     cb(null, false);
@@ -58,7 +61,8 @@ const fileFilterExcel = (req, file, cb) => {
   } else {
     cb(null, false);
     return new Error("Formato de arquivo inválido");
-  }}
+  }
+}
 
 //configura o filtro (selos)
 const fileFilterSelo = (req, file, cb) => {
@@ -170,4 +174,4 @@ const uploadSelo = multer({
 });
 
 
-module.exports = {uploadProfilePhoto, uploadDoc, uploadProduct, uploadExcel, uploadSelo, uploadRelatory,uploadRelatorys};
+module.exports = { uploadProfilePhoto, uploadDoc, uploadProduct, uploadExcel, uploadSelo, uploadRelatory, uploadRelatorys };

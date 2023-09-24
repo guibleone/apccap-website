@@ -11,7 +11,7 @@
 :root {
     --main-purple: #140C9F;
     --main-purple-light: #2A1A92;
-    --main-purple-dark: #0A0845;
+    --main-purple-dark: #0F0A70;
     --main-purple-darker: #0A0845;
     --main-white: #FAF8F8;
     --main-white-light: #F2F2F2;
@@ -46,11 +46,14 @@ html {
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
+    border: none;
+    border: 1px solid var(--main-white);
 }
 
 .button-purple:hover {
     background-color: var(--main-white);
     color: var(--main-purple);
+    border: 1px solid var(--main-purple);
 }
 
 .button-white {
@@ -61,11 +64,13 @@ html {
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
+    border: 1px solid var(--main-purple);
 }
 
 .button-white:hover {
     background-color: var(--main-purple);
     color: var(--main-white);
+    border: 1px solid var(--main-white);
 }
 
 .button-red {

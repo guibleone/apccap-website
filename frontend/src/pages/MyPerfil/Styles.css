@@ -1,0 +1,29 @@
+/* estilos do formulario */
+ .title {
+    display: flex;
+    flex-direction: column;
+    color: #0F0A70;
+    gap: 20px;
+}
+
+ .title h1 {
+    font-size: 40px;
+    font-weight: 900;
+}
+
+ .title p {
+    font-size: 20px;
+    font-weight: 400;
+}
+
+
+@media (max-width: 768px) {
+    .title h1 {
+        font-size: 30px;
+    }
+
+     .title p {
+        font-size: 16px;
+    }
+}
+

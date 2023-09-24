@@ -9,111 +9,174 @@ const { storage } = require('../db/firebase.js')
 
 // registrar usuário
 const registerUser = asyncHandler(async (req, res) => {
-    const { name, cpf, password, email, acessLevel, pathFoto, address } = req.body
 
-    if (!name || !cpf || !password || !email) {
-        res.status(400)
-        throw new Error('Preencha todos os campos')
+    const { userData } = req.body;
+
+    try {
+
+        const { dadosPessoaisData, propriedadeData, marcaData } = JSON.parse(userData);
+
+        if (dadosPessoaisData && propriedadeData && marcaData) {
+
+            const emailExists = await User.findOne({
+                'dados_pessoais.email': dadosPessoaisData.email,
+
+            });
+
+            const cpfExists = await User.findOne({
+                'dados_pessoais.cpf': dadosPessoaisData.cpf,
+            });
+
+            if (emailExists) {
+                res.status(400).json({ message: 'Email já cadastrado. Tente outro.' });
+                return;
+            }
+
+            if (cpfExists) {
+                res.status(400).json({ message: 'CPF já cadastrado. Tente outro.' });
+                return;
+            }
+
+            const logo = req.file;
+
+            if (!logo) {
+                res.status(400).json({ message: 'Selecione uma imagem válida' });
+                return;
+            }
+
+            const salt = await bcrypt.genSalt(10);
+            const hashPassword = await bcrypt.hash(dadosPessoaisData.password, salt);
+
+            const user = await User.create({
+                dados_pessoais: {
+                    ...dadosPessoaisData,
+                    password2: '',
+                    password: hashPassword,
+                },
+                propriedade: propriedadeData,
+                marca: { ...marcaData, logo: '' },
+            });
+
+            if (user) {
+
+                user.token = generateToken(user._id);
+
+                const storageRef = ref(storage, `logos/${user._id}`)
+
+                const metadata = {
+                    contentType: logo.mimetype,
+                }
+
+                const snapshot = await uploadBytesResumable(storageRef, logo.buffer, metadata);
+
+                const url = await getDownloadURL(snapshot.ref);
+
+                user.marca.logo = url
+
+                await user.save();
+
+                return res.json(user);
+
+            } else {
+                return res.status(400).json({ message: 'Dados inválidos' });
+            }
+        } else {
+
+            res.status(400).json({ message: 'Preencha todos os campos' });
+        }
+
+    } catch (error) {
+        res.status(500)
+        throw new Error('Erro ao criar usuário')
     }
 
-    // verificar se o cpf já existe
-    const cpfExists = await User.findOne({ cpf })
-    if (cpfExists) {
-        res.status(400)
-        throw new Error('CPF já cadastrado')
-    }
+});
 
-    // verificar se o email já existe
-    const isEmail = await User.findOne({ email })
-    if (isEmail) {
-        res.status(400)
-        throw new Error('Email já cadastrado')
-    }
 
-    const salt = await bcrypt.genSalt(10)
-    const hashPassword = await bcrypt.hash(password, salt)
-
-    const user = await User.create({
-        name,
-        cpf,
-        password: hashPassword,
-        email,
-        pathFoto,
-        acessLevel,
-        address
-    })
-
-    if (user) {
-        user.token = generateToken(user._id)
-
-        await user.save()
-
-        res.json(user)
-    } else {
-        res.status(400)
-        throw new Error('Dados inválidos')
-    }
-
-})
 
 // adicionar foto de perfil
 const addProfilePhoto = asyncHandler(async (req, res) => {
+    try {
 
-    if (!req.file) {
-        res.status(400)
-        throw new Error('Selecione uma imagem válida')
-    }
-
-    const user = await User.findById(req.params.id)
-
-    if (user) {
-
-        const storageRef = ref(storage, `profilePhotos/${user._id}`)
-
-        const metadata = {
-            contentType: req.file.mimetype,
+        if (!req.file) {
+            res.status(400)
+            throw new Error('Selecione uma imagem válida')
         }
 
-        const snapshot = await uploadBytesResumable(storageRef, req.file.buffer, metadata);
+        const user = await User.findById(req.params.id)
 
-        const url = await getDownloadURL(snapshot.ref);
+        if (user) {
 
-        user.pathFoto = url
+            if(user.dados_pessoais.profilePhoto) {
+                const storageRef = ref(storage, `profilePhotos/${user._id}`)
+                await deleteObject(storageRef)
+            }
 
-        await user.save()
+            const storageRef = ref(storage, `profilePhotos/${user._id}`)
 
-        res.json(user)
+            const metadata = {
+                contentType: req.file.mimetype,
+            }
 
-    } else {
-        res.status(404)
-        throw new Error('Usuário não encontrado')
-    }
+            const snapshot = await uploadBytesResumable(storageRef, req.file.buffer, metadata);
 
-})
+            const url = await getDownloadURL(snapshot.ref);
 
-// login de usuário
-const loginUser = asyncHandler(async (req, res) => {
-    const { cpf, password } = req.body
+            user.dados_pessoais = {
+                ...user.dados_pessoais,
+                profilePhoto: url
+            }
 
-    if (!cpf || !password) {
+            await user.save()
+
+            res.json(user)
+
+        } else {
+            res.status(404)
+            throw new Error('Usuário não encontrado')
+        }
+
+    } catch (error) {
         res.status(400)
-        throw new Error('Preencha todos os campos')
-    }
-
-    const user = await User.findOne({ cpf })
-
-    if (user && (await bcrypt.compare(password, user.password))) {
-        user.token = generateToken(user._id)
-
-        await user.save()
-
-        res.json(user)
-    } else {
-        res.status(401)
-        throw new Error('CPF ou senha inválidos')
+        throw new Error('Erro ao adicionar foto de perfil')
     }
 
 })
+
+// adidionar logo da marca
+
+const loginUser = asyncHandler(async (req, res) => {
+
+    const { cpf, password } = req.body;
+
+    try {
+        if (!cpf || !password) {
+            res.status(400);
+            throw new Error('Preencha todos os campos');
+        }
+
+        const user = await User.findOne({ 'dados_pessoais.cpf': cpf });
+
+        const userPassword = user && user.dados_pessoais.password
+
+        if (user && (await bcrypt.compare(password, userPassword))) {
+            const token = generateToken(user._id);
+
+            user.token = token;
+
+            await user.save();
+
+            res.json(user);
+        } else {
+            res.status(401);
+            return res.json({ message: 'CPF ou senha inválidos' });
+        }
+    } catch (error) {
+        res.status(500)
+        throw new Error('Erro ao fazer login')
+    }
+});
+
 
 // deletar usuário
 const deleteUser = asyncHandler(async (req, res) => {
@@ -128,49 +191,103 @@ const deleteUser = asyncHandler(async (req, res) => {
     }
 })
 
-// atualizar usuário 
 const updateUser = asyncHandler(async (req, res) => {
-    const user = await User.findById(req.params.id)
 
-    const emailExists = await User.findOne({ email: req.body.email })
-    const cpfExists = await User.findOne({ cpf: req.body.cpf })
+    const userId = req.params.id;
+    const { userData } = req.body;
 
-    //verificar se email já existe
-    if (emailExists) {
-        if (emailExists._id != req.params.id) {
-            res.status(400)
-            throw new Error('Email já cadastrado.Tente outro')
+    try {
+        const { dadosPessoaisData, propriedadeData, marcaData } = JSON.parse(userData);
+
+        if (dadosPessoaisData && propriedadeData && marcaData) {
+
+            const emailExists = await User.findOne({
+                'dados_pessoais.email': dadosPessoaisData.email,
+                _id: { $ne: userId },
+            });
+
+            const cpfExists = await User.findOne({
+                'dados_pessoais.cpf': dadosPessoaisData.cpf,
+                _id: { $ne: userId },
+            });
+
+            if (emailExists) {
+                res.status(400).json({ message: 'Email já cadastrado. Tente outro.' });
+                return;
+            }
+
+            if (cpfExists) {
+                res.status(400).json({ message: 'CPF já cadastrado. Tente outro.' });
+                return;
+            }
+
+            const user = await User.findById(userId);
+
+            const updatedDadosPessoais = {
+                ...user.dados_pessoais,
+                ...dadosPessoaisData,
+            };
+
+            const updatedPropriedade = {
+                ...user.propriedade,
+                ...propriedadeData,
+            };
+
+
+            const updatedMarca = {
+                ...user.marca,
+                ...marcaData,
+            };
+
+            const logo = req.file;
+
+            if (logo) {
+
+                if (user.marca.logo) {
+                    const storageRef = ref(storage, `logos/${user._id}`)
+                    await deleteObject(storageRef)
+                }
+
+                const storageRef = ref(storage, `logos/${user._id}`)
+
+                const metadata = {
+                    contentType: logo.mimetype,
+                }
+
+                const snapshot = await uploadBytesResumable(storageRef, logo.buffer, metadata);
+
+                const url = await getDownloadURL(snapshot.ref);
+
+                updatedMarca.logo = url
+            }
+
+
+            if (updatedDadosPessoais && updatedPropriedade && updatedMarca) {
+
+                user.dados_pessoais = updatedDadosPessoais
+                user.propriedade = updatedPropriedade
+                user.marca = updatedMarca
+
+                await user.save();
+
+                res.status(200).json(user)
+
+            } else {
+                res.status(404).json({ message: 'Usuário não encontrado.' });
+            }
+
+        } else {
+
+            res.status(400).json({ message: 'Preencha todos os campos' });
         }
+
+    } catch (error) {
+        res.status(500)
+        throw new Error('Erro ao atualizar usuário')
     }
 
-    //verificar se cpf já existe
-    if (cpfExists) {
-        if (cpfExists._id != req.params.id) {
-            res.status(400)
-            throw new Error('CPF já cadastrado.Tente outro')
-        }
-    }
+});
 
-    // verificar se o usuário existe
-    if (user) {
-        user.name = req.body.name || user.name
-        user.cpf = req.body.cpf || user.cpf
-        user.password = req.body.password || user.password
-        user.email = req.body.email || user.email
-        user.pathFoto = req.body.pathFoto || user.pathFoto
-        user.acessLevel = req.body.acessLevel || user.acessLevel
-        user.address = req.body.address || user.address
-
-        await user.save()
-
-        res.json(user)
-
-    } else {
-        res.status(404)
-        throw new Error('Usuário não encontrado')
-    }
-
-})
 
 // reiniciar aprovação
 
@@ -190,18 +307,18 @@ const restartAprove = asyncHandler(async (req, res) => {
             throw new Error('Usuário já está em análise')
         }
 
-        if(user.analise.analise_pedido.recurso.path){
+        if (user.analise.analise_pedido.recurso.path) {
             const storageRef = ref(storage, `conselhoRelatórios/${user._id}/recurso`)
             await deleteObject(storageRef)
 
             user.analise.analise_pedido.recurso.path = ''
             user.analise.analise_pedido.recurso.time = null
             user.analise.analise_pedido.recurso.status = ''
-            
+
             await user.save()
         }
 
-        if(user.analise.analise_pedido.path){
+        if (user.analise.analise_pedido.path) {
             const storageRef = ref(storage, `conselhoRelatórios/${user._id}/analise_pedido`)
             await deleteObject(storageRef)
 
@@ -238,37 +355,37 @@ const handleRecurso = asyncHandler(async (req, res) => {
 
     try {
 
-        if(req.file){     
+        if (req.file) {
 
-                const user = await User.findById(req.params.id)
-    
-                if (!user) {
-                    res.status(404)
-                    throw new Error('Usuário não encontrado')
-                }
-    
-                const storageRef = ref(storage, `conselhoRelatórios/${user._id}/recurso`)
-    
-                const metadata = {
-                    contentType: req.file.mimetype,
-                }
-    
-                const snapshot = await uploadBytesResumable(storageRef, req.file.buffer, metadata);
-    
-                const url = await getDownloadURL(snapshot.ref);
-    
-                user.analise.analise_pedido.recurso.path = url
-                user.analise.analise_pedido.recurso.time = null
-    
-                await user.save()
-    
-                res.json(user)
+            const user = await User.findById(req.params.id)
+
+            if (!user) {
+                res.status(404)
+                throw new Error('Usuário não encontrado')
+            }
+
+            const storageRef = ref(storage, `conselhoRelatórios/${user._id}/recurso`)
+
+            const metadata = {
+                contentType: req.file.mimetype,
+            }
+
+            const snapshot = await uploadBytesResumable(storageRef, req.file.buffer, metadata);
+
+            const url = await getDownloadURL(snapshot.ref);
+
+            user.analise.analise_pedido.recurso.path = url
+            user.analise.analise_pedido.recurso.time = null
+
+            await user.save()
+
+            res.json(user)
         }
 
-    }catch(error){
+    } catch (error) {
         res.status(400)
         throw new Error('Erro ao enviar recurso')
-    }   
+    }
 
 })
 
@@ -315,7 +432,7 @@ const associateProducer = asyncHandler(async (req, res) => {
             return;
         }
 
-        if(user.oldRole === 'produtor'){
+        if (user.oldRole === 'produtor') {
             res.status(400).json({ error: 'Usuário já é produtor' });
             return;
         }
@@ -334,7 +451,7 @@ const associateProducer = asyncHandler(async (req, res) => {
         user.role = 'produtor';
 
         await user.save();
-        
+
         res.json(user)
         return;
 
@@ -344,16 +461,11 @@ const associateProducer = asyncHandler(async (req, res) => {
     }
 });
 
-
-
-
-
 // gerar token
-const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
-        expiresIn: '1d'
-    })
-}
+const generateToken = (userId) => {
+    const secretKey = process.env.JWT_SECRET;
+    return jwt.sign({ userId }, secretKey, { expiresIn: '48h' });
+};
 
 // exportar funções
 module.exports = {

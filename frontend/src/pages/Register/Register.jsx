@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { reset, registerUser } from '../../features/auth/authSlice'
 import { getResume, resetResume } from '../../features/resume/resumeSlice'
@@ -40,16 +40,6 @@ function Register() {
     p: 4,
 
   }
-
-  const [formData, setFormData] = useState({
-    name: '',
-    cpf: '',
-    email: '',
-    documentos_pessoais: {},
-    address: {},
-    password: '',
-    password2: ''
-  })
 
   /* Dados Pessoais */
   const [dadosPessoaisData, setDadosPessoaisData] = useState({
@@ -112,6 +102,16 @@ function Register() {
     }))
   }
 
+
+  const [logo, setLogo] = useState('')
+  const fileInputRef = useRef(null);
+
+  const handleLogo = (e) => {
+    e.preventDefault();
+
+    setLogo(e.target.files[0])
+  };
+
   const sameCpf = (e) => {
     const isChecked = e.target.checked;
 
@@ -136,9 +136,8 @@ function Register() {
 
 
   const resume = useSelector((state) => state.resume.resume)
-  const { name, cpf, email, password, password2, address } = formData
 
-  const { user, isError, isLoading, isSuccess, message, pending } = useSelector((state) => state.auth)
+  const { user, isError, isLoading, isSuccess, message } = useSelector((state) => state.auth)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -182,28 +181,24 @@ function Register() {
     window.scrollTo(0, 0)
   }, [])
 
-  const onChange = (e) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }))
-  }
-
   const onSubmit = (e) => {
     e.preventDefault()
 
-    if (password !== password2) {
-      toast.error('Senhas não conferem.', styleError)
+    if (dadosPessoaisData.password !== dadosPessoaisData.password2) {
+      return toast.error('As senhas não coincidem.', styleError)
     }
+    if (!dadosPessoaisData || !propriedadeData || !marcaData) {
+      return toast.error('Preencha todos os campos.', styleError)
+    }
+
     else {
       const userData = {
-        name,
-        cpf,
-        email,
-        password
+        dadosPessoaisData,
+        propriedadeData,
+        marcaData
       }
 
-      console.log(dadosPessoaisData, propriedadeData, marcaData)
+      dispatch(registerUser({ userData, logo }))
     }
 
   }
@@ -950,15 +945,16 @@ function Register() {
 
             </Grid>
 
-            {!matches &&
+            {matches &&
               <>
                 <Grid item xs={12} lg={12} mt={8}>
                   <Box sx={{ display: 'flex', gap: '20px', flexDirection: !matches ? 'column' : 'row' }}>
 
                     <button className='button-purple'
                       onClick={onSubmit}
+                      disabled={isLoading}
                     >
-                      Cadastrar
+                      {isLoading ? <CircularProgress color="success" style={{ padding: '5px' }} /> : 'Cadastrar'}
                     </button>
 
                     <button className='button-white'
@@ -991,12 +987,15 @@ function Register() {
                     Logo da sua marca
                   </h3>
 
+
                   <TextField
                     required
                     fullWidth
                     id="logo"
                     name="logo"
-                    autoComplete="logo" onChange={onChange} type="file"
+                    autoComplete="logo" type="file"
+                    inputRef={fileInputRef}
+                    onChange={handleLogo}
                     sx={
                       {
                         '& .MuiInputBase-root': {
@@ -1011,15 +1010,16 @@ function Register() {
 
               </Box>
 
-              {matches &&
+              {!matches &&
                 <>
                   <Grid item xs={12} lg={12} mt={8}>
                     <Box sx={{ display: 'flex', gap: '20px', flexDirection: !matches ? 'column' : 'row' }}>
 
                       <button className='button-purple'
                         onClick={onSubmit}
+                        disabled={isLoading}
                       >
-                        Cadastrar
+                        {isLoading ? <CircularProgress color="success" style={{ padding: '5px' }} /> : 'Cadastrar'}
                       </button>
 
                       <button className='button-white'
@@ -1035,7 +1035,6 @@ function Register() {
                 </>
               }
 
-
             </Grid>
 
           </Grid>
@@ -1045,106 +1044,6 @@ function Register() {
 
 
       {/*
-      <Box
-        sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          minHeight: '100vh'
-        }}
-      >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          <AiFillLock />
-        </Avatar>
-
-        <Typography component="h1" variant="h5">
-          Registrar
-        </Typography>
-
-        <Box component="form" noValidate onSubmit={onSubmit} sx={{ mt: 3 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="name"
-                required
-                fullWidth
-                label="Nome Completo"
-                autoFocus
-                onChange={onChange} type="text" id="name" name="name" value={name}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                fullWidth
-                id="cpf"
-                label="CPF"
-                name="cpf"
-                autoComplete="cpf" onChange={onChange} type="number" value={cpf}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="email"
-                label="Email"
-                name="email"
-                onChange={onChange} type='email' value={email}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="password"
-                label="Senha"
-                type="password"
-                id="password"
-                autoComplete="new-password"
-                onChange={onChange} value={password}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                label="Confirmar Senha"
-                autoComplete="new-password"
-                onChange={onChange} type="password" id="password2" name="password2" value={password2}
-              />
-            </Grid>
-          </Grid>
-
-          <Grid item xs={12}>
-            <Checkbox sx={{marginLeft:'-10px'}} checked={acceptTerms} onClick={handleAcceptTermsToggle} />
-            <Typography variant='caption'>
-              Li e concordo com os <Link sx={{ cursor: 'pointer' }} onClick={handleOpenTerms} >termos</Link> de uso
-            </Typography>
-          </Grid>
-
-          <Button
-            disabled={pending || !acceptTerms}
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            {pending ? <CircularProgress size={25} color="success" /> : 'Cadastrar'}
-
-          </Button>
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Link href="/entrar" variant="body2">
-                Já tem uma conta ? Entre
-              </Link>
-            </Grid>
-          </Grid>
-        </Box>
-      </Box>
-
-
       <Modal
         open={openTerms}
         onClose={handleOpenTerms}
