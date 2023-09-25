@@ -1,45 +1,17 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from "react-redux"
-import { Typography, Box, Button, useMediaQuery, CardActions, Card, CardMedia, CardContent, Grid } from '@mui/material';
+import { Typography, Box, Button, useMediaQuery, CardActions, Card, CardMedia, CardContent, Grid, CssBaseline, Container } from '@mui/material';
 import UsersPagination from "../../../components/Pagination/Users"
 import { toast } from 'react-toastify'
 import { resetStatus } from "../../../features/admin/adminSlice"
 import { styleError, styleSuccess } from '../../toastStyles'
+import {FaUserEdit} from 'react-icons/fa'
+import { useNavigate } from 'react-router-dom';
 
 export default function Admin() {
-  const styles = {
-    mobile: {
-      box: {
-        display: 'flex',
-        flexDirection: 'column',
-      },
-      title: {
-        color: '#00007B',
-        textAlign: 'center',
-        backgroundColor: '#fff',
-        borderBottom: '1px solid #00007B',
-        padding: '10px',
-      }
-    },
-    desktop: {
-      box: {
-        display: 'flex',
-        flexDirection: 'column',
-        padding: '10px',
-        borderRadius: '10px',
-        marginTop: '10px',
 
-      },
-      title: {
-        color: '#00007B',
-        textAlign: 'center',
-        backgroundColor: '#fff',
-        borderBottom: '1px solid #00007B',
-        padding: '10px',
-      }
-    }
-  }
+  const navigate = useNavigate()
 
   const { isSuccess, isError, message } = useSelector((state) => state.admin)
 
@@ -64,58 +36,84 @@ export default function Admin() {
 
 
   return (
-    <Box>
+    <Box sx={{
+      backgroundColor: '#FAF8F8',
 
-      <Box sx={matches ? styles.mobile.title : styles.desktop.title}>
-        <Typography variant="h5" component='h2'>Painel Administrativo</Typography>
-        <Typography variant="subtitle" >Usuários Cadastrados</Typography>
-      </Box>
+    }}>
 
+      <CssBaseline />
 
-      <Grid 
-      sx={{ margin: '10px 0', display: 'flex', flexDirection: matches ? 'column' : 'row', gap: matches ? '20px' : '0' }}
-      container={!matches} 
-      rowSpacing={5} 
-      columnSpacing={{ xs: 8, sm: 6, md: 3 }} >
+      <Container maxWidth='xl' >
+        <Box sx={{
+          padding: matches ? '72px 5px' : '72px  35px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: matches ? '20px' : '0',
+        }}>
+          <h3 style={{ color: '#000', fontWeight: 600 }}>
+            Gerenciar Acessos
+          </h3>
 
-        {users && users.map((user) => (
+          <Grid
+            sx={{ margin: '10px 0', display: 'flex', flexDirection: matches ? 'column' : 'row', gap: matches ? '20px' : '0' }}
+            container={!matches}
+            rowSpacing={5}
+            columnSpacing={{ xs: 8, sm: 6, md: 3 }} >
 
-          <Grid key={user._id} item md={4}>
+            {users && users.map((user) => (
 
-            <Card sx={{ minWidth: 342 }}>
-              
-              <CardMedia
-                sx={{ height: 150 }}
-                image={user.pathFoto ? user.pathFoto : 'https://as1.ftcdn.net/jpg/02/68/55/60/220_F_268556012_c1WBaKFN5rjRxR2eyV33znK4qnYeKZjm.jpg'}
-              />
+              <Grid key={user._id} item md={3}>
+                <Box 
+                  onClick={() => navigate(`/usuario/${user._id}`)}
+                  sx={{
+                    borderRadius: '6px',
+                    border: '1.5px solid #9B9C9E',
+                    padding: '24px',
+                    flexDirection: 'column',
+                    '&:hover': {
+                      cursor: 'pointer',
+                      border: '1.5px solid #00007B',
+                    }       
+                  }} >
+                    <Box sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                    }}>
+                    <h3 style={{ color: '#000', fontWeight: 600 }}>    
+                      {user.dados_pessoais.name.split(' ')[0]} {user.dados_pessoais.name.split(' ')[user.dados_pessoais.name.split(' ').length - 1]}
+                    </h3>
 
-              <CardContent>
+                    <FaUserEdit style={{ color: '#000', fontSize: '20px' }} />
 
-                <Typography noWrap  gutterBottom variant="h5" component="div">
-                  {user.name}
-                </Typography>
+                    </Box>
 
-                <Typography noWrap variant="body2" color="text.secondary">
-                  {user.cpf} - {user.role}
-                </Typography>
+                    <p sx={{
+                      color: '#000',
+                      fontWeight: 500,
+                      fontSize: '14px',
+                    }}>
+  
+                      {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+                    </p>
+                  </Box>
 
-              </CardContent>
+              </Grid>
 
-              <CardActions>
-                <Button href={`/usuario/${user._id}`} variant='outlined' fullWidth size="small">Ver Dados</Button>
-              </CardActions>
-              
-            </Card>
+            ))}
 
           </Grid>
 
-        ))}
+          <UsersPagination setUsersData={(u) => setUsers(u)} />
 
-      </Grid>
+        </Box>
 
-      <UsersPagination setUsersData={(u) => setUsers(u)} />
+
+
+
+      </Container>
 
     </Box>
+
 
   )
 }

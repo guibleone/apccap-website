@@ -141,7 +141,7 @@ function NavMenu() {
                                     }
                                         to="/meu-perfil">
 
-                                        <Avatar src={user.pathFoto ? user.pathFoto : 'https://placehold.co/600x400'} alt="Foto de Perfil"
+                                        <Avatar src={user.dados_pessoais ? user.dados_pessoais.profilePhoto : 'https://placehold.co/600x400'} alt="Foto de Perfil"
 
                                             sx={{ width: 46, height: 46 }} />
 
@@ -257,22 +257,22 @@ function NavMenu() {
 
                     {!user ? (
                         <>
-                            <ListItem style={{display:'flex', justifyContent:'center'}}>
+                            <ListItem style={{ display: 'flex', justifyContent: 'center' }}>
                                 <button className='button-white' onClick={() => navigate('/entrar')}>Associado</button>
                             </ListItem>
                         </>
                     ) : (
 
                         <ListItem >
-                             <ListItemIcon>
-                            <AiOutlineClose style={{ color: "#FAF8F8" }} />
-                        </ListItemIcon>
+                            <ListItemIcon>
+                                <AiOutlineClose style={{ color: "#FAF8F8" }} />
+                            </ListItemIcon>
                             <Link style={
                                 {
                                     color: 'inherit',
                                     textDecoration: 'none',
                                 }
-                            } onClick={() => dispatch(logout())}>Sair</Link>
+                            } onClick={() => {navigate('/'); dispatch(logout()); }}>Sair</Link>
                         </ListItem>
                     )}
 

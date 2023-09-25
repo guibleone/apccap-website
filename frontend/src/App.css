@@ -33,6 +33,21 @@ html {
     box-sizing: border-box;
 }
 
+@media (max-width: 768px) {
+    html,
+    body {
+        overflow-x: hidden;
+    }
+    body {
+        position: relative
+    }
+    
+
+}
+
+
+
+
 ::-webkit-scrollbar {
     width: 15px;
     background: transparent;

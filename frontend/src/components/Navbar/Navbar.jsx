@@ -138,7 +138,7 @@ function Navbar() {
                       { display: 'flex', alignItems: 'center', gap: '5px' }
                     }>
 
-                      <Link className="sair" onClick={onLogout}>
+                      <Link className="sair" onClick={() => {navigate('/'); dispatch(logout()); }}>
                         <h4 style={{
                           fontSize: '16.5px',
                           fontStyle: 'normal',

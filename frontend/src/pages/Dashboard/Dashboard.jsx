@@ -515,8 +515,8 @@ function Dashboard() {
 
 
       ) : (
-        <Container>
 
+        <>
           {(user.role === "admin") && (
             <Admin />
           )}
@@ -541,7 +541,7 @@ function Dashboard() {
             <Conselho />
           )}
 
-        </Container>
+        </>
       )
       }
 

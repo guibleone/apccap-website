@@ -117,32 +117,39 @@ function UserSingle() {
 
     useEffect(() => {
 
-        dispatch(getUserData({ id, token: user.token }))
-        dispatch(getResumeData({ id, token: user.token }))
-        dispatch(getDocumentsData({ id, token: user.token }))
+        if (!user) {
+            navigate('/')
+        }
+    
+        if (user) {
+            dispatch(getUserData({ id, token: user.token }))
+            dispatch(getResumeData({ id, token: user.token }))
+            dispatch(getDocumentsData({ id, token: user.token }))
 
-        dispatch(reset())
+            dispatch(reset())
+        }
 
-    }, [dispatch, id, user.token])
+    }, [user])
 
 
     if (isLoading) {
+
         return <Box sx={
             {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                height: '100vh'
+                backgroundColor: '#FAF8F8',
+
             }
         }>
             <CircularProgress sx={
                 {
-                    margin: '100px',
+                    marginBottom: '100px',
                 }
             } size={100} />
         </Box>
     }
-
     if (user && user.role === 'secretario') {
         return <SecretaryLevel />
     }
@@ -153,134 +160,143 @@ function UserSingle() {
 
 
     return (
-        <Container sx={{ minHeight: '100vh' }}>
+        <Box sx={{
+            backgroundColor: '#FAF8F8',
+            paddingBottom: '120px',
+        }}>
+
+            <CssBaseline />
+
+            <Container maxWidth='xl' >
+
+                {user && userData.dados_pessoais && (
+                    <>
+                        <Grid rowSpacing={5} columnSpacing={{ xs: 8, sm: 6, md: 3 }} >
+
+                            <Grid item md={4} sx={styleBox1}>
+
+                                <Avatar src={userData.dados_pessoais ? userData.dados_pessoais.profilePhoto : 'https://placehold.co/600x400'} alt="Foto de Perfil"
+                                    sx={{ width: 66, height: 66 }}
+
+                                />
 
 
-            <Grid rowSpacing={5} columnSpacing={{ xs: 8, sm: 6, md: 3 }} >
+                                <Typography textAlign={'center'} variant="h5">{userData.dados_pessoais.name}</Typography>
 
-                <Grid item md={4} sx={styleBox1}>
+                                {(userData._id !== id) && <Email email={userData.dados_pessoais.email} />}
+                            </Grid>
 
-                    <Avatar src={pathFoto ? pathFoto : 'https://placehold.co/600x400'} alt="Foto de Perfil"
-                        sx={{ width: 56, height: 56 }}
-                        variant="rounded"
-                    />
+                            <Divider sx={{ margin: '20px 0' }} />
 
-                    <Typography textAlign={'center'} variant="h5">{name}</Typography>
-
-                    {(user._id !== id) && <Email email={email} />}
-                </Grid>
-
-                <Divider sx={{ margin: '20px 0' }} />
-
-                <Grid item md={4} sx={styleBox2}>
+                            <Grid item md={4} sx={styleBox2}>
 
 
-                    <Typography variant="h5" component="div">Dados Pessoais</Typography>
-                    <Typography variant="h7" component="div">CPF: {cpf}</Typography>
+                                <Typography variant="h5" component="div">Dados Pessoais</Typography>
+                                <Typography variant="h7" component="div">CPF: {userData.dados_pessoais.cpf}</Typography>
 
-                    <Typography variant="h5" component="div">Endereço</Typography>
+                                <Typography variant="h5" component="div">Endereço</Typography>
 
-                    {address ? (
-                        <>
-                            <Typography variant="h7" component="div">{address ? `${address.logradouro} ${address.numero} - ${address.bairro}` : 'Endereço não cadastrado'}</Typography>
-                            <Typography variant="h7" component="div">{address ? `${address.cidade} - ${address.estado}` : 'Endereço não cadastrado'}</Typography>
-                        </>
-                    ) : (<Typography variant="h7" component="div">Endereço não cadastrado</Typography>)}
+                                {userData.dados_pessoais ? (
+                                    <>
+                                        <Typography variant="h7" component="div">{userData.dados_pessoais.cep ? `${userData.dados_pessoais.logradouro} ${userData.dados_pessoais.numero}` : 'Endereço não cadastrado'}</Typography>
+                                        <Typography variant="h7" component="div">{userData.dados_pessoais.cep ? `${userData.dados_pessoais.cidade} - ${userData.dados_pessoais.estado}` : 'Endereço não cadastrado'}</Typography>
+                                    </>
+                                ) : (<Typography variant="h7" component="div">Endereço não cadastrado</Typography>)}
+
+                            </Grid>
+
+                            <Grid item md={4} sx={styleBox3}>
+                                <Typography variant="h5" component="div">Resumo</Typography>
+                                <Typography variant="h7" component="div">{body ? body : 'Nenhum resumo criado'}</Typography>
+                            </Grid>
+
+                            <Grid item md={4} sx={styleBox3}>
+
+                                <Typography variant="h5" component="div">Documentos</Typography>
+                                <Box sx={{ maxHeight: documents.length > 0 ? '200px' : '30px', paddingRight: '10px' }}>
+                                    {documents.length > 0 ? documents.map((document) => (
+                                        <Box sx={
+                                            {
+                                                display: 'flex',
+                                                justifyContent: 'space-between',
+                                                alignItems: 'center',
+                                                width: '100%',
+                                                border: '1px solid black',
+                                                borderRadius: '5px',
+                                                padding: '10px',
+                                                margin: '10px 0'
+                                            }
+                                        } key={document._id}>
+                                            <p>{document.name}</p>
+                                            <Button variant="outlined" color="success" onClick={() => dispatch(downloadDocument(document))}>{<FaDownload />}</Button>
+                                        </Box>
+
+                                    )) : <p>Nenhum documento adicionado</p>
+
+                                    }
+                                </Box>
+
+                            </Grid>
+
+                            <Grid item md={4} sx={styleBox3}>
+                                <Typography variant="h5" component="div">Alterar Acesso</Typography>
+                                <AccessLevel id={id} token={user.token} />
+                            </Grid>
 
 
-
-                </Grid>
-
-                <Grid item md={4} sx={styleBox3}>
-                    <Typography variant="h5" component="div">Resumo</Typography>
-                    <Typography variant="h7" component="div">{body ? body : 'Nenhum resumo criado'}</Typography>
-                </Grid>
-
-                <Grid item md={4} sx={styleBox3}>
-
-                    <Typography variant="h5" component="div">Documentos</Typography>
-                    <Box sx={{maxHeight:documents.length > 0 ? '200px' : '30px', paddingRight:'10px'}}>
-                        {documents.length > 0 ? documents.map((document) => (
                             <Box sx={
                                 {
                                     display: 'flex',
-                                    justifyContent: 'space-between',
+                                    justifyContent: 'end',
                                     alignItems: 'center',
-                                    width: '100%',
-                                    border: '1px solid black',
-                                    borderRadius: '5px',
-                                    padding: '10px',
-                                    margin: '10px 0'
+                                    gap: '10px',
                                 }
-                            } key={document._id}>
-                                <p>{document.name}</p>
-                                <Button variant="outlined" color="success" onClick={() => dispatch(downloadDocument(document))}>{<FaDownload />}</Button>
+                            }>
+                                <Box>
+                                    <Button color="error" variant="contained" onClick={handleOpen} disabled={user._id === id}>Excluir</Button>
+                                    <Modal
+                                        open={open}
+                                        onClose={handleClose}
+                                        aria-labelledby="modal-modal-title"
+                                        aria-describedby="modal-modal-description"
+                                    >
+                                        <Box sx={style}>
+                                            <Typography id="modal-modal-title" variant="h6" component="h2">
+                                                Tem certeza que deseja excluir?
+                                            </Typography>
+                                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                                                Voce não poderá desfazer essa ação.
+                                                <Button onClick={handleClose}>Cancelar</Button>
+                                                <Button color="error" onClick={() => (
+                                                    dispatch(deleteUser({ id, token: user.token }),
+                                                        (!isLoading && navigate('/'))
+                                                    ))}>Excluir</Button>
+                                            </Typography>
+                                        </Box>
+                                    </Modal>
+                                </Box>
+
+                                <div>
+                                    <Button onClick={() => dispatch(aproveUser({ id, token: user.token }))} color="success" variant="contained" disabled={userData.status === 'aprovado' || user._id === id}>Aprovar</Button>
+                                </div>
+
                             </Box>
+                        </Grid>
 
-                        )) : <p>Nenhum documento adicionado</p>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '15px', margin: '15px 0' }}>
 
-                        }
-                    </Box>
+                            {(userData.status === 'aprovado' && !isError)
+                                ? <Alert severity="success">Usuário credenciado</Alert>
+                                : <Alert severity="error">Usuário aguardando aprovação.</Alert>
+                            }
 
-                </Grid>
+                            {isError && <Alert severity="error">{message}</Alert>}
 
-                <Grid item md={4} sx={styleBox3}>
-                    <Typography variant="h5" component="div">Alterar Acesso</Typography>
-                    <AccessLevel id={id} token={user.token} />
-                </Grid>
+                        </Box>
+                    </>)}
+            </Container>
 
-
-                <Box sx={
-                    {
-                        display: 'flex',
-                        justifyContent: 'end',
-                        alignItems: 'center',
-                        gap: '10px',
-                    }
-                }>
-                    <Box>
-                        <Button color="error" variant="contained" onClick={handleOpen} disabled={user._id === id}>Excluir</Button>
-                        <Modal
-                            open={open}
-                            onClose={handleClose}
-                            aria-labelledby="modal-modal-title"
-                            aria-describedby="modal-modal-description"
-                        >
-                            <Box sx={style}>
-                                <Typography id="modal-modal-title" variant="h6" component="h2">
-                                    Tem certeza que deseja excluir?
-                                </Typography>
-                                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                                    Voce não poderá desfazer essa ação.
-                                    <Button onClick={handleClose}>Cancelar</Button>
-                                    <Button color="error" onClick={() => (
-                                        dispatch(deleteUser({ id, token: user.token }),
-                                            (!isLoading && navigate('/'))
-                                        ))}>Excluir</Button>
-                                </Typography>
-                            </Box>
-                        </Modal>
-                    </Box>
-
-                    <div>
-                        <Button onClick={() => dispatch(aproveUser({ id, token: user.token }))} color="success" variant="contained" disabled={userData.status === 'aprovado' || user._id === id}>Aprovar</Button>
-                    </div>
-
-                </Box>
-            </Grid>
-
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '15px', margin: '15px 0' }}>
-
-                {(userData.status === 'aprovado' && !isError)
-                    ? <Alert severity="success">Usuário credenciado</Alert>
-                    : <Alert severity="error">Usuário aguardando aprovação.</Alert>
-                }
-
-                {isError && <Alert severity="error">{message}</Alert>}
-
-            </Box>
-
-        </Container>
+        </Box>
 
     )
 }
