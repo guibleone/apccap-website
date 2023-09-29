@@ -13,9 +13,11 @@ import { useDropzone } from 'react-dropzone'
 import axios from 'axios'
 import { associateProducer } from '../../features/auth/authSlice'
 import ButtonChangeRole from '../../components/ChangeRole/ButtonChangeRole'
+import { colors } from '../colors'
+import { BsArrowUpRight } from 'react-icons/bs'
 
 function RegisterProduct() {
-  
+
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -50,7 +52,7 @@ function RegisterProduct() {
     boxShadow: 24,
     p: 4,
 
-} : {
+  } : {
     position: 'absolute',
     top: '50%',
     left: '50%',
@@ -61,24 +63,31 @@ function RegisterProduct() {
     boxShadow: 24,
     p: 4,
 
-}
+  }
 
   useEffect(() => {
-    dispatch(reset())
-    dispatch(getProducts())
-  }, [])
+    if (user.role === 'produtor' || user.role === 'produtor_associado') {
 
-
-  useEffect(() => {
-
-    const userData = {
-      id: user._id,
-      token: user.token
+      dispatch(reset())
+      dispatch(getProducts())
     }
 
-    dispatch(getSelos(userData))
+  }, [user])
 
-  }, [dispatch, user._id, user.token])
+
+  useEffect(() => {
+
+    if (user.role === 'produtor') {
+
+      const userData = {
+        id: user._id,
+        token: user.token
+      }
+
+      dispatch(getSelos(userData))
+    }
+
+  }, [dispatch, user._id, user.token, user])
 
   useEffect(() => {
 
@@ -194,17 +203,17 @@ function RegisterProduct() {
   const handleSubmit = () => {
 
 
-    if(!name || !description || !quantity || !files) {
+    if (!name || !description || !quantity || !files) {
       toast.error('Preencha todos os campos', styleError)
       return
     }
 
-    if(files.length < 4) {
+    if (files.length < 4) {
       toast.error('Insira todos documentos', styleError)
       return
     }
 
-    if(files.length > 4) {
+    if (files.length > 4) {
       toast.error('Insira apenas 4 documentos', styleError)
       return
     }
@@ -277,221 +286,256 @@ function RegisterProduct() {
     </Box>
   }
 
+  if (user.role === 'user') {
+    return <Box sx={
+      {
+        display: 'flex',
+        backgroundColor: colors.main_white,
+        minHeight: '100vh',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '36px',
+        padding: '72px 0'
+
+      }
+    }>     <Box sx={{
+      maxWidth: '500px',
+      textAlign: 'center',
+      gap: '16px'
+    }}>
+        <h3 className='semi-bold black'>
+          Você não tem acesso a essa página
+        </h3>
+        <h1 className='black bold'>
+          Produtor Não Associado
+        </h1>
+
+        <h4 className='regular black'>
+          Lorem ipsum dolor sit amet consectetur. Adipiscing amet morbi bibendum senectus.
+        </h4>
+      </Box>
+
+      <button className='button-purple' onClick={() => navigate('/credencial')} >
+        Me Associar <BsArrowUpRight size={20} style={{ verticalAlign: 'bottom' }} />
+      </button>
+
+    </Box>
+  }
+
 
   return (
-    <Container sx={
+    <Box sx={
       {
+        backgroundColor: colors.main_white,
         minHeight: '100vh',
-      }
-    }>
+      }}>
+      <Container maxWidth='xl'>
 
-      <Typography sx={{ textAlign: 'center', margin: '20px 0' }} variant={matches ? 'h5' : 'h5'}>Cadastrar Produto</Typography>
+        <Typography sx={{ textAlign: 'center' }} variant={matches ? 'h5' : 'h5'}>Cadastrar Produto</Typography>
 
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={6} lg={3.7}>
-          <FormControl fullWidth >
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <TextField placeholder="Informe o nome do produto" size='small' name='name' onChange={onChange} value={name} />
-              <TextField placeholder="Informe a descrição do produto" size='small' name='description' onChange={onChange} value={description} />
-              <TextField placeholder="Informe a quantidade de selos" size='small' name='quantity' onChange={onChange} />
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={6} lg={3.7}>
+            <FormControl fullWidth >
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <TextField placeholder="Informe o nome do produto" size='small' name='name' onChange={onChange} value={name} />
+                <TextField placeholder="Informe a descrição do produto" size='small' name='description' onChange={onChange} value={description} />
+                <TextField placeholder="Informe a quantidade de selos" size='small' name='quantity' onChange={onChange} />
+              </Box>
+            </FormControl>
+
+          </Grid>
+
+          <Divider orientation="vertical" flexItem sx={{ margin: '0 20px' }} />
+
+          <Grid item xs={12} md={6} lg={3.7}>
+
+            <Box sx={{
+              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px',
+              p: 1,
+              border: isDragActive ? '1px solid #E4E3E3' : '',
+              borderRadius: '5px',
+              boxShadow: isDragActive ? '0px 0px 5px 0px rgba(0,0,0,0.75)' : '',
+            }} {...getRootProps()}>
+              <input multiple {...getInputProps()} />
+              <Button variant='outlined' color='success'><AiOutlineDropbox size={80} /> </Button>
+              <Typography textAlign={'center'} variant='p'>Arraste e solte os arquivos ou clique para selecionar</Typography>
             </Box>
-          </FormControl>
 
-        </Grid>
+            <Button fullWidth variant='outlined' onClick={handleOpenViewDocuments} >ver documentos</Button>
+          </Grid>
 
-        <Divider orientation="vertical" flexItem sx={{ margin: '0 20px' }} />
+          <Divider orientation="vertical" flexItem sx={{ margin: '0 20px' }} />
 
-        <Grid item xs={12} md={6} lg={3.7}>
+          <Grid item xs={12} md={6} lg={3.7}>
 
-          <Box sx={{
-            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px',
-            p: 1,
-            border: isDragActive ? '1px solid #E4E3E3' : '',
-            borderRadius: '5px',
-            boxShadow: isDragActive ? '0px 0px 5px 0px rgba(0,0,0,0.75)' : '',
-          }} {...getRootProps()}>
-            <input multiple {...getInputProps()} />
-            <Button variant='outlined' color='success'><AiOutlineDropbox size={80} /> </Button>
-            <Typography textAlign={'center'} variant='p'>Arraste e solte os arquivos ou clique para selecionar</Typography>
-          </Box>
-
-          <Button fullWidth variant='outlined' onClick={handleOpenViewDocuments} >ver documentos</Button>
-        </Grid>
-
-        <Divider orientation="vertical" flexItem sx={{ margin: '0 20px' }} />
-
-        <Grid item xs={12} md={6} lg={3.7}>
-
-          {files.length > 0 ? (
-            <div>
-              <h4>Arquivos selecionados</h4>
-              <ul>
-                {files.map((file) => (
-                  <li key={file.path}>
-                    {file.path}
-                    <Button variant='outlined' color='error' onClick={() => removeFile(file)}><BiTrashAlt /></Button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ) :
-            <Typography variant='p'>Nenhum arquivo selecionado</Typography>
-          }
-        </Grid>
-
-        <Button sx={{ m: 2 }} fullWidth color='success' variant='outlined' onClick={handleSubmit}>Cadastrar</Button>
-
-      </Grid>
-
-      <Divider sx={{ margin: '20px 0' }} />
-
-
-      {productsData.length === 0 ?
-
-        (<Typography variant="h5" gutterBottom>Nenhum produto cadastrado</Typography>)
-
-        : (
-          <Box sx={
-            {
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '10px',
-              marginTop: '20px',
+            {files.length > 0 ? (
+              <div>
+                <h4>Arquivos selecionados</h4>
+                <ul>
+                  {files.map((file) => (
+                    <li key={file.path}>
+                      {file.path}
+                      <Button variant='outlined' color='error' onClick={() => removeFile(file)}><BiTrashAlt /></Button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) :
+              <Typography variant='p'>Nenhum arquivo selecionado</Typography>
             }
-          }>
-            <Typography sx={{ textAlign: 'center' }} variant={'h5'} component="h1" >Seus Produtos</Typography>
+          </Grid>
+
+          <Button sx={{ m: 2 }} fullWidth color='success' variant='outlined' onClick={handleSubmit}>Cadastrar</Button>
+
+        </Grid>
+
+        <Divider sx={{ margin: '20px 0' }} />
 
 
-            <Grid
-              sx={{ margin: '10px 0', display: 'flex', flexDirection: matches ? 'column' : 'row', gap: matches ? '20px' : '0' }}
-              container={!matches}
-              rowSpacing={{ xs: 8, sm: 6, md: 3 }}
-              columnSpacing={{ xs: 8, sm: 6, md: 3 }}
-            >
+        {productsData.length === 0 ?
 
-              {productsData.map((product) => (
+          (<Typography variant="h5" gutterBottom>Nenhum produto cadastrado</Typography>)
 
-                <Grid  item key={product._id} md={3}>
+          : (
+            <Box sx={
+              {
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px',
+                marginTop: '20px',
+              }
+            }>
+              <Typography sx={{ textAlign: 'center' }} variant={'h5'} component="h1" >Seus Produtos</Typography>
 
-                  <Card
-                    sx={{
-                      border: matches ? '1px solid #E4E3E3' : 'none',
-                      borderRadius: '5px',
-                    }}>
 
-                    <CardMedia
-                      sx={{ height: matches ? 252 : 252 }}
-                      image={product.path ? product.path : 'https://as1.ftcdn.net/jpg/02/68/55/60/220_F_268556012_c1WBaKFN5rjRxR2eyV33znK4qnYeKZjm.jpg'}
-                    />
+              <Grid
+                sx={{ margin: '10px 0', display: 'flex', flexDirection: matches ? 'column' : 'row', gap: matches ? '20px' : '0' }}
+                container={!matches}
+                rowSpacing={{ xs: 8, sm: 6, md: 3 }}
+                columnSpacing={{ xs: 8, sm: 6, md: 3 }}
+              >
 
-                    <CardContent>
-                      <Box nowrap>
-                        <Typography sx={{ textAlign: 'center' }} variant="h6" nowrap >{product.name}</Typography>
-                      </Box>
-                    </CardContent>
+                {productsData.map((product) => (
 
-                    {product.status === 'aprovado' ?
-                      <>
-                        <CardActions sx={{ display: 'flex', justifyContent: 'space-around' }}>
+                  <Grid item key={product._id} md={3}>
 
-                          <Button fullWidth variant='outlined' onClick={() => navigate(`/acompanhar-analise/${product._id}`)} color="warning">
-                            <BiFile size={20} />
-                          </Button>
+                    <Card
+                      sx={{
+                        border: matches ? '1px solid #E4E3E3' : 'none',
+                        borderRadius: '5px',
+                      }}>
 
-                          <Button sx={{ marginLeft: '7px' }} fullWidth variant='outlined' color='info' href={`/produto/${product._id}`}>
-                            <AiOutlineEdit size={20} />
-                          </Button>
+                      <CardMedia
+                        sx={{ height: matches ? 252 : 252 }}
+                        image={product.path ? product.path : 'https://as1.ftcdn.net/jpg/02/68/55/60/220_F_268556012_c1WBaKFN5rjRxR2eyV33znK4qnYeKZjm.jpg'}
+                      />
 
-                          <Button fullWidth variant='outlined' color='error' onClick={() => dispatch(deleteProduct({ id: product._id }))} >
-                            <BiTrashAlt size={20} />
-                          </Button>
-                        </CardActions>
-                      </> :
-                      <>
-                        {product.status === '' &&
-                          <CardActions sx={{ display: 'flex', justifyContent: 'center', gap: '5px' }}>
-                            <Button variant='outlined' onClick={() => navigate(`/acompanhar-analise/${product._id}`)} color="warning">Acompanhar análise</Button>
-                          </CardActions>
-                        }
-                        {product.status === 'pendente' && <>
-                          <CardActions sx={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
-                            <Button variant='outlined' color='success' onClick={() => handlePayment({ id: product._id, quantity: product.selo.quantity })}>
-                              Pagar Selos
-                            </Button>
-                          </CardActions>
-                        </>
-                        }
-                        {product.status === 'reprovado' && <>
-                          <CardActions sx={{ display: 'flex', justifyContent: 'center', gap: '5px' }}>
-                            <Button variant='outlined' color='error' onClick={() => dispatch(deleteProduct({ id: product._id }))} >
-                              <BiTrashAlt size={20} />
-                            </Button>
-                            <Button variant='outlined' onClick={() => navigate(`/acompanhar-analise/${product._id}`)} color="warning">
+                      <CardContent>
+                        <Box nowrap>
+                          <Typography sx={{ textAlign: 'center' }} variant="h6" nowrap >{product.name}</Typography>
+                        </Box>
+                      </CardContent>
+
+                      {product.status === 'aprovado' ?
+                        <>
+                          <CardActions sx={{ display: 'flex', justifyContent: 'space-around' }}>
+
+                            <Button fullWidth variant='outlined' onClick={() => navigate(`/acompanhar-analise/${product._id}`)} color="warning">
                               <BiFile size={20} />
                             </Button>
+
+                            <Button sx={{ marginLeft: '7px' }} fullWidth variant='outlined' color='info' href={`/produto/${product._id}`}>
+                              <AiOutlineEdit size={20} />
+                            </Button>
+
+                            <Button fullWidth variant='outlined' color='error' onClick={() => dispatch(deleteProduct({ id: product._id }))} >
+                              <BiTrashAlt size={20} />
+                            </Button>
                           </CardActions>
-                          
+                        </> :
+                        <>
+                          {product.status === '' &&
+                            <CardActions sx={{ display: 'flex', justifyContent: 'center', gap: '5px' }}>
+                              <Button variant='outlined' onClick={() => navigate(`/acompanhar-analise/${product._id}`)} color="warning">Acompanhar análise</Button>
+                            </CardActions>
+                          }
+                          {product.status === 'pendente' && <>
+                            <CardActions sx={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
+                              <Button variant='outlined' color='success' onClick={() => handlePayment({ id: product._id, quantity: product.selo.quantity })}>
+                                Pagar Selos
+                              </Button>
+                            </CardActions>
+                          </>
+                          }
+                          {product.status === 'reprovado' && <>
+                            <CardActions sx={{ display: 'flex', justifyContent: 'center', gap: '5px' }}>
+                              <Button variant='outlined' color='error' onClick={() => dispatch(deleteProduct({ id: product._id }))} >
+                                <BiTrashAlt size={20} />
+                              </Button>
+                              <Button variant='outlined' onClick={() => navigate(`/acompanhar-analise/${product._id}`)} color="warning">
+                                <BiFile size={20} />
+                              </Button>
+                            </CardActions>
+
+                          </>
+                          }
                         </>
-                        }
-                      </>
+                      }
+
+                    </Card>
+
+                    {product.status === 'reprovado' &&
+                      <Alert sx={{ margin: '10px 0' }} severity="error">Seu produto foi reprovado.</Alert>
                     }
 
-                  </Card>
-                  
-                  {product.status === 'reprovado' && 
-                  <Alert sx={{margin:'10px 0'}} severity="error">Seu produto foi reprovado.</Alert>
-                  }
+
+                  </Grid>
+                ))}
 
 
-                </Grid>
-              ))}
+              </Grid>
+
+            </Box>
+          )}
+
+        <ProductsPagination setProductsData={(p) => setProductsData(p)} />
+
+        <Divider sx={{ margin: '20px 0' }} />
 
 
-            </Grid>
+        <Modal
+          open={openViewDocuments}
+          onClose={handleOpenViewDocuments}
+        >
+          <Box sx={style}>
+            <Box sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '10px'
+            }}>
+              <Box display={'flex'} justifyContent={'space-between'}>
+                <Typography variant="h6" >Documentos Necessários</Typography>
+                <AiFillRedEnvelope size={30} />
+              </Box>
 
+              <Typography variant="h7" > Para a aprovação do produto são requiridos os segunites documentos.</Typography>
+
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <Typography variant="h7" > - Cartão de CNPJ e CPF</Typography>
+                <Typography variant="h7" > - Inscrição nos órgãopúblicos de regulação</Typography>
+                <Typography variant="h7" > - Anotação de responsabilidade técnica (ART)</Typography>
+                <Typography variant="h7" > - Informações sobre a propriedade</Typography>
+              </Box>
+
+              <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+                <Button color='info' variant='contained' onClick={handleOpenViewDocuments}>Voltar</Button>
+              </Box>
+            </Box>
           </Box>
-        )}
+        </Modal>
 
-      <ProductsPagination setProductsData={(p) => setProductsData(p)} />
-
-      <Divider sx={{ margin: '20px 0' }} />
-
-
-      <Modal
-                open={openViewDocuments}
-                onClose={handleOpenViewDocuments}
-            >
-                <Box sx={style}>
-                    <Box sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '10px'
-                    }}>
-                        <Box display={'flex'} justifyContent={'space-between'}>
-                            <Typography variant="h6" >Documentos Necessários</Typography>
-                            <AiFillRedEnvelope size={30} />
-                        </Box>
-
-                        <Typography variant="h7" > Para a aprovação do produto são requiridos os segunites documentos.</Typography>
-
-                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                            <Typography variant="h7" > - Cartão de CNPJ e CPF</Typography>
-                            <Typography variant="h7" > - Inscrição nos órgãopúblicos de regulação</Typography>
-                            <Typography variant="h7" > - Anotação de responsabilidade técnica (ART)</Typography>
-                            <Typography variant="h7" > - Informações sobre a propriedade</Typography>
-                        </Box>
-            
-                        <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
-                            <Button color='info' variant='contained' onClick={handleOpenViewDocuments}>Voltar</Button>
-                        </Box>
-                    </Box>
-                </Box>
-            </Modal>
-
-
-
-
-    </Container >
+      </Container>
+    </Box>
   )
 }
 

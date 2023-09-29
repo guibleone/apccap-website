@@ -139,7 +139,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 
         if (documents) {
             documents.map(async (document) => {
-                const storageRef = ref(storage, `documents/${user._id}/${document.type}/${document.name}`)
+                const storageRef = ref(storage, `documents/${user._id}/${document.name}`)
                 await deleteObject(storageRef)
             })
 
@@ -329,7 +329,6 @@ const approveRelatory = asyncHandler(async (req, res) => {
 
         if (type === 'analise_laboratorial') {
             user.status = 'aprovado'
-            user.role = 'produtor'
             await user.save()
         }
 

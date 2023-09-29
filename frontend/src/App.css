@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 
 * {
     margin: 0;
@@ -17,7 +17,9 @@
     --main-white-light: #F2F2F2;
     --main-orange: #EE771E;
     --main-orange-light: #F2A03D;
-    --main-red: #BF232C
+    --main-red: #BF232C;
+    --main-black: #000;
+    --main-grey:#E9E9E9;
 }
 
 h1,
@@ -27,6 +29,27 @@ h4 {
     color: var(--main-purple);
 }
 
+.black {
+    color: var(--main-black);
+}
+
+.bold {
+    font-weight: 700;
+}
+
+.semi-bold {
+    font-weight: 600;
+}
+
+.medium {
+    font-weight: 500;
+}
+
+.regular {
+    font-weight: 400;
+}
+
+
 html {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -34,23 +57,27 @@ html {
 }
 
 @media (max-width: 768px) {
+
     html,
     body {
         overflow-x: hidden;
     }
+
     body {
         position: relative
     }
-    
+
 
 }
 
-
-
-
 ::-webkit-scrollbar {
-    width: 15px;
-    background: transparent;
+    -webkit-appearance: none;
+    width: 7px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0,0,0,.5);
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
 }
 
 .button-purple {
@@ -58,7 +85,7 @@ html {
     color: var(--main-white);
     padding: 10px 20px;
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
     border: none;
@@ -76,7 +103,7 @@ html {
     color: var(--main-purple);
     padding: 10px 20px;
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
     border: 1px solid var(--main-purple);
@@ -88,12 +115,48 @@ html {
     border: 1px solid var(--main-white);
 }
 
+.button-white-bottom-border {
+    background-color: var(--main-white);
+    color: var(--main-purple);
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border: none;
+    border-bottom: 1px solid var(--main-purple);
+}
+
+.button-white-bottom-border:hover {
+    background-color: var(--main-purple);
+    color: var(--main-white);
+    border: none;
+    border-bottom: 1px solid var(--main-white);
+}
+
+.button-grey-bottom-border {
+    background-color: var(--main-grey);
+    color: var(--main-purple);
+    padding: 10px 20px 10px 0px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border: none;
+    border-bottom: 1px solid var(--main-purple);
+}
+
+.button-grey-bottom-border:hover {
+    color: var(--main-black);
+    border-bottom: 1px solid var(--main-black);
+}
+
 .button-red {
     background-color: var(--main-red);
     color: var(--main-white);
     padding: 10px 20px;
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
     border: none;

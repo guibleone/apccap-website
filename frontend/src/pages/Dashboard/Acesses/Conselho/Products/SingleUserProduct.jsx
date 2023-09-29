@@ -189,7 +189,7 @@ export default function SingleUserProduct() {
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px'}}>
             <Typography variant='p'><strong>Nome:</strong> {productData.name}</Typography>
             <Typography variant='p'><strong>Descrição:</strong> {productData.description}</Typography>
-            <Typography variant='p'><strong>Produtor:</strong> {userData.name}</Typography>
+            <Typography variant='p'><strong>Produtor:</strong> {userData.dados_pessoais.name}</Typography>
             <Typography variant='p'><strong>Selos Pedidos:</strong> {productData.selo && productData.selo.quantity}</Typography>
           </Box>
         </Grid>

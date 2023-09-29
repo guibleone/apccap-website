@@ -26,11 +26,12 @@ export default function UserProducts() {
 
     return (
         <Container sx={{ minHeight: '100vh' }}>
+            { userData &&  userData.dados_pessoais && (
             <Grid container spacing={2}>
 
                 <Grid item xs={12} md={6} lg={3}>
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', padding: '10px' }}>
-                        <Avatar src={userData && userData.pathFoto} sx={{ width: '100px', height: '100px' }} />
+                        <Avatar src={userData &&  userData.dados_pessoais &&  userData.dados_pessoais.profilePhoto} sx={{ width: '100px', height: '100px' }} />
                     </Box>
                 </Grid>
 
@@ -38,13 +39,13 @@ export default function UserProducts() {
                     <Box sx={{ display: 'flex', gap: '5px', justifyContent: 'center', flexDirection: 'column', padding: '10px' }}>
                         {userData && userData.address ? (
                             <>
-                                <Typography variant='p'>CEP - {userData.address.cep} </Typography>
-                                <Typography variant='p'>{userData.address.logradouro} , {userData.address.numero} </Typography>
-                                <Typography variant='p'>{userData.address.cidade} / {userData.address.estado} </Typography>
+                                <Typography variant='p'>CEP - {userData.dados_pessoais.address.cep} </Typography>
+                                <Typography variant='p'>{userData.dados_pessoais.address.logradouro} , {userData.dados_pessoais.address.numero} </Typography>
+                                <Typography variant='p'>{userData.dados_pessoais.address.cidade} / {userData.dados_pessoais.address.estado} </Typography>
                             </>
                         ) :
                             <>
-                                <Typography variant='p'>{userData.name} não possui endereço registrado</Typography>
+                                <Typography variant='p'>{userData.dados_pessoais.name} não possui endereço registrado</Typography>
                             </>
                         }
                     </Box>
@@ -57,6 +58,7 @@ export default function UserProducts() {
                 </Grid>
 
             </Grid>
+            )}
 
             <Divider sx={{ margin: '10px 0' }} />
 

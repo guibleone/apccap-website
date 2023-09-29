@@ -27,16 +27,16 @@ function Informations() {
 
     /* Dados Pessoais */
     const [dadosPessoaisData, setDadosPessoaisData] = useState({
-        name: user.dados_pessoais ? user.dados_pessoais.name : '',
-        cpf: user.dados_pessoais ? user.dados_pessoais.cpf : '',
-        email: user.dados_pessoais ? user.dados_pessoais.email : '',
-        telefone: user.dados_pessoais ? user.dados_pessoais.telefone : '',
-        celular: user.dados_pessoais ? user.dados_pessoais.celular : '',
-        cep: user.dados_pessoais ? user.dados_pessoais.cep : '',
-        logradouro: user.dados_pessoais ? user.dados_pessoais.logradouro : '',
-        numero: user.dados_pessoais ? user.dados_pessoais.numero : '',
-        cidade: user.dados_pessoais ? user.dados_pessoais.cidade : '',
-        estado: user.dados_pessoais ? user.dados_pessoais.estado : '',
+        name: user && user.dados_pessoais ? user.dados_pessoais.name : '',
+        cpf: user && user.dados_pessoais ? user.dados_pessoais.cpf : '',
+        email: user && user.dados_pessoais ? user.dados_pessoais.email : '',
+        telefone: user && user.dados_pessoais ? user.dados_pessoais.telefone : '',
+        celular: user && user.dados_pessoais ? user.dados_pessoais.celular : '',
+        cep: user && user.dados_pessoais ? user.dados_pessoais.cep : '',
+        logradouro: user && user.dados_pessoais ? user.dados_pessoais.logradouro : '',
+        numero: user && user.dados_pessoais ? user.dados_pessoais.numero : '',
+        cidade: user && user.dados_pessoais ? user.dados_pessoais.cidade : '',
+        estado: user && user.dados_pessoais ? user.dados_pessoais.estado : '',
     })
 
     const handleChangeDadosPessoais = (e) => {
@@ -49,17 +49,17 @@ function Informations() {
     /* propriedade */
 
     const [propriedadeData, setPropriedadeData] = useState({
-        cpfProprietario: user.propriedade ? user.propriedade.cpfProprietario : '',
-        logradouro_propriedade: user.propriedade ? user.propriedade.logradouro_propriedade : '',
-        cidade_propriedade: user.propriedade ? user.propriedade.cidade_propriedade : '',
-        estado_propriedade: user.propriedade ? user.propriedade.estado_propriedade : '',
-        cep_propriedade: user.propriedade ? user.propriedade.cep_propriedade : '',
-        numero_propriedade: user.propriedade ? user.propriedade.numero_propriedade : '',
-        nome_propriedade: user.propriedade ? user.propriedade.nome_propriedade : '',
-        area_total: user.propriedade ? user.propriedade.area_total : '',
-        telefone_propriedade: user.propriedade ? user.propriedade.telefone_propriedade : '',
-        celular_propriedade: user.propriedade ? user.propriedade.celular_propriedade : '',
-        tempoProducao: user.propriedade ? user.propriedade.tempoProducao : '',
+        cpfProprietario: user && user.propriedade ? user.propriedade.cpfProprietario : '',
+        logradouro_propriedade: user && user.propriedade ? user.propriedade.logradouro_propriedade : '',
+        cidade_propriedade: user && user.propriedade ? user.propriedade.cidade_propriedade : '',
+        estado_propriedade: user && user.propriedade ? user.propriedade.estado_propriedade : '',
+        cep_propriedade: user && user.propriedade ? user.propriedade.cep_propriedade : '',
+        numero_propriedade: user && user.propriedade ? user.propriedade.numero_propriedade : '',
+        nome_propriedade: user && user.propriedade ? user.propriedade.nome_propriedade : '',
+        area_total: user && user.propriedade ? user.propriedade.area_total : '',
+        telefone_propriedade: user && user.propriedade ? user.propriedade.telefone_propriedade : '',
+        celular_propriedade: user && user.propriedade ? user.propriedade.celular_propriedade : '',
+        tempoProducao: user && user.propriedade ? user.propriedade.tempoProducao : '',
     })
 
     const handleChangePropriedade = (e) => {
@@ -72,10 +72,10 @@ function Informations() {
     /* marca */
 
     const [marcaData, setMarcaData] = useState({
-        site: user.marca ? user.marca.site : '',
-        instagram: user.marca ? user.marca.instagram : '',
-        whatsapp: user.marca ? user.marca.whatsapp : '',
-        logo: user.marca ? user.marca.logo : '',
+        site: user && user.marca ? user.marca.site : '',
+        instagram: user && user.marca ? user.marca.instagram : '',
+        whatsapp: user && user.marca ? user.marca.whatsapp : '',
+        logo: user && user.marca ? user.marca.logo : '',
     })
 
     const handleChangeMarca = (e) => {
@@ -135,10 +135,15 @@ function Informations() {
 
     useEffect(() => {
 
-        dispatch(getDocuments(user.token))
-        dispatch(getResume(user.token))
+        if (!user) {
+            navigate('/')
+        }
+        if (user) {
+            dispatch(getDocuments(user.token))
+            dispatch(getResume(user.token))
+        }
 
-    }, [])
+    }, [user])
 
     useEffect(() => {
         if (isError) {
@@ -191,7 +196,7 @@ function Informations() {
         }}>
             <CssBaseline />
 
-            <Grid container spacing={2}p={matches ? 9 : 4} pt={9} >
+            <Grid container spacing={2} p={matches ? 9 : 4} pt={9} >
                 <Grid item xs={12} lg={4} >
                     <Box sx={{ display: 'flex', gap: '20px', flexDirection: 'column', paddingLeft: !matches ? 0 : '60px' }}>
                         <h1 style={{ fontWeight: 700, fontSize: !matches ? '24px' : '' }}>
@@ -463,8 +468,8 @@ function Informations() {
 
                     <Grid item xs={12} lg={6} mt={3} pt={matches ? 8 : 0}>
 
-                        <Box sx={{ display: 'flex', gap: '20px', flexDirection: !matches ? 'column' : 'row', alignItems: 'center' }}>
-                            <Avatar sx={{ width: 120, height: 120 }} src={user.dados_pessoais ? user.dados_pessoais.profilePhoto : ''} />
+                        <Box sx={{ display: 'flex', gap: '20px', flexDirection: !matches ? 'column' : 'row', alignItems: 'center', justifyContent:'center' }}>
+                            <Avatar sx={{ width: 120, height: 120 }} src={user && user.dados_pessoais && user.dados_pessoais.profilePhoto ? user.dados_pessoais.profilePhoto : ''} />
 
                             <Grid item xs={12} lg={6} mt={2} sx={{ textAlign: 'center' }}>
                                 <h3 sx={{ fontWeight: 540, color: '#000000' }}>
@@ -501,9 +506,14 @@ function Informations() {
 
                     </Grid>
 
-
+                    <Grid item xs={12} lg={6} mt={3} pt={matches ? 8 : 0}>
+                        <Resume />
+                    </Grid>
 
                 </Grid>
+
+
+
 
                 <Grid container spacing={2} p={matches ? 10 : 0} pt={4} columnSpacing={22}  >
                     <Grid item xs={12}>
@@ -930,7 +940,7 @@ function Informations() {
                         <Grid item xs={12} lg={12} mt={3} pt={matches ? 8 : 0}>
 
                             <Box sx={{ display: 'flex', gap: '20px', flexDirection: !matches ? 'column' : 'row', alignItems: 'center' }}>
-                                <Avatar sx={{ width: 120, height: 120 }} src={user.marca ? user.marca.logo : ''} />
+                                <Avatar sx={{ width: 120, height: 120 }} src={user && user.marca ? user.marca.logo : ''} />
 
                                 <Grid item xs={12} lg={6} mt={2} sx={{ textAlign: 'center' }}>
                                     <h3 sx={{ fontWeight: 540, color: '#000000' }}>

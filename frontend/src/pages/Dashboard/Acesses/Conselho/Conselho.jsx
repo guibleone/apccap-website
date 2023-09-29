@@ -6,6 +6,7 @@ import UsersPagination from '../../../../components/Pagination/Users'
 import { getProducts } from '../../../../features/products/productsSlice'
 import ButtonChangeRole from '../../../../components/ChangeRole/ButtonChangeRole'
 import Reunion from '../../../../components/Reunions/Reunion'
+import { colors } from '../../../colors'
 
 
 export default function Conselho() {
@@ -25,80 +26,85 @@ export default function Conselho() {
 
 
     return (
+        <Box sx={{
+            backgroundColor: colors.main_white,
+            minHeight: '100vh',
+        }}>
 
-        <Grid container spacing={2}>
+            <Container maxWidth='xl' >
+                <Grid container spacing={2}>
 
-            <Grid item xs={12} sm={12} lg={12}>
-                <Typography variant='h5'>Conselho regulador</Typography>
-                <Typography variant='p'>Seja bem vindo, </Typography>
-                <Divider sx={{ margin: '10px 0' }} />
-            </Grid>
+                    <Grid item xs={12} sm={12} lg={12}>
+                        <Typography variant='h5'>Conselho regulador</Typography>
+                        <Typography variant='p'>Seja bem vindo, </Typography>
+                        <Divider sx={{ margin: '10px 0' }} />
+                    </Grid>
 
-            <Grid item xs={12} sm={12} lg={12}>
+                    <Grid item xs={12} sm={12} lg={12}>
 
-                <Typography variant='h5'>Pedidos de credenciamento</Typography>
-                <Typography variant='p'>Credenciais para análise</Typography>
+                        <Typography variant='h5'>Pedidos de credenciamento</Typography>
+                        <Typography variant='p'>Credenciais para análise</Typography>
 
-                {users && users.map((user) => (
+                        {users && users.map((user) => (
 
-                    <Box key={user._id}
-                        sx={{
-                            marginTop: '10px',
-                        }}
-                    >
-                        {(user.status === 'analise') && (
-                            <>
-                                <Typography variant="h6" >{`${user.name}`}</Typography>
-                                <Button variant="outlined" onClick={() => navigate(`/analise-credencial/${user._id}`)} > Ver Dados</Button>
-                            </>
-                        )}
+                            <Box key={user._id}
+                                sx={{
+                                    marginTop: '10px',
+                                }}
+                            >
+                                {(user.status === 'analise') && (
+                                    <>
+                                        <Typography variant="h6" >{`${user.dados_pessoais.name}`}</Typography>
+                                        <Button variant="outlined" onClick={() => navigate(`/analise-credencial/${user._id}`)} > Ver Dados</Button>
+                                    </>
+                                )}
 
-                    </Box >
+                            </Box >
 
-                ))
-                }
+                        ))
+                        }
 
-                <UsersPagination setUsersData={(u) => setUsers(u)} />
+                        <UsersPagination setUsersData={(u) => setUsers(u)} />
 
-                <Divider sx={{ margin: '10px 0' }} />
+                        <Divider sx={{ margin: '10px 0' }} />
 
-            </Grid>
+                    </Grid>
 
-            <Grid item xs={12} sm={12} lg={12}>
+                    <Grid item xs={12} sm={12} lg={12}>
 
-                <Typography variant='h5'>Produtos para análise</Typography>
+                        <Typography variant='h5'>Produtos para análise</Typography>
 
-                {users && users.map((user) => (
+                        {users && users.map((user) => (
 
-                    <Box key={user._id}
-                        sx={{
-                            marginTop: '10px',
-                        }}
-                    >
-                        {user.productsQuantity >= 1 && (
-                            <>
-                                <Typography variant="h6" >{`${user.name}`}</Typography>
-                                <Button variant="outlined" onClick={() => navigate(`/produtos-usuario/${user._id}`)} >Ver Dados</Button>
-                            </>
-                        )}
+                            <Box key={user._id}
+                                sx={{
+                                    marginTop: '10px',
+                                }}
+                            >
+                                {user.productsQuantity >= 1 && (
+                                    <>
+                                        <Typography variant="h6" >{`${user.dados_pessoais.name}`}</Typography>
+                                        <Button variant="outlined" onClick={() => navigate(`/produtos-usuario/${user._id}`)} >Ver Dados</Button>
+                                    </>
+                                )}
 
-                    </Box >
+                            </Box >
 
-                ))
-                }
+                        ))
+                        }
 
-                <UsersPagination setUsersData={(u) => setUsers(u)} />
+                        <UsersPagination setUsersData={(u) => setUsers(u)} />
 
-                <Divider sx={{ margin: '10px 0' }} />
+                        <Divider sx={{ margin: '10px 0' }} />
 
-            </Grid>
+                    </Grid>
 
-            <Reunion  />
+                    <Reunion />
 
-        </Grid>
+                </Grid>
 
+            </Container>
 
-
-
+        </Box>
     )
 }

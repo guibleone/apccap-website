@@ -8,6 +8,7 @@ import AddExcelSpread from './AddExcelSpread'
 import { useNavigate } from 'react-router-dom'
 import ButtonChangeRole from '../../../../components/ChangeRole/ButtonChangeRole'
 import Reunion from '../../../../components/Reunions/Reunion'
+import { colors } from '../../../colors'
 
 export default function Tesoureiro() {
   const navigate = useNavigate()
@@ -24,30 +25,36 @@ export default function Tesoureiro() {
   }, [])
 
   return (
-    <Box>
+    <Box sx={{
+      backgroundColor: colors.main_white,
+      minHeight: '100vh',
+    }}>
 
-      <Box sx={{display:'flex',flexDirection:'column', gap:'10px'}}>
-        <Typography variant="h5" >Bem vindo de volta, Tesoureiro(a)</Typography>
-        <Typography variant='subtitle' >Você pode gerenciar os gastos da Associação </Typography>
-      </Box>
+      <Container maxWidth='xl' >
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <Typography variant="h5" >Bem vindo de volta, Tesoureiro(a)</Typography>
+          <Typography variant='subtitle' >Você pode gerenciar os gastos da Associação </Typography>
+        </Box>
 
-      <Divider sx={{ margin: '20px 0' }} />
+        <Divider sx={{ margin: '20px 0' }} />
 
-      <AddSpread />
+        <AddSpread />
 
-      <Divider sx={{ margin: '20px 0' }} />
+        <Divider sx={{ margin: '20px 0' }} />
 
-      <ConcludedSpread />
+        <ConcludedSpread />
 
-      <Divider sx={{ margin: '20px 0' }} />
+        <Divider sx={{ margin: '20px 0' }} />
 
-      <AddExcelSpread />
+        <AddExcelSpread />
 
-      <Divider sx={{ margin: '20px 0' }} />
+        <Divider sx={{ margin: '20px 0' }} />
 
-      <Button sx={{margin:'20px 0'}}fullWidth onClick={()=>navigate('/balancete')} variant='outlined' color='success'>Faturamento</Button>
+        <Button sx={{ margin: '20px 0' }} fullWidth onClick={() => navigate('/balancete')} variant='outlined' color='success'>Faturamento</Button>
 
-      <Reunion />
+        <Reunion />
+
+      </Container>
 
     </Box>
   )

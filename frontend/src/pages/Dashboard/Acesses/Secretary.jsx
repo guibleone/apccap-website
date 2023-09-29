@@ -9,6 +9,7 @@ import { styleError, styleSuccess } from '../../toastStyles'
 import { toast } from 'react-toastify'
 import ButtonChangeRole from '../../../components/ChangeRole/ButtonChangeRole'
 import Reunion from '../../../components/Reunions/Reunion'
+import { colors } from '../../colors'
 
 export default function Secretary() {
   const [openAta, setOpeneAta] = useState(false)
@@ -17,8 +18,6 @@ export default function Secretary() {
   const { isLoading, isSuccess, isError, message } = useSelector((state) => state.reunions)
   const { user } = useSelector((state) => state.auth)
 
-
-
   if (isLoading) {
 
     return <Box sx={
@@ -26,7 +25,8 @@ export default function Secretary() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100vh'
+        backgroundColor: colors.main_white,
+        minHeight: '100vh'
       }
     }>
       <CircularProgress sx={
@@ -35,32 +35,32 @@ export default function Secretary() {
         }
       } size={100} />
     </Box>
+
   }
 
 
   return (
-    <Container>
-      <Box>
-        <Typography variant='h5'>Bem vindo de volta, Secretário (a)</Typography>
-        <Typography variant='p'>Você pode fazer os relatórios da associção.</Typography>
-      </Box>
 
+    <Box sx={{
+      backgroundColor: colors.main_white,
+      minHeight: '100vh',
+    }}>
 
-      <Divider sx={{ my: 2 }} />
+      <Container maxWidth='xl' >
 
+        <Reunion />
 
-      <Reunion />
+        <Divider sx={{ my: 2 }} />
 
-      <Divider sx={{ my: 2 }} />
-
-
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6} lg={6}>
-          <Typography variant='h6'>Relatórios de Transparência</Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6} lg={6}>
+            <Typography variant='h6'>Relatórios de Transparência</Typography>
+          </Grid>
         </Grid>
-      </Grid>
 
 
-    </Container >
+      </Container >
+
+    </Box>
   )
 }

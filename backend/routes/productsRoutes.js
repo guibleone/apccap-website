@@ -15,8 +15,8 @@ router.get('/produtor/:id', getProducer)
 router.get('/produtor/resume/:id', getProducerResume)
 
 // rotas selos
-router.get('/selo/:id',hasRole('produtor'), getSelos)
-router.post('/selo/:id', uploadSelo.single("pathRelatory"),  hasRole('produtor'), addSelo)
+router.get('/selo/:id',hasRole(['produtor','produtor_associado']), getSelos)
+router.post('/selo/:id', uploadSelo.single("pathRelatory"),  hasRole(['produtor','produtor_associado']), addSelo)
 
 // pegar produtos
 router.get('/', hasRole(['produtor','conselho']), getProducts) 
@@ -25,16 +25,16 @@ router.get('/', hasRole(['produtor','conselho']), getProducts)
 router.get('/:id', hasRole(['produtor','conselho']), getSingleProduct)
 
 // adicionar produtos
-router.post('/', uploadRelatorys.array('files', 10), hasRole('produtor'), addProduct)
+router.post('/', uploadRelatorys.array('files', 10), hasRole(['produtor','produtor_associado']), addProduct)
 
 // deletar produtos
-router.delete('/:id', hasRole('produtor'), deleteProduct)
+router.delete('/:id', hasRole(['produtor','produtor_associado']), deleteProduct)
 
 // atualizar produtos
-router.put('/:id', hasRole('produtor'), updateProduct)
+router.put('/:id', hasRole(['produtor','produtor_associado']), updateProduct)
 
 // adicionar foto
-router.post('/foto/:id', hasRole('produtor'), uploadProduct.single("path"), addPhoto)
+router.post('/foto/:id', hasRole(['produtor','produtor_associado']), uploadProduct.single("path"), addPhoto)
 
 // rastrear produto
 router.post('/rastrear', trackProduct)

@@ -18,6 +18,10 @@ import { BsExclamationTriangle, BsInstagram, BsWhatsapp } from "react-icons/bs";
 import { AiFillCheckCircle, AiOutlineArrowRight } from "react-icons/ai";
 import { MdWhatsapp } from "react-icons/md";
 import { Link } from "react-router-dom";
+import Footer from "../../components/Footer/Footer";
+import {colors} from '../colors'
+import { getDocuments } from "../../features/documents/documentsSlice";
+import Produtor from "./Acesses/Produtor/Produtor";
 
 function Dashboard() {
 
@@ -61,12 +65,14 @@ function Dashboard() {
     if (user && (user.role === "admin" || user.role === 'secretario' || user.role === 'presidente' || user.role === 'conselho')) {
       dispatch(listUsers(user.token))
     }
+
     if (user) {
       const userData = {
         email: user.email,
         token: user.token
       }
       dispatch(getSubscription(userData))
+      dispatch(getDocuments(user.token))
     }
 
   }, [])
@@ -78,8 +84,8 @@ function Dashboard() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#FAF8F8',
-
+        backgroundColor: colors.main_white,
+        minHeight: '100vh'
       }
     }>
       <CircularProgress sx={
@@ -88,20 +94,6 @@ function Dashboard() {
         }
       } size={100} />
     </Box>
-  }
-
-  if (user) {
-    if (user.status === 'analise' && user.role !== 'user') {
-      return <Box sx={
-        {
-          display: 'flex',
-          justifyContent: 'center',
-          height: '100vh'
-        }
-      }>
-        <Typography variant="h5">Seu cadastro está em análise. Por favor aguarde.</Typography>
-      </Box>
-    }
   }
 
   if ((payments && user && payments.subscription !== 'active' && user.role === 'produtor') || (user && user.status === 'reprovado')) {
@@ -135,7 +127,7 @@ function Dashboard() {
     <Box>
       <CssBaseline />
 
-      {(!user || user.role === 'user') ? (
+      {(!user) ? (
         <>
           <div className="header">
             <div className="text-side">
@@ -162,13 +154,10 @@ function Dashboard() {
               </div>
             </div>
 
-            <div className="rastreio">
+           
+              <img src={require('../../imgs/seloFoto.png')} alt="rastreio" className="rastreio-img" />
 
-              <img src={require('../../imgs/codigo-exemplo.png')} alt="rastreio" className="rastreio-img" />
-
-            </div>
-
-
+         
           </div>
 
           <section className="festival">
@@ -264,7 +253,7 @@ function Dashboard() {
 
           {/* Lojas */}
 
-          <Grid container spacing={2} rowSpacing={'70px'} sx={{ backgroundColor: '#FAF8F8', padding: '80px 0 80px 0' }}>
+          <Grid container spacing={2} rowSpacing={'70px'} sx={{ backgroundColor: colors.main_white, padding: '80px 0 80px 0' }}>
 
             <Grid item xs={12} lg={12}>
               <Box sx={{
@@ -272,10 +261,10 @@ function Dashboard() {
                 flexDirection: 'column',
                 alignItems: 'center',
               }}>
-                <h1 style={{ color: '#0B0B0B', fontWeight: 700 }}>
+                <h1 style={{ color: colors.main_black, fontWeight: 700 }}>
                   Onde Encontrar ?
                 </h1>
-                <h4 style={{ color: '#0B0B0B', fontWeight: 400 }}>
+                <h4 style={{ color: colors.main_black, fontWeight: 400 }}>
                   Confira nossas lojas parceiras
                 </h4>
               </Box>
@@ -303,7 +292,7 @@ function Dashboard() {
                           gap: '20px',
 
                         }}>
-                          <h4 style={{ color: '#0B0B0B', fontWeight: 600 }}>
+                          <h4 style={{ color: colors.main_black, fontWeight: 600 }}>
                             Fazenda Benedetti
                           </h4>
 
@@ -317,7 +306,7 @@ function Dashboard() {
                           gap: '40px',
 
                         }}>
-                          <h6 style={{ color: '#0B0B0B', fontWeight: 500 }}>
+                          <h6 style={{ color: colors.main_black, fontWeight: 500 }}>
                             Rod. Amparo-Serra Negra, Km 138 - Almeidas, Amparo - SP, 13902-800
                           </h6>
 
@@ -352,7 +341,7 @@ function Dashboard() {
                 flexDirection: 'column',
                 width: matches ? '100%' : '542px',
                 gap: '40px',
-                color: '#140C9F',
+                color: colors.main_purple,
                 padding: matches ? ' 20px' : '0',
               }}>
                 <h1 style={{ fontWeight: 700, fontSize: matches ? '26px' : '' }}>
@@ -422,7 +411,7 @@ function Dashboard() {
                       <h3>
                         Ver Mais
                       </h3>
-                      <AiOutlineArrowRight style={{ verticalAlign: 'bottom', color: '#140C9F' }} size={20} />
+                      <AiOutlineArrowRight style={{ verticalAlign: 'bottom', color: colors.main_purple, }} size={20} />
                     </Box>
                   </Link>
                 </>)}
@@ -452,12 +441,12 @@ function Dashboard() {
                       <Box sx={{ display: 'flex', gap: '24px', flexDirection: 'column', maxWidth: '350px', padding: '40px 30px' }}>
                         <Box>
                           <Link className="temas" ><h5 >Jogos</h5></Link>
-                          <h3 style={{ color: '#0B0B0B' }}>Fazenda Feliz</h3>
+                          <h3 style={{ color: colors.main_black }}>Fazenda Feliz</h3>
                         </Box>
 
                         <Typography variant='p'
                           sx={{
-                            color: '#0B0B0B',
+                            color: colors.main_black,
                             fontSize: '14px',
                             fontWeight: '400',
                             lineHeight: '20px',
@@ -475,12 +464,12 @@ function Dashboard() {
 
                           <Box sx={{ display: 'flex', gap: '45px' }}>
                             <div>
-                              <h5 style={{ color: '#0B0B0B', fontWeight: 600, fontSize: '14px' }}>Guilherme Leone</h5>
-                              <h5 style={{ color: '#0B0B0B', fontWeight: 500, fontStyle: 'italic', fontSize: '11px' }}>Presidente</h5>
+                              <h5 style={{ color: colors.main_black, fontWeight: 600, fontSize: '14px' }}>Guilherme Leone</h5>
+                              <h5 style={{ color: colors.main_black, fontWeight: 500, fontStyle: 'italic', fontSize: '11px' }}>Presidente</h5>
                             </div>
 
 
-                            <h5 style={{ color: '#0B0B0B', fontWeight: 500, fontSize: '11px', justifySelf: 'flex-end', alignSelf: 'center' }}>20/09/2021</h5>
+                            <h5 style={{ color: colors.main_black, fontWeight: 500, fontSize: '11px', justifySelf: 'flex-end', alignSelf: 'center' }}>20/09/2021</h5>
                           </Box>
 
                         </Box>
@@ -502,27 +491,26 @@ function Dashboard() {
                     </Box>
                   </Link>
                 </>)}
-
-
-
               </Box>
 
             </Grid>
 
           </Grid>
 
-        </>
+          <Footer />
 
+        </>
 
       ) : (
 
         <>
-          {(user.role === "admin") && (
-            <Admin />
+
+          {(user.role === "produtor" || user.role === 'produtor_associado') && (
+            <Produtor/>
           )}
 
-          {(user.role === "produtor") && (
-            <RegisterProduct />
+          {(user.role === "admin") && (
+            <Admin />
           )}
 
           {(user.role === 'secretario') && (
@@ -546,6 +534,10 @@ function Dashboard() {
       }
 
     </Box >
+
+   
+   
+
 
   )
 }

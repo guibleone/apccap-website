@@ -44,7 +44,7 @@ function App() {
           <Route path={`/produtos`} element={<RegisterProduct />} />
           <Route path={`/produto/:id`} element={<SingleProduct />}/>
           <Route path={`/rastreabilidade`} element={<Traceability />}/>
-          <Route path={`/credencial-produtor`} element={<Producer />} />
+          <Route path={`/credencial`} element={<Producer />} />
           <Route path='/produtor/:id' element={<SingleProducer />} />
           <Route path='/planilha/:id' element={<SingleSpread />} />
           <Route path='/planilhas' element={<AllSpreadSheets />} />
@@ -57,7 +57,6 @@ function App() {
           <Route path='/unico-produto-usuario/:id' element={<SingleUserProduct />} />
           <Route path='*' element={<h1>Not Found 404</h1>} />
         </Routes> 
-        <Footer />
       </Router>
       <ToastContainer />
 

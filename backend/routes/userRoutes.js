@@ -1,7 +1,7 @@
 const express = require('express')
 const { registerUser, loginUser, deleteUser,
     updateUser, addProfilePhoto, restartAprove,
-    handleRecurso, becomeProducer, associateProducer } = require('../controllers/userControllers.js')
+    handleRecurso, becomeProducer, associateProducer, submitForm } = require('../controllers/userControllers.js')
 const { protect, hasRole } = require('../middlewares/authMiddleware.js')
 const { uploadProfilePhoto, uploadRelatory } = require('../middlewares/multer.js')
 
@@ -14,6 +14,7 @@ router.post('/entrar', loginUser)
 router.post('/foto/:id', protect, uploadProfilePhoto.single("pathFoto"), addProfilePhoto)
 router.post('/recurso/:id', protect, uploadRelatory.single("path"), handleRecurso)
 router.post('/become-producer', hasRole('user'), becomeProducer)
+router.post('/formulario/:id', hasRole('produtor_associado'), submitForm)
 
 // associação ter accesso de produtor
 router.post('/associate-producer', hasRole(['produtor', 'presidente', 'secretario', 'conselho', 'tesoureiro']), associateProducer)
@@ -25,7 +26,7 @@ router.delete('/:id', deleteUser)
 router.put('/:id', protect, uploadProfilePhoto.single("logo"), updateUser)
 
 // Reinicar aprovação de usuário
-router.put('/reset/:id', hasRole(['user', 'produtor']), restartAprove)
+router.put('/reset/:id', hasRole(['produtor_associado', 'produtor']), restartAprove)
 
 
 // exporta o router

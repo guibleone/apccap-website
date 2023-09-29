@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom'
 import { AiFillUnlock } from 'react-icons/ai'
 import { styleError, styleSuccess } from '../toastStyles'
 import './Style.css'
+import Footer from "../../components/Footer/Footer"
 
 function Login() {
   const matches = useMediaQuery('(min-width:600px)');
@@ -69,103 +70,105 @@ function Login() {
 
 
   return (
-    <Box sx={{
-      backgroundColor: '#FAF8F8',
-      minHeight: '100vh',
-      paddingBottom:'120px'
-    }}>
-      <CssBaseline />
-      <Container>
+    <>
+      <Box sx={{
+        backgroundColor: '#FAF8F8',
+        minHeight: '100vh',
+        paddingBottom: '120px'
+      }}>
+        <CssBaseline />
+        <Container>
 
-        <Grid container spacing={2} p={matches ? 9 : 0} pt={9} >
-          <Grid item xs={12} lg={12}>
-            <div className="title">
-              <h1>Login</h1>
-              <p>
-                Para você que é um produtor já associado {matches ? <br /> : null}
-                ou iniciou o processo de associação.
-              </p>
-            </div>
-          </Grid>
+          <Grid container spacing={2} p={matches ? 9 : 0} pt={9} >
+            <Grid item xs={12} lg={12}>
+              <div className="title">
+                <h1>Login</h1>
+                <p>
+                  Para você que é um produtor já associado {matches ? <br /> : null}
+                  ou iniciou o processo de associação.
+                </p>
+              </div>
+            </Grid>
 
-          <Grid item xs={12} lg={12} mt={5} >
-            <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
-              CPF
-            </Typography>
-            <TextField
-              id="cpf"
-              name="cpf"
-              autoComplete="cpf"
-              onChange={onChange}
-              type="number"
-              value={cpf}
-              fullWidth
-              placeholder="000.000.000-00"
-              sx={
-                {
-                  '& .MuiInputBase-root': {
-                    borderRadius: '0px',
-                  },
+            <Grid item xs={12} lg={12} mt={5} >
+              <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+                CPF
+              </Typography>
+              <TextField
+                id="cpf"
+                name="cpf"
+                autoComplete="cpf"
+                onChange={onChange}
+                type="number"
+                value={cpf}
+                fullWidth
+                placeholder="000.000.000-00"
+                sx={
+                  {
+                    '& .MuiInputBase-root': {
+                      borderRadius: '0px',
+                    },
+                  }
                 }
-              }
-            />
-          </Grid>
+              />
+            </Grid>
 
-          <Grid item xs={12} lg={12} mt={5} >
-            <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
-              Senha
-            </Typography>
-            <TextField
-              id="password"
-              name="password"
-              placeholder="*******"
-              type="password"
-              autoComplete="new-password"
-              onChange={onChange} value={password}
-              fullWidth
-              sx={
-                {
-                  '& .MuiInputBase-root': {
-                    borderRadius: '0px',
-                  },
+            <Grid item xs={12} lg={12} mt={5} >
+              <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+                Senha
+              </Typography>
+              <TextField
+                id="password"
+                name="password"
+                placeholder="*******"
+                type="password"
+                autoComplete="new-password"
+                onChange={onChange} value={password}
+                fullWidth
+                sx={
+                  {
+                    '& .MuiInputBase-root': {
+                      borderRadius: '0px',
+                    },
+                  }
                 }
-              }
 
-            />
+              />
+
+            </Grid>
+
+            <Grid item xs={12} lg={12} mt={5} >
+
+              <div className="esqueci-senha">
+                <Link to="/" style={{ color: '#140C9F', textDecoration: 'none', cursor: 'pointer' }}>Esqueci minha senha</Link>
+              </div>
+
+            </Grid>
+
+            <Grid item xs={12} lg={12} mt={5} >
+              <Box sx={{
+                display: 'flex',
+                gap: '1rem',
+                justifyContent: 'flex-end',
+
+              }}>
+
+                <button className='button-purple' onClick={() => navigate('/registrar')}>Cadastrar</button>
+                <button className='button-white' disabled={pending} style={{ backgroundColor: pending && '#FAF8F8' }} onClick={onSubmit}>
+                  {pending ? <CircularProgress size={20} color="success" /> : 'Entrar'}
+                </button>
+              </Box>
+
+            </Grid>
 
           </Grid>
+        </Container>
 
-          <Grid item xs={12} lg={12} mt={5} >
+      </Box >
 
-            <div className="esqueci-senha">
-              <Link to="/" style={{ color: '#140C9F', textDecoration: 'none', cursor: 'pointer' }}>Esqueci minha senha</Link>
-            </div>
-
-          </Grid>
-
-          <Grid item xs={12} lg={12} mt={5} >
-            <Box sx={{
-              display: 'flex',
-              gap: '1rem',
-              justifyContent: 'flex-end',
-
-            }}>
-
-              <button className='button-purple' onClick={() => navigate('/registrar')}>Cadastrar</button>
-              <button className='button-white' disabled={pending} style={{ backgroundColor: pending && '#FAF8F8' }} onClick={onSubmit}>
-                {pending ? <CircularProgress size={20} color="success" /> : 'Entrar'}
-              </button>
-            </Box>
-
-          </Grid>
-
-        </Grid>
-      </Container>
-
-
-    </Box >
-
-
+      <Footer />
+      
+    </>
   )
 }
 

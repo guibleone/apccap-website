@@ -182,6 +182,28 @@ const associateProducer = async (data) => {
     return response.data
 }
 
+// submter formulário
+
+const submitForm = async(data) => {
+
+    const config = {
+
+        headers: {
+            Authorization: `Bearer ${data.token}`
+        }
+
+    }
+
+    const response = await axios.post(API_URL + '/formulario/' + data.id, data, config)
+
+    if (response.data) {
+        localStorage.setItem('user', JSON.stringify(response.data))
+    }
+
+    return response.data
+
+}
+
 
 
 // logout de usuário
@@ -201,7 +223,8 @@ const authService = {
     resetAprove,
     sendRecurso,
     becomeProducer,
-    associateProducer
+    associateProducer,
+    submitForm
 }
 
 export default authService;

@@ -10,6 +10,8 @@ import { toast } from 'react-toastify'
 import { styleError } from '../toastStyles'
 import { AiOutlineDownload } from 'react-icons/ai'
 import { repproveRecurso } from '../../features/admin/adminSlice'
+import { useNavigate } from 'react-router-dom'
+import NaoAssociado from './NaoAssociado'
 
 
 function Producer() {
@@ -19,14 +21,15 @@ function Producer() {
 
     const fileInput = useRef(null);
 
+    const navigate = useNavigate()
     const dispatch = useDispatch()
     const matches = useMediaQuery('(min-width:800px)')
 
     // informação do documento
     const [documentData, setDocumentData] = useState({
         path: '',
-        id: user._id,
-        token: user.token
+        id: user && user._id,
+        token: user && user.token
     })
 
     const onChange = (e) => {
@@ -39,7 +42,6 @@ function Producer() {
         if (!documentData.path) return toast.error('Selecione um arquivo', styleError)
         dispatch(sendRecurso(documentData))
     }
-
 
 
 
@@ -87,6 +89,7 @@ function Producer() {
             dispatch(getDocuments(user.token))
         }
 
+
     }, [user])
 
     useEffect(() => {
@@ -102,6 +105,10 @@ function Producer() {
                 </Box>
             </Container>
         )
+    }
+
+    if(user && (user.role === 'produtor' || user.role === 'produtor_associado')){
+        return <NaoAssociado />
     }
 
     if (isLoading) {
@@ -126,7 +133,7 @@ function Producer() {
         <Container sx={{ minHeight: '100vh' }}>
             <CssBaseline />
 
-            {user.status === 'analise' && user.analise.analise_pedido.status === '' &&
+            {user && user.status === 'analise' && user.analise.analise_pedido.status === '' &&
                 <>
                     <Documents />
                 </>
@@ -134,7 +141,7 @@ function Producer() {
 
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center', padding: '20px' }}>
 
-                {user.status === 'analise' && user.analise && user.analise.analise_pedido.status === 'reprovado' &&
+                {user && user.status === 'analise' && user.analise && user.analise.analise_pedido.status === 'reprovado' &&
                     user.analise.analise_pedido.recurso.path === '' &&
                     <>
                         <Typography textAlign={'center'} variant='h5'>Seus documentos foram inválidados <FcHighPriority style={{ verticalAlign: 'bottom' }} size={35} /></Typography>
@@ -153,14 +160,14 @@ function Producer() {
                     </>
                 }
 
-                {user.status === 'analise' && user.analise && user.analise.analise_pedido.recurso.path &&
+                {user && user.status === 'analise' && user.analise && user.analise.analise_pedido.recurso.path &&
                     <>
                         <Typography textAlign={'center'} variant='h5'>Seu recurso foi enviado. Por favor aguarde<FcClock style={{ verticalAlign: 'bottom' }} size={35} /></Typography>
                     </>
                 }
 
 
-                {user.status === 'aprovado' && (
+                {user && user.status === 'aprovado' && (
                     <>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center' }}>
                             <Typography variant='h5'>Aprovado <FcApproval style={{ verticalAlign: 'bottom' }} size={35} /> </Typography>
@@ -183,7 +190,7 @@ function Producer() {
                     </>
                 )}
 
-                {user.status === 'reprovado' && (
+                {user && user.status === 'reprovado' && (
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <Typography variant='h5'>Sua credencial foi reprovada <FcCancel /> </Typography>
                         <Button
@@ -199,7 +206,7 @@ function Producer() {
                 )}
             </Box>
 
-            {(user.status === 'aprovado' || user.status === 'analise') &&
+            {user && (user.status === 'aprovado' || user.status === 'analise') &&
                 <>
                     <Typography textAlign='center' variant='h5'>Acompanhe o Processo</Typography>
 
@@ -212,13 +219,13 @@ function Producer() {
                                 <Typography variant='h6'>Análise do pedido</Typography>
                                 <Typography variant='p'>Parecer sobre os documentos do produtor</Typography>
 
-                                {user.analise && user.analise.analise_pedido.path && user.analise.analise_pedido.status !== 'pendente' ? (
+                                {user && user.analise && user.analise.analise_pedido.path && user.analise.analise_pedido.status !== 'pendente' ? (
                                     <>
                                         <Box sx={{ display: 'flex' }}>
                                             <Button color="success" href={user.analise && user.analise.analise_pedido.path}><AiOutlineDownload size={25} /></Button>
                                         </Box>
 
-                                        {user.analise && (
+                                        {user && user.analise && (
                                             <>
 
                                                 {user.analise.analise_pedido.status === 'reprovado' &&
@@ -247,7 +254,7 @@ function Producer() {
                                 <Typography variant='h6'>Vistoria</Typography>
                                 <Typography variant='p'>Parecer do técnico sobre a cadeia produtiva</Typography>
 
-                                {user.analise && user.analise.vistoria.path && user.analise.vistoria.status !== 'pendente' ? (
+                                {user && user.analise && user.analise.vistoria.path && user.analise.vistoria.status !== 'pendente' ? (
                                     <>
                                         <Box sx={{ display: 'flex' }}>
                                             <Button color="success" href={user.analise && user.analise.vistoria.path}><AiOutlineDownload size={25} /></Button>
@@ -283,7 +290,7 @@ function Producer() {
                                 <Typography variant='h6'>Análise Laboratorial</Typography>
                                 <Typography variant='p'>Parecer do laboratório credenciado</Typography>
 
-                                {user.analise && user.analise.analise_laboratorial.path && user.analise.analise_laboratorial.status !== 'pendente' ? (
+                                {user && user.analise && user.analise.analise_laboratorial.path && user.analise.analise_laboratorial.status !== 'pendente' ? (
                                     <>
                                         <Box sx={{ display: 'flex' }}>
                                             <Button color="success" href={user.analise && user.analise.analise_laboratorial.path}><AiOutlineDownload size={25} /></Button>

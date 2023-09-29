@@ -139,6 +139,19 @@ export const associateProducer = createAsyncThunk('auth/associateProducer', asyn
     }
 })
 
+// submter formulário de requerimento
+
+export const submitForm = createAsyncThunk('auth/submitForm', async(user, thunkAPI) => {
+    try {
+        const response = await authService.submitForm(user)
+        return response
+    } catch (error) {
+        // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
 // slice para funções de autnticação de usuário
 export const authSlice = createSlice({
     name: 'auth',
@@ -271,9 +284,23 @@ export const authSlice = createSlice({
                 state.isError = true
                 state.message = action.payload
             })
-
+            // submeter formulário de requerimento
+            .addCase(submitForm.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(submitForm.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isSuccess = true
+                state.message = 'Formulário enviado com sucesso'
+                state.user = action.payload
+            })
+            .addCase(submitForm.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+            })
+            
     }
-
 
 })
 

@@ -10,11 +10,12 @@ import { toast } from 'react-toastify'
 import Email from "../../components/Email/Email"
 import SecretaryLevel from "./SecretaryLevel"
 import PresidentLevel from "./PresidentLevel"
+import { colors } from '../colors'
 
 
 function UserSingle() {
 
-    const { user } = useSelector((state) => state.auth)
+    const { user, isLoading: isLoadingAuth } = useSelector((state) => state.auth)
 
     const { userData, resumeData, documentsData, isLoading, message, isError, isSuccess } = useSelector((state) => state.admin)
 
@@ -120,7 +121,7 @@ function UserSingle() {
         if (!user) {
             navigate('/')
         }
-    
+
         if (user) {
             dispatch(getUserData({ id, token: user.token }))
             dispatch(getResumeData({ id, token: user.token }))
@@ -132,15 +133,15 @@ function UserSingle() {
     }, [user])
 
 
-    if (isLoading) {
+    if (isLoading || isLoadingAuth) {
 
         return <Box sx={
             {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                backgroundColor: '#FAF8F8',
-
+                backgroundColor: colors.main_white,
+                minHeight: '100vh'
             }
         }>
             <CircularProgress sx={
@@ -150,6 +151,7 @@ function UserSingle() {
             } size={100} />
         </Box>
     }
+
     if (user && user.role === 'secretario') {
         return <SecretaryLevel />
     }
@@ -161,15 +163,16 @@ function UserSingle() {
 
     return (
         <Box sx={{
-            backgroundColor: '#FAF8F8',
+            backgroundColor: colors.main_white,
             paddingBottom: '120px',
+            minHeight: '100vh',
         }}>
 
             <CssBaseline />
 
             <Container maxWidth='xl' >
 
-                {user && userData.dados_pessoais && (
+                {user && userData.dados_pessoais ? (
                     <>
                         <Grid rowSpacing={5} columnSpacing={{ xs: 8, sm: 6, md: 3 }} >
 
@@ -293,7 +296,23 @@ function UserSingle() {
                             {isError && <Alert severity="error">{message}</Alert>}
 
                         </Box>
-                    </>)}
+                    </>):(
+                        <Box sx={
+                            {
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                backgroundColor: colors.main_white,
+                                minHeight: '100vh'
+                            }
+                        }>
+                            <CircularProgress sx={
+                                {
+                                    marginBottom: '100px',
+                                }
+                            } size={100} />
+                        </Box>
+                    )}
             </Container>
 
         </Box>

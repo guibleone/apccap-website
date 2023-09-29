@@ -14,7 +14,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
     try {
 
-        const { dadosPessoaisData, propriedadeData, marcaData } = JSON.parse(userData);
+        const { dadosPessoaisData, propriedadeData, marcaData, isAssociado } = JSON.parse(userData);
 
         if (dadosPessoaisData && propriedadeData && marcaData) {
 
@@ -73,6 +73,11 @@ const registerUser = asyncHandler(async (req, res) => {
 
                 user.marca.logo = url
 
+                if (isAssociado) {
+                    user.role = 'produtor_associado'
+                    user.status = 'analise'
+                }
+                
                 await user.save();
 
                 return res.json(user);
@@ -107,7 +112,7 @@ const addProfilePhoto = asyncHandler(async (req, res) => {
 
         if (user) {
 
-            if(user.dados_pessoais.profilePhoto) {
+            if (user.dados_pessoais.profilePhoto) {
                 const storageRef = ref(storage, `profilePhotos/${user._id}`)
                 await deleteObject(storageRef)
             }
@@ -461,6 +466,38 @@ const associateProducer = asyncHandler(async (req, res) => {
     }
 });
 
+// submeter formulário de requerimento
+
+const submitForm = asyncHandler(async (req, res) => {
+    try {
+        const { id } = req.params
+
+        const { formData } = req.body
+
+        const user = await User.findById(id)
+
+        if (!user) {
+            res.status(404).json({ error: 'Usuário não encontrado' });
+            return;
+        }
+
+        if (!formData) {
+            res.status(400).json({ error: 'Preencha todos os campos' });
+            return;
+        }
+
+        user.formulario_requerimento = formData
+
+        await user.save()
+
+        res.status(200).json(user)
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Erro ao submeter formulário' });
+    }
+});
+
 // gerar token
 const generateToken = (userId) => {
     const secretKey = process.env.JWT_SECRET;
@@ -477,5 +514,6 @@ module.exports = {
     restartAprove,
     handleRecurso,
     becomeProducer,
-    associateProducer
+    associateProducer,
+    submitForm
 }

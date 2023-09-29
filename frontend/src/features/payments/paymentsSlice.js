@@ -44,6 +44,7 @@ const paymentsSlice = createSlice({
             state.isLoading = false;
             state.isSuccess = false;
             state.message = '';
+            state.payments = null;
         }
     },
     extraReducers: (builder) => {

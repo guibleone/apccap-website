@@ -17,6 +17,7 @@ import { BsTrash } from 'react-icons/bs'
 import { associateProducer } from '../../../../features/auth/authSlice';
 import ButtonChangeRole from '../../../../components/ChangeRole/ButtonChangeRole';
 import Reunion from '../../../../components/Reunions/Reunion';
+import { colors } from '../../../colors';
 registerLocale('pt-BR', ptBR)
 setDefaultLocale('ptBR')
 
@@ -109,77 +110,81 @@ export default function President() {
   }, [emailStatus.isSuccess, emailStatus.isError])
 
   return (
-    <Container>
+    <Box sx={{
+      backgroundColor: colors.main_white,
+      minHeight: '100vh',
+    }}>
+      <Container>
 
-      <Grid container spacing={2} >
+        <Grid container spacing={2} >
 
-        <Grid item xs={12} lg={12}>
-          <Typography textAlign={'center'} variant='h5'>Convocar Reuniões</Typography>
+          <Grid item xs={12} lg={12}>
+            <Typography textAlign={'center'} variant='h5'>Convocar Reuniões</Typography>
+          </Grid>
+          <Grid item xs={12} lg={12}>
+            <TextField onChange={(e) => setTitle(e.target.value)} fullWidth size='small' placeholder='Informe o título da reunião' >Título</TextField>
+          </Grid>
+
+          <Grid item xs={12} lg={12}>
+            <TextareaAutosize
+              minRows={6}
+              placeholder='Mensagem para convocação'
+              style={{ width: "100%", resize: 'none', fontSize: '16px', padding: '10px' }}
+              maxRows={8}
+              name='message'
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            />
+          </Grid>
+
+          <Grid item xs={12} lg={12}>
+            <DatePicker
+              selected={startDate}
+              onChange={(date) => setStartDate(date)}
+              showTimeSelect
+              dateFormat="Pp"
+              locale={ptBR}
+              customInput={<Button variant='outlined'>Data e Hora</Button>}
+            />
+
+            <Typography>Reunião: {startDate.toLocaleString()}</Typography>
+
+          </Grid>
+
+          <Grid item xs={12} lg={12}>
+
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+              <FormGroup row>
+                <FormControlLabel control={<Checkbox checked={typeReunion.administrativa} onChange={handleChange} name='administrativa' />} label={'Administrativa'} />
+                <FormControlLabel control={<Checkbox checked={typeReunion.assembleia_ordinal} onChange={handleChange} name='assembleia_ordinal' />} label={'Assembleia ordinal'} />
+                <FormControlLabel control={<Checkbox checked={typeReunion.assembleia_extraordinaria} onChange={handleChange} name='assembleia_extraordinaria' />} label={'Assembleia extraordinária'} />
+              </FormGroup>
+
+              <Button
+                disabled={emailStatus.isLoading}
+                onClick={handleSendEmail}
+                fullWidth
+                variant='contained'
+                color='success'> {emailStatus.isLoading ? <CircularProgress color="success" size={24} /> : 'Convocar'}
+              </Button>
+
+            </Box>
+
+          </Grid>
+
         </Grid>
-        <Grid item xs={12} lg={12}>
-          <TextField onChange={(e) => setTitle(e.target.value)} fullWidth size='small' placeholder='Informe o título da reunião' >Título</TextField>
-        </Grid>
 
-        <Grid item xs={12} lg={12}>
-          <TextareaAutosize
-            minRows={6}
-            placeholder='Mensagem para convocação'
-            style={{ width: "100%", resize: 'none', fontSize: '16px', padding: '10px' }}
-            maxRows={8}
-            name='message'
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-          />
-        </Grid>
-
-        <Grid item xs={12} lg={12}>
-          <DatePicker
-            selected={startDate}
-            onChange={(date) => setStartDate(date)}
-            showTimeSelect
-            dateFormat="Pp"
-            locale={ptBR}
-            customInput={<Button variant='outlined'>Data e Hora</Button>}
-          />
-
-          <Typography>Reunião: {startDate.toLocaleString()}</Typography>
-
-        </Grid>
-
-        <Grid item xs={12} lg={12}>
-
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
-            <FormGroup row>
-              <FormControlLabel control={<Checkbox checked={typeReunion.administrativa} onChange={handleChange} name='administrativa' />} label={'Administrativa'} />
-              <FormControlLabel control={<Checkbox checked={typeReunion.assembleia_ordinal} onChange={handleChange} name='assembleia_ordinal' />} label={'Assembleia ordinal'} />
-              <FormControlLabel control={<Checkbox checked={typeReunion.assembleia_extraordinaria} onChange={handleChange} name='assembleia_extraordinaria' />} label={'Assembleia extraordinária'} />
-            </FormGroup>
-
-            <Button
-              disabled={emailStatus.isLoading}
-              onClick={handleSendEmail}
-              fullWidth
-              variant='contained'
-              color='success'> {emailStatus.isLoading ? <CircularProgress color="success" size={24} /> : 'Convocar'}
-            </Button>
-
-          </Box>
-
-        </Grid>
-
-      </Grid>
-
-      <Divider orientation='vertical' flexItem sx={{ m: 2 }} />
+        <Divider orientation='vertical' flexItem sx={{ m: 2 }} />
 
 
-      <Reunion />
+        <Reunion />
 
+        <Divider sx={{ margin: '20px 0' }} />
 
+        <UsersCredenciados />
 
-      <Divider sx={{ margin: '20px 0' }} />
+      </Container >
 
-      <UsersCredenciados />
-
-    </Container >
+    </Box>
   )
 }

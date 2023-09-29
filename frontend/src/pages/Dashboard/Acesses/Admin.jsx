@@ -38,7 +38,7 @@ export default function Admin() {
   return (
     <Box sx={{
       backgroundColor: '#FAF8F8',
-
+      minHeight: '100vh',
     }}>
 
       <CssBaseline />

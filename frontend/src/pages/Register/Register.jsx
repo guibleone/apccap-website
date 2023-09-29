@@ -11,6 +11,8 @@ import {
 import { AiFillInfoCircle, AiFillLock, AiFillWarning, AiOutlinePaperClip } from 'react-icons/ai'
 import { styleError, styleSuccess } from '../toastStyles'
 import './Style.css'
+import Footer from '../../components/Footer/Footer'
+import { colors } from '../colors'
 
 
 function Register() {
@@ -86,6 +88,15 @@ function Register() {
     }))
   }
 
+  const [isAssociado, setIsAssociado] = useState(false)
+
+  const handleIsAssociate = (e) => {
+    const isChecked = e.target.checked;
+
+    setIsAssociado(isChecked)
+    
+  };
+
   /* marca */
 
   const [marcaData, setMarcaData] = useState({
@@ -137,7 +148,7 @@ function Register() {
 
   const resume = useSelector((state) => state.resume.resume)
 
-  const { user, isError, isLoading, isSuccess, message } = useSelector((state) => state.auth)
+  const { user, isError, pending, isSuccess, message, isLoading} = useSelector((state) => state.auth)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -195,7 +206,8 @@ function Register() {
       const userData = {
         dadosPessoaisData,
         propriedadeData,
-        marcaData
+        marcaData,
+        isAssociado
       }
 
       dispatch(registerUser({ userData, logo }))
@@ -219,143 +231,53 @@ function Register() {
       } size={100} />
     </Box>
   }
+
   return (
-    <Box sx={{
-      backgroundColor: '#FAF8F8',
-      minHeight: '100vh',
-      paddingBottom: '120px'
-    }}>
-      <CssBaseline />
+    <>
+      <Box sx={{
+        backgroundColor: '#FAF8F8',
+        minHeight: '100vh',
+        paddingBottom: '120px'
+      }}>
 
-      <Grid container spacing={2} p={matches ? 9 : 0} pt={9} >
-        <Grid item xs={12} lg={12}>
-          <div className='title'>
-            <h1>
-              Cadastro
-            </h1>
+        <CssBaseline />
 
-            <p>
-              Para você que  não é um produtor associado, cumpre com os <br />
-              <Link style={{ color: '#140C9F', fontWeight: 700, textDecorationColor: '#140C9F' }} >requisitos</Link> e deseja se associar.
-            </p>
-          </div>
-        </Grid>
+        <Grid container spacing={2} p={matches ? 9 : 0} pt={9} >
+          <Grid item xs={12} lg={12}>
+            <div className='title'>
+              <h1>
+                Cadastro
+              </h1>
 
-        <Grid container spacing={2} p={matches ? 10 : 4} columnSpacing={22} >
-          <Grid item xs={12}>
-            <Typography pb={1} variant={matches ? 'h5' : 'h6'}
-              sx={{
-                fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: !matches ? '100%' : '210px',
-                textAlign: matches ? 'left' : 'center'
-              }} >
-              Dados Pessoais
-            </Typography>
+              <p>
+                Para você que  não é um produtor associado, cumpre com os <br />
+                <Link style={{ color: '#140C9F', fontWeight: 700, textDecorationColor: '#140C9F' }} >requisitos</Link> e deseja se associar.
+              </p>
+            </div>
           </Grid>
 
-          <Grid item xs={12} lg={6} mt={5}>
-            <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
-              Nome Completo
-            </Typography>
-            <TextField
-              autoComplete="name"
-              required
-              fullWidth
-              placeholder='André Luiz'
-              autoFocus
-              onChange={handleChangeDadosPessoais} type="text" id="name" name="name" value={dadosPessoaisData.name}
-              sx={
-                {
-                  '& .MuiInputBase-root': {
-                    borderRadius: '0px',
-                  },
-                }
-              }
-            />
+          <Grid container spacing={2} p={matches ? 10 : 4} columnSpacing={22} >
+            <Grid item xs={12}>
+              <Typography pb={1} variant={matches ? 'h5' : 'h6'}
+                sx={{
+                  fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: !matches ? '100%' : '210px',
+                  textAlign: matches ? 'left' : 'center'
+                }} >
+                Dados Pessoais
+              </Typography>
+            </Grid>
 
-            <Typography variant='body1' pb={2} mt={2} sx={{ fontWeight: 540 }}>
-              E-mail
-            </Typography>
-
-            <TextField
-              required
-              fullWidth
-              id="email"
-              placeholder='appcap@gmail.com'
-              name="email"
-              onChange={handleChangeDadosPessoais} type='email' value={dadosPessoaisData.email}
-
-              sx={
-                {
-                  '& .MuiInputBase-root': {
-                    borderRadius: '0px',
-                  },
-                }
-              }
-            />
-
-            <Box sx={{ display: 'flex', gap: '10px', flexDirection: !matches ? 'column' : 'row' }}>
-              <Grid item xs={12} lg={6} mt={3}>
-                <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
-                  CEP
-                </Typography>
-
-                <TextField
-                  required
-                  fullWidth
-                  id="cep"
-                  placeholder='00000-000'
-                  name="cep"
-                  autoComplete="cep" onChange={handleChangeDadosPessoais} type="number"
-                  value={dadosPessoaisData.cep}
-                  sx={
-                    {
-                      '& .MuiInputBase-root': {
-                        borderRadius: '0px',
-                      },
-                    }
-                  }
-                />
-              </Grid>
-
-
-              <Grid item xs={12} lg={6} mt={3}>
-
-                <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
-                  Número
-                </Typography>
-
-                <TextField
-                  required
-                  fullWidth
-                  id="number"
-                  placeholder='000'
-                  name="numero"
-                  autoComplete="number" onChange={handleChangeDadosPessoais} type="number"
-                  value={dadosPessoaisData.numero}
-                  sx={
-                    {
-                      '& .MuiInputBase-root': {
-                        borderRadius: '0px',
-                      },
-                    }
-                  }
-                />
-              </Grid>
-
-            </Box>
-
-            <Grid item xs={12} lg={12} mt={3}>
+            <Grid item xs={12} lg={6} mt={5}>
               <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
-                Logradouro
+                Nome Completo
               </Typography>
               <TextField
+                autoComplete="name"
                 required
                 fullWidth
-                id="logradouro"
-                placeholder='Rua das Flores'
-                name="logradouro"
-                autoComplete="logradouro" onChange={handleChangeDadosPessoais} type="text"
-                value={dadosPessoaisData.logradouro}
+                placeholder='André Luiz'
+                autoFocus
+                onChange={handleChangeDadosPessoais} type="text" id="name" name="name" value={dadosPessoaisData.name}
                 sx={
                   {
                     '& .MuiInputBase-root': {
@@ -365,23 +287,17 @@ function Register() {
                 }
               />
 
-            </Grid>
-
-            <Grid item xs={12} lg={12} mt={3}>
-              <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
-                Senha
+              <Typography variant='body1' pb={2} mt={2} sx={{ fontWeight: 540 }}>
+                E-mail
               </Typography>
 
               <TextField
                 required
                 fullWidth
-                id="password"
-                placeholder='*******'
-                name="password"
-                type="password"
-                autoComplete="new-password"
-                onChange={handleChangeDadosPessoais}
-                value={dadosPessoaisData.password}
+                id="email"
+                placeholder='appcap@gmail.com'
+                name="email"
+                onChange={handleChangeDadosPessoais} type='email' value={dadosPessoaisData.email}
 
                 sx={
                   {
@@ -392,73 +308,69 @@ function Register() {
                 }
               />
 
-              <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }} mt={3}>
-                <AiFillInfoCircle size={25} style={{ verticalAlign: 'bottom' }} /> Mínimo 8 caractéres
-              </Typography>
+              <Box sx={{ display: 'flex', gap: '10px', flexDirection: !matches ? 'column' : 'row' }}>
+                <Grid item xs={12} lg={6} mt={3}>
+                  <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+                    CEP
+                  </Typography>
 
-            </Grid>
-          </Grid>
-
-          <Grid item xs={12} lg={6} mt={5}>
-            <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
-              CPF
-            </Typography>
-            <TextField
-              required
-              fullWidth
-              id="cpf"
-              placeholder='000.000.000-00'
-              name="cpf"
-              autoComplete="cpf" onChange={handleChangeDadosPessoais} type="number"
-              value={dadosPessoaisData.cpf}
-              sx={
-                {
-                  '& .MuiInputBase-root': {
-                    borderRadius: '0px',
-                  },
-                }
-              }
-            />
-
-            <Box sx={{ display: 'flex', gap: '10px', flexDirection: !matches ? 'column' : 'row' }}>
-              <Grid item xs={12} lg={6} mt={2}>
-                <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
-                  Telefone
-                </Typography>
-
-                <TextField
-                  required
-                  fullWidth
-                  id="telefone"
-                  placeholder='(19) 3261-5485'
-                  name="telefone"
-                  autoComplete="telefone" onChange={handleChangeDadosPessoais} type="number"
-                  value={dadosPessoaisData.telefone}
-                  sx={
-                    {
-                      '& .MuiInputBase-root': {
-                        borderRadius: '0px',
-                      },
+                  <TextField
+                    required
+                    fullWidth
+                    id="cep"
+                    placeholder='00000-000'
+                    name="cep"
+                    autoComplete="cep" onChange={handleChangeDadosPessoais} type="number"
+                    value={dadosPessoaisData.cep}
+                    sx={
+                      {
+                        '& .MuiInputBase-root': {
+                          borderRadius: '0px',
+                        },
+                      }
                     }
-                  }
-                />
-              </Grid>
+                  />
+                </Grid>
 
 
-              <Grid item xs={12} lg={6} mt={2}>
+                <Grid item xs={12} lg={6} mt={3}>
 
+                  <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+                    Número
+                  </Typography>
+
+                  <TextField
+                    required
+                    fullWidth
+                    id="number"
+                    placeholder='000'
+                    name="numero"
+                    autoComplete="number" onChange={handleChangeDadosPessoais} type="number"
+                    value={dadosPessoaisData.numero}
+                    sx={
+                      {
+                        '& .MuiInputBase-root': {
+                          borderRadius: '0px',
+                        },
+                      }
+                    }
+                  />
+                </Grid>
+
+              </Box>
+
+              <Grid item xs={12} lg={12} mt={3}>
                 <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
-                  Celular
+                  Logradouro
                 </Typography>
-
                 <TextField
                   required
                   fullWidth
-                  id="celular"
-                  placeholder='(19) 99999-9999'
-                  name="celular"
-                  autoComplete="celular" onChange={handleChangeDadosPessoais} type="number"
-                  value={dadosPessoaisData.celular}
+                  id="logradouro"
+                  placeholder='Rua das Flores'
+                  name="logradouro"
+                  autoComplete="logradouro" onChange={handleChangeDadosPessoais} type="text"
+                  value={dadosPessoaisData.logradouro}
                   sx={
                     {
                       '& .MuiInputBase-root': {
@@ -469,74 +381,51 @@ function Register() {
                 />
 
               </Grid>
-            </Box>
 
-            <Grid item xs={12} lg={12} mt={3}>
-              <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
-                Estado
-              </Typography>
+              <Grid item xs={12} lg={12} mt={3}>
+                <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+                  Senha
+                </Typography>
 
-              <Select
-                fullWidth
-                onChange={handleChangeDadosPessoais}
-                defaultValue=""
-                value={dadosPessoaisData.estado || ''}
-                name='estado'
-                sx={
-                  {
-                    '& .MuiInputBase-root': {
-                      borderRadius: '0px',
-                    },
+                <TextField
+                  required
+                  fullWidth
+                  id="password"
+                  placeholder='*******'
+                  name="password"
+                  type="password"
+                  autoComplete="new-password"
+                  onChange={handleChangeDadosPessoais}
+                  value={dadosPessoaisData.password}
+
+                  sx={
+                    {
+                      '& .MuiInputBase-root': {
+                        borderRadius: '0px',
+                      },
+                    }
                   }
-                }
-              >
-                <MenuItem value="">Selecione um estado</MenuItem>
-                <MenuItem value="SP">São Paulo</MenuItem>
-                <MenuItem value="RJ">Rio de Janeiro</MenuItem>
-                <MenuItem value="MG">Minas Gerais</MenuItem>
-              </Select>
+                />
 
+                <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }} mt={3}>
+                  <AiFillInfoCircle size={25} style={{ verticalAlign: 'bottom' }} /> Mínimo 8 caractéres
+                </Typography>
+
+              </Grid>
             </Grid>
 
-            <Grid item xs={12} lg={12} mt={3}>
+            <Grid item xs={12} lg={6} mt={5}>
               <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
-                Cidade
+                CPF
               </Typography>
-
               <TextField
                 required
                 fullWidth
-                id="cidade"
-                placeholder='Campinas'
-                name="cidade"
-                autoComplete="cidade" onChange={handleChangeDadosPessoais} type="text"
-                value={dadosPessoaisData.cidade}
-                sx={
-                  {
-                    '& .MuiInputBase-root': {
-                      borderRadius: '0px',
-                    },
-                  }
-                }
-              />
-            </Grid>
-
-            <Grid item xs={12} lg={12} mt={3}>
-              <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
-                Confirmar senha
-              </Typography>
-
-              <TextField
-                required
-                fullWidth
-                id="password2"
-                placeholder='*******'
-                name="password2"
-                type="password"
-                autoComplete="new-password"
-                onChange={handleChangeDadosPessoais}
-                value={dadosPessoaisData.password2}
-
+                id="cpf"
+                placeholder='000.000.000-00'
+                name="cpf"
+                autoComplete="cpf" onChange={handleChangeDadosPessoais} type="number"
+                value={dadosPessoaisData.cpf}
                 sx={
                   {
                     '& .MuiInputBase-root': {
@@ -546,70 +435,162 @@ function Register() {
                 }
               />
 
+              <Box sx={{ display: 'flex', gap: '10px', flexDirection: !matches ? 'column' : 'row' }}>
+                <Grid item xs={12} lg={6} mt={2}>
+                  <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+                    Telefone
+                  </Typography>
+
+                  <TextField
+                    required
+                    fullWidth
+                    id="telefone"
+                    placeholder='(19) 3261-5485'
+                    name="telefone"
+                    autoComplete="telefone" onChange={handleChangeDadosPessoais} type="number"
+                    value={dadosPessoaisData.telefone}
+                    sx={
+                      {
+                        '& .MuiInputBase-root': {
+                          borderRadius: '0px',
+                        },
+                      }
+                    }
+                  />
+                </Grid>
+
+
+                <Grid item xs={12} lg={6} mt={2}>
+
+                  <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+                    Celular
+                  </Typography>
+
+                  <TextField
+                    required
+                    fullWidth
+                    id="celular"
+                    placeholder='(19) 99999-9999'
+                    name="celular"
+                    autoComplete="celular" onChange={handleChangeDadosPessoais} type="number"
+                    value={dadosPessoaisData.celular}
+                    sx={
+                      {
+                        '& .MuiInputBase-root': {
+                          borderRadius: '0px',
+                        },
+                      }
+                    }
+                  />
+
+                </Grid>
+              </Box>
+
+              <Grid item xs={12} lg={12} mt={3}>
+                <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+                  Estado
+                </Typography>
+
+                <Select
+                  fullWidth
+                  onChange={handleChangeDadosPessoais}
+                  defaultValue=""
+                  value={dadosPessoaisData.estado || ''}
+                  name='estado'
+                  sx={
+                    {
+                      '& .MuiInputBase-root': {
+                        borderRadius: '0px',
+                      },
+                    }
+                  }
+                >
+                  <MenuItem value="">Selecione um estado</MenuItem>
+                  <MenuItem value="SP">São Paulo</MenuItem>
+                  <MenuItem value="RJ">Rio de Janeiro</MenuItem>
+                  <MenuItem value="MG">Minas Gerais</MenuItem>
+                </Select>
+
+              </Grid>
+
+              <Grid item xs={12} lg={12} mt={3}>
+                <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+                  Cidade
+                </Typography>
+
+                <TextField
+                  required
+                  fullWidth
+                  id="cidade"
+                  placeholder='Campinas'
+                  name="cidade"
+                  autoComplete="cidade" onChange={handleChangeDadosPessoais} type="text"
+                  value={dadosPessoaisData.cidade}
+                  sx={
+                    {
+                      '& .MuiInputBase-root': {
+                        borderRadius: '0px',
+                      },
+                    }
+                  }
+                />
+              </Grid>
+
+              <Grid item xs={12} lg={12} mt={3}>
+                <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+                  Confirmar senha
+                </Typography>
+
+                <TextField
+                  required
+                  fullWidth
+                  id="password2"
+                  placeholder='*******'
+                  name="password2"
+                  type="password"
+                  autoComplete="new-password"
+                  onChange={handleChangeDadosPessoais}
+                  value={dadosPessoaisData.password2}
+
+                  sx={
+                    {
+                      '& .MuiInputBase-root': {
+                        borderRadius: '0px',
+                      },
+                    }
+                  }
+                />
+
+              </Grid>
+
             </Grid>
 
           </Grid>
 
-        </Grid>
+          <Grid container spacing={2} p={matches ? 10 : 4} columnSpacing={22}  >
+            <Grid item xs={12}>
+              <Typography pb={1} variant={matches ? 'h5' : 'h6'}
+                sx={{
+                  fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: !matches ? '100%' : '210px',
+                  textAlign: matches ? 'left' : 'center'
+                }} >
+                Propriedade
+              </Typography>
+            </Grid>
 
-        <Grid container spacing={2} p={matches ? 10 : 4} columnSpacing={22}  >
-          <Grid item xs={12}>
-            <Typography pb={1} variant={matches ? 'h5' : 'h6'}
-              sx={{
-                fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: !matches ? '100%' : '210px',
-                textAlign: matches ? 'left' : 'center'
-              }} >
-              Propriedade
-            </Typography>
-          </Grid>
-
-          <Grid item xs={12} lg={6} mt={5}>
-            <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
-              CPF do Proprietário
-            </Typography>
-
-            <TextField
-              required
-              fullWidth
-              id="cpfProprietario"
-              placeholder='000.000.000-00'
-              name="cpfProprietario"
-              autoComplete="cpfProprietario" onChange={handleChangePropriedade} type="number"
-              value={propriedadeData.cpfProprietario}
-              sx={
-                {
-                  '& .MuiInputBase-root': {
-                    borderRadius: '0px',
-                  },
-                }
-              }
-            />
-
-            <Checkbox
-              onChange={sameCpf}
-              disabled={!dadosPessoaisData.cpf} sx={{ marginLeft: '-10px', marginTop: '-3px' }} />
-            <Typography variant='caption'
-              sx={{
-                varticalAlign: 'bottom',
-                fontSize: '1rem'
-              }}
-            >
-              Mesmo CPF
-            </Typography>
-
-            <Grid item xs={12} lg={12} mt={3}>
+            <Grid item xs={12} lg={6} mt={5}>
               <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
-                Logradouro
+                CPF do Proprietário
               </Typography>
 
               <TextField
                 required
                 fullWidth
-                id="logradouro_propriedade"
-                placeholder='Rua das Flores'
-                name="logradouro_propriedade"
-                autoComplete="logradouro_propriedade" onChange={handleChangePropriedade} type="text"
-                value={propriedadeData.logradouro_propriedade}
+                id="cpfProprietario"
+                placeholder='000.000.000-00'
+                name="cpfProprietario"
+                autoComplete="cpfProprietario" onChange={handleChangePropriedade} type="number"
+                value={propriedadeData.cpfProprietario}
                 sx={
                   {
                     '& .MuiInputBase-root': {
@@ -620,208 +601,307 @@ function Register() {
               />
 
               <Checkbox
-                disabled={!dadosPessoaisData.logradouro || !dadosPessoaisData.cep || !dadosPessoaisData.numero || !dadosPessoaisData.cidade || !dadosPessoaisData.estado}
-                onChange={sameAddress} sx={{ marginLeft: '-10px', marginTop: '-3px' }} />
+                onChange={sameCpf}
+                disabled={!dadosPessoaisData.cpf} sx={{ marginLeft: '-10px', marginTop: '-3px' }} />
               <Typography variant='caption'
                 sx={{
                   varticalAlign: 'bottom',
                   fontSize: '1rem'
                 }}
               >
-                Mesmo Endereço
+                Mesmo CPF
               </Typography>
+
+              <Grid item xs={12} lg={12} mt={3}>
+                <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+                  Logradouro
+                </Typography>
+
+                <TextField
+                  required
+                  fullWidth
+                  id="logradouro_propriedade"
+                  placeholder='Rua das Flores'
+                  name="logradouro_propriedade"
+                  autoComplete="logradouro_propriedade" onChange={handleChangePropriedade} type="text"
+                  value={propriedadeData.logradouro_propriedade}
+                  sx={
+                    {
+                      '& .MuiInputBase-root': {
+                        borderRadius: '0px',
+                      },
+                    }
+                  }
+                />
+
+                <Checkbox
+                  disabled={!dadosPessoaisData.logradouro || !dadosPessoaisData.cep || !dadosPessoaisData.numero || !dadosPessoaisData.cidade || !dadosPessoaisData.estado}
+                  onChange={sameAddress} sx={{ marginLeft: '-10px', marginTop: '-3px' }} />
+                <Typography variant='caption'
+                  sx={{
+                    varticalAlign: 'bottom',
+                    fontSize: '1rem'
+                  }}
+                >
+                  Mesmo Endereço
+                </Typography>
+              </Grid>
+
+              <Grid item xs={12} lg={12} mt={3}>
+                <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+                  Cidade
+                </Typography>
+
+                <TextField
+                  required
+                  fullWidth
+                  id="cidade-propriedade"
+                  placeholder='Campinas'
+                  name="cidade-propriedade"
+                  autoComplete="cidade-propriedade" onChange={handleChangePropriedade} type="text"
+                  value={propriedadeData.cidade_propriedade}
+                  sx={
+                    {
+                      '& .MuiInputBase-root': {
+                        borderRadius: '0px',
+                      },
+                    }
+                  }
+                />
+              </Grid>
+
+              <Grid item xs={12} lg={12} mt={3}>
+                <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+                  Estado
+                </Typography>
+                <Select
+                  fullWidth
+                  onChange={handleChangePropriedade}
+                  defaultValue=""
+                  value={propriedadeData.estado_propriedade || ''}
+                  name='estado'
+                  sx={
+                    {
+                      '& .MuiInputBase-root': {
+                        borderRadius: '0px',
+                      },
+                    }
+                  }
+                >
+                  <MenuItem value="">Selecione um estado</MenuItem>
+                  <MenuItem value="SP">São Paulo</MenuItem>
+                  <MenuItem value="RJ">Rio de Janeiro</MenuItem>
+                  <MenuItem value="MG">Minas Gerais</MenuItem>
+                </Select>
+
+              </Grid>
+
+              <Grid item xs={12} lg={12} mt={3}>
+                <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+                  Há quanto tempo voçê produz cachaça ?
+                </Typography>
+
+                <TextField
+                  required
+                  fullWidth
+                  id="tempoProducao"
+                  placeholder='13 anos'
+                  name="tempoProducao"
+                  autoComplete="tempoProducao" onChange={handleChangePropriedade} type="text"
+                  value={propriedadeData.tempoProducao}
+                  sx={
+                    {
+                      '& .MuiInputBase-root': {
+                        borderRadius: '0px',
+                      },
+                    }
+                  }
+                />
+
+              </Grid>
             </Grid>
 
-            <Grid item xs={12} lg={12} mt={3}>
-              <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
-                Cidade
-              </Typography>
+            <Grid item xs={12} lg={6} mt={5}>
+              <Box sx={{ display: 'flex', gap: '10px', flexDirection: !matches ? 'column' : 'row' }}>
+                <Grid item xs={12} lg={6} mt={2}>
+                  <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+                    CEP
+                  </Typography>
 
-              <TextField
-                required
-                fullWidth
-                id="cidade-propriedade"
-                placeholder='Campinas'
-                name="cidade-propriedade"
-                autoComplete="cidade-propriedade" onChange={handleChangePropriedade} type="text"
-                value={propriedadeData.cidade_propriedade}
-                sx={
-                  {
-                    '& .MuiInputBase-root': {
-                      borderRadius: '0px',
-                    },
+                  <TextField
+                    required
+                    fullWidth
+                    id="cep-propriedade"
+                    placeholder='00000-000'
+                    name="cep-propriedade"
+                    autoComplete="cep-propriedade" onChange={handleChangePropriedade} type="number"
+                    value={propriedadeData.cep_propriedade}
+                    sx={
+                      {
+                        '& .MuiInputBase-root': {
+                          borderRadius: '0px',
+                        },
+                      }
+                    }
+                  />
+
+
+
+                </Grid>
+
+                <Grid item xs={12} lg={6} mt={2}>
+
+                  <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+                    Número
+                  </Typography>
+
+                  <TextField
+                    required
+                    fullWidth
+                    id="numero-propriedade"
+                    placeholder='00000-000'
+                    name="numero-propriedade"
+                    autoComplete="numero-propriedade" onChange={handleChangePropriedade} type="number"
+                    value={propriedadeData.numero_propriedade}
+                    sx={
+                      {
+                        '& .MuiInputBase-root': {
+                          borderRadius: '0px',
+                        },
+                      }
+                    }
+                  />
+
+                </Grid>
+              </Box>
+
+              <Grid item xs={12} lg={12} mt={3}>
+                <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+                  Nome da Propriedade
+                </Typography>
+
+                <TextField
+                  required
+                  fullWidth
+                  id="nome_propriedade"
+                  placeholder='Fazenda São Pedro'
+                  name="nome_propriedade"
+                  autoComplete="nome_propriedade" onChange={handleChangePropriedade} type="text"
+                  value={propriedadeData.nome_propriedade}
+                  sx={
+                    {
+                      '& .MuiInputBase-root': {
+                        borderRadius: '0px',
+                      },
+                    }
                   }
-                }
-              />
-            </Grid>
+                />
 
-            <Grid item xs={12} lg={12} mt={3}>
-              <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
-                Estado
-              </Typography>
-              <Select
-                fullWidth
-                onChange={handleChangePropriedade}
-                defaultValue=""
-                value={propriedadeData.estado_propriedade || ''}
-                name='estado'
-                sx={
-                  {
-                    '& .MuiInputBase-root': {
-                      borderRadius: '0px',
-                    },
+              </Grid>
+
+              <Grid item xs={12} lg={12} mt={3}>
+                <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+                  Área Total
+                </Typography>
+
+                <TextField
+                  required
+                  fullWidth
+                  id="area_total"
+                  placeholder='1000 m²'
+                  name="area_total"
+                  autoComplete="area_total" onChange={handleChangePropriedade} type="number"
+                  value={propriedadeData.area_total}
+                  sx={
+                    {
+                      '& .MuiInputBase-root': {
+                        borderRadius: '0px',
+                      },
+                    }
                   }
-                }
-              >
-                <MenuItem value="">Selecione um estado</MenuItem>
-                <MenuItem value="SP">São Paulo</MenuItem>
-                <MenuItem value="RJ">Rio de Janeiro</MenuItem>
-                <MenuItem value="MG">Minas Gerais</MenuItem>
-              </Select>
+                />
 
-            </Grid>
+              </Grid>
 
-            <Grid item xs={12} lg={12} mt={3}>
-              <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
-                Há quanto tempo voçê produz cachaça ?
-              </Typography>
+              <Box sx={{ display: 'flex', gap: '10px', flexDirection: !matches ? 'column' : 'row' }}>
+                <Grid item xs={12} lg={6} mt={2}>
+                  <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+                    Telefone
+                  </Typography>
 
-              <TextField
-                required
-                fullWidth
-                id="tempoProducao"
-                placeholder='13 anos'
-                name="tempoProducao"
-                autoComplete="tempoProducao" onChange={handleChangePropriedade} type="text"
-                value={propriedadeData.tempoProducao}
-                sx={
-                  {
-                    '& .MuiInputBase-root': {
-                      borderRadius: '0px',
-                    },
-                  }
-                }
-              />
+                  <TextField
+                    required
+                    fullWidth
+                    id="telefone_propriedade"
+                    placeholder='(19) 3261-5485'
+                    name="telefone_propriedade"
+                    autoComplete="telefone_propriedade" onChange={handleChangePropriedade} type="number"
+                    value={propriedadeData.telefone_propriedade}
+                    sx={
+                      {
+                        '& .MuiInputBase-root': {
+                          borderRadius: '0px',
+                        },
+                      }
+                    }
+                  />
+                </Grid>
 
+
+                <Grid item xs={12} lg={6} mt={2}>
+
+                  <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+                    Celular
+                  </Typography>
+
+                  <TextField
+                    required
+                    fullWidth
+                    id="celular_propriedade"
+                    placeholder='(19) 99999-9999'
+                    name="celular_propriedade"
+                    autoComplete="celular_propriedade" onChange={handleChangePropriedade} type="number"
+                    value={propriedadeData.celular_propriedade}
+                    sx={
+                      {
+                        '& .MuiInputBase-root': {
+                          borderRadius: '0px',
+                        },
+                      }
+                    }
+                  />
+
+                </Grid>
+              </Box>
             </Grid>
           </Grid>
 
-          <Grid item xs={12} lg={6} mt={5}>
-            <Box sx={{ display: 'flex', gap: '10px', flexDirection: !matches ? 'column' : 'row' }}>
-              <Grid item xs={12} lg={6} mt={2}>
-                <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
-                  CEP
-                </Typography>
-
-                <TextField
-                  required
-                  fullWidth
-                  id="cep-propriedade"
-                  placeholder='00000-000'
-                  name="cep-propriedade"
-                  autoComplete="cep-propriedade" onChange={handleChangePropriedade} type="number"
-                  value={propriedadeData.cep_propriedade}
-                  sx={
-                    {
-                      '& .MuiInputBase-root': {
-                        borderRadius: '0px',
-                      },
-                    }
-                  }
-                />
-
-
-
-              </Grid>
-
-              <Grid item xs={12} lg={6} mt={2}>
-
-                <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
-                  Número
-                </Typography>
-
-                <TextField
-                  required
-                  fullWidth
-                  id="numero-propriedade"
-                  placeholder='00000-000'
-                  name="numero-propriedade"
-                  autoComplete="numero-propriedade" onChange={handleChangePropriedade} type="number"
-                  value={propriedadeData.numero_propriedade}
-                  sx={
-                    {
-                      '& .MuiInputBase-root': {
-                        borderRadius: '0px',
-                      },
-                    }
-                  }
-                />
-
-              </Grid>
-            </Box>
-
-            <Grid item xs={12} lg={12} mt={3}>
-              <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
-                Nome da Propriedade
+          <Grid container spacing={2} p={matches ? 10 : 4} columnSpacing={22} >
+            <Grid item xs={12}>
+              <Typography pb={1} variant={matches ? 'h5' : 'h6'}
+                sx={{
+                  fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: !matches ? '100%' : '210px',
+                  textAlign: matches ? 'left' : 'center'
+                }} >
+                Marca
               </Typography>
-
-              <TextField
-                required
-                fullWidth
-                id="nome_propriedade"
-                placeholder='Fazenda São Pedro'
-                name="nome_propriedade"
-                autoComplete="nome_propriedade" onChange={handleChangePropriedade} type="text"
-                value={propriedadeData.nome_propriedade}
-                sx={
-                  {
-                    '& .MuiInputBase-root': {
-                      borderRadius: '0px',
-                    },
-                  }
-                }
-              />
-
             </Grid>
 
-            <Grid item xs={12} lg={12} mt={3}>
-              <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
-                Área Total
-              </Typography>
+            <Grid item xs={12} lg={6} mt={5}>
 
-              <TextField
-                required
-                fullWidth
-                id="area_total"
-                placeholder='1000 m²'
-                name="area_total"
-                autoComplete="area_total" onChange={handleChangePropriedade} type="number"
-                value={propriedadeData.area_total}
-                sx={
-                  {
-                    '& .MuiInputBase-root': {
-                      borderRadius: '0px',
-                    },
-                  }
-                }
-              />
-
-            </Grid>
-
-            <Box sx={{ display: 'flex', gap: '10px', flexDirection: !matches ? 'column' : 'row' }}>
-              <Grid item xs={12} lg={6} mt={2}>
+              <Grid item xs={12} lg={12} mt={3}>
                 <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
-                  Telefone
+                  Site
                 </Typography>
 
                 <TextField
                   required
                   fullWidth
-                  id="telefone_propriedade"
-                  placeholder='(19) 3261-5485'
-                  name="telefone_propriedade"
-                  autoComplete="telefone_propriedade" onChange={handleChangePropriedade} type="number"
-                  value={propriedadeData.telefone_propriedade}
+                  id="site"
+                  placeholder='Link do site'
+                  name="site"
+                  autoComplete="site" onChange={handleChangeMarca} type="text"
+                  value={marcaData.site}
                   sx={
                     {
                       '& .MuiInputBase-root': {
@@ -832,21 +912,43 @@ function Register() {
                 />
               </Grid>
 
-
-              <Grid item xs={12} lg={6} mt={2}>
-
+              <Grid item xs={12} lg={12} mt={3}>
                 <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
-                  Celular
+                  Instagram
                 </Typography>
 
                 <TextField
                   required
                   fullWidth
-                  id="celular_propriedade"
+                  id="instagram"
+                  placeholder='Link do Instagram'
+                  name="instagram"
+                  autoComplete="instagram" onChange={handleChangeMarca} type="text"
+                  value={marcaData.instagram}
+                  sx={
+                    {
+                      '& .MuiInputBase-root': {
+                        borderRadius: '0px',
+                      },
+                    }
+                  }
+                />
+
+              </Grid>
+
+              <Grid item xs={12} lg={12} mt={3}>
+                <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
+                  Número de Whatsapp
+                </Typography>
+
+                <TextField
+                  required
+                  fullWidth
+                  id="whatsapp"
                   placeholder='(19) 99999-9999'
-                  name="celular_propriedade"
-                  autoComplete="celular_propriedade" onChange={handleChangePropriedade} type="number"
-                  value={propriedadeData.celular_propriedade}
+                  name="whatsapp"
+                  autoComplete="whatsapp" onChange={handleChangeMarca} type="number"
+                  value={marcaData.whatsapp}
                   sx={
                     {
                       '& .MuiInputBase-root': {
@@ -856,92 +958,22 @@ function Register() {
                   }
                 />
 
+                <Grid item xs={12} lg={12} mt={3}>
+                  <Checkbox
+                    onChange={handleIsAssociate} sx={{ marginLeft: '-10px', marginTop: '-3px' }} />
+                  <Typography variant='caption'
+                    sx={{
+                      varticalAlign: 'bottom',
+                      fontSize: '1rem'
+                    }}
+                  >
+                    Tornar-se um associado ?
+                  </Typography>
+                  <Link style={{ color: '#140C9F', fontWeight: 700, textDecorationColor: '#140C9F' }}>Saiba mais</Link>
+              
+
+
               </Grid>
-            </Box>
-          </Grid>
-        </Grid>
-
-        <Grid container spacing={2} p={matches ? 10 : 4} columnSpacing={22} >
-          <Grid item xs={12}>
-            <Typography pb={1} variant={matches ? 'h5' : 'h6'}
-              sx={{
-                fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: !matches ? '100%' : '210px',
-                textAlign: matches ? 'left' : 'center'
-              }} >
-              Marca
-            </Typography>
-          </Grid>
-
-          <Grid item xs={12} lg={6} mt={5}>
-
-            <Grid item xs={12} lg={12} mt={3}>
-              <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
-                Site
-              </Typography>
-
-              <TextField
-                required
-                fullWidth
-                id="site"
-                placeholder='Link do site'
-                name="site"
-                autoComplete="site" onChange={handleChangeMarca} type="text"
-                value={marcaData.site}
-                sx={
-                  {
-                    '& .MuiInputBase-root': {
-                      borderRadius: '0px',
-                    },
-                  }
-                }
-              />
-            </Grid>
-
-            <Grid item xs={12} lg={12} mt={3}>
-              <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
-                Instagram
-              </Typography>
-
-              <TextField
-                required
-                fullWidth
-                id="instagram"
-                placeholder='Link do Instagram'
-                name="instagram"
-                autoComplete="instagram" onChange={handleChangeMarca} type="text"
-                value={marcaData.instagram}
-                sx={
-                  {
-                    '& .MuiInputBase-root': {
-                      borderRadius: '0px',
-                    },
-                  }
-                }
-              />
-
-            </Grid>
-
-            <Grid item xs={12} lg={12} mt={3}>
-              <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
-                Número de Whatsapp
-              </Typography>
-
-              <TextField
-                required
-                fullWidth
-                id="whatsapp"
-                placeholder='(19) 99999-9999'
-                name="whatsapp"
-                autoComplete="whatsapp" onChange={handleChangeMarca} type="number"
-                value={marcaData.whatsapp}
-                sx={
-                  {
-                    '& .MuiInputBase-root': {
-                      borderRadius: '0px',
-                    },
-                  }
-                }
-              />
 
             </Grid>
 
@@ -952,9 +984,10 @@ function Register() {
 
                     <button className='button-purple'
                       onClick={onSubmit}
-                      disabled={isLoading}
+                      disabled={pending}
+                      style={{backgroundColor: pending && colors.main_white}}
                     >
-                      {isLoading ? <CircularProgress color="success" style={{ padding: '5px' }} /> : 'Cadastrar'}
+                      {pending ? <CircularProgress color="success" style={{ padding: '5px' }} /> : 'Cadastrar'}
                     </button>
 
                     <button className='button-white'
@@ -1017,9 +1050,10 @@ function Register() {
 
                       <button className='button-purple'
                         onClick={onSubmit}
-                        disabled={isLoading}
+                        disabled={pending}
+                        style={{backgroundColor: pending && colors.main_white}}
                       >
-                        {isLoading ? <CircularProgress color="success" style={{ padding: '5px' }} /> : 'Cadastrar'}
+                        {pending ? <CircularProgress color="success" style={{ padding: '5px' }} /> : 'Cadastrar'}
                       </button>
 
                       <button className='button-white'
@@ -1076,7 +1110,12 @@ function Register() {
       </Modal>
       */}
 
+
+
     </Box >
+      <Footer />
+
+    </>
   )
 }
 

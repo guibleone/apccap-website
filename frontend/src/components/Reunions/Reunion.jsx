@@ -14,6 +14,7 @@ import { BsPen, BsTrash } from 'react-icons/bs'
 import { FcCheckmark, FcCancel, FcLock } from 'react-icons/fc'
 import { useNavigate } from 'react-router-dom'
 import { getSubscription } from '../../features/payments/paymentsSlice'
+import { colors } from '../../pages/colors'
 
 
 export default function Reunion() {
@@ -207,7 +208,9 @@ export default function Reunion() {
         <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
                 <Grid item xs={12} lg={12}>
-                    <Typography textAlign={'center'} variant='h5'>Reuniões Convocadas</Typography>
+                    <h3 style={{ color: colors.main_black, fontWeight: 600 }}>
+                        Gerenciar Reuniões
+                    </h3>
                 </Grid>
 
                 {reunions && reunions.length > 0 ?

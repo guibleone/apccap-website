@@ -57,6 +57,16 @@
     color: var(--main-purple);
 }
 
+.rastreio-img{
+    width: 175px;
+    height: auto;
+    /* To maintain the image's aspect ratio */
+    display: block;
+    /* Ensures that width and height are applied correctly */
+    margin-left: 66px;
+    /* Center horizontally */
+}
+
 /*container do festival */
 
 .festival {
@@ -221,13 +231,14 @@
         /* Center horizontally */
     }
 
-    .rastreio img {
-        width: 100%;
+    .rastreio-img {
+        width: 165px;
         height: auto;
         /* To maintain the image's aspect ratio */
         display: block;
         /* Ensures that width and height are applied correctly */
-        margin-left: 66px;
+        margin: 0 auto;
+        padding-top: 50px;
         /* Center horizontally */
     }
 

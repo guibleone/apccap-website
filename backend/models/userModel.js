@@ -12,6 +12,9 @@ const userSchema = new mongoose.Schema({
     marca: {
         type: mongoose.SchemaTypes.Mixed,
     },
+    formulario_requerimento: {
+        type: mongoose.SchemaTypes.Mixed,
+    },
     pathFoto: {
         type: String
     },
@@ -23,7 +26,7 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        default: "user"
+        default: "produtor"
     },
     oldRole: {
         type: String,
