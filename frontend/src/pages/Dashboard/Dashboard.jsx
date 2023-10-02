@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { listUsers } from "../../features/admin/adminSlice"
 import { Typography, Box, Container, CssBaseline, Button, TextField, CircularProgress, useMediaQuery, Grid, Card, Avatar, CardMedia } from '@mui/material';
-import RegisterProduct from "../Products/RegisterProduct";
 import { trackProduct, clear } from "../../features/products/productsSlice";
 import Secretary from "./Acesses/Secretary"
 import Tesoureiro from "./Acesses/Tesoureiro/Tesoureiro"
@@ -68,7 +67,7 @@ function Dashboard() {
 
     if (user) {
       const userData = {
-        email: user.email,
+        email: user.dados_pessoais.email,
         token: user.token
       }
       dispatch(getSubscription(userData))
@@ -96,7 +95,7 @@ function Dashboard() {
     </Box>
   }
 
-  if ((payments && user && payments.subscription !== 'active' && user.role === 'produtor') || (user && user.status === 'reprovado')) {
+  /*if ((payments && user && payments.subscription !== 'active' && user.role === 'produtor' ) || (user && user.status === 'reprovado')) {
     return (
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh', padding: '20px', gap: '10px' }}>
         <FcLock size={100} />
@@ -105,7 +104,7 @@ function Dashboard() {
         <Button color='success' variant='outlined' onClick={() => navigate('/credencial-produtor')} >Credencial</Button>
       </Box>
     )
-  }
+  }*/
 
   const numberLojas = matches ? 3 : 6
   const lojas = []

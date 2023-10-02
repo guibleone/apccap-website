@@ -9,6 +9,7 @@
     "@mui/material": "^5.13.2",
     "@react-email/button": "0.0.10",
     "@react-email/html": "0.0.4",
+    "@react-pdf/renderer": "^3.1.12",
     "@reduxjs/toolkit": "^1.9.5",
     "@stripe/react-stripe-js": "^2.1.2",
     "@stripe/stripe-js": "^1.54.2",

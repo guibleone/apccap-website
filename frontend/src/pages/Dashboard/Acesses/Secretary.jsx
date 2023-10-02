@@ -10,10 +10,13 @@ import { toast } from 'react-toastify'
 import ButtonChangeRole from '../../../components/ChangeRole/ButtonChangeRole'
 import Reunion from '../../../components/Reunions/Reunion'
 import { colors } from '../../colors'
+import { BsArrowUpRight } from 'react-icons/bs'
+import { useNavigate } from 'react-router-dom'
 
 export default function Secretary() {
   const [openAta, setOpeneAta] = useState(false)
   const matches = useMediaQuery('(min-width:600px)');
+  const navigate = useNavigate()
 
   const { isLoading, isSuccess, isError, message } = useSelector((state) => state.reunions)
   const { user } = useSelector((state) => state.auth)
@@ -47,10 +50,31 @@ export default function Secretary() {
     }}>
 
       <Container maxWidth='xl' >
+        <Grid container spacing={2} pb={5}>
+          <Grid item xs={12} md={4}>
+            <Box sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              padding: '72px 0',
+              gap: '10px'
+            }}>
+              <h3 className='semi-bold black'>
+                Credencial
+              </h3>
+              <h1 className='black semi-bold'>
+                Secretário
+              </h1>
+              <h5 className='black regular'>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente at voluptatem beatae aut! Fugiat reprehenderit quasi ut nam, adipisci eaque et dolorem officia eveniet repudiandae! Inventore saepe expedita vero minus.
+              </h5>
+              <button onClick={() => navigate('/meu-perfil')} className='button-purple' style={{ width: '182px' }}>
+                Meus Dados <BsArrowUpRight size={20} style={{ verticalAlign: 'bottom' }} />
+              </button>
+            </Box>
+          </Grid>
 
-        <Reunion />
+        </Grid>
 
-        <Divider sx={{ my: 2 }} />
 
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6} lg={6}>

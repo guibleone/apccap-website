@@ -20,7 +20,7 @@ export default function ProductsPagination({setProductsData}) {
         }
     }
 
-    const pageSize = 4
+    const pageSize = 8
 
     const [pagination, setPagination] = useState({
         count: 0,
@@ -47,8 +47,10 @@ export default function ProductsPagination({setProductsData}) {
         <Box sx={{
             alignContent: 'center',
             justifyContent: 'center',
+            alignItems: 'center',
             display: 'flex',
-            margin: '20px 0'
+            margin: 'auto',
+            padding:'20px 0 72px 0',
         }}>
 
             <Pagination

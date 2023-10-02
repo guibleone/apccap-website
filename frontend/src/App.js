@@ -8,13 +8,9 @@ import Navbar from './components/Navbar/Navbar.jsx';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Informations from './pages/MyPerfil/Informations';
-
-import Footer from './components/Footer/Footer';
 import Blog from './pages/Blog/Blog';
-import RegisterProduct from './pages/Products/RegisterProduct';
 import SingleProduct from './pages/Products/SingleProduct';
 import Traceability from './pages/Traceability/Traceability';
-import Producer from './pages/Credencial/Credencial';
 import SingleProducer from './pages/Traceability/SingleProducer';
 import SingleSpread from './pages/Dashboard/Acesses/Tesoureiro/SingleSpread';
 import UserSingle from './pages/UserSingle/UserSingle';
@@ -27,6 +23,13 @@ import AnaliseCredencial from './pages/Dashboard/Acesses/Conselho/AnaliseCredenc
 import ProductAnalise from './pages/Products/ProductAnalise';
 import UserProducts from './pages/Dashboard/Acesses/Conselho/Products/UserProducts';
 import SingleUserProduct from './pages/Dashboard/Acesses/Conselho/Products/SingleUserProduct';
+import Products from './pages/Products/Products';
+import RegisterProduct from './pages/Products/RegisterProduct';
+import Credencial from './pages/Credencial/CredencialProdutor';
+import Reunion from './components/Reunions/Reunion';
+import ConvocarReunion from './pages/Dashboard/Acesses/Presidente/ConvocarReunion';
+import PDFReunion from './pages/Dashboard/Acesses/Presidente/PDFReunion';
+import Produtores from './pages/Dashboard/Acesses/Presidente/Produtores';
 
 function App() {
   return (
@@ -41,10 +44,11 @@ function App() {
           <Route path='/blog' element={<Blog />} />
           <Route path={`/usuario/:id`} element={<UserSingle /> } />
           <Route path={`/usuario-credenciado/:id`} element={<User /> } />
-          <Route path={`/produtos`} element={<RegisterProduct />} />
+          <Route path={`/produtos`} element={<Products />} />
+          <Route path={`/produto-cadastro`} element={<RegisterProduct />} />
           <Route path={`/produto/:id`} element={<SingleProduct />}/>
           <Route path={`/rastreabilidade`} element={<Traceability />}/>
-          <Route path={`/credencial`} element={<Producer />} />
+          <Route path={`/credencial`} element={<Credencial />} />
           <Route path='/produtor/:id' element={<SingleProducer />} />
           <Route path='/planilha/:id' element={<SingleSpread />} />
           <Route path='/planilhas' element={<AllSpreadSheets />} />
@@ -55,6 +59,10 @@ function App() {
           <Route path='/acompanhar-analise/:id' element={<ProductAnalise />} />
           <Route path='/produtos-usuario/:id' element={<UserProducts />} />
           <Route path='/unico-produto-usuario/:id' element={<SingleUserProduct />} />
+          <Route path='/reunioes' element={<Reunion />} />
+          <Route path='/convocar-reuniao' element={<ConvocarReunion />} />
+          <Route path='/pdf-reunion' element={<PDFReunion />} />
+          <Route path='/produtores' element={<Produtores />} />
           <Route path='*' element={<h1>Not Found 404</h1>} />
         </Routes> 
       </Router>

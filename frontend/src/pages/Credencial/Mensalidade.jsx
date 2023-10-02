@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { getSubscription } from '../../features/payments/paymentsSlice'
 import { styleSuccess, styleError } from '../toastStyles'
+import { BsArrowUpRight } from 'react-icons/bs'
+import { colors } from '../colors'
 
 export default function Mensalidade() {
 
@@ -23,7 +25,7 @@ export default function Mensalidade() {
     try {
 
       const response = await axios.post('/api/payment/comprar-mensalidade', {
-        email: user.email,
+        email: user.dados_pessoais.email,
       })
 
       if (response.data) {
@@ -56,7 +58,7 @@ export default function Mensalidade() {
   useEffect(() => {
 
     const userData = {
-      email: user.email,
+      email: user.dados_pessoais.email,
       token: user.token
     }
 
@@ -68,38 +70,39 @@ export default function Mensalidade() {
     return <Box sx={
       {
         display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: '20px',
         overflow: 'hidden',
       }
     }>
-      <CircularProgress size={100} />
+      <Skeleton variant="rectangular" width={'100%'} height={50} />
     </Box>
   }
 
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center' }}>
-      
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+
       {(payments && !payments.portal) && (
-        <form onSubmit={handleSubmit}>
-          <Button disabled={isLoadingPayment || (payments && payments.subscription)} variant='outlined' color='success' type="submit">
-            {isLoadingPayment ? <CircularProgress color="success" size={24} /> : 'Assinar'}
-          </Button>
-        </form>
+
+        <button onClick={handleSubmit} style={{ backgroundColor: isLoadingPayment && colors.main_white }} className='button-purple' disabled={isLoadingPayment || (payments && payments.subscription)} variant='outlined' color='success' type="submit">
+          {isLoadingPayment ? <CircularProgress color="success" size={24} /> : <>
+            Assinar Credencial<BsArrowUpRight size={20} style={{ verticalAlign: 'bottom' }} />
+          </>}
+        </button>
+
       )}
 
       {(payments && payments.portal) && (
-        <Button onClick={() => window.location.href = payments.portal} target='_blank' variant='contained' color='success'>
+        <button className='button-purple' onClick={() => window.location.href = payments && payments.portal} target='_blank' variant='contained' color='success'>
           Portal do Produtor
-        </Button>
+        </button>
       )}
 
       {(messagePayment === "Pedido cancelado - compre novamente quando estiver pronto.") && <Alert severity="error">{messagePayment}</Alert>}
       {(messagePayment === "Pedido realizado com sucesso!") && <Alert severity="success">{messagePayment}</Alert>}
 
     </Box>
+
+  
 
   )
 }

@@ -19,10 +19,10 @@ router.get('/selo/:id',hasRole(['produtor','produtor_associado']), getSelos)
 router.post('/selo/:id', uploadSelo.single("pathRelatory"),  hasRole(['produtor','produtor_associado']), addSelo)
 
 // pegar produtos
-router.get('/', hasRole(['produtor','conselho']), getProducts) 
+router.get('/', hasRole(['produtor','produtor_associado','conselho']), getProducts) 
 
 // pegar único produto
-router.get('/:id', hasRole(['produtor','conselho']), getSingleProduct)
+router.get('/:id', hasRole(['produtor','produtor_associado','conselho']), getSingleProduct)
 
 // adicionar produtos
 router.post('/', uploadRelatorys.array('files', 10), hasRole(['produtor','produtor_associado']), addProduct)

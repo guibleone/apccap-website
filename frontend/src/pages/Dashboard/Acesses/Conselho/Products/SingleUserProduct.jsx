@@ -8,6 +8,7 @@ import { addRelatorysProducts, approveProductRelatory, deleteRelatorysProducts, 
 import { toast } from 'react-toastify'
 import { styleError, styleSuccess } from '../../../../toastStyles'
 import { FcPrivacy } from 'react-icons/fc'
+import { colors } from '../../../../colors'
 
 
 export default function SingleUserProduct() {
@@ -162,26 +163,37 @@ export default function SingleUserProduct() {
 
   }, [isError, isSuccess, emailStatus.isError, emailStatus.isSuccess])
 
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, []);
+
 
   if (isLoading) {
+
     return <Box sx={
       {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        minHeight: '100vh',
+        backgroundColor: colors.main_white,
+        minHeight: '100vh'
       }
     }>
       <CircularProgress sx={
         {
-          margin: '100px',
+          marginBottom: '100px',
         }
       } size={100} />
     </Box>
   }
 
+
   return (
-    <Container sx={{ minHeight: '100vh' }}>
+    <Box sx={{
+      backgroundColor:colors.main_white,
+      minHeight: '100vh',
+  }}>
+  <Container maxWidth='lg'>
 
       <Grid container spacing={2}>
         <Grid item xs={12} sm={12} lg={3} >
@@ -436,6 +448,7 @@ export default function SingleUserProduct() {
       </Modal>
 
     </Container>
+    </Box>
 
   )
 }

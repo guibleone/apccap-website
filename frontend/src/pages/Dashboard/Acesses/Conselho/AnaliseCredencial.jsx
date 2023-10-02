@@ -223,22 +223,24 @@ export default function AnaliseCredencial() {
     }, [isError, isSuccess, emailStatus.isError, emailStatus.isSuccess])
 
     if (isLoading) {
+
         return <Box sx={
             {
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '100vh'
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: colors.main_white,
+              minHeight: '100vh'
             }
-        }>
+          }>
             <CircularProgress sx={
-                {
-                    marginBottom: '100px',
-                }
+              {
+                marginBottom: '100px',
+              }
             } size={100} />
-        </Box>
-    }
-
+          </Box>
+        }
+      
 
     return (
         <Box sx={{

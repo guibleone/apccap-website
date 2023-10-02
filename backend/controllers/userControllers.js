@@ -498,6 +498,121 @@ const submitForm = asyncHandler(async (req, res) => {
     }
 });
 
+// associar-se
+
+const associate = asyncHandler(async (req, res) => {
+    try {
+        const { id } = req.body;
+
+        if (!id) {
+            res.status(400).json({ error: 'Informe o id do usuário' });
+            return;
+        }
+
+        const user = await User.findById(id);
+
+        if (!user) {
+            res.status(404).json({ error: 'Usuário não encontrado' });
+            return;
+        }
+
+        if (user.role === 'produtor_associado') {
+            res.status(400).json({ error: 'Usuário já é produtor associado' });
+            return;
+        }
+
+        user.role = 'produtor_associado';
+        user.status = 'analise'
+
+        await user.save();
+
+        res.json(user)
+        return;
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Erro ao associar produtor' });
+    }
+})
+
+// cancelar credencial
+const cancelCredencial = asyncHandler(async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (!id) {
+            res.status(400).json({ error: 'Informe o id do usuário' });
+            return;
+        }
+
+        const user = await User.findById(id);
+
+        if (!user) {
+            res.status(404).json({ error: 'Usuário não encontrado' });
+            return;
+        }
+
+        if (user.role === 'produtor') {
+            res.status(400).json({ error: 'Usuário já é produtor' });
+            return;
+        }
+
+        user.role = 'produtor';
+
+        if(user.analise.analise_pedido.path){
+            const storageRef = ref(storage, `conselhoRelatórios/${user._id}/analise_pedido`)
+            await deleteObject(storageRef)
+        }
+
+        if(user.analise.analise_pedido.recurso.path){
+            const storageRef = ref(storage, `conselhoRelatórios/${user._id}/recurso`)
+            await deleteObject(storageRef)
+        }
+
+      if(user.analise.vistoria.path){
+        const storageRef = ref(storage, `conselhoRelatórios/${user._id}/vistoria`)
+        await deleteObject(storageRef)
+        }
+
+        if(user.analise.analise_laboratorial.path){
+            const storageRef = ref(storage, `conselhoRelatórios/${user._id}/analise_laboratorial`)
+            await deleteObject(storageRef)
+        }
+
+        user.formulario_requerimento = null
+
+        user.analise = {
+            analise_pedido: {
+                status: '',
+                path: '',
+                time: null,
+                recurso: {
+                    status: '',
+                    path: '',
+                    time: null,
+                }
+            },
+            vistoria: {
+                status: '',
+                path: '',
+            },
+            analise_laboratorial: {
+                status: '',
+                path: '',
+            },
+        }
+
+        await user.save();
+
+        res.json(user)
+        return;
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Erro ao associar produtor' });
+    }
+}) 
+
 // gerar token
 const generateToken = (userId) => {
     const secretKey = process.env.JWT_SECRET;
@@ -515,5 +630,7 @@ module.exports = {
     handleRecurso,
     becomeProducer,
     associateProducer,
-    submitForm
+    submitForm,
+    associate,
+    cancelCredencial
 }

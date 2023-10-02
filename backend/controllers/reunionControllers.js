@@ -15,7 +15,7 @@ const createReunion = asyncHandler(async (req, res) => {
 
         const nomeMembros = []
 
-        if (typeReunion.administrativa) {
+        if (typeReunion === 'administrativa') {
             type = 'administrativa'
 
             const associates = await User.find({ role: { $in: ['presidente', 'secretario', 'tesoureiro', 'conselho'] } })
@@ -25,7 +25,7 @@ const createReunion = asyncHandler(async (req, res) => {
             })
         }
 
-        if (typeReunion.assembleia_ordinal) {
+        if (typeReunion === 'assembleia_ordinal') {
             type = 'assembleia_ordinal'
 
             const associates = await User.find({ role: { $in: ['presidente', 'secretario', 'tesoureiro', 'conselho', 'produtor'] } })
@@ -35,7 +35,7 @@ const createReunion = asyncHandler(async (req, res) => {
             })
         }
 
-        if (typeReunion.assembleia_extraordinaria) {
+        if (typeReunion=== 'assembleia_extraordinaria') {
             type = 'assembleia_extraordinaria'
 
             const associates = await User.find({ role: { $in: ['presidente', 'secretario', 'tesoureiro', 'conselho', 'produtor'] } })

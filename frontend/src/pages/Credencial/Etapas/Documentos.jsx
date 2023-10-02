@@ -157,7 +157,7 @@ function Documentos() {
                 </h5>
             </Box>
 
-            <Grid container columnSpacing={30} spacing={2} sx={{ marginTop: '20px' }}>
+            <Grid container columnSpacing={25} spacing={2} sx={{ marginTop: '20px' }}>
 
                 <Grid item xs={12} sm={6} lg={6}>
                     {types.includes('cnpj_cpf') ?

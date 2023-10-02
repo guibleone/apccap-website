@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useSelector } from "react-redux"
 
 
-export default function UsersPagination({ setUsersData }) {
+export default function UsersPagination({ setUsersData,status }) {
     
     const { users } = useSelector((state) => state.admin)
 
@@ -11,7 +11,9 @@ export default function UsersPagination({ setUsersData }) {
         getData: ({ from, to }) => {
             return new Promise((resolve, reject) => {
 
-                const data = users.slice(from, to)
+                const data = users
+                .filter(reunion => (!status || reunion.status === status))
+                .slice(from, to)
 
                 resolve({
                     count: users.length,

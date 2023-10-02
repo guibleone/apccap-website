@@ -184,7 +184,7 @@ const associateProducer = async (data) => {
 
 // submter formulário
 
-const submitForm = async(data) => {
+const submitForm = async (data) => {
 
     const config = {
 
@@ -205,6 +205,53 @@ const submitForm = async(data) => {
 }
 
 
+// associar 
+
+const associate = async (data) => {
+
+    const config = {
+
+        headers: {
+            Authorization: `Bearer ${data.token}`
+        }
+
+    }
+
+    const response = await axios.post(API_URL + '/associar', data, config)
+
+    if (response.data) {
+        localStorage.setItem('user', JSON.stringify(response.data))
+    }
+
+
+    return response.data
+
+}
+
+
+// cancelar credencial
+
+const cancelCredencial = async (data) => {
+
+    const config = {
+
+        headers: {
+            Authorization: `Bearer ${data.token}`
+        }
+
+    }
+
+
+    const response = await axios.post(API_URL + '/cancelar-credencial/' + data.id, data, config)
+
+    if (response.data) {
+        localStorage.setItem('user', JSON.stringify(response.data))
+    }
+
+    return response.data
+
+}
+
 
 // logout de usuário
 const logout = async () => {
@@ -224,7 +271,9 @@ const authService = {
     sendRecurso,
     becomeProducer,
     associateProducer,
-    submitForm
+    submitForm,
+    associate,
+    cancelCredencial
 }
 
 export default authService;

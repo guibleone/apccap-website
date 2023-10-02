@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { getProducts, getUserData } from '../../../../../features/admin/adminSlice'
 import { BiTrashAlt } from 'react-icons/bi'
 import { AiOutlineEdit } from 'react-icons/ai'
+import { colors } from '../../../../colors'
 
 export default function UserProducts() {
     const navigate = useNavigate()
@@ -24,8 +25,17 @@ export default function UserProducts() {
         dispatch(getProducts({ id, token: user.token }))
     }, [])
 
+    useEffect(() => {
+        window.scrollTo(0, 0)
+      }, []);
+    
+
     return (
-        <Container sx={{ minHeight: '100vh' }}>
+        <Box sx={{
+            backgroundColor:colors.main_white,
+            minHeight: '100vh',
+        }}>
+        <Container maxWidth='lg'>
             { userData &&  userData.dados_pessoais && (
             <Grid container spacing={2}>
 
@@ -116,5 +126,6 @@ export default function UserProducts() {
                     </Box>
                 )}
         </Container>
+        </Box>
     )
 }

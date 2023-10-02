@@ -20,6 +20,7 @@ import { resetPayments } from '../../features/payments/paymentsSlice'
 function Navbar() {
 
   const { user } = useSelector(state => state.auth)
+  const {payments} = useSelector(state => state.payments)
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -36,13 +37,13 @@ function Navbar() {
 
   const onLogout = () => {
     dispatch(resetResume())
-    dispatch(logout())
     dispatch(reset())
     dispatch(resetDocuments())
     dispatch(resetAdmin())
     dispatch(resetProducts())
     dispatch(resetSpreadsheet())
     dispatch(resetPayments())
+    dispatch(logout())
     navigate('/')
   }
 
@@ -85,7 +86,9 @@ function Navbar() {
             textAlign: 'center',
           }}>
             <h4 style={{ color: '#FAF8F8', fontWeight: 500 }}>
-              Você está logado como <span style={{ color: '#FAF8F8', fontWeight: 600 }}>{user.role === 'produtor' ? 'produtor' : 'produtor associado'} {user.status === 'analise' && '(análise)'} </span>
+              Você está logado como <span style={{ color: '#FAF8F8', fontWeight: 600 }}>{user.role === 'produtor' ? 'produtor' : 'produtor associado'} {user.status === 'analise' && '(análise)'} 
+              {user.status === 'aprovado' &&  payments && !payments.portal && '(requer assinatura)'}
+              </span>
             </h4>
           </Box>
 
@@ -139,7 +142,7 @@ function Navbar() {
                         fontSize: '16px',
                         fontWeight: '600',
                         color: '#000F9F',
-                      }}>{user.dados_pessoais.name}</Typography>
+                      }}>{user.dados_pessoais.name.split(' ')[0]}</Typography>
                     </Link>
 
 
@@ -251,7 +254,7 @@ function Navbar() {
                         fontSize: '16px',
                         fontWeight: '600',
                         color: '#000F9F',
-                      }}>{user.dados_pessoais.name}</Typography>
+                      }}>{user.dados_pessoais.name.split(' ')[0]}</Typography>
                     </Link>
 
                     <Box sx={
@@ -311,8 +314,8 @@ function Navbar() {
               <div className="links-centrais">
 
                 <Link className="links" to="/"><h4>Início</h4></Link>
-                <Link className="links" to="/"><h4>Reuniões</h4></Link>
-                <Link className="links" to="/publicacoes"><h4>Relatórios</h4></Link>
+                <Link className="links" to="/reunioes"><h4>Reuniões</h4></Link>
+                <Link className="links" to="/relatorios"><h4>Relatórios</h4></Link>
                 {user && (
                   ((user.role !== 'admin' && (user.role !== 'user')) || user.oldRole)
                     ?
@@ -343,7 +346,7 @@ function Navbar() {
                         fontSize: '16px',
                         fontWeight: '600',
                         color: '#000F9F',
-                      }}>{user.dados_pessoais.name}</Typography>
+                      }}>{user.dados_pessoais.name.split(' ')[0]}</Typography>
                     </Link>
 
                     <Box sx={
@@ -403,7 +406,8 @@ function Navbar() {
               <div className="links-centrais">
 
                 <Link className="links" to="/"><h4>Início</h4></Link>
-                <Link className="links" to="/"><h4>Reuniões</h4></Link>
+                <Link className="links" to="/reunioes"><h4>Reuniões</h4></Link>
+                <Link className="links" to="/produtores"><h4>Produtores</h4></Link>
 
                 {user && (
                   ((user.role !== 'admin' && (user.role !== 'user')) || user.oldRole)
@@ -438,7 +442,7 @@ function Navbar() {
                         fontSize: '16px',
                         fontWeight: '600',
                         color: '#000F9F',
-                      }}>{user.dados_pessoais.name}</Typography>
+                      }}>{user.dados_pessoais.name.split(' ')[0]}</Typography>
                     </Link>
 
                     <Box sx={
@@ -529,7 +533,7 @@ function Navbar() {
                         fontSize: '16px',
                         fontWeight: '600',
                         color: '#000F9F',
-                      }}>{user.dados_pessoais.name}</Typography>
+                      }}>{user.dados_pessoais.name.split(' ')[0]}</Typography>
                     </Link>
 
                     <Box sx={
@@ -590,7 +594,9 @@ function Navbar() {
               <div className="links-centrais">
 
                 <Link className="links" to="/"><h4>Início</h4></Link>
-                <Link className="links" to="/"><h4>Selos</h4></Link>
+                <Link className="links" to="/credenciamento"><h4>Credenciamento</h4></Link>
+                <Link className="links" to="/produtos-conselho"><h4>Produtos</h4></Link>
+                <Link className="links" to="/reunioes"><h4>Reuniões</h4></Link>
 
                 {user && (
                   ((user.role !== 'admin' && (user.role !== 'user')) || user.oldRole)
@@ -622,7 +628,7 @@ function Navbar() {
                         fontSize: '16px',
                         fontWeight: '600',
                         color: '#000F9F',
-                      }}>{user.dados_pessoais.name}</Typography>
+                      }}>{user.dados_pessoais.name.split(' ')[0]}</Typography>
                     </Link>
 
                     <Box sx={
@@ -673,6 +679,7 @@ function Navbar() {
             <Link className="links" to="/festival-cachaca"><h4>Festival da Cachaça</h4></Link>
             <Link className="links" to="/quem-somos"><h4>Quem Somos ?</h4></Link>
             <Link className="links" to="/blog"><h4>Blog</h4></Link>
+            <Link className="links" to="/documentos"><h4>Documentos</h4></Link>
 
           </div>
 

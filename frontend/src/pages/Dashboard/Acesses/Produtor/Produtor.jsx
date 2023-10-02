@@ -3,7 +3,7 @@
 import { Accordion, AccordionDetails, AccordionSummary, Box, Container, Grid, useMediaQuery } from '@mui/material'
 import { colors } from '../../../colors'
 import { BsArrowDownShort, BsArrowRightShort, BsArrowUpRight, BsChevronDown, BsChevronRight, BsPlusCircle, BsX } from 'react-icons/bs'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { addSelosPayed, deleteProduct, getProducts, reset } from '../../../../features/products/productsSlice'
@@ -117,7 +117,7 @@ export default function Produtor() {
               <h3 className='semi-bold black'>
                 Credencial
               </h3>
-              {user.role === 'produtor' ? (<>
+              {user.role === 'produtor' && !user.oldRole ? (<>
                 <h1 className='bold black'>
                   Produtor Não Associado
                 </h1>
@@ -160,7 +160,7 @@ export default function Produtor() {
                 <h3 className='black semi-bold'>
                   Produtos cadastrados
                 </h3>
-                <button onClick={() => navigate('/produtos')} className='button-white-bottom-border'>
+                <button onClick={() => navigate('/produto-cadastro')} className='button-white-bottom-border'>
                   Novo Produto <BsPlusCircle size={20} style={{ verticalAlign: 'bottom', marginLeft: '5px' }} />
                 </button>
 
@@ -172,17 +172,17 @@ export default function Produtor() {
 
         </Grid>
 
-        <Grid container columnSpacing={5} rowSpacing={3} >
+        <Grid container rowSpacing={3} >
           <Grid item >
-            {!productsData && (
+            {(productsData.length === 0) && (
               <h3 className='regular black'>
                 Você ainda não cadastrou nenhum produto.
               </h3>
             )}
           </Grid>
           {productsData &&
-            productsData.map((product) => (
-              <Grid item xs={12} md={3} key={product._id}>
+            productsData.filter((product) => product).slice(0, 4).map((product) => (
+              <Grid item xs={12} md={3} pr={matches ? 2 : 0}  key={product._id}>
                 <Box sx={{
                   backgroundColor: colors.main_grey,
                   padding: '20px',
@@ -200,46 +200,56 @@ export default function Produtor() {
                     <MdLiquor size={30} style={{ verticalAlign: 'bottom', marginLeft: '5px' }} />
                   </Box>
                   <Box>
-                   
-                      {product.status === '' &&
-                          <button className='button-grey-bottom-border' onClick={() => navigate(`/acompanhar-analise/${product._id}`)} >acompanhar análise</button>
-                      }
-                      {product.status === 'pendente' && 
-                          <button className='button-grey-bottom-border'   onClick={() => handlePayment({ id: product._id, quantity: product.selo.quantity })}>
-                            pagar Selos
-                          </button>
 
-                      }
-                      {product.status === 'reprovado' && <>
-                          <button className='button-grey-bottom-border'   onClick={() => dispatch(deleteProduct({ id: product._id }))} >
-                            <BiTrashAlt size={20} />
-                          </button>
-                          <button className='button-grey-bottom-border'   variant='outlined' onClick={() => navigate(`/acompanhar-analise/${product._id}`)} color="warning">
-                            <BiFile size={20} />
-                          </button>
+                    {product.status === '' &&
+                      <button className='button-grey-bottom-border' onClick={() => navigate(`/acompanhar-analise/${product._id}`)} >acompanhar análise</button>
+                    }
+                    {product.status === 'pendente' &&
+                      <button className='button-grey-bottom-border' onClick={() => handlePayment({ id: product._id, quantity: product.selo.quantity })}>
+                        pagar Selos
+                      </button>
 
-                      </>
-                      }
-                            {product.status === 'aprovado' && 
-                          <button className='button-grey-bottom-border'   onClick={() => navigate(`/produto/${product._id}`)}>
-                            editar produto
-                          </button>
+                    }
+                    {product.status === 'reprovado' && <>
+                      <button className='button-grey-bottom-border' onClick={() => dispatch(deleteProduct({ id: product._id }))} >
+                        <BiTrashAlt size={20} />
+                      </button>
+                      <button className='button-grey-bottom-border' variant='outlined' onClick={() => navigate(`/acompanhar-analise/${product._id}`)} color="warning">
+                        <BiFile size={20} />
+                      </button>
 
-                      }
+                    </>
+                    }
 
-                 
-
+                    {product.status === 'aprovado' &&
+                      <button className='button-grey-bottom-border' onClick={() => navigate(`/produto/${product._id}`)}>
+                        editar produto
+                      </button>
+                    }
+                    
                   </Box>
-
-                  </Box>
+                </Box>
               </Grid>
 
             ))
           }
 
+          <Grid item xs={12} md={12}>
+            {(productsData && productsData.length > 4) && (
+              <Box sx={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+              }}>
+                <Link style={{ color: '#000', margin: '15px 0' }} to='/produtos'> Ver Tudo</Link>
+              </Box>
+            )}
+          </Grid>
+
+
+
         </Grid>
 
-        {user.role === 'produtor_associado' && (
+        {user.role === 'produtor_associado' && user.status !== 'aprovado' && (
           <>
             {matches ? (
               <Box sx={{ display: 'flex', gap: '48px', padding: '72px 0', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>

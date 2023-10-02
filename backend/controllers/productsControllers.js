@@ -60,63 +60,70 @@ const generateSelos = ({ params }) => {
 // adicionar produtos
 const addProduct = asyncHandler(async (req, res) => {
 
-    const { name, quantity, description } = req.body;
-    const user = await User.findById(req.user._id)
+    try {
 
-    // Checar se o usuário enviou arquivos
-    if (!req.files || req.files.length === 0) {
-        return res.status(400).json({ error: 'Nenhum arquivo foi selecionado' });
-    }
+        const { name, quantity, description } = req.body;
+        const user = await User.findById(req.user._id)
 
-    if (!name || !quantity || !description) {
-        return res.status(400).json({ error: 'Insira os dados corretamente' });
-    }
-    // Criar um array para armazenar os metadados dos arquivos
-    const relatorys = [];
-
-    // Upload os arquivos para o Cloud Storage
-    for (const file of req.files) {
-        const storageRef = ref(storage, `productRelatorys/${req.user._id}/${name}/${file.originalname}`);
-        const metadata = {
-            contentType: file.mimetype,
-        };
-
-        try {
-            // Upload o arquivo para o Cloud Storage
-            const snapshot = await uploadBytesResumable(storageRef, file.buffer, metadata);
-
-            // Pegar a URL do arquivo
-            const url = await getDownloadURL(snapshot.ref);
-
-            // Armazenar os metadados do arquivo
-            relatorys.push({
-                name: file.originalname,
-                path: url,
-            });
-        } catch (error) {
-            console.error(error);
-            return res.status(500).json({ error: 'Falha ao criar o produto' });
+        // Checar se o usuário enviou arquivos
+        if (!req.files || req.files.length === 0) {
+            return res.status(400).json({ error: 'Nenhum arquivo foi selecionado' });
         }
-    }
 
-    // Criar o produto
-    const product = await Product.create({
-        name,
-        description,
-        selo: {
-            quantity
-        },
-        relatorys,
-        producer: req.user._id,
-    });
+        if (!name || !quantity || !description) {
+            return res.status(400).json({ error: 'Insira os dados corretamente' });
+        }
+        // Criar um array para armazenar os metadados dos arquivos
+        const relatorys = [];
 
-    // Checar se o produto foi criado
-    if (product) {
-        user.productsQuantity += 1
-        await user.save()
-        res.status(201).json(product);
-    } else {
-        res.status(500).json({ error: 'Failed to create the product' });
+        // Upload os arquivos para o Cloud Storage
+        for (const file of req.files) {
+            const storageRef = ref(storage, `productRelatorys/${req.user._id}/${name}/${file.originalname}`);
+            const metadata = {
+                contentType: file.mimetype,
+            };
+
+            try {
+                // Upload o arquivo para o Cloud Storage
+                const snapshot = await uploadBytesResumable(storageRef, file.buffer, metadata);
+
+                // Pegar a URL do arquivo
+                const url = await getDownloadURL(snapshot.ref);
+
+                // Armazenar os metadados do arquivo
+                relatorys.push({
+                    name: file.originalname,
+                    path: url,
+                });
+            } catch (error) {
+                console.error(error);
+                return res.status(500).json({ error: 'Falha ao criar o produto' });
+            }
+        }
+
+        // Criar o produto
+        const product = await Product.create({
+            name,
+            description,
+            selo: {
+                quantity
+            },
+            relatorys,
+            producer: req.user._id,
+        });
+
+        // Checar se o produto foi criado
+        if (product) {
+            user.productsQuantity += 1
+            await user.save()
+            res.status(201).json(product);
+        } else {
+            res.status(500).json({ error: 'Failed to create the product' });
+        }
+
+
+    } catch (error) {
+        res.status(400).json({ error: 'Erro ao adicionar produto' });
     }
 
 })
@@ -124,7 +131,7 @@ const addProduct = asyncHandler(async (req, res) => {
 // atualizar produto
 const updateProduct = asyncHandler(async (req, res) => {
 
-    const { description } = req.body
+    const { description,name } = req.body
 
     const user = await User.findById(req.user._id)
 
@@ -133,6 +140,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     if (product) {
         product.producer = user._id
         product.description = description
+        product.name = name
 
         const updatedProduct = await product.save()
 

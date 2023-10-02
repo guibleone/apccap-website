@@ -1,16 +1,22 @@
-import { Accordion, AccordionDetails, AccordionSummary, Box, Container, Grid, Modal, useMediaQuery } from '@mui/material'
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Container, Grid, Modal, useMediaQuery } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { colors } from '../colors'
 import { BsArrowDownShort, BsArrowRightShort, BsArrowUpRight, BsChevronDown, BsChevronRight } from 'react-icons/bs'
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Formulario from './Etapas/Formulario'
 import { toast } from 'react-toastify'
 import { styleError, styleSuccess } from '../toastStyles'
 import Documentos from './Etapas/Documentos'
 import Analise from './Etapas/Analise'
+import { associate, cancelCredencial, reset } from '../../features/auth/authSlice'
+import Mensalidade from './Mensalidade'
 
-export default function NaoAssociado() {
+export default function Credencial() {
+
+    const dispatch = useDispatch()
+
+    const { payments } = useSelector((state) => state.payments)
 
     // abir e fechar passos 
     const [expanded, setExpanded] = useState('panel1');
@@ -36,7 +42,29 @@ export default function NaoAssociado() {
             toast.error(message, styleError)
         }
 
+        reset()
+
     }, [isSuccess, isError, message])
+
+    const handleAssociate = () => {
+        const data = {
+            id: user._id,
+            token: user.token
+        }
+
+        dispatch(associate(data))
+
+    }
+
+    const handleCancel = () => {
+        const data = {
+            id: user._id,
+            token: user.token
+        }
+
+        dispatch(cancelCredencial(data))
+
+    }
 
 
     return (
@@ -56,16 +84,21 @@ export default function NaoAssociado() {
                             <h3 className='semi-bold black'>
                                 Credencial
                             </h3>
-                            {user.role === 'produtor_associado' ? (<>
+                            {(user.role === 'produtor_associado' || user.oldRole) ? (<>
                                 <h1 className='bold black'>
                                     Produtor Associado
                                 </h1>
+
+                                {(user.status === 'aprovado' || user.oldRole) && (
+                                    <Mensalidade />
+                                )}
+
                             </>) : (
                                 <>
                                     <h1 className='bold black'>
                                         Produtor Não Associado
                                     </h1>
-                                    <button className='button-purple'>
+                                    <button onClick={handleAssociate} className='button-purple'>
                                         Associa-se
                                     </button>
                                 </>)}
@@ -74,84 +107,168 @@ export default function NaoAssociado() {
                     </Grid>
 
 
+                    {/* credencial produtor */}
+                    {user && (user.role === 'produtor' && !user.oldRole) && (<>
+                        <Grid item xs={12} md={12}>
 
-                    <Grid item xs={12} md={12}>
+                            <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} sx={{
+                                backgroundColor: colors.main_white,
+                            }} >
+                                <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
+                                    <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                        {expanded === 'panel1' ? <BsChevronDown size={20} /> : <BsChevronRight size={20} />}
+                                        <h4 className='semi-bold black'>
+                                            Para que serve a credencial ?
+                                        </h4>
+                                    </Box>
+                                </AccordionSummary>
 
-                        <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} sx={{
-                            backgroundColor: colors.main_white,
-                        }} >
-                            <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-                                <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                                    {expanded === 'panel1' ? <BsChevronDown size={20} /> : <BsChevronRight size={20} />}
-                                    <h4 className='semi-bold black'>
-                                        Para que serve a credencial ?
-                                    </h4>
-                                </Box>
-                            </AccordionSummary>
+                                <AccordionDetails>
+                                    <Grid container rowSpacing={2} columnSpacing={6}>
+                                        <Grid item xs={12} md={3}>
+                                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '22px', borderRadius: '5.694px', border: '1.898px solid #000 ' }}>
+                                                <h3 className='semi-bold black'>
+                                                    Primeira Etapa
+                                                </h3>
+                                                <h5 className='regular black'>
+                                                    Lorem ipsum dolor sit amet consectetur. Adipiscing amet morbi bibendum senectus. Eget sed vulputate arcu.
+                                                </h5>
+                                            </Box>
+                                        </Grid>
+                                        <Grid item xs={12} md={3}>
+                                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '22px', borderRadius: '5.694px', border: '1.898px solid #000 ' }}>
+                                                <h3 className='semi-bold black'>
+                                                    Segunda Etapa
+                                                </h3>
+                                                <h5 className='regular black'>
+                                                    Lorem ipsum dolor sit amet consectetur. Adipiscing amet morbi bibendum senectus. Eget sed vulputate arcu.
+                                                </h5>
+                                            </Box>
+                                        </Grid>
+                                        <Grid item xs={12} md={3}>
+                                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '22px', borderRadius: '5.694px', border: '1.898px solid #000 ' }}>
+                                                <h3 className='semi-bold black'>
+                                                    Terceira Etapa
+                                                </h3>
+                                                <h5 className='regular black'>
+                                                    Lorem ipsum dolor sit amet consectetur. Adipiscing amet morbi bibendum senectus. Eget sed vulputate arcu.
+                                                </h5>
+                                            </Box>
+                                        </Grid>
+                                        <Grid item xs={12} md={3}>
+                                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '22px', borderRadius: '5.694px', border: `1.898px solid ${colors.main_purple} ` }}>
+                                                <h3 className='semi-bold'>
+                                                    Acesso Liberado
+                                                </h3>
+                                                <h5 className='regular'>
+                                                    Lorem ipsum dolor sit amet consectetur. Adipiscing amet morbi bibendum senectus. Eget sed vulputate arcu.
+                                                </h5>
+                                            </Box>
+                                        </Grid>
 
-                            <AccordionDetails>
-                                <Grid container rowSpacing={2} columnSpacing={6}>
-                                    <Grid item xs={12} md={3}>
-                                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '22px', borderRadius: '5.694px', border: '1.898px solid #000 ' }}>
-                                            <h3 className='semi-bold black'>
-                                                Primeira Etapa
-                                            </h3>
-                                            <h5 className='regular black'>
-                                                Lorem ipsum dolor sit amet consectetur. Adipiscing amet morbi bibendum senectus. Eget sed vulputate arcu.
-                                            </h5>
-                                        </Box>
+                                        <Grid item xs={12} md={12}>
+                                            <Box sx={{ display: 'flex', gap: '10px', flexDirection: matches ? 'row' : 'column' }}>
+                                                <h5 className='semi-bold black'>
+                                                    Dúvidas ?
+                                                </h5>
+                                                <h5 className='regular black'>
+                                                    Visite nosso <a href='https://www.google.com.br' target='_blank' rel="noreferrer" className='purple'>FAQ</a> ou vá até a <a href='https://www.google.com.br' target='_blank' rel="noreferrer" className='purple'>nossa sede presencial</a>
+                                                </h5>
+                                            </Box>
+                                        </Grid>
+
                                     </Grid>
-                                    <Grid item xs={12} md={3}>
-                                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '22px', borderRadius: '5.694px', border: '1.898px solid #000 ' }}>
-                                            <h3 className='semi-bold black'>
-                                                Segunda Etapa
-                                            </h3>
-                                            <h5 className='regular black'>
-                                                Lorem ipsum dolor sit amet consectetur. Adipiscing amet morbi bibendum senectus. Eget sed vulputate arcu.
-                                            </h5>
-                                        </Box>
+                                </AccordionDetails>
+                            </Accordion>
+
+                        </Grid>
+                    </>)}
+
+                    {/*cancelar credencilal*/}
+                    {user && (user.role === 'produtor_associado' && user.status === 'aprovado' && payments && payments.subscription === 'active') && (<>
+                        <Grid item xs={12} md={12}>
+
+                            <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} sx={{
+                                backgroundColor: colors.main_white,
+                            }} >
+                                <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
+                                    <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                        {expanded === 'panel1' ? <BsChevronDown size={20} /> : <BsChevronRight size={20} />}
+                                        <h4 className='semi-bold black'>
+                                            Como cancelar a minha credencial ?
+                                        </h4>
+                                    </Box>
+                                </AccordionSummary>
+
+                                <AccordionDetails>
+                                    <Grid container rowSpacing={2} columnSpacing={6}>
+                                        <Grid item xs={12} md={3}>
+                                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '22px', borderRadius: '5.694px', border: '1.898px solid #000 ' }}>
+                                                <h3 className='semi-bold black'>
+                                                    Primeira Etapa
+                                                </h3>
+                                                <h5 className='regular black'>
+                                                    Na página da credencial acesse o portal do produtor e cancele a sua renovação automática.
+                                                </h5>
+                                            </Box>
+                                        </Grid>
+                                        <Grid item xs={12} md={3}>
+                                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '22px', borderRadius: '5.694px', border: '1.898px solid #000 ' }}>
+                                                <h3 className='semi-bold black'>
+                                                    Segunda Etapa
+                                                </h3>
+                                                <h5 className='regular black'>
+                                                    Você terá ainda 30 dias para acessar o portal do produtor. Podendo reativar a mensalidade.
+                                                </h5>
+                                            </Box>
+                                        </Grid>
+                                        <Grid item xs={12} md={3}>
+                                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '22px', borderRadius: '5.694px', border: '1.898px solid #000 ' }}>
+                                                <h3 className='semi-bold black'>
+                                                    Terceira Etapa
+                                                </h3>
+                                                <h5 className='regular black'>
+                                                    Após cancelar sua assinatura no portal do produtor. Aguarde 30 dias para cancelar sua credencial.
+                                                </h5>
+                                            </Box>
+                                        </Grid>
+                                        <Grid item xs={12} md={3}>
+                                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '22px', borderRadius: '5.694px', border: `1.898px solid ${colors.main_purple} ` }}>
+                                                <h3 className='semi-bold'>
+                                                    Cancelar Credencial
+                                                </h3>
+                                                <h5 className='regular'>
+
+                                                </h5>
+                                                <Button onClick={handleCancel} color='success' variant='outlined'  disabled={payments.subscription !== 'active' ? true : false} className='Button-purple'>
+                                                    Cancelar
+                                                </Button>
+                                            </Box>
+                                        </Grid>
+
+                                        <Grid item xs={12} md={12}>
+                                            <Box sx={{ display: 'flex', gap: '10px', flexDirection: matches ? 'row' : 'column' }}>
+                                                <h5 className='semi-bold black'>
+                                                    Dúvidas ?
+                                                </h5>
+                                                <h5 className='regular black'>
+                                                    Visite nosso <a href='https://www.google.com.br' target='_blank' rel="noreferrer" className='purple'>FAQ</a> ou vá até a <a href='https://www.google.com.br' target='_blank' rel="noreferrer" className='purple'>nossa sede presencial</a>
+                                                </h5>
+                                            </Box>
+                                        </Grid>
+
                                     </Grid>
-                                    <Grid item xs={12} md={3}>
-                                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '22px', borderRadius: '5.694px', border: '1.898px solid #000 ' }}>
-                                            <h3 className='semi-bold black'>
-                                                Terceira Etapa
-                                            </h3>
-                                            <h5 className='regular black'>
-                                                Lorem ipsum dolor sit amet consectetur. Adipiscing amet morbi bibendum senectus. Eget sed vulputate arcu.
-                                            </h5>
-                                        </Box>
-                                    </Grid>
-                                    <Grid item xs={12} md={3}>
-                                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '22px', borderRadius: '5.694px', border: `1.898px solid ${colors.main_purple} ` }}>
-                                            <h3 className='semi-bold'>
-                                                Acesso Liberado
-                                            </h3>
-                                            <h5 className='regular'>
-                                                Lorem ipsum dolor sit amet consectetur. Adipiscing amet morbi bibendum senectus. Eget sed vulputate arcu.
-                                            </h5>
-                                        </Box>
-                                    </Grid>
+                                </AccordionDetails>
+                            </Accordion>
 
-                                    <Grid item xs={12} md={12}>
-                                        <Box sx={{ display: 'flex', gap: '10px', flexDirection: matches ? 'row' : 'column' }}>
-                                            <h5 className='semi-bold black'>
-                                                Dúvidas ?
-                                            </h5>
-                                            <h5 className='regular black'>
-                                                Visite nosso <a href='https://www.google.com.br' target='_blank' rel="noreferrer" className='purple'>FAQ</a> ou vá até a <a href='https://www.google.com.br' target='_blank' rel="noreferrer" className='purple'>nossa sede presencial</a>
-                                            </h5>
-                                        </Box>
-                                    </Grid>
-
-                                </Grid>
-                            </AccordionDetails>
-                        </Accordion>
-
-                    </Grid>
+                        </Grid>
+                    </>)}
 
 
 
-                    {user && (user.role === 'produtor_associado' && user.status === 'analise') && (<>
+                    {/* aprovar credencial */}
+
+                    {user && (user.role === 'produtor_associado' && user.status === 'analise' && !user.oldRole) && (<>
                         <Grid item xs={12} md={12}>
 
                             <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} sx={{
@@ -225,6 +342,9 @@ export default function NaoAssociado() {
                             </Accordion>
 
                         </Grid>
+
+
+
                         <Grid item xs={12} md={12}>
                             {matches ? (
                                 <Box sx={{ display: 'flex', gap: '48px', padding: '72px 0', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
@@ -331,7 +451,13 @@ export default function NaoAssociado() {
 
                         </Grid>
                     </>)}
+
+
+
                 </Grid>
+
+
+
 
             </Container>
 

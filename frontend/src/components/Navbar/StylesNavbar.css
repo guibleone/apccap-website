@@ -18,6 +18,7 @@
 .links {
     text-decoration: none;
     color: var(--main-purple);
+    font-size: '16px';
 }
 
 .links:hover {

@@ -152,6 +152,33 @@ export const submitForm = createAsyncThunk('auth/submitForm', async(user, thunkA
     }
 })
 
+// associar como produtor_associado
+
+export const associate = createAsyncThunk('auth/associate', async(user, thunkAPI) => {
+    try {
+        const response = await authService.associate(user)
+        return response
+    } catch (error) {
+        // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
+// cancelar credencial
+
+export const cancelCredencial = createAsyncThunk('auth/cancelCredencial', async(user, thunkAPI) => {
+    try {
+        const response = await authService.cancelCredencial(user)
+        return response
+    } catch (error) {
+        // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+
+})
+
 // slice para funções de autnticação de usuário
 export const authSlice = createSlice({
     name: 'auth',
@@ -299,6 +326,39 @@ export const authSlice = createSlice({
                 state.isError = true
                 state.message = action.payload
             })
+            // associar como produtor_associado
+            .addCase(associate.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(associate.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isSuccess = true
+                state.message = 'Associado com sucesso'
+                state.user = action.payload
+            })
+            .addCase(associate.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+            })
+            // cancelar credencial
+            .addCase(cancelCredencial.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(cancelCredencial.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isSuccess = true
+                state.message = 'Credencial cancelada com sucesso'
+                state.user = action.payload
+            })
+            .addCase(cancelCredencial.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+            })
+
+
+
             
     }
 

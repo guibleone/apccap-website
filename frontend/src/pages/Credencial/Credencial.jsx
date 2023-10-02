@@ -11,7 +11,7 @@ import { styleError } from '../toastStyles'
 import { AiOutlineDownload } from 'react-icons/ai'
 import { repproveRecurso } from '../../features/admin/adminSlice'
 import { useNavigate } from 'react-router-dom'
-import NaoAssociado from './NaoAssociado'
+import NaoAssociado from './CredencialProdutor'
 
 
 function Producer() {

@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import {
     TbMenu2, TbArrowNarrowLeft, TbArrowNarrowRight,
-    TbSearch, TbHome2, TbUsers, TbNews, TbHome
+    TbSearch, TbHome2, TbUsers, TbNews, TbHome, TbMessage
 } from "react-icons/tb";
 import { MdLiquor } from "react-icons/md";
 
@@ -68,6 +68,7 @@ function NavMenu() {
         dispatch(resetProducts())
         dispatch(resetSpreadsheet())
         dispatch(resetPayments())
+
         navigate('/')
     }
 
@@ -181,7 +182,7 @@ function NavMenu() {
                                         </a>
 
                                         <h5 style={{ color: '#FAF8F8', fontWeight: 300 }}>
-                                            {user && user.role === 'produtor' ? 'produtor' : 'produtor associado'}
+                                            {user && user.role === 'produtor associado' ? 'produtor associado' : user.role}
                                         </h5>
 
                                     </Box>
@@ -261,7 +262,66 @@ function NavMenu() {
                             } href="/blog">Blog</a>
                         </ListItem>
 
+                        <ListItem >
+                            <ListItemIcon>
+                                <TbNews style={{ color: "#FAF8F8" }} />
+                            </ListItemIcon>
+                            <a style={
+                                {
+                                    color: 'inherit',
+                                    textDecoration: 'none',
+
+                                }
+                            } href="/documentos">Documentos</a>
+                        </ListItem>
+
                     </>)}
+
+                    {/*presidente */}
+
+                    {user && user.role === 'presidente' && <>
+                        <ListItem >
+
+                            <ListItemIcon>
+                                <TbHome2 style={{ color: "#FAF8F8" }} />
+                            </ListItemIcon>
+                            <a style={
+                                {
+                                    color: 'inherit',
+                                    textDecoration: 'none',
+                                }
+                            } href="/">Início</a>
+                        </ListItem>
+
+                        <ListItem >
+
+                            <ListItemIcon>
+                                <TbMessage style={{ color: "#FAF8F8" }} />
+                            </ListItemIcon>
+                            <a style={
+                                {
+                                    color: 'inherit',
+                                    textDecoration: 'none',
+                                }
+                            } href="/reunioes">Reuniões</a>
+                        </ListItem>
+
+
+                        <ListItem >
+
+                            <ListItemIcon>
+                                <TbUsers style={{ color: "#FAF8F8" }} />
+                            </ListItemIcon>
+                            <a style={
+                                {
+                                    color: 'inherit',
+                                    textDecoration: 'none',
+                                }
+                            } href="/produtores">Produtores</a>
+                        </ListItem>
+
+                    </>}
+
 
                     {/* produtor */}
 
@@ -342,13 +402,15 @@ function NavMenu() {
 
                 <List>
 
-                    {user && (
-                        ((user.role !== 'admin' &&  user.oldRole))
-                            ? <ListItem >
-                                <ButtonChangeRole />
-                            </ListItem>
-                            : null
-                    )}
+                {user && (
+                  ((user.role !== 'admin' && (user.role !== 'user')) || user.oldRole)
+                    ?
+                    <ListItem sx={{ justifyContent: 'center' }}>
+                    <ButtonChangeRole />
+                    </ListItem>
+                    : null
+                )}
+
 
                     {!user ? (
                         <>

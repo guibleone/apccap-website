@@ -29,7 +29,7 @@ const paySelos = asyncHandler(async (req, res) => {
 
 const payMensalidade = asyncHandler(async (req, res) => {
 
-    const URL = 'http://localhost:3000/credencial-produtor';
+    const URL = 'http://localhost:3000/credencial';
     const { email } = req.body;
 
     try {
@@ -73,7 +73,7 @@ const getSubscription = asyncHandler(async (req, res) => {
 
             const portal = await stripe.billingPortal.sessions.create({
                 customer: customer.data[0].id,
-                return_url: 'http://localhost:3000/credencial-produtor',
+                return_url: 'http://localhost:3000/credencial',
             });
 
             res.status(200).json({ portal: portal.url, subscription: subscription.data[0].status  });
