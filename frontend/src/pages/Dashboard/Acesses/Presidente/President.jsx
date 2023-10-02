@@ -250,7 +250,7 @@ export default function President() {
 
 
           <Grid item xs={12} md={12} pb={10}>
-            {(users && users.filter(user => user.role === 'produtor_associado' && user.status === 'aprovado').length === 0) && (
+            {(users && users.filter(user => user.role === 'produtor_associado' && user.status === 'aprovado').length > 4) && (
               <Box sx={{
                 display: 'flex',
                 justifyContent: 'flex-end',
