@@ -134,6 +134,26 @@ const presenceList = async (reunionData) => {
 
 }
 
+// pegar única reunião
+
+const getOneReunion = async (reunionData) => {
+
+    let token = reunionData.token
+
+    // pegar o token do usuário
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+
+    const response = await axios.get(API_URL + '/single/' + reunionData.id, config);
+    return response.data;
+
+}
+
+
     
 
 const reunionService = {
@@ -143,7 +163,8 @@ const reunionService = {
     addReunionAta,
     signAta,
     deleteReunion,
-    presenceList
+    presenceList,
+    getOneReunion
     
 }
 

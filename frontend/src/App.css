@@ -19,7 +19,7 @@
     --main-orange-light: #F2A03D;
     --main-red: #BF232C;
     --main-black: #000;
-    --main-grey:#E9E9E9;
+    --main-grey: #E9E9E9;
 }
 
 h1,
@@ -78,10 +78,11 @@ html {
     -webkit-appearance: none;
     width: 7px;
 }
+
 ::-webkit-scrollbar-thumb {
     border-radius: 4px;
-    background-color: rgba(0,0,0,.5);
-    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+    background-color: rgba(0, 0, 0, .5);
+    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
 }
 
 .button-purple {
@@ -171,7 +172,62 @@ html {
     color: var(--main-red);
 }
 
+.button-documentos {
+    background-color: var(--main-white);
+    color: var(--main-black);
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border: 1px solid var(--main-black);
+    position: relative;
+    width: 100%;
+
+}
+
+.button-text {
+    display: flex;
+    justify-content: center;
+}
+
+.documento-actions{
+    position: absolute;
+    top: 50%;
+    left: 45%;
+    transform: translateY(-50%);
+    color: var(--main-black);
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    gap: '20px';
+
+}
+
+.button-documentos:hover {
+    .button-text {
+        opacity: 0.2;
+    }
+
+    .documento-actions{
+        opacity: 1
+    }
+}
+
 .small {
     font-size: 0.8rem;
     padding: 10px;
+}
+
+.no-border{
+    border: none;
+    padding: 0;
+    font-weight: 400;
+}
+
+.no-border:hover{
+    border: none;
+    padding: 0;
+    background-color: var(--main-white);
+    color: var(--main-purple);
 }

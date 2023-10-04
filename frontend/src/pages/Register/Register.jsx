@@ -655,10 +655,10 @@ function Register() {
                 <TextField
                   required
                   fullWidth
-                  id="cidade-propriedade"
+                  id="cidade_propriedade"
                   placeholder='Campinas'
-                  name="cidade-propriedade"
-                  autoComplete="cidade-propriedade" onChange={handleChangePropriedade} type="text"
+                  name="cidade_propriedade"
+                  autoComplete="cidade_propriedade" onChange={handleChangePropriedade} type="text"
                   value={propriedadeData.cidade_propriedade}
                   sx={
                     {
@@ -679,7 +679,7 @@ function Register() {
                   onChange={handleChangePropriedade}
                   defaultValue=""
                   value={propriedadeData.estado_propriedade || ''}
-                  name='estado'
+                  name='estado_propriedade'
                   sx={
                     {
                       '& .MuiInputBase-root': {
@@ -731,10 +731,10 @@ function Register() {
                   <TextField
                     required
                     fullWidth
-                    id="cep-propriedade"
+                    id="cep_propriedade"
                     placeholder='00000-000'
-                    name="cep-propriedade"
-                    autoComplete="cep-propriedade" onChange={handleChangePropriedade} type="number"
+                    name="cep_propriedade"
+                    autoComplete="cep_propriedade" onChange={handleChangePropriedade} type="number"
                     value={propriedadeData.cep_propriedade}
                     sx={
                       {
@@ -758,10 +758,10 @@ function Register() {
                   <TextField
                     required
                     fullWidth
-                    id="numero-propriedade"
+                    id="numero_propriedade"
                     placeholder='00000-000'
-                    name="numero-propriedade"
-                    autoComplete="numero-propriedade" onChange={handleChangePropriedade} type="number"
+                    name="numero_propriedade"
+                    autoComplete="numero_propriedade" onChange={handleChangePropriedade} type="number"
                     value={propriedadeData.numero_propriedade}
                     sx={
                       {

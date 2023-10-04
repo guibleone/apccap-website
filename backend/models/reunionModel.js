@@ -38,7 +38,7 @@ const reunionSchema = mongoose.Schema({
         }
     },
     pautas: [{
-        nome: {
+        message: {
             type: String,
             required: false
         },

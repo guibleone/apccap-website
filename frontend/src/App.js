@@ -30,6 +30,9 @@ import Reunion from './components/Reunions/Reunion';
 import ConvocarReunion from './pages/Dashboard/Acesses/Presidente/ConvocarReunion';
 import PDFReunion from './pages/Dashboard/Acesses/Presidente/PDFReunion';
 import Produtores from './pages/Dashboard/Acesses/Presidente/Produtores';
+import Balancos from './pages/Dashboard/Acesses/Tesoureiro/Balanços';
+import SingleReunion from './components/Reunions/SingleReunion';
+import DocumentosPublicos from './pages/Documentos/DocumentosPublicos';
 
 function App() {
   return (
@@ -63,6 +66,9 @@ function App() {
           <Route path='/convocar-reuniao' element={<ConvocarReunion />} />
           <Route path='/pdf-reunion' element={<PDFReunion />} />
           <Route path='/produtores' element={<Produtores />} />
+          <Route path='/balancos' element={<Balancos />} />
+          <Route path='/reuniao/:id' element={<SingleReunion />} />
+          <Route path='/documentos' element={<DocumentosPublicos />} />
           <Route path='*' element={<h1>Not Found 404</h1>} />
         </Routes> 
       </Router>

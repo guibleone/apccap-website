@@ -112,29 +112,46 @@ export default function Produtor() {
               display: 'flex',
               flexDirection: 'column',
               padding: '72px 0',
-              gap: '10px'
+              gap: '36px'
             }}>
+
+              {user.role === 'produtor' && !user.oldRole ? (<>
+                <Box sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '10px'
+                }}>
+                  
               <h3 className='semi-bold black'>
                 Credencial
               </h3>
-              {user.role === 'produtor' && !user.oldRole ? (<>
-                <h1 className='bold black'>
-                  Produtor Não Associado
-                </h1>
-                <h5 className='regular black'>
-                  Lorem ipsum dolor sit amet consectetur. Adipiscing amet morbi bibendum senectus. Eget sed vulputate arcu.Lorem ipsum dolor sit amet consectetur. Adipiscing amet morbi bibendum senectus. Eget sed vulputate arcu.
-                </h5>
+                  <h1 className='bold black'>
+                    Produtor Não Associado
+                  </h1>
+                  <h5 className='regular black'>
+                    Lorem ipsum dolor sit amet consectetur. Adipiscing amet morbi bibendum senectus. Eget sed vulputate arcu.Lorem ipsum dolor sit amet consectetur. Adipiscing amet morbi bibendum senectus. Eget sed vulputate arcu.
+                  </h5>
+                </Box>
                 <button onClick={() => navigate('/credencial')} className='button-purple' style={{ width: '182px' }}>
                   Me Associar <BsArrowUpRight size={20} style={{ verticalAlign: 'bottom' }} />
                 </button>
               </>) : (
-                <>
+                <> <Box sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '10px'
+                }}>
+                  
+              <h3 className='semi-bold black'>
+                Credencial
+              </h3>
                   <h1 className='bold black'>
                     Produtor Associado
                   </h1>
                   <h5 className='regular black'>
                     Lorem ipsum dolor sit amet consectetur. Adipiscing amet morbi bibendum senectus. Eget sed vulputate arcu.Lorem ipsum dolor sit amet consectetur. Adipiscing amet morbi bibendum senectus. Eget sed vulputate arcu.
                   </h5>
+                </Box>
                   <button onClick={() => navigate('/credencial')} className='button-purple' style={{ width: '182px' }}>
                     Credencial <BsArrowUpRight size={20} style={{ verticalAlign: 'bottom' }} />
                   </button>
@@ -182,7 +199,7 @@ export default function Produtor() {
           </Grid>
           {productsData &&
             productsData.filter((product) => product).slice(0, 4).map((product) => (
-              <Grid item xs={12} md={3} pr={matches ? 2 : 0}  key={product._id}>
+              <Grid item xs={12} md={3} pr={matches ? 2 : 0} key={product._id}>
                 <Box sx={{
                   backgroundColor: colors.main_grey,
                   padding: '20px',
@@ -226,7 +243,7 @@ export default function Produtor() {
                         editar produto
                       </button>
                     }
-                    
+
                   </Box>
                 </Box>
               </Grid>

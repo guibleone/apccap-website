@@ -34,7 +34,7 @@ export default function Produtores() {
             <Container maxWidth='xl'>
                 <Grid container spacing={2}>
                     <Grid item xs={12} lg={12}>
-                        <Box sx={{ textAlign: 'center' }}>
+                        <Box sx={{ textAlign: 'center' , padding: '72px 0', }}>
                             <h1 className='bold black'>
                                 Produtores
                             </h1>

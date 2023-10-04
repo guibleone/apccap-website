@@ -28,7 +28,7 @@ const addSpreadSheet = expressAsyncHandler(async (req, res) => {
 // pegar todas planilhas
 const getSpreadSheets = expressAsyncHandler(async (req, res) => {
     const spreadSheets = await SpreadSheet.find({user: req.user._id})
-    res.json(spreadSheets)
+    res.json(spreadSheets.reverse())
 })
 
 // pegar única planilha 

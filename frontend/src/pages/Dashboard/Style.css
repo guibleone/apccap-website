@@ -194,6 +194,8 @@
 
     .text-side {
         width: 100%;
+        align-items: center;
+        text-align: center;
     }
 
     h1 {

@@ -18,7 +18,7 @@ import { AiFillCheckCircle, AiOutlineArrowRight } from "react-icons/ai";
 import { MdWhatsapp } from "react-icons/md";
 import { Link } from "react-router-dom";
 import Footer from "../../components/Footer/Footer";
-import {colors} from '../colors'
+import { colors } from '../colors'
 import { getDocuments } from "../../features/documents/documentsSlice";
 import Produtor from "./Acesses/Produtor/Produtor";
 
@@ -131,7 +131,7 @@ function Dashboard() {
           <div className="header">
             <div className="text-side">
               <h1 style={{ fontWeight: 700 }}>
-                Busque pela cachaça que adiquiriu e saiba mais sobre sua procedência.
+                Busque pela cachaça que adiquiriu e saiba mais sobre sua procedência
               </h1>
 
               <div className="rastrear">
@@ -153,10 +153,11 @@ function Dashboard() {
               </div>
             </div>
 
-           
+            {!matches && (<>
               <img src={require('../../imgs/seloFoto.png')} alt="rastreio" className="rastreio-img" />
+            </>)}
 
-         
+
           </div>
 
           <section className="festival">
@@ -505,7 +506,7 @@ function Dashboard() {
         <>
 
           {(user.role === "produtor" || user.role === 'produtor_associado') && (
-            <Produtor/>
+            <Produtor />
           )}
 
           {(user.role === "admin") && (
@@ -534,8 +535,8 @@ function Dashboard() {
 
     </Box >
 
-   
-   
+
+
 
 
   )

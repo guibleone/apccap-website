@@ -10,6 +10,9 @@ export default function QuemSomos() {
 
     return (
         <Container sx={{ minHeight: '100vh' }}>
+            <h1>Quem Somos ?</h1>
+            {/*
+        
             <Grid container spacing={2} >
                 <Grid item xs={12} sm={12} >
                     <Paper elevation={6} sx={{ p: 2, mt: 2 }}>
@@ -68,7 +71,9 @@ export default function QuemSomos() {
 
                 </Grid>
 
-            </Grid>
+  
+
+            </Grid>  */}
         </Container>
     );
 }

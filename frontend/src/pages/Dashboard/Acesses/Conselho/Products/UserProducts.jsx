@@ -1,4 +1,4 @@
-import { Alert, Avatar, Box, Button, Card, CardActions, CardContent, CardMedia, Container, Divider, Grid, Typography, useMediaQuery } from '@mui/material'
+import { Alert, Avatar, Box, Button, Card, CardActions, CardContent, CardMedia, CircularProgress, Container, Divider, Grid, Typography, useMediaQuery } from '@mui/material'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
@@ -28,6 +28,24 @@ export default function UserProducts() {
     useEffect(() => {
         window.scrollTo(0, 0)
       }, []);
+      if ( !userData || !userData.dados_pessoais || !productsData) {
+
+        return <Box sx={
+          {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: colors.main_white,
+            minHeight: '100vh'
+          }
+        }>
+          <CircularProgress sx={
+            {
+              marginBottom: '100px',
+            }
+          } size={100} />
+        </Box>
+      }
     
 
     return (

@@ -52,7 +52,9 @@ const fileFilterProduct = (req, file, cb) => {
 const fileFilterExcel = (req, file, cb) => {
   // rejeitar um arquivo se não for compatível com o excel
   if (
-    file.mimetype === "text/csv"
+    file.mimetype === "text/csv" ||
+    file.mimetype === "application/vnd.ms-excel" ||
+    file.mimetype === "application/pdf"
   ) {
     file.originalname = Buffer.from(file.originalname, 'latin1').toString(
       'utf8',

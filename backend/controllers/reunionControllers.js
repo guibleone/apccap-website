@@ -21,7 +21,7 @@ const createReunion = asyncHandler(async (req, res) => {
             const associates = await User.find({ role: { $in: ['presidente', 'secretario', 'tesoureiro', 'conselho'] } })
 
             associates.forEach(associate => {
-                nomeMembros.push(`${associate.name} - ${associate.role}`)
+                nomeMembros.push(`${associate.dados_pessoais.name} - ${associate.role}`)
             })
         }
 
@@ -31,7 +31,7 @@ const createReunion = asyncHandler(async (req, res) => {
             const associates = await User.find({ role: { $in: ['presidente', 'secretario', 'tesoureiro', 'conselho', 'produtor'] } })
 
             associates.forEach(associate => {
-                nomeMembros.push(`${associate.name} - ${associate.role}`)
+                nomeMembros.push(`${associate.dados_pessoais.name} - ${associate.role}`)
             })
         }
 
@@ -41,7 +41,7 @@ const createReunion = asyncHandler(async (req, res) => {
             const associates = await User.find({ role: { $in: ['presidente', 'secretario', 'tesoureiro', 'conselho', 'produtor'] } })
 
             associates.forEach(associate => {
-                nomeMembros.push(`${associate.name} - ${associate.role}`)
+                nomeMembros.push(`${associate.dados_pessoais.name} - ${associate.role}`)
             })
         }
 
@@ -314,8 +314,27 @@ const presenceList = asyncHandler(async (req, res) => {
     }
 })
 
+// pegar única reunião
+
+const getOneReunion = asyncHandler(async (req, res) => {
+    try {
+        const reunion = await Reunion.findById(req.params.id)
+
+        if (!reunion) {
+            res.status(404)
+            throw new Error('Reunião não encontrada')
+        }
+
+        res.status(200).json(reunion)
+        
+    } catch (error) {
+        res.status(500)
+        throw new Error('Erro ao buscar reunião')    
+    }
+})
+
 module.exports = {
     createReunion, getReunions, finishReunion,
     addReunionAta, deleteReunion, deleteReunionAta,
-    signAta, presenceList
+    signAta, presenceList,getOneReunion
 }

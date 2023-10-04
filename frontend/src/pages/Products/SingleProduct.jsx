@@ -108,7 +108,7 @@ function SingleProduct() {
       }, [])
     
 
-    if (isLoading || !productData.name) {
+    if (isLoading || !productData) {
         return <Box sx={
             {
                 display: 'flex',
@@ -190,7 +190,7 @@ function SingleProduct() {
                                 Nome do Produto
                             </Typography>
 
-                            <TextField name='name' defaultValue={productData  && productData.name } onChange={onChange} fullWidth variant="outlined" />
+                            <TextField name='name' defaultValue={productData  && productData?.name } onChange={onChange} fullWidth variant="outlined" />
                             
                             <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
                                 Descrição do Produto

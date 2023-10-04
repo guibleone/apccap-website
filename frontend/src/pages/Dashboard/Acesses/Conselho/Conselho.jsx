@@ -41,17 +41,22 @@ export default function Conselho() {
                             display: 'flex',
                             flexDirection: 'column',
                             padding: '72px 0',
-                            gap: '10px'
+                            gap: '36px'
                         }}>
-                            <h3 className='semi-bold black'>
-                                Credencial
-                            </h3>
-                            <h1 className='black semi-bold'>
-                                Conselho Regulador
-                            </h1>
-                            <h5 className='black regular'>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente at voluptatem beatae aut! Fugiat reprehenderit quasi ut nam, adipisci eaque et dolorem officia eveniet repudiandae! Inventore saepe expedita vero minus.
-                            </h5>
+                            <Box sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '10px'
+                            }}><h3 className='semi-bold black'>
+                                    Credencial
+                                </h3>
+                                <h1 className='black semi-bold'>
+                                    Conselho Regulador
+                                </h1>
+                                <h5 className='black regular'>
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente at voluptatem beatae aut! Fugiat reprehenderit quasi ut nam, adipisci eaque et dolorem officia eveniet repudiandae! Inventore saepe expedita vero minus.
+                                </h5>
+                            </Box>
                             <button onClick={() => navigate('/meu-perfil')} className='button-purple' style={{ width: '182px' }}>
                                 Meus Dados <BsArrowUpRight size={20} style={{ verticalAlign: 'bottom' }} />
                             </button>
@@ -69,8 +74,8 @@ export default function Conselho() {
                         <Box sx={{
                             display: 'flex',
                             flexDirection: 'column',
-                            padding: '24px 0',
-                            gap: '36px'
+
+                            gap: '24px'
                         }}>
 
                             <Box sx={{
@@ -139,7 +144,6 @@ export default function Conselho() {
                         <Box sx={{
                             display: 'flex',
                             flexDirection: 'column',
-                            padding: '24px 0',
                             gap: '36px'
                         }}>
 
@@ -170,7 +174,7 @@ export default function Conselho() {
                                         gap: '10px'
 
                                     }}>
-                                              <h3 className='semi-bold black'>
+                                        <h3 className='semi-bold black'>
                                             {user.dados_pessoais.name.split(' ')[0]}
                                         </h3>
                                         <h4 className='regular black'>

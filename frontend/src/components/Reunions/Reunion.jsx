@@ -1,5 +1,6 @@
-import { Box, Grid, Typography, Button, MenuItem, TextField, Alert, Modal, useMediaQuery, CircularProgress, Link, Checkbox, Divider, Container } from '@mui/material'
+import { Box, Grid, Typography, Button, MenuItem, TextField, Alert, Modal, useMediaQuery, CircularProgress, Checkbox, Divider, Container } from '@mui/material'
 import React, { useCallback } from 'react'
+import {Link} from 'react-router-dom'
 import ReunionPagination from '../Pagination/Reunions'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -86,7 +87,6 @@ export default function Reunion() {
         dispatch(finishReunion(reunions))
 
     }
-
 
     const [file, setFile] = useState(null)
     const [id, setId] = useState(null)
@@ -211,9 +211,9 @@ export default function Reunion() {
     return (
         <Box sx={{ backgroundColor: colors.main_white, minHeight: '100vh' }}>
             <Container maxWidth='xl'>
-                <Grid container spacing={2}>
-                    <Grid item xs={12} lg={12}>
-                        <Box sx={{ textAlign: 'center' }}>
+                <Grid container spacing={2} >
+                    <Grid item xs={12} lg={12} >
+                        <Box sx={{ textAlign: 'center',  padding: '72px 0', }}>
                             <h1 className='bold black'>
                                 Reuniões
                             </h1>
@@ -227,23 +227,39 @@ export default function Reunion() {
                     {reunions && reunions.length > 0 ?
                         reunions
                             .map((reunion, index) => (
-                                <Grid item sm={12} lg={3} key={index}>
-
+                                <Grid item xs={12} md={3} pr={matches ? 2 : 0} key={reunion._id}>
                                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px', backgroundColor: colors.main_grey, padding: '20px' }}>
                                         <Box sx={{
+                                            backgroundColor: colors.main_grey,
+                                            padding: '6px',
                                             display: 'flex',
-                                            justifyContent: 'space-between',
+                                            flexDirection: 'column',
+                                            gap: '24px'
                                         }}>
-                                            <h4 className='semi-bold black'>
-                                                {reunion.date}
-                                            </h4>
-                                            <AiOutlineEdit size={25} />
+                                            <Box sx={{
+                                                display: 'flex',
+                                                justifyContent: 'space-between',
+                                            }}>
+                                                <h4 className='semi-bold black'>
+                                                    {reunion.date}
+                                                </h4>
+                                                <AiOutlineEdit size={25} />
 
+                                            </Box>
+
+                                            <Box sx={{
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                gap: '5px'
+                                            }}>
+                                                <h4 className='semi-bold black'>{reunion.title}</h4>
+                                                <Link style={{cursor:'pointer'}} className='regular black italic' to={`/reuniao/${reunion._id}`}>
+                                                    <h5>Ver Reunião</h5>
+                                                </Link>
+                                            </Box>
                                         </Box>
-                                        
-                                        <h4 className='semi-bold black'>{reunion.title}</h4>
 
-                                        {(reunion.ata.path && reunion.ata.assinaturas_restantes.length > 0 && !reunion.membros.faltantes.includes(`${user.name} - ${user.role}`)) &&
+                                        {/*    {(reunion.ata.path && reunion.ata.assinaturas_restantes.length > 0 && !reunion.membros.faltantes.includes(`${user.name} - ${user.role}`)) &&
                                             <Box sx={{ display: 'flex', gap: '5px' }}>
                                                 <Link sx={{ cursor: 'pointer' }} onClick={() => { handleOpenDetailsSign(); setAssinaturas(reunion.ata.assinaturas); setExpectedAssinaturas(reunion.membros.presentes) }}>
                                                     Assinaturas Restantes
@@ -434,7 +450,7 @@ export default function Reunion() {
                                                 </Grid>
                                             }
 
-                                        </Box>
+                                        </Box>*/}
                                     </Box>
                                 </Grid>
 

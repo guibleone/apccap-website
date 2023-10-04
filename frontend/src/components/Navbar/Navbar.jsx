@@ -150,7 +150,7 @@ function Navbar() {
                       { display: 'flex', alignItems: 'center', gap: '5px' }
                     }>
 
-                      <button className='button-white small' onClick={onLogout}>
+                      <button className='button-white no-border' onClick={onLogout}>
                         sair
                       </button>
 
@@ -261,7 +261,7 @@ function Navbar() {
                       { display: 'flex', alignItems: 'center', gap: '5px' }
                     }>
 
-                      <button className='button-white small' onClick={onLogout}>
+                      <button className='button-white no-border' onClick={onLogout}>
                         sair
 
                       </button>
@@ -353,7 +353,7 @@ function Navbar() {
                       { display: 'flex', alignItems: 'center', gap: '5px' }
                     }>
 
-                      <button className='button-white small' onClick={onLogout}>
+                      <button className='button-white no-border' onClick={onLogout}>
                         sair
 
                       </button>
@@ -449,7 +449,7 @@ function Navbar() {
                       { display: 'flex', alignItems: 'center', gap: '5px' }
                     }>
 
-                      <button className='button-white small' onClick={onLogout}>
+                      <button className='button-white no-border' onClick={onLogout}>
                         sair
 
                       </button>
@@ -502,7 +502,7 @@ function Navbar() {
               <div className="links-centrais">
 
                 <Link className="links" to="/"><h4>Início</h4></Link>
-                <Link className="links" to="/"><h4>Balanços</h4></Link>
+                <Link className="links" to="/balancos"><h4>Balanços</h4></Link>
                 {user && (
                   ((user.role !== 'admin' && (user.role !== 'user')) || user.oldRole)
                     ?
@@ -540,7 +540,7 @@ function Navbar() {
                       { display: 'flex', alignItems: 'center', gap: '5px' }
                     }>
 
-                      <button className='button-white small' onClick={onLogout}>
+                      <button className='button-white no-border' onClick={onLogout}>
                         sair
 
                       </button>
@@ -635,7 +635,7 @@ function Navbar() {
                       { display: 'flex', alignItems: 'center', gap: '5px' }
                     }>
 
-                      <button className='button-white small' onClick={onLogout}>
+                      <button className='button-white no-border' onClick={onLogout}>
                         sair
 
                       </button>
@@ -691,7 +691,7 @@ function Navbar() {
             </div>
 
 
-            <button className="button-purple small" style={{ width: '230px' }} onClick={() => navigate('/entrar')}>Área Produtor</button>
+            <button className="button-purple" style={{ width: '230px' }} onClick={() => navigate('/entrar')}>Área Produtor</button>
 
           </div>
         </div>

@@ -61,7 +61,7 @@ export default function ProductAnalise() {
                                     </h1>
 
                                     <h3 className='regular black'>
-                                        Aompanhe o andamento do processo de seu produto
+                                        Acompanhe o andamento do processo de seu produto
                                     </h3>
 
                                     <h3 className='regular ' style={{ textAlign: 'center' }}>{product.name}</h3>

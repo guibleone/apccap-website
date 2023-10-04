@@ -86,7 +86,6 @@ export default function ConvocarReunion({ onClose }) {
     }
 
 
-
     // toast
     useEffect(() => {
 
@@ -101,8 +100,6 @@ export default function ConvocarReunion({ onClose }) {
         dispatch(resetEmailStatus())
 
     }, [emailStatus.isSuccess, emailStatus.isError])
-
-
 
 
 
@@ -136,7 +133,7 @@ export default function ConvocarReunion({ onClose }) {
                 </Grid>
             </Grid>
 
-            <Grid container spacing={2} pb={5}>
+            <Grid container spacing={2} >
 
                 <Grid item xs={12} lg={12}>
                     <Box sx={{
@@ -152,7 +149,7 @@ export default function ConvocarReunion({ onClose }) {
                             minRows={6}
                             placeholder='Mensagem para convocação'
                             style={{ width: "100%", resize: 'none', fontSize: '16px', padding: '10px', backgroundColor: colors.main_white }}
-                            maxRows={8}
+                            maxRows={5}
                             name='message'
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
@@ -160,9 +157,29 @@ export default function ConvocarReunion({ onClose }) {
                     </Box>
                 </Grid>
 
-            </Grid>
+                <Grid item xs={12} lg={12}>
 
-            <Grid container spacing={2} pb={5}>
+                    <h4 className='medium black'>
+                        Pautas
+                    </h4>
+
+                    <Box sx={{ display: 'flex', gap: '10px', width: '100%', flexDirection: 'column' }}>
+
+                        <TextareaAutosize
+                            minRows={6}
+                            placeholder='Pautas da reunião'
+                            style={{ width: "100%", resize: 'none', fontSize: '16px', padding: '10px', backgroundColor: colors.main_white }}
+                            maxRows={8}
+                            name='pautas'
+
+                        />
+
+                    </Box>
+
+
+
+                </Grid>
+
 
                 <Grid item xs={12} lg={6}>
                     <Box sx={{
@@ -184,7 +201,7 @@ export default function ConvocarReunion({ onClose }) {
                     </Box>
                 </Grid>
 
-                <Grid item xs={12} lg={6} pb={10}>
+                <Grid item xs={12} lg={6} pb={5}>
                     <Box sx={{ display: 'flex', gap: '10px', width: '100%', flexDirection: 'column' }}>
                         <h4 className='medium black'>
                             Data
@@ -201,7 +218,8 @@ export default function ConvocarReunion({ onClose }) {
 
                 </Grid>
 
-                <Grid item xs={12} lg={4} pt={10} >
+
+                <Grid item xs={12} lg={4} >
                     <Box sx={{
                         display: 'flex',
                         gap: '10px',

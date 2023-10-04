@@ -95,7 +95,7 @@ export default function SingleUserProduct() {
     }
 
     const emailData = {
-      email: userData.email,
+      email: userData.dados_pessoais.email,
       result: 'APROVADO',
       type: type,
       produto: productData.name
@@ -115,7 +115,7 @@ export default function SingleUserProduct() {
     }
 
     const emailData = {
-      email: userData.email,
+      email: userData.dados_pessoais.email,
       result: 'REPROVADO',
       type: type,
       produto: productData.name
@@ -168,7 +168,7 @@ export default function SingleUserProduct() {
   }, []);
 
 
-  if (isLoading) {
+  if (isLoading || !productData) {
 
     return <Box sx={
       {
@@ -190,264 +190,250 @@ export default function SingleUserProduct() {
 
   return (
     <Box sx={{
-      backgroundColor:colors.main_white,
+      backgroundColor: colors.main_white,
       minHeight: '100vh',
-  }}>
-  <Container maxWidth='lg'>
-
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={12} lg={3} >
-          <Typography variant='h5'>Informações do Produto</Typography>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px'}}>
-            <Typography variant='p'><strong>Nome:</strong> {productData.name}</Typography>
-            <Typography variant='p'><strong>Descrição:</strong> {productData.description}</Typography>
-            <Typography variant='p'><strong>Produtor:</strong> {userData.dados_pessoais.name}</Typography>
-            <Typography variant='p'><strong>Selos Pedidos:</strong> {productData.selo && productData.selo.quantity}</Typography>
-          </Box>
-        </Grid>
-        <Grid item xs={12} sm={12} lg={3} >
-          <Typography variant='h5'>Documentos</Typography>
-
-          <Box sx={{ height: '80px', paddingRight:1 }}>
-            {productData.relatorys && productData.relatorys.length > 0 ? productData.relatorys.map((doc) => (
-              <>
-                <Box key={doc._id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography variant='p' noWrap>{doc.name}</Typography>
-                  <Button variant='outlined' color="success" href={doc.path} download={doc.name}><AiOutlineDownload /></Button>
-                </Box>
-
-                <Divider sx={{ margin: '5px 0' }} />
-              </>
-            )) : <Typography variant='p'>Nenhum documento enviado</Typography>}
-
-          </Box>
-        </Grid>
-      </Grid>
-
-      <Divider sx={{ margin: '20px 0' }} />
-
-      <Typography textAlign={'center'} variant='h5'>Etapas da Análise</Typography>
-
-      <Grid container spacing={2} sx={{ marginTop: '20px', marginBottom: '40px' }} >
-
-        <Grid item xs={12} sm={12} lg={3.9} >
-
-          <form name="analise_pedido" onSubmit={handleSubmit}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center' }}>
-
-              <Typography variant='h6'>Análise do pedido</Typography>
-              <Typography variant='p'>Parecer sobre os documentos do produtor</Typography>
-
-              {productData.analise && !productData.analise.analise_pedido.path ? (
-                <>
-                  <input onChange={onChange} type="file" name="analise_pedido" ref={fileInput} />
-                  <Button type="submit" variant="outlined" color="primary">Adicionar</Button>
-                </>) : (
-                <>
-                  {productData.analise && productData.analise.analise_pedido.status === 'pendente' &&
-                    <Box sx={{ display: 'flex', gap: '5px' }}>
-                      <Button color="success" href={productData.analise && productData.analise.analise_pedido.path}><AiOutlineDownload size={25} /></Button>
-                      <Button onClick={() => handleDelete('analise_pedido')} color="error"><AiOutlineDelete size={25} /></Button>
-                    </Box>
-                  }
-
-                  {productData.analise && (
-                    <>
-                      {productData.analise.analise_pedido.status === 'pendente' &&
-                        <Box sx={{ display: 'flex', gap: '5px' }}>
-                          <Button onClick={() => { handleOpenRepprove(); setType('analise_pedido'); }} color='error'>Reprovar</Button>
-                          <Button onClick={() => { handleOpenApprove(); setType('analise_pedido'); }} color='success'>Aprovar</Button>
-                        </Box>
-                      }
-
-                      {productData.analise.analise_pedido.status === 'reprovado' &&
-                        <Alert severity="error">Relatório reprovado pela direção</Alert>
-                      }
-
-                      {productData.analise.analise_pedido.status === 'aprovado' &&
-                        <Alert severity="success">Análise de relatório concluída</Alert>
-                      }
-                    </>
-                  )}
-                </>
-
-              )}
+    }}>
+      <Container maxWidth='lg'>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={12} lg={3} >
+            <Typography variant='h5'>Informações do Produto</Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+              <Typography variant='p'><strong>Nome:</strong> {productData?.name}</Typography>
+              <Typography variant='p'><strong>Descrição:</strong> {productData?.description}</Typography>
+              <Typography variant='p'><strong>Selos Pedidos:</strong> {productData?.selo?.quantity}</Typography>
             </Box>
-          </form>
-
-
+          </Grid>
+          <Grid item xs={12} sm={12} lg={3} >
+            <Typography variant='h5'>Documentos</Typography>
+            <Box sx={{ minHeight: '80px', paddingRight: 1 }}>
+              {productData?.relatorys && productData?.relatorys.length > 0 ? productData?.relatorys.map((doc) => (
+                <>
+                  <Box key={doc._id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Typography variant='p' noWrap>{doc.name}</Typography>
+                    <Button variant='outlined' color="success" href={doc.path} download={doc.name}><AiOutlineDownload /></Button>
+                  </Box>
+                  <Divider sx={{ margin: '5px 0' }} />
+                </>
+              )) : <Typography variant='p'>Nenhum documento enviado</Typography>}
+            </Box>
+          </Grid>
         </Grid>
 
-        <Divider orientation="vertical" flexItem={matches} />
+        <Divider sx={{ margin: '20px 0' }} />
 
-        <Grid item xs={12} sm={12} lg={3.9} >
-          <form name='vistoria' onSubmit={handleSubmit}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center' }}>
+        <Typography textAlign={'center'} variant='h5'>Etapas da Análise</Typography>
 
-              <Typography variant='h6'>Vistoria</Typography>
-              <Typography variant='p'>Parecer do técnico sobre a cadeia produtiva</Typography>
+        <Grid container spacing={2} sx={{ marginTop: '20px', marginBottom: '40px' }} >
 
-              {(productData.analise && productData.analise.vistoria.path === '') ?
-                (productData.analise && productData.analise.analise_pedido.status !== 'aprovado') ? (<FcPrivacy size={35} />) : (
+          <Grid item xs={12} sm={12} lg={3.9} >
+
+            <form name="analise_pedido" onSubmit={handleSubmit}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center' }}>
+                <Typography variant='h6'>Análise do pedido</Typography>
+                <Typography variant='p'>Parecer sobre os documentos do produtor</Typography>
+                {productData?.analise && !productData?.analise?.analise_pedido?.path ? (
                   <>
-                    <input onChange={onChange} type="file" name="vistoria" id="vistoria" ref={fileInput} />
+                    <input onChange={onChange} type="file" name="analise_pedido" ref={fileInput} />
                     <Button type="submit" variant="outlined" color="primary">Adicionar</Button>
                   </>
-                )
-                : (
+                ) : (
                   <>
-                    {productData.analise && productData.analise.vistoria.status === 'pendente' &&
+                    {productData?.analise && productData?.analise?.analise_pedido?.status === 'pendente' &&
                       <Box sx={{ display: 'flex', gap: '5px' }}>
-                        <Button color="success" href={productData.analise && productData.analise.vistoria.path}><AiOutlineDownload size={25} /></Button>
+                        <Button color="success" href={productData?.analise?.analise_pedido?.path}><AiOutlineDownload size={25} /></Button>
+                        <Button onClick={() => handleDelete('analise_pedido')} color="error"><AiOutlineDelete size={25} /></Button>
+                      </Box>
+                    }
+                    {productData?.analise && (
+                      <>
+                        {productData?.analise?.analise_pedido?.status === 'pendente' &&
+                          <Box sx={{ display: 'flex', gap: '5px' }}>
+                            <Button onClick={() => { handleOpenRepprove(); setType('analise_pedido'); }} color='error'>Reprovar</Button>
+                            <Button onClick={() => { handleOpenApprove(); setType('analise_pedido'); }} color='success'>Aprovar</Button>
+                          </Box>
+                        }
+                        {productData?.analise?.analise_pedido?.status === 'reprovado' &&
+                          <Alert severity="error">Relatório reprovado pela direção</Alert>
+                        }
+                        {productData?.analise?.analise_pedido?.status === 'aprovado' &&
+                          <Alert severity="success">Análise de relatório concluída</Alert>
+                        }
+                      </>
+                    )}
+                  </>
+                )}
+              </Box>
+            </form>
+
+          </Grid>
+
+          <Divider orientation="vertical" flexItem={matches} />
+
+          <Grid item xs={12} sm={12} lg={3.9} >
+            <form name='vistoria' onSubmit={handleSubmit}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center' }}>
+                <Typography variant='h6'>Vistoria</Typography>
+                <Typography variant='p'>Parecer do técnico sobre a cadeia produtiva</Typography>
+                {(productData?.analise?.vistoria?.path === '') ? (
+                  (productData?.analise?.analise_pedido?.status !== 'aprovado') ? (<FcPrivacy size={35} />) : (
+                    <>
+                      <input onChange={onChange} type="file" name="vistoria" id="vistoria" ref={fileInput} />
+                      <Button type="submit" variant="outlined" color="primary">Adicionar</Button>
+                    </>
+                  )
+                ) : (
+                  <>
+                    {productData?.analise && productData?.analise?.vistoria?.status === 'pendente' &&
+                      <Box sx={{ display: 'flex', gap: '5px' }}>
+                        <Button color="success" href={productData?.analise?.vistoria?.path}><AiOutlineDownload size={25} /></Button>
                         <Button onClick={() => handleDelete('vistoria')} color="error"><AiOutlineDelete size={25} /></Button>
                       </Box>
                     }
-                    {productData.analise && (
+                    {productData?.analise && (
                       <>
-                        {productData.analise.vistoria.status === 'pendente' &&
+                        {productData?.analise?.vistoria?.status === 'pendente' &&
                           <Box sx={{ display: 'flex', gap: '5px' }}>
                             <Button onClick={() => { handleOpenRepprove(); setType('vistoria'); }} color='error'>Reprovar</Button>
                             <Button onClick={() => { handleOpenApprove(); setType('vistoria'); }} color='success'>Aprovar</Button>
                           </Box>
                         }
-
-                        {productData.analise.vistoria.status === 'reprovado' &&
+                        {productData?.analise?.vistoria?.status === 'reprovado' &&
                           <Alert severity="error">Relatório reprovado pela direção</Alert>
                         }
-
-                        {productData.analise.vistoria.status === 'aprovado' &&
+                        {productData?.analise?.vistoria?.status === 'aprovado' &&
                           <Alert severity="success">Análise de relatório concluída</Alert>
                         }
                       </>
                     )}
                   </>
                 )}
-            </Box>
-          </form>
+              </Box>
+            </form>
+          </Grid>
+
+          <Divider orientation={matches ? 'vertical' : ''} flexItem={matches} />
+
+          <Grid item xs={12} sm={12} lg={3.8} >
+            <form name="analise_laboratorial" onSubmit={handleSubmit}>
+              <Box sx={{
+                display: 'flex', flexDirection: 'column', gap: '5px', alignItems:
+
+                  'center'
+              }}>
+                <Typography variant='h6'>Análise Laboratorial</Typography>
+                <Typography variant='p'>Parecer do laboratório credenciado</Typography>
+                {productData?.analise && !productData?.analise?.analise_laboratorial?.path ?
+                  (productData?.analise?.analise_pedido?.status !== 'aprovado' || productData?.analise?.vistoria?.status !== 'aprovado') ? (<FcPrivacy size={35} />) : (
+                    <>
+                      <input onChange={onChange} type="file" name="analise_laboratorial" ref={fileInput} />
+                      <Button type="submit" variant="outlined" color="primary">Adicionar</Button>
+                    </>
+                  ) : (
+                    <>
+                      {productData?.analise && productData?.analise?.analise_laboratorial?.status === 'pendente' &&
+                        <Box sx={{ display: 'flex', gap: '5px' }}>
+                          <Button color="success" href={productData?.analise?.analise_laboratorial?.path}><AiOutlineDownload size={25} /></Button>
+                          <Button onClick={() => handleDelete('analise_laboratorial')} color="error"><AiOutlineDelete size={25} /></Button>
+                        </Box>
+                      }
+
+                      {productData?.analise && (
+                        <>
+                          {productData?.analise?.analise_laboratorial?.status === 'pendente' &&
+                            <Box sx={{ display: 'flex', gap: '5px' }}>
+                              <Button onClick={() => { handleOpenRepprove(); setType('analise_laboratorial'); }} color='error'>Reprovar</Button>
+                              <Button onClick={() => { handleOpenApprove(); setType('analise_laboratorial'); }} color='success'>Aprovar</Button>
+                            </Box>
+                          }
+
+                          {productData?.analise?.analise_laboratorial?.status === 'reprovado' &&
+                            <Alert severity="error">Relatório reprovado pela direção</Alert>
+                          }
+
+                          {productData?.analise?.analise_laboratorial?.status === 'aprovado' &&
+                            <Alert severity="success">Análise de relatório concluída</Alert>
+                          }
+                        </>
+                      )}
+                    </>
+                  )}
+              </Box>
+            </form>
+          </Grid>
         </Grid>
 
-        <Divider orientation={matches ? 'vertical' : ''} flexItem={matches} />
+        <Modal
+          open={openApprove}
+          onClose={handleOpenApprove}
+        >
+          <Box sx={style}>
+            <Box sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '10px'
+            }}>
+              <Box display={'flex'} justifyContent={'space-between'}>
+                <Typography variant="h6" >Tem certeza ? </Typography>
+                <AiFillWarning color='red' size={30} />
+              </Box>
 
-        <Grid item xs={12} sm={12} lg={3.8} >
-          <form name="analise_laboratorial" onSubmit={handleSubmit}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center' }}>
+              <Typography variant="h7" > Essa ação é permanente. </Typography>
+              <Typography color='error' variant="p" > Será enviado um email ao produtor.</Typography>
 
-              <Typography variant='h6'>Análise Laboratorial</Typography>
-              <Typography variant='p'>Parecer do laboratório credenciado</Typography>
+              <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+                <Button color='error' variant='contained' onClick={handleOpenApprove}>Cancelar</Button>
 
-              {productData.analise && !productData.analise.analise_laboratorial.path ?
-                (productData.analise.analise_pedido.status !== 'aprovado' || productData.analise.vistoria.status !== 'aprovado') ? (<FcPrivacy size={35} />) : (
-                  <>
-                    <input onChange={onChange} type="file" name="analise_laboratorial" ref={fileInput} />
-                    <Button type="submit" variant="outlined" color="primary">Adicionar</Button>
-                  </>
-                ) : (
-                  <>
-                    {productData.analise && productData.analise.analise_laboratorial.status === 'pendente' &&
-                      <Box sx={{ display: 'flex', gap: '5px' }}>
-                        <Button color="success" href={productData.analise && productData.analise.analise_laboratorial.path}><AiOutlineDownload size={25} /></Button>
-                        <Button onClick={() => handleDelete('analise_laboratorial')} color="error"><AiOutlineDelete size={25} /></Button>
-                      </Box>
-                    }
+                <Button
+                  disabled={isLoading}
+                  color="success"
+                  variant='contained'
+                  onClick={approveRelatory}
+                >
+                  {isLoading ? <CircularProgress color="success" size={24} /> : 'Aprovar'}
+                </Button>
 
-                    {productData.analise && (
-                      <>
-                        {productData.analise.analise_laboratorial.status === 'pendente' &&
-                          <Box sx={{ display: 'flex', gap: '5px' }}>
-                            <Button onClick={() => { handleOpenRepprove(); setType('analise_laboratorial'); }} color='error'>Reprovar</Button>
-                            <Button onClick={() => { handleOpenApprove(); setType('analise_laboratorial'); }} color='success'>Aprovar</Button>
-                          </Box>
-                        }
-
-                        {productData.analise.analise_laboratorial.status === 'reprovado' &&
-                          <Alert severity="error">Relatório reprovado pela direção</Alert>
-                        }
-
-                        {productData.analise.analise_laboratorial.status === 'aprovado' &&
-                          <Alert severity="success">Análise de relatório concluída</Alert>
-                        }
-                      </>
-                    )}
-                  </>
-                )}
-            </Box>
-          </form>
-        </Grid>
-      </Grid>
-
-
-      <Modal
-        open={openApprove}
-        onClose={handleOpenApprove}
-      >
-        <Box sx={style}>
-          <Box sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '10px'
-          }}>
-            <Box display={'flex'} justifyContent={'space-between'}>
-              <Typography variant="h6" >Tem certeza ? </Typography>
-              <AiFillWarning color='red' size={30} />
-            </Box>
-
-            <Typography variant="h7" > Essa ação é permanente. </Typography>
-            <Typography color='error' variant="p" > Será enviado um email ao produtor.</Typography>
-
-            <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
-              <Button color='error' variant='contained' onClick={handleOpenApprove}>Cancelar</Button>
-
-              <Button
-                disabled={isLoading}
-                color="success"
-                variant='contained'
-                onClick={approveRelatory}
-              >
-                {isLoading ? <CircularProgress color="success" size={24} /> : 'Aprovar'}
-              </Button>
-
+              </Box>
             </Box>
           </Box>
-        </Box>
-      </Modal>
+        </Modal>
 
 
-      <Modal
-        open={openRepprove}
-        onClose={handleOpenRepprove}
-      >
-        <Box sx={style}>
-          <Box sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '10px'
-          }}>
-            <Box display={'flex'} justifyContent={'space-between'}>
-              <Typography variant="h6" >Tem certeza ? </Typography>
-              <AiFillWarning color='red' size={30} />
-            </Box>
+        <Modal
+          open={openRepprove}
+          onClose={handleOpenRepprove}
+        >
+          <Box sx={style}>
+            <Box sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '10px'
+            }}>
+              <Box display={'flex'} justifyContent={'space-between'}>
+                <Typography variant="h6" >Tem certeza ? </Typography>
+                <AiFillWarning color='red' size={30} />
+              </Box>
 
-            <Typography variant="h7" > Essa ação é permanente. </Typography>
-            <Typography color='error' variant="p" > Será enviado um email ao produtor.</Typography>
+              <Typography variant="h7" > Essa ação é permanente. </Typography>
+              <Typography color='error' variant="p" > Será enviado um email ao produtor.</Typography>
 
-            <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
-              <Button color='error' variant='contained' onClick={handleOpenRepprove}>Cancelar</Button>
+              <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+                <Button color='error' variant='contained' onClick={handleOpenRepprove}>Cancelar</Button>
 
-              <Button
-                disabled={isLoading}
-                color="success"
-                variant='contained'
-                onClick={repproveRelatory}
-              >
-                {isLoading ? <CircularProgress color="success" size={24} /> : 'Reprovar'}
-              </Button>
+                <Button
+                  disabled={isLoading}
+                  color="success"
+                  variant='contained'
+                  onClick={repproveRelatory}
+                >
+                  {isLoading ? <CircularProgress color="success" size={24} /> : 'Reprovar'}
+                </Button>
 
+              </Box>
             </Box>
           </Box>
-        </Box>
-      </Modal>
+        </Modal>
 
-    </Container>
+      </Container>
     </Box>
 
   )

@@ -77,17 +77,23 @@ export default function President() {
               display: 'flex',
               flexDirection: 'column',
               padding: '72px 0',
-              gap: '10px'
+              gap: '36px'
             }}>
-              <h3 className='semi-bold black'>
-                Credencial
-              </h3>
-              <h1 className='black semi-bold'>
-                Presidente
-              </h1>
-              <h5 className='black regular'>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente at voluptatem beatae aut! Fugiat reprehenderit quasi ut nam, adipisci eaque et dolorem officia eveniet repudiandae! Inventore saepe expedita vero minus.
-              </h5>
+              <Box sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px'
+              }}>
+                <h3 className='semi-bold black'>
+                  Credencial
+                </h3>
+                <h1 className='black semi-bold'>
+                  Presidente
+                </h1>
+                <h5 className='black regular'>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente at voluptatem beatae aut! Fugiat reprehenderit quasi ut nam, adipisci eaque et dolorem officia eveniet repudiandae! Inventore saepe expedita vero minus.
+                </h5>
+              </Box>
               <button onClick={() => navigate('/meu-perfil')} className='button-purple' style={{ width: '182px' }}>
                 Meus Dados <BsArrowUpRight size={20} style={{ verticalAlign: 'bottom' }} />
               </button>
@@ -102,7 +108,6 @@ export default function President() {
             <Box sx={{
               display: 'flex',
               flexDirection: 'column',
-              padding: '72px 0',
               gap: '36px'
             }}>
 
@@ -128,7 +133,7 @@ export default function President() {
             )}
           </Grid>
 
-          {reunionData &&
+          {reunionData && reunionData.length >= 1 &&
             reunionData.filter((reunion) => reunion).slice(0, 4).map((reunion) => (
               <Grid item xs={12} md={3} pr={matches ? 2 : 0} key={reunion._id}>
                 <Box sx={{
@@ -183,7 +188,7 @@ export default function President() {
             <Box sx={{
               display: 'flex',
               flexDirection: 'column',
-              padding: '72px 0',
+              padding: '72px 0 20px 0',
               gap: '36px'
             }}>
 
@@ -192,7 +197,7 @@ export default function President() {
                 justifyContent: 'space-between',
               }}>
                 <h3 className='black semi-bold'>
-                 Gerenciar Produtores
+                  Gerenciar Produtores
                 </h3>
               </Box>
             </Box>
@@ -259,7 +264,7 @@ export default function President() {
               </Box>
             )}
           </Grid>
-          
+
         </Grid>
 
       </Container >

@@ -47,7 +47,7 @@ export const createReunion = createAsyncThunk('reunion/createReunion', async (re
 export const finishReunion = createAsyncThunk('reunion/finishReunion', async (reunion, thunkAPI) => {
     try {
         const response = await reunionService.finishReunion(reunion);
-        thunkAPI.dispatch(getReunions(reunion.token));
+        thunkAPI.dispatch(getOneReunion(reunion));
         return response;
     }
     catch (error) {
@@ -64,7 +64,7 @@ export const finishReunion = createAsyncThunk('reunion/finishReunion', async (re
 export const addReunionAta = createAsyncThunk('reunion/addReunionAta', async (reunion, thunkAPI) => {
     try {
         const response = await reunionService.addReunionAta(reunion);
-        thunkAPI.dispatch(getReunions(reunion.token));
+        thunkAPI.dispatch(getOneReunion(reunion));
         return response;
     }
     catch (error) {
@@ -80,7 +80,7 @@ export const addReunionAta = createAsyncThunk('reunion/addReunionAta', async (re
 export const signAta = createAsyncThunk('reunion/signAta', async (reunion, thunkAPI) => {
     try {
         const response = await reunionService.signAta(reunion);
-        thunkAPI.dispatch(getReunions(reunion.token));
+        thunkAPI.dispatch(getOneReunion(reunion));
         return response;
     }
     catch (error) {
@@ -112,7 +112,22 @@ export const deleteReunion = createAsyncThunk('reunion/deleteReunion', async (re
 export const presenceList = createAsyncThunk('reunion/presenceList', async (reunion, thunkAPI) => {
     try {
         const response = await reunionService.presenceList(reunion);
-        thunkAPI.dispatch(getReunions(reunion.token));
+        thunkAPI.dispatch(getOneReunion(reunion));
+        return response;
+    }
+    catch (error) {
+        // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message);
+
+    }
+})
+
+// pegar única reunião
+
+export const getOneReunion = createAsyncThunk('reunion/getOneReunion', async (reunion, thunkAPI) => {
+    try {
+        const response = await reunionService.getOneReunion(reunion);
         return response;
     }
     catch (error) {
@@ -269,6 +284,23 @@ export const reunionSlice = createSlice({
                 state.isSuccess = false;
                 state.isError = true;
                 state.message = action.payload;
+            })
+            // pegar única reunião
+            .addCase(getOneReunion.pending, (state) => {
+                state.isLoading = true;
+                state.isSuccess = false;
+                state.isError = false;
+            })
+            .addCase(getOneReunion.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = false;
+                state.isError = false;
+                state.reunionData = action.payload;
+            })
+            .addCase(getOneReunion.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = false;
+                state.isError = true;
             })
     }
 })

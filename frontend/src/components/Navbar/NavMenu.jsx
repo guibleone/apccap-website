@@ -6,10 +6,9 @@ import {
 } from '@mui/material';
 import {
     TbMenu2, TbArrowNarrowLeft, TbArrowNarrowRight,
-    TbSearch, TbHome2, TbUsers, TbNews, TbHome, TbMessage
+    TbSearch, TbHome2, TbUsers, TbNews, TbHome, TbMessage, TbFile
 } from "react-icons/tb";
 import { MdLiquor } from "react-icons/md";
-
 import { useNavigate, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'
 import { logout, reset } from '../../features/auth/authSlice';
@@ -21,6 +20,7 @@ import { reset as resetAdmin } from "../../features/admin/adminSlice"
 import { reset as resetProducts } from "../../features/products/productsSlice"
 import { reset as resetSpreadsheet } from "../../features/spreadSheet/spreadSheetSlice"
 import { resetPayments } from "../../features/payments/paymentsSlice"
+import { IoDocumentsOutline } from "react-icons/io5";
 
 const drawerWidth = '65%';
 
@@ -264,7 +264,7 @@ function NavMenu() {
 
                         <ListItem >
                             <ListItemIcon>
-                                <TbNews style={{ color: "#FAF8F8" }} />
+                                <IoDocumentsOutline style={{ color: "#FAF8F8" }} />
                             </ListItemIcon>
                             <a style={
                                 {
@@ -400,6 +400,37 @@ function NavMenu() {
 
                 </List>
 
+                {/* tesoureiro */}
+                {user && user.role === 'tesoureiro' && <>
+                <ListItem >
+                            <ListItemIcon>
+                                <TbHome style={{ color: "#FAF8F8" }} />
+                            </ListItemIcon>
+                            <a style={
+                                {
+                                    color: 'inherit',
+                                    textDecoration: 'none',
+
+                                }
+                            } href="/">Início</a>
+                        </ListItem>
+
+                        <ListItem >
+                            <ListItemIcon>
+                                <TbFile style={{ color: "#FAF8F8" }} />
+                            </ListItemIcon>
+                            <a style={
+                                {
+                                    color: 'inherit',
+                                    textDecoration: 'none',
+
+                                }
+                            } href="/balancos">Balanços</a>
+                        </ListItem>
+
+                        </>}
+
+
                 <List>
 
                 {user && (
@@ -421,7 +452,7 @@ function NavMenu() {
                     ) : (
 
                         <ListItem sx={{ justifyContent: 'center' }}>
-                            <button className='button-white ' onClick={onLogout}>
+                            <button className='button-white small' onClick={onLogout}>
                                 sair
                             </button>
                         </ListItem>
