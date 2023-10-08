@@ -388,7 +388,7 @@ export const adminSlice = createSlice({
                 state.isError = false
             })
             .addCase(alterAccess.fulfilled, (state, action) => {
-                state.isSuccess = true
+                state.isSuccess = false
                 state.isLoading = false
                 state.isError = false
                 state.userData = action.payload

@@ -1,23 +1,26 @@
 import { Alert, Avatar, Box, Button, Card, CardActions, CardContent, CardMedia, CircularProgress, Container, Divider, Grid, Typography, useMediaQuery } from '@mui/material'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { getProducts, getUserData } from '../../../../../features/admin/adminSlice'
 import { BiTrashAlt } from 'react-icons/bi'
 import { AiOutlineEdit } from 'react-icons/ai'
 import { colors } from '../../../../colors'
+import { MdLiquor } from 'react-icons/md'
+import ProductsPagination from '../../../../../components/Pagination/Products'
 
 export default function UserProducts() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const { productsData } = useSelector((state) => state.admin)
-    const matches = useMediaQuery('(max-width: 600px)')
+    const matches = useMediaQuery('(min-width: 600px)')
 
     const { id } = useParams()
 
     const { userData } = useSelector((state) => state.admin)
     const { user } = useSelector((state) => state.auth)
+
+    const [products, setProducts] = useState()
 
 
     useEffect(() => {
@@ -27,123 +30,96 @@ export default function UserProducts() {
 
     useEffect(() => {
         window.scrollTo(0, 0)
-      }, []);
-      if ( !userData || !userData.dados_pessoais || !productsData) {
+    }, []);
+    if (!userData || !userData.dados_pessoais) {
 
         return <Box sx={
-          {
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: colors.main_white,
-            minHeight: '100vh'
-          }
-        }>
-          <CircularProgress sx={
             {
-              marginBottom: '100px',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: colors.main_white,
+                minHeight: '100vh'
             }
-          } size={100} />
+        }>
+            <CircularProgress sx={
+                {
+                    marginBottom: '100px',
+                }
+            } size={100} />
         </Box>
-      }
-    
+    }
+
 
     return (
         <Box sx={{
-            backgroundColor:colors.main_white,
+            backgroundColor: colors.main_white,
             minHeight: '100vh',
         }}>
-        <Container maxWidth='lg'>
-            { userData &&  userData.dados_pessoais && (
-            <Grid container spacing={2}>
+            <Container maxWidth='xl'>
+                {userData && userData.dados_pessoais && (
+                    <Grid container spacing={2} p={matches ? 9 : 0} pt={!matches ? 9 : 2} >
+                        <Grid item xs={12} lg={12}>
+                            <div className='title'>
+                                <Avatar src={userData.dados_pessoais ? userData.dados_pessoais.profilePhoto : 'https://placehold.co/600x400'} alt="Foto de Perfil"
+                                    sx={{ width: 66, height: 66 }}
 
-                <Grid item xs={12} md={6} lg={3}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', padding: '10px' }}>
-                        <Avatar src={userData &&  userData.dados_pessoais &&  userData.dados_pessoais.profilePhoto} sx={{ width: '100px', height: '100px' }} />
-                    </Box>
-                </Grid>
+                                />
+                                <h2 className='black bold'>
+                                    {userData?.dados_pessoais?.name.split(' ')[0]} {userData?.dados_pessoais?.name.split(' ')[userData?.dados_pessoais?.name.split(' ').length - 1]}
+                                </h2>
 
-                <Grid item xs={12} md={6} lg={6}>
-                    <Box sx={{ display: 'flex', gap: '5px', justifyContent: 'center', flexDirection: 'column', padding: '10px' }}>
-                        {userData && userData.address ? (
-                            <>
-                                <Typography variant='p'>CEP - {userData.dados_pessoais.address.cep} </Typography>
-                                <Typography variant='p'>{userData.dados_pessoais.address.logradouro} , {userData.dados_pessoais.address.numero} </Typography>
-                                <Typography variant='p'>{userData.dados_pessoais.address.cidade} / {userData.dados_pessoais.address.estado} </Typography>
-                            </>
-                        ) :
-                            <>
-                                <Typography variant='p'>{userData.dados_pessoais.name} não possui endereço registrado</Typography>
-                            </>
-                        }
-                    </Box>
-                </Grid>
-
-                <Grid item xs={12} md={6} lg={3}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', padding: '10px' }}>
-                        <Typography variant='body'> {userData && userData.resumo ? userData.resumo : 'Usário não possui resumo de produtor' }</Typography>
-                    </Box>
-                </Grid>
-
-            </Grid>
-            )}
-
-            <Divider sx={{ margin: '10px 0' }} />
-
-            {productsData && productsData.length === 0 ?
-
-                (<Typography variant="h5" gutterBottom>Nenhum produto cadastrado</Typography>)
-
-                : (
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px', overflow: 'hidden' }}>
-
-                        <Typography sx={{ textAlign: 'center', padding: 1, }} variant={'h5'} >Produtos Para Análise</Typography>
-
-                        <Grid
-                            sx={{ margin: '10px 0', display: 'flex', flexDirection: matches ? 'column' : 'row', gap: matches ? '20px' : '0' }}
-                            container={!matches}
-                            rowSpacing={{ xs: 8, sm: 6, md: 3 }}
-                            columnSpacing={{ xs: 8, sm: 6, md: 3 }}
-                        >
-
-                            {productsData && productsData.map((product) => (
-
-                                <>
-                                    {product.status === '' &&
-
-                                        <Grid alignSelf={'center'} item key={product._id} md={3}>
-
-                                            <Card
-                                                sx={{
-                                                    maxWidth: matches ? 352 : 252,
-                                                    minWidth: 262,
-                                                    border: matches ? '1px solid #E4E3E3' : 'none',
-                                                    borderRadius: '5px',
-                                                }}>
-
-                                                <CardMedia
-                                                    sx={{ height: 252 }}
-                                                    image={product.path ? product.path : 'https://as1.ftcdn.net/jpg/02/68/55/60/220_F_268556012_c1WBaKFN5rjRxR2eyV33znK4qnYeKZjm.jpg'}
-                                                />
-
-                                                <CardContent>
-                                                    <Typography sx={{ textAlign: 'center' }} variant="h6" component="h1">{product.name}</Typography>
-                                                </CardContent>
+                                <h3 style={{ textAlign: 'center' }} className='regular black'>
+                                    Requer análise dos produtos
+                                </h3>
 
 
-                                                <CardActions sx={{ display: 'flex', justifyContent: 'center', gap: '5px' }}>
-                                                    <Button variant='outlined' color='warning' onClick={() => navigate(`/unico-produto-usuario/${product._id}`)}>Ver Produto</Button>
-                                                </CardActions>
-                                            </Card>
-
-                                        </Grid>
-                                    }
-                                </>
-                            ))}
+                            </div>
                         </Grid>
-                    </Box>
+
+                    </Grid>
                 )}
-        </Container>
+
+                <Grid container rowSpacing={3} pt={5} >
+                    <Grid item >
+                        {(products?.length === 0) && (
+                            <h3 className='regular black'>
+                                Você ainda não cadastrou nenhum produto.
+                            </h3>
+                        )}
+                    </Grid>
+
+                    {products &&
+                        products?.filter((product) => product).slice(0, 4).map((product) => (
+                            <Grid item xs={12} md={3} pr={matches ? 2 : 0} key={product._id}>
+                                <Box sx={{
+                                    backgroundColor: colors.main_grey,
+                                    padding: '20px',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '24px'
+                                }}>
+                                    <Box sx={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                    }}>
+                                        <h3 className='semi-bold black'>
+                                            {product.name}
+                                        </h3>
+                                        <MdLiquor size={30} style={{ verticalAlign: 'bottom', marginLeft: '5px' }} />
+                                    </Box>
+                                    <Box>
+                                        <button className='button-grey-bottom-border' onClick={() => navigate(`/unico-produto-usuario/${product._id}`)}>
+                                            ver produto
+                                        </button>
+                                    </Box>
+
+                                </Box>
+                            </Grid>
+                        ))}
+                </Grid>
+                <ProductsPagination setProductsData={(u) => setProducts(u)} status={true} />
+            </Container>
         </Box>
     )
 }

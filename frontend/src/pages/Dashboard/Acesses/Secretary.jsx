@@ -166,7 +166,7 @@ export default function Secretary() {
             )}
           </Grid>
 
-          <Grid item xs={12} sm={6} lg={6}>
+          <Grid item xs={12} sm={6} lg={6} pb={10}>
 
             <Box sx={{
               display: 'flex',
@@ -181,12 +181,6 @@ export default function Secretary() {
             </Box>
           </Grid>
 
-        </Grid>
-
-
-
-        <Grid container spacing={2}>
-          
         </Grid>
 
 

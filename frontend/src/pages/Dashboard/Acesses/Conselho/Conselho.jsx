@@ -128,7 +128,7 @@ export default function Conselho() {
                                 display: 'flex',
                                 justifyContent: 'flex-end',
                             }}>
-                                <Link style={{ color: '#000', margin: '15px 0' }} to='/dredenciamento'> Ver Tudo</Link>
+                                <Link style={{ color: '#000', margin: '15px 0' }} to='/credenciamento'> Ver Tudo</Link>
                             </Box>
                         )}
                     </Grid>
@@ -197,7 +197,7 @@ export default function Conselho() {
                                 display: 'flex',
                                 justifyContent: 'flex-end',
                             }}>
-                                <Link style={{ color: '#000', margin: '15px 0' }} to='/dredenciamento'> Ver Tudo</Link>
+                                <Link style={{ color: '#000', margin: '15px 0' }} to='/produtos-conselho'> Ver Tudo</Link>
                             </Box>
                         )}
                     </Grid>

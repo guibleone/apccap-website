@@ -1,19 +1,32 @@
 import { Box, Pagination } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
+import { listUsers } from '../../features/admin/adminSlice'
 
 
-export default function UsersPagination({ setUsersData,status }) {
-    
+export default function UsersPagination({ setUsersData, status, productsQuantity }) {
+    const dispatch = useDispatch()
+
     const { users } = useSelector((state) => state.admin)
+    const { user } = useSelector((state) => state.auth)
+
+    useEffect(() => {
+
+        if (user && (user.role === "admin" || user.role === 'secretario' || user.role === 'presidente' || user.role === 'conselho')) {
+            dispatch(listUsers(user.token))
+        }
+
+    }, [user])
+
 
     const service = {
         getData: ({ from, to }) => {
             return new Promise((resolve, reject) => {
 
                 const data = users
-                .filter(reunion => (!status || reunion.status === status))
-                .slice(from, to)
+                    .filter(user => (!status || user.status === status))
+                    .filter(user => (productsQuantity ? user.productsQuantity >= 1 : user))
+                    .slice(from, to)
 
                 resolve({
                     count: users.length,

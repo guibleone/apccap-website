@@ -42,7 +42,7 @@ export default function Credencial() {
             toast.error(message, styleError)
         }
 
-        reset()
+        dispatch(reset())
 
     }, [isSuccess, isError, message])
 

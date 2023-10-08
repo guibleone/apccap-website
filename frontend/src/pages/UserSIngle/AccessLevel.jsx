@@ -43,12 +43,13 @@ function AccessLevel({ id, token }) {
     }
 
     dispatch(alterAccess(acessData))
+    toast.success('Acesso alterado', styleSuccess)
   }
 
   useEffect(() => {
 
     if (isSuccess) {
-      toast.success('Acesso alterado', styleSuccess)
+      
     }
 
   }, [])
@@ -88,11 +89,12 @@ function AccessLevel({ id, token }) {
 
       <Typography variant="body2" color="text.secondary"> <b>Acesso Atual: </b> {acesso}</Typography>
 
-      <Button onClick={handleSubmit} fullWidth variant="contained" sx={
+      <button className='button-purple' onClick={handleSubmit} style={
         {
           margin: '15px 0',
+          width: '100%'
         }
-      } disabled={user._id === id}>Alterar</Button>
+      } disabled={user._id === id}>Alterar</button>
 
     </Box>
 

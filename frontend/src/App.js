@@ -33,6 +33,8 @@ import Produtores from './pages/Dashboard/Acesses/Presidente/Produtores';
 import Balancos from './pages/Dashboard/Acesses/Tesoureiro/Balanços';
 import SingleReunion from './components/Reunions/SingleReunion';
 import DocumentosPublicos from './pages/Documentos/DocumentosPublicos';
+import Credenciamento from './pages/Dashboard/Acesses/Conselho/Credenciamento';
+import TodosProdutos from './pages/Dashboard/Acesses/Conselho/TodosProdutos';
 
 function App() {
   return (
@@ -69,6 +71,8 @@ function App() {
           <Route path='/balancos' element={<Balancos />} />
           <Route path='/reuniao/:id' element={<SingleReunion />} />
           <Route path='/documentos' element={<DocumentosPublicos />} />
+          <Route path='/credenciamento' element={<Credenciamento />} />
+          <Route path='/produtos-conselho' element={<TodosProdutos />} />
           <Route path='*' element={<h1>Not Found 404</h1>} />
         </Routes> 
       </Router>

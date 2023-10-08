@@ -1,4 +1,4 @@
-import { Alert, Box, Button, CircularProgress, Container, Divider, Grid, Modal, Typography, useMediaQuery } from '@mui/material'
+import { Alert, Box, Button, CircularProgress, Container, Divider, Grid, Modal, TextField, Typography, useMediaQuery } from '@mui/material'
 import { useParams } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
@@ -193,48 +193,169 @@ export default function SingleUserProduct() {
       backgroundColor: colors.main_white,
       minHeight: '100vh',
     }}>
-      <Container maxWidth='lg'>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={12} lg={3} >
-            <Typography variant='h5'>Informações do Produto</Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-              <Typography variant='p'><strong>Nome:</strong> {productData?.name}</Typography>
-              <Typography variant='p'><strong>Descrição:</strong> {productData?.description}</Typography>
-              <Typography variant='p'><strong>Selos Pedidos:</strong> {productData?.selo?.quantity}</Typography>
+      <Container maxWidth='xl'>
+
+        <Grid container spacing={2} pt={!matches ? 9 : 2} >
+
+
+          <Grid item xs={12} md={4}>
+            <Box sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '10px'
+            }}>
+
+              <h3 style={{
+                fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: !matches ? '100%' : '270px',
+                textAlign: matches ? 'left' : 'center'
+              }} >
+                Propriedade
+              </h3>
+
+              <div>
+                <label style={{ fontWeight: 600 }}>Nome </label>
+                <h4 className='regular black'>
+                  {userData?.propriedade?.nome_propriedade}
+                </h4>
+              </div>
+
+              <div>
+                <label style={{ fontWeight: 600 }}>Área Total </label>
+                <h4 className='regular black'>
+                  {userData?.propriedade?.area_total}
+                </h4>
+              </div>
+
+
+              <div>
+                <label style={{ fontWeight: 600 }}>CPF do proprietário </label>
+                <h4 className='regular black'>
+                  {userData?.propriedade?.cpfProprietario}
+                </h4>
+              </div>
+
+
+              <div>
+                <label style={{ fontWeight: 600 }}>Endereço </label>
+                <h4 className='regular black'>
+                  {userData?.propriedade?.logradouro_propriedade} , {userData?.propriedade?.numero_propriedade} <br />
+                  {userData?.propriedade?.cidade_propriedade} / {userData?.propriedade?.estado_propriedade}
+                </h4>
+              </div>
+
+              <div>
+                <label style={{ fontWeight: 600 }}>Telefone</label>
+                <h4 className='regular black'>
+                  {userData?.propriedade?.telefone_propriedade}
+                </h4>
+              </div>
+
+              <div>
+                <label style={{ fontWeight: 600 }}>Celular</label>
+                <h4 className='regular black'>
+                  {userData?.propriedade?.celular_propriedade}
+                </h4>
+              </div>
+
             </Box>
           </Grid>
-          <Grid item xs={12} sm={12} lg={3} >
-            <Typography variant='h5'>Documentos</Typography>
-            <Box sx={{ minHeight: '80px', paddingRight: 1 }}>
-              {productData?.relatorys && productData?.relatorys.length > 0 ? productData?.relatorys.map((doc) => (
-                <>
-                  <Box key={doc._id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Typography variant='p' noWrap>{doc.name}</Typography>
-                    <Button variant='outlined' color="success" href={doc.path} download={doc.name}><AiOutlineDownload /></Button>
-                  </Box>
-                  <Divider sx={{ margin: '5px 0' }} />
-                </>
-              )) : <Typography variant='p'>Nenhum documento enviado</Typography>}
+
+          <Grid item xs={12} md={4}>
+            <Box sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '10px'
+            }}>
+
+              <h3 style={{
+                fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: !matches ? '100%' : '270px',
+                textAlign: matches ? 'left' : 'center'
+              }} >
+                Informações do produto
+              </h3>
+
+
+              <div>
+                <label style={{ fontWeight: 600 }}>Nome </label>
+                <h4 className='regular black'>
+                  {productData?.name}
+                </h4>
+              </div>
+
+              <div>
+                <label style={{ fontWeight: 600 }}>Descrição </label>
+                <h4 className='regular black'>
+                  {productData?.description}
+                </h4>
+              </div>
+
+              <div>
+                <label style={{ fontWeight: 600 }}>Selos pedidos </label>
+                <h4 className='regular black'>
+                  {productData?.selo?.quantity}
+                </h4>
+              </div>
+
             </Box>
+
           </Grid>
+
+          <Grid item xs={12} md={4}>
+            <Box sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '10px'
+            }}>
+
+              <h3 style={{
+                fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: !matches ? '100%' : '270px',
+                textAlign: matches ? 'left' : 'center'
+              }} >
+                Documentos
+              </h3>
+
+              <Box >
+                {productData?.relatorys && productData?.relatorys.length > 0 ? productData?.relatorys.map((doc) => (
+                  <>
+                    <Box key={doc._id} sx={{ display: 'flex', justifyContent: 'space-between', paddingTop: '10px' }}>
+                      <h4 className='regular black'>{doc.name}</h4>
+                      <Button variant='outlined' color="success" href={doc.path} download={doc.name}><AiOutlineDownload /></Button>
+                    </Box>
+
+                    <Divider sx={{ margin: '5px 0' }} />
+                  </>
+                )) : <h4 >Nenhum documento enviado</h4>}
+
+              </Box>
+
+            </Box>
+
+          </Grid>
+
+
+
         </Grid>
 
-        <Divider sx={{ margin: '20px 0' }} />
 
-        <Typography textAlign={'center'} variant='h5'>Etapas da Análise</Typography>
 
         <Grid container spacing={2} sx={{ marginTop: '20px', marginBottom: '40px' }} >
-
+          <Grid item xs={12} sm={12} lg={12} pb={4} >
+            <h3 style={{
+              fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: !matches ? '100%' : '270px',
+              textAlign: matches ? 'left' : 'center'
+            }} >
+              Etapas da análise
+            </h3>
+          </Grid>
           <Grid item xs={12} sm={12} lg={3.9} >
-
             <form name="analise_pedido" onSubmit={handleSubmit}>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center' }}>
-                <Typography variant='h6'>Análise do pedido</Typography>
-                <Typography variant='p'>Parecer sobre os documentos do produtor</Typography>
+                <h3 >Análise do pedido</h3>
+                <h4 style={{ textAlign: 'center' }} className="regular black">Parecer sobre os documentos do produtor</h4>
                 {productData?.analise && !productData?.analise?.analise_pedido?.path ? (
                   <>
-                    <input onChange={onChange} type="file" name="analise_pedido" ref={fileInput} />
-                    <Button type="submit" variant="outlined" color="primary">Adicionar</Button>
+                    <TextField size="small" type='file' onChange={onChange} name="analise_pedido" inputRef={fileInput} />
+                    <button type="submit" className="button-purple">Adicionar</button>
                   </>
                 ) : (
                   <>
@@ -272,13 +393,14 @@ export default function SingleUserProduct() {
           <Grid item xs={12} sm={12} lg={3.9} >
             <form name='vistoria' onSubmit={handleSubmit}>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center' }}>
-                <Typography variant='h6'>Vistoria</Typography>
-                <Typography variant='p'>Parecer do técnico sobre a cadeia produtiva</Typography>
+                <h3 >Vistoria</h3>
+                <h4 style={{ textAlign: 'center' }} className="regular black" >Parecer do técnico sobre a cadeia produtiva</h4>
+
                 {(productData?.analise?.vistoria?.path === '') ? (
                   (productData?.analise?.analise_pedido?.status !== 'aprovado') ? (<FcPrivacy size={35} />) : (
                     <>
-                      <input onChange={onChange} type="file" name="vistoria" id="vistoria" ref={fileInput} />
-                      <Button type="submit" variant="outlined" color="primary">Adicionar</Button>
+                      <TextField size="small" onChange={onChange} type="file" name="vistoria" id="vistoria" inputRef={fileInput} />
+                      <button type="submit" className="button-purple">Adicionar</button>
                     </>
                   )
                 ) : (
@@ -320,13 +442,13 @@ export default function SingleUserProduct() {
 
                   'center'
               }}>
-                <Typography variant='h6'>Análise Laboratorial</Typography>
-                <Typography variant='p'>Parecer do laboratório credenciado</Typography>
+                <h3 >Análise Laboratorial</h3>
+                <h4 style={{ textAlign: 'center' }} className="regular black" >Parecer do laboratório credenciado</h4>
                 {productData?.analise && !productData?.analise?.analise_laboratorial?.path ?
                   (productData?.analise?.analise_pedido?.status !== 'aprovado' || productData?.analise?.vistoria?.status !== 'aprovado') ? (<FcPrivacy size={35} />) : (
                     <>
-                      <input onChange={onChange} type="file" name="analise_laboratorial" ref={fileInput} />
-                      <Button type="submit" variant="outlined" color="primary">Adicionar</Button>
+                      <TextField size="small" onChange={onChange} type="file" name="analise_laboratorial" inputRef={fileInput} />
+                      <button type="submit" className="button-purple">Adicionar</button>
                     </>
                   ) : (
                     <>
