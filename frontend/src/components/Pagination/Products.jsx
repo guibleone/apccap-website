@@ -10,6 +10,7 @@ export default function ProductsPagination({ setProductsData, status }) {
 
     useEffect(() => {
 
+        if(userData) return
         const data = {
             id: userData._id,
             token: user.token
@@ -17,7 +18,7 @@ export default function ProductsPagination({ setProductsData, status }) {
 
         dispatch(getProducts(data))
 
-    }, [user])
+    }, [userData])
 
 
     const productsData = useSelector((state) => state.admin.productsData ? state.admin.productsData : state.products.productsData)
@@ -27,7 +28,7 @@ export default function ProductsPagination({ setProductsData, status }) {
             return new Promise((resolve, reject) => {
 
                 const data = productsData
-                .filter(product => status && product.analise.analise_laboratorial.path === "" )
+                .filter(product => status ? product.analise.analise_laboratorial.path === ""  : product)
                 .slice(from, to)
 
                 resolve({

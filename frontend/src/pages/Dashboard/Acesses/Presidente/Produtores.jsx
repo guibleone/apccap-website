@@ -34,7 +34,7 @@ export default function Produtores() {
             <Container maxWidth='xl'>
                 <Grid container spacing={2}>
                     <Grid item xs={12} lg={12}>
-                        <Box sx={{ textAlign: 'center' , padding: '72px 0', }}>
+                        <Box sx={{ textAlign: 'center', padding: '72px 0', }}>
                             <h1 className='bold black'>
                                 Produtores
                             </h1>
@@ -44,52 +44,49 @@ export default function Produtores() {
                         </Box>
                     </Grid>
 
-                    <Grid item xs={12} lg={12}>
-                        {users && users.filter(user => user.role === 'produtor_associado' || user.role === 'produtor').map((user) => (
+                    {users && users.filter(user => user.role === 'produtor_associado' || user.role === 'produtor').map((user) => (
 
 
-                            <Grid item xs={12} md={3} pr={matches ? 2 : 0} key={user._id}>
+                        <Grid item xs={12} md={3} pr={matches ? 2 : 0} key={user._id}  >
+                            <Box sx={{
+                                backgroundColor: colors.main_grey,
+                                padding: '20px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '24px'
+                            }}>
                                 <Box sx={{
-                                    backgroundColor: colors.main_grey,
-                                    padding: '20px',
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                }}>
+                                    <h4 className='semi-bold black'>
+                                        {user.dados_pessoais.name}
+                                    </h4>
+                                    <AiOutlineEdit size={25} />
+
+                                </Box>
+
+                                <Box sx={{
                                     display: 'flex',
                                     flexDirection: 'column',
-                                    gap: '24px'
+                                    gap: '5px'
                                 }}>
-                                    <Box sx={{
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                    }}>
-                                        <h4 className='semi-bold black'>
-                                            {user.dados_pessoais.name}
-                                        </h4>
-                                        <AiOutlineEdit size={25} />
-
-                                    </Box>
-
-                                    <Box sx={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        gap: '5px'
-                                    }}>
-                                        <h4 className='semi-bold black'>{user.role === 'produtor_associado' ? 'Produtor Associado' : user.role}</h4>
-                                        <Link className='regular black italic' to={`/usuario-credenciado/${user._id}`}>
-                                            <h5>Ver Produtor</h5>
-                                        </Link>
-                                    </Box>
+                                    <h4 className='semi-bold black'>{user.role === 'produtor_associado' ? 'Produtor Associado' : user.role}</h4>
+                                    <Link className='regular black italic' to={`/usuario-credenciado/${user._id}`}>
+                                        <h5>Ver Produtor</h5>
+                                    </Link>
                                 </Box>
-                            </Grid>
+                            </Box>
+                        </Grid>
 
 
-                        ))
-                        }
-
-                        <UsersPagination setUsersData={(u) => setUsers(u)} />
-
-                    </Grid>
-
+                    ))
+                    }
 
                 </Grid>
+
+                <UsersPagination setUsersData={(u) => setUsers(u)} />
+                
             </Container>
         </Box>
     )

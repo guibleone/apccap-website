@@ -21,8 +21,9 @@ const userSchema = new mongoose.Schema({
     acessLevel: {
         type: Number
     },
-    address: {
-        type: mongoose.SchemaTypes.Mixed,
+    credencial: {
+        type: String,
+        default: ''
     },
     role: {
         type: String,

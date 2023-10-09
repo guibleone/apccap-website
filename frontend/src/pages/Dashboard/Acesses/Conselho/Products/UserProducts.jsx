@@ -84,7 +84,7 @@ export default function UserProducts() {
                     <Grid item >
                         {(products?.length === 0) && (
                             <h3 className='regular black'>
-                                Você ainda não cadastrou nenhum produto.
+                                Nenhum produto cadastrado
                             </h3>
                         )}
                     </Grid>

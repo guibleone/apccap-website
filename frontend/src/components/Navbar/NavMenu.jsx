@@ -6,9 +6,9 @@ import {
 } from '@mui/material';
 import {
     TbMenu2, TbArrowNarrowLeft, TbArrowNarrowRight,
-    TbSearch, TbHome2, TbUsers, TbNews, TbHome, TbMessage, TbFile
+    TbSearch, TbHome2, TbUsers, TbNews, TbHome, TbMessage, TbFile, TbId, TbGlass, TbBrandZoom, TbFiles
 } from "react-icons/tb";
-import { MdLiquor } from "react-icons/md";
+import { MdLiquor, MdOutlineLiquor } from "react-icons/md";
 import { useNavigate, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'
 import { logout, reset } from '../../features/auth/authSlice';
@@ -354,7 +354,7 @@ function NavMenu() {
 
                         <ListItem >
                             <ListItemIcon>
-                                <TbNews style={{ color: "#FAF8F8" }} />
+                                <TbId style={{ color: "#FAF8F8" }} />
                             </ListItemIcon>
                             <a style={
                                 {
@@ -427,6 +427,106 @@ function NavMenu() {
                                 }
                             } href="/balancos">Balanços</a>
                         </ListItem>
+
+                        </>}
+
+                        {/* conselho regulador */}
+                        {user && user.role === 'conselho' && <>
+                <ListItem >
+                            <ListItemIcon>
+                                <TbHome style={{ color: "#FAF8F8" }} />
+                            </ListItemIcon>
+                            <a style={
+                                {
+                                    color: 'inherit',
+                                    textDecoration: 'none',
+
+                                }
+                            } href="/">Início</a>
+                        </ListItem>
+
+                        <ListItem >
+                            <ListItemIcon>
+                                <TbId style={{ color: "#FAF8F8" }} />
+                            </ListItemIcon>
+                            <a style={
+                                {
+                                    color: 'inherit',
+                                    textDecoration: 'none',
+
+                                }
+                            } href="/credenciamento">Credenciamento</a>
+                        </ListItem>
+
+                        <ListItem >
+                            <ListItemIcon>
+                                <MdOutlineLiquor style={{ color: "#FAF8F8" }} />
+                            </ListItemIcon>
+                            <a style={
+                                {
+                                    color: 'inherit',
+                                    textDecoration: 'none',
+
+                                }
+                            } href="/produtos-conselho">Produtos</a>
+                        </ListItem>
+
+                        <ListItem >
+                            <ListItemIcon>
+                                <TbMessage style={{ color: "#FAF8F8" }} />
+                            </ListItemIcon>
+                            <a style={
+                                {
+                                    color: 'inherit',
+                                    textDecoration: 'none',
+
+                                }
+                            } href="/reunioes">Reuniões</a>
+                        </ListItem>
+
+                        </>}
+
+                        {/* secretário */}
+                        {user && user.role === 'secretario' && <>
+                <ListItem >
+                            <ListItemIcon>
+                                <TbHome style={{ color: "#FAF8F8" }} />
+                            </ListItemIcon>
+                            <a style={
+                                {
+                                    color: 'inherit',
+                                    textDecoration: 'none',
+
+                                }
+                            } href="/">Início</a>
+                        </ListItem>
+
+                        <ListItem >
+                            <ListItemIcon>
+                                <TbMessage style={{ color: "#FAF8F8" }} />
+                            </ListItemIcon>
+                            <a style={
+                                {
+                                    color: 'inherit',
+                                    textDecoration: 'none',
+
+                                }
+                            } href="/reunioes">Reuniões</a>
+                        </ListItem>
+
+                        <ListItem >
+                            <ListItemIcon>
+                                <TbFiles style={{ color: "#FAF8F8" }} />
+                            </ListItemIcon>
+                            <a style={
+                                {
+                                    color: 'inherit',
+                                    textDecoration: 'none',
+
+                                }
+                            } href="/relatorios">Relatórios</a>
+                        </ListItem>
+
 
                         </>}
 

@@ -12,6 +12,8 @@ import { toast } from 'react-toastify'
 import { disapproveUser } from '../../../../features/admin/adminSlice'
 import { FcCancel, FcDeleteDatabase, FcOk } from 'react-icons/fc'
 import ProductsPagination from '../../../../components/Pagination/Products'
+import { colors } from '../../../colors'
+import { MdLiquor } from 'react-icons/md'
 
 export default function User() {
     const { user } = useSelector((state) => state.auth)
@@ -19,7 +21,7 @@ export default function User() {
     const { payments, isLoading: isLoadingPayment } = useSelector((state) => state.payments)
     const matches = useMediaQuery('(min-width:800px)')
 
-    const [productsData, setProductsData] = useState([])
+    const [products, setProducts] = useState()
 
     const [openDesaprove, setOpenDesaprove] = useState(false);
 
@@ -92,7 +94,7 @@ export default function User() {
 
         dispatch(getProducts(data))
 
-    }, [id, user.token, dispatch])
+    }, [id, user.token])
 
     useEffect(() => {
 
@@ -100,7 +102,7 @@ export default function User() {
             dispatch(getSubscription({ email: produtor.email, token: user.token }))
         }
 
-    }, [produtor, user.token, dispatch])
+    }, [produtor, user.token])
 
     useEffect(() => {
         window.scrollTo(0, 0)
@@ -111,183 +113,217 @@ export default function User() {
             {
                 display: 'flex',
                 justifyContent: 'center',
-                padding: '50px',
+                alignItems: 'center',
+                backgroundColor: colors.main_white,
                 minHeight: '100vh'
             }
         }>
-            <CircularProgress size={100} />
+            <CircularProgress sx={
+                {
+                    marginBottom: '100px',
+                }
+            } size={100} />
         </Box>
     }
-
     return (
-        <Container sx={{ minHeight: '100vh' }}>
-            <Grid container  >
-                <Grid item xs={12} md={4} >
-                    <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '10px', padding: '10px' }}>
+        <Box sx={{
+            backgroundColor: colors.main_white,
+            minHeight: '100vh',
+        }}>
+            <Container maxWidth='xl'>
+                {produtor && produtor.dados_pessoais && (
+                    <Grid container spacing={2} p={matches ? 9 : 0} pt={!matches ? 9 : 2} pb={5} >
+                        <Grid item xs={12} lg={12}>
+                            <div className='title'>
+                                <Avatar src={produtor.dados_pessoais ? produtor.dados_pessoais.profilePhoto : 'https://placehold.co/600x400'} alt="Foto de Perfil"
+                                    sx={{ width: 66, height: 66 }}
 
-                        <Typography textAlign={'center'} variant="h5" >{`${produtor && produtor.name}`}</Typography>
-
-
-
-                        <Avatar variant='square' src={produtor && produtor.pathFoto ? produtor.pathFoto : 'https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg'} alt=""
-                            sx={{
-                                width: '100%',
-                                height: '200px',
-                            }}
-                        />
-
-                    </Box>
-
-                </Grid>
-
-                <Divider orientation={'vertical'} flexItem />
-
-                <Grid item xs={12} md={5} sx={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center', padding: '10px' }}  >
-                            <Typography textAlign={'center'} variant="h5" >Análises do Produtor</Typography>
-                            {produtor.analise && produtor.analise.analise_pedido.path && 
-                            <>
-                                <Button startIcon={<AiOutlineDownload />} fullWidth variant='outlined' color='primary' href={produtor.analise.analise_pedido.path}>Análise de pedido</Button>
-                            </>}
-
-                            {produtor.analise && produtor.analise.vistoria.path && 
-                            <>
-                                <Button startIcon={<AiOutlineDownload />}  fullWidth variant='outlined' color='primary' href={produtor.analise.vistoria.path}>Vistoria</Button>
-                            </>}
-
-                            {produtor.analise && produtor.analise.analise_laboratorial.path && 
-                            <>
-                                <Button startIcon={<AiOutlineDownload />}  fullWidth variant='outlined' color='primary' href={produtor.analise.analise_laboratorial.path}>Análise Laboratorial</Button>
-                            </>}
-                
-                </Grid>
-
-                <Divider orientation="vertical" flexItem />
-
-                <Grid item xs={12} md={2} >
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItens: 'center', gap: '10px', padding: '10px' }}>
-
-
-                        <Typography textAlign={'center'} variant='h7'>Status Credencial {produtor && produtor.status ?
-                            (<FcOk style={{ verticalAlign: 'bottom' }} size={25} />) : (<FcCancel style={{ verticalAlign: 'bottom' }} size={25} />)}
-                        </Typography>
-
-                        <Typography sx={{ textAlign: 'center' }} variant='h7'>Assinatura Mensal {payments && payments.subscription ?
-                            (<FcOk style={{ verticalAlign: 'bottom' }} size={25} />) : (<FcCancel style={{ verticalAlign: 'bottom' }} size={25} />)}
-                        </Typography>
-
-
-                    </Box>
-
-                </Grid>
-
-                <Grid item xs={12} md={12} sx={{ margin: '10px 0' }}  >
-
-                    <Button fullWidth onClick={handleOpenDesaprove} color='error' variant='outlined'>Descredenciar</Button>
-
-                    <Modal
-                        open={openDesaprove}
-                        onClose={handleCloseDesaprove}
-                    >
-                        <Box sx={style}>
-                            <Box sx={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: '10px',
-                                alignItems: 'center',
-                            }}>
-                                <Box display={'flex'} justifyContent={'space-between'}>
-                                    <Typography variant="h6" >Tem certeza ? </Typography>
-                                    <AiFillWarning color='red' size={30} />
-                                </Box>
-
-                                <Typography textAlign={'center'} variant="h7" >Digite o motivo do descredenciamento.</Typography>
-
-                                <TextareaAutosize onChange={(e) => setRelatory(e.target.value)} minRows={8} style={{ width: '100%', padding: '10px', border: '1px solid black' }} />
-
-                                <Typography color={'red'} variant="h7" >Será enviado um email ao produtor.</Typography>
-
-                                <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
-
-                                    <Button color='error' variant='outlined' onClick={handleCloseDesaprove}>Cancelar</Button>
-
-                                    <Button
-                                        disabled={isLoadingAdmin}
-                                        color="success"
-                                        variant='outlined'
-                                        onClick={handleDessaprove}
-                                    >
-                                        {isLoadingAdmin ? <CircularProgress color="success" size={24} /> : 'Descredenciar'}
-                                    </Button>
-
-                                </Box>
-                            </Box>
-                        </Box>
-                    </Modal>
-
-
-                    <Button sx={{ margin: '10px 0' }} fullWidth variant='outlined' color='success' onClick={() => navigate('/')}>Voltar</Button>
-
-
-                </Grid>
-
-            </Grid>
-
-            <Divider sx={{ margin: '20px 0' }} />
-
-            <Grid container spacing={2}>
-
-                <Grid item xs={12} md={12} >
-
-                    <Typography textAlign={'center'} variant="h5" >Produtos</Typography>
-
-                </Grid>
-
-                {(productsData && productsData.length > 0) ? productsData.map((product) => (
-                    <>
-                        <Grid lg={3} md={4} sm={6} xs={12} item key={product._id} sx={{ display: 'flex', justifyContent: 'center' }} >
-                            <Card
-                                sx={{
-                                    maxWidth: matches ? 352 : 252,
-                                    minWidth: 252,
-                                    border: '1px solid #E4E3E3',
-                                    borderRadius: '5px',
-                                }}>
-
-                                <CardMedia
-                                    sx={{ height: matches ? 252 : 252 }}
-                                    image={product.path ? product.path : 'https://as1.ftcdn.net/jpg/02/68/55/60/220_F_268556012_c1WBaKFN5rjRxR2eyV33znK4qnYeKZjm.jpg'}
                                 />
+                                <h2 className='black bold'>
+                                    {produtor?.dados_pessoais?.name.split(' ')[0]} {produtor?.dados_pessoais?.name.split(' ')[produtor?.dados_pessoais?.name.split(' ').length - 1]}
+                                </h2>
 
-                                <CardContent>
-                                    <Typography sx={{ textAlign: 'center' }} variant="h6" component="h1">{product.name}</Typography>
-                                </CardContent>
+                                <h3 style={{ textAlign: 'center' }} className='regular black'>
+                                    Gerencie a utilização do produtor
+                                </h3>
 
-                                <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                    <Typography variant="p" >{product.description}</Typography>
-                                    <Typography variant="p" >{(product.selo && product.selo.startSelo) ? `${product.selo.startSelo} - ${product.selo.endSelo}` : 'Produto em análise'}</Typography>
-                                </CardContent>
 
-                            </Card>
-
+                            </div>
                         </Grid>
-                    </>
-
-
-                )) : (
-                    <Grid item md={12} xs={12} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', margin: '10px 0' }}>
-
-                        <>
-                            <FcDeleteDatabase size={100} />
-                            <Typography variant="h7" >Nenhum produto cadastrado</Typography>
-                        </>
 
                     </Grid>
                 )}
 
-            </Grid>
+                <Grid container  >
 
-            <ProductsPagination setProductsData={(p) => setProductsData(p)} />
+                    <Grid item xs={12} md={5}>
+                        <Box sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '40px'
+                        }}>
 
-        </Container>
+                            <h3 style={{
+                                fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: !matches ? '100%' : '270px',
+                                textAlign: matches ? 'left' : 'center'
+                            }} >
+                                Documentos
+                            </h3>
+
+                            <Box sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '10px'
+                            }}>
+                                {produtor.analise && produtor.analise.analise_pedido.path &&
+                                    <>
+                                        <button className='button-white' startIcon={<AiOutlineDownload />} fullWidth variant='outlined' color='primary' href={produtor.analise.analise_pedido.path}>Análise do pedido</button >
+                                    </>}
+
+                                {produtor.analise && produtor.analise.vistoria.path &&
+                                    <>
+                                        <button className='button-white' startIcon={<AiOutlineDownload />} fullWidth variant='outlined' color='primary' href={produtor.analise.vistoria.path}> Vistoria</button >
+                                    </>}
+
+                                {produtor.analise && produtor.analise.analise_laboratorial.path &&
+                                    <>
+                                        <button className='button-white' startIcon={<AiOutlineDownload />} fullWidth variant='outlined' color='primary' href={produtor.analise.analise_laboratorial.path}> Análise Laboratorial</button >
+                                    </>}
+                            </Box>
+
+                        </Box>
+
+
+                    </Grid>
+
+                    {/**
+                    <Grid item xs={12} md={2} >
+                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItens: 'center', gap: '10px', padding: '10px' }}>
+
+
+                            <Typography textAlign={'center'} variant='h7'>Status Credencial {produtor && produtor.status ?
+                                (<FcOk style={{ verticalAlign: 'bottom' }} size={25} />) : (<FcCancel style={{ verticalAlign: 'bottom' }} size={25} />)}
+                            </Typography>
+
+                            <Typography sx={{ textAlign: 'center' }} variant='h7'>Assinatura Mensal {payments && payments.subscription ?
+                                (<FcOk style={{ verticalAlign: 'bottom' }} size={25} />) : (<FcCancel style={{ verticalAlign: 'bottom' }} size={25} />)}
+                            </Typography>
+
+
+                        </Box>
+
+                    </Grid>
+                     */}
+
+
+                </Grid>
+
+                <Divider sx={{ margin: '20px 0' }} />
+
+                <h3 style={{
+                    fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: !matches ? '100%' : '270px',
+                    textAlign: matches ? 'left' : 'center'
+                }} >
+                    Produtos
+                </h3>
+
+                <Grid container rowSpacing={3} pt={5} >
+                    <Grid item >
+                        {(products?.length === 0) && (
+                            <h3 className='regular black'>
+                                Nenhum produto cadastrado
+                            </h3>
+                        )}
+                    </Grid>
+
+
+                    {products &&
+                        products?.filter((product) => product).slice(0, 4).map((product) => (
+
+                            <Grid item xs={12} md={3} pr={matches ? 2 : 0} key={product._id}>
+                                <Box sx={{
+                                    backgroundColor: colors.main_grey,
+                                    padding: '20px',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '24px'
+                                }}>
+                                    <Box sx={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                    }}>
+                                        <h3 className='semi-bold black'>
+                                            {product.name}
+                                        </h3>
+                                        <MdLiquor size={30} style={{ verticalAlign: 'bottom', marginLeft: '5px' }} />
+                                    </Box>
+                                    <Box>
+                                        <h4 className='regular black'> {product.status ? 'Produto Aprovado' : 'Produto em análise'}</h4>
+                                        {product?.selo?.startSelo && <h5>{product?.selo?.startSelo} - {product?.selo?.endSelo}</h5>}
+                                        {!product?.selo?.startSelo && <h5>Aguardando selos</h5>}
+                                    </Box>
+
+                                </Box>
+                            </Grid>
+                        ))}
+                </Grid>
+
+                <ProductsPagination setProductsData={(p) => setProducts(p)} />
+
+                <Box sx={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    gap: '10px',
+                    paddingBottom:'72px'
+                }} >
+
+                    <button className='button-white' onClick={() => navigate('/')}>Voltar</button>
+                    <button className='button-purple' onClick={handleOpenDesaprove} >Excluir</button>
+
+                </Box>
+
+                <Modal
+                    open={openDesaprove}
+                    onClose={handleCloseDesaprove}
+                >
+                    <Box sx={style}>
+                        <Box sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '10px',
+                            alignItems: 'center',
+                        }}>
+                            <Box display={'flex'} justifyContent={'space-between'}>
+                                <Typography variant="h6" >Tem certeza ? </Typography>
+                                <AiFillWarning color='red' size={30} />
+                            </Box>
+
+                            <Typography textAlign={'center'} variant="h7" >Digite o motivo do descredenciamento.</Typography>
+
+                            <TextareaAutosize onChange={(e) => setRelatory(e.target.value)} minRows={8} style={{ width: '100%', padding: '10px', border: '1px solid black' }} />
+
+                            <Typography color={'red'} variant="h7" >Será enviado um email ao produtor.</Typography>
+
+                            <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+
+                                <Button color='error' variant='outlined' onClick={handleCloseDesaprove}>Cancelar</Button>
+
+                                <Button
+                                    disabled={isLoadingAdmin}
+                                    color="success"
+                                    variant='outlined'
+                                    onClick={handleDessaprove}
+                                >
+                                    {isLoadingAdmin ? <CircularProgress color="success" size={24} /> : 'Descredenciar'}
+                                </Button>
+
+                            </Box>
+                        </Box>
+                    </Box>
+                </Modal>
+
+
+            </Container>
+        </Box>
     )
 }
