@@ -162,6 +162,7 @@ margin-left: auto;
     }
 }
 
+
 @media (max-width: 768px) {
     .box-produto {
         flex-direction: column;
@@ -178,8 +179,8 @@ margin-left: auto;
         z-index: 4;
     }
     .foto-produto{
-        width: 200px;
-        height: 200px;
+        width: 150px;
+        height: 150px;
         z-index: 3;
     }
 
@@ -187,13 +188,13 @@ margin-left: auto;
         width: 250px;
         height: 250px;
         left: 68px;
-        top: 165px;
+        top: 135px;
     }
 
     .foto-produtor {
         width: 80px; /* Adjust width for smaller screens */
         height: 80px; /* Adjust height for smaller screens */
-        top: 350px; /* Adjust top position for smaller screens */
+        top: 320px; /* Adjust top position for smaller screens */
         left: 55px; /* Adjust left position for smaller screens */
     }
 

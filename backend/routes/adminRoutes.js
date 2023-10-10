@@ -7,12 +7,18 @@ const {
     getPayment, disapproveUser, getProuducts, aproveSelos, 
     disaproveSelos, addRelatorys, deleteRelatorys, 
     approveRelatory, repproveRelatory, approveRecurso,
-    repproveRecurso, associateProducer } = require('../controllers/adminControllers.js');
+    repproveRecurso, associateProducer, getMembros, getProducers } = require('../controllers/adminControllers.js');
 
 const { uploadRelatory } = require('../middlewares/multer.js');
 
 // Pegar todos os usuários
 router.get('/', hasRole(['admin', 'secretario', 'presidente', 'conselho']), getUsers);
+
+// pegar membros da associação
+router.get('/membros', getMembros)
+
+// pegar produtores 
+router.get('/produtores', getProducers)
 
 // Pegar dados do usuário
 router.get('/user/:id', hasRole(['admin', 'secretario', 'presidente', 'conselho']), getUserData);

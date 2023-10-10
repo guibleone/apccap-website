@@ -186,11 +186,6 @@ function SingleProduct() {
                             gap: '15px',
                         }} >
                             
-                            <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
-                                Nome do Produto
-                            </Typography>
-
-                            <TextField name='name' defaultValue={productData  && productData?.name } onChange={onChange} fullWidth variant="outlined" />
                             
                             <Typography variant='body1' pb={2} sx={{ fontWeight: 540 }}>
                                 Descrição do Produto
@@ -225,7 +220,7 @@ function SingleProduct() {
                         <Box sx={{
                             display: 'flex',
                             flexDirection: 'column',
-                            gap: '78px',
+                            gap: '56px',
                         }} >
 
                         <h3

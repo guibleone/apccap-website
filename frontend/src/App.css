@@ -11,7 +11,7 @@
 :root {
     --main-purple: #140C9F;
     --main-purple-light: #2A1A92;
-    --main-purple-dark: #0F0A70;
+    --main-purple-dark: ##20244B;
     --main-purple-darker: #0A0845;
     --main-white: #FAF8F8;
     --main-white-light: #F2F2F2;
@@ -31,6 +31,14 @@ h4 {
 
 .black {
     color: var(--main-black);
+}
+
+.white {
+    color: var(--main-white);
+}
+
+.purple {
+    color: var(--main-purple-dark);
 }
 
 .bold {

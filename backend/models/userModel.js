@@ -23,7 +23,6 @@ const userSchema = new mongoose.Schema({
     },
     credencial: {
         type: String,
-        default: ''
     },
     role: {
         type: String,

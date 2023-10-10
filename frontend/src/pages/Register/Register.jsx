@@ -65,6 +65,20 @@ function Register() {
       [e.target.name]: e.target.value,
     }))
   }
+
+  const cidadesValidas = [
+    'Águas de Lindóia',
+    'Amparo',
+    'Holambra',
+    'Jaguariúna',
+    'Lindóia',
+    'Monte Alegre do Sul',
+    'Pedreira',
+    'Serra Negra',
+    'Socorro',
+   
+  ]
+
   /* propriedade */
 
   const [propriedadeData, setPropriedadeData] = useState({
@@ -94,7 +108,7 @@ function Register() {
     const isChecked = e.target.checked;
 
     setIsAssociado(isChecked)
-    
+
   };
 
   /* marca */
@@ -148,7 +162,7 @@ function Register() {
 
   const resume = useSelector((state) => state.resume.resume)
 
-  const { user, isError, pending, isSuccess, message, isLoading} = useSelector((state) => state.auth)
+  const { user, isError, pending, isSuccess, message, isLoading } = useSelector((state) => state.auth)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -505,10 +519,7 @@ function Register() {
                     }
                   }
                 >
-                  <MenuItem value="">Selecione um estado</MenuItem>
                   <MenuItem value="SP">São Paulo</MenuItem>
-                  <MenuItem value="RJ">Rio de Janeiro</MenuItem>
-                  <MenuItem value="MG">Minas Gerais</MenuItem>
                 </Select>
 
               </Grid>
@@ -518,22 +529,28 @@ function Register() {
                   Cidade
                 </Typography>
 
-                <TextField
-                  required
+                <Select
                   fullWidth
-                  id="cidade"
-                  placeholder='Campinas'
-                  name="cidade"
-                  autoComplete="cidade" onChange={handleChangeDadosPessoais} type="text"
-                  value={dadosPessoaisData.cidade}
+                  onChange={handleChangeDadosPessoais}
+                  defaultValue=""
+                  value={dadosPessoaisData.cidade || ''}
+                  name='cidade'
+                  autoComplete='cidade'
+                  MenuProps={{ PaperProps: { sx: { maxHeight: 200 } } }}
                   sx={
                     {
                       '& .MuiInputBase-root': {
                         borderRadius: '0px',
                       },
+                      
                     }
                   }
-                />
+                >
+                  {cidadesValidas.map((cidade, index) => (
+                    <MenuItem key={index} value={cidade}>{cidade}</MenuItem>
+                  ))}
+                </Select>
+
               </Grid>
 
               <Grid item xs={12} lg={12} mt={3}>
@@ -652,22 +669,28 @@ function Register() {
                   Cidade
                 </Typography>
 
-                <TextField
-                  required
+                <Select
                   fullWidth
-                  id="cidade_propriedade"
-                  placeholder='Campinas'
-                  name="cidade_propriedade"
-                  autoComplete="cidade_propriedade" onChange={handleChangePropriedade} type="text"
-                  value={propriedadeData.cidade_propriedade}
+                  onChange={handleChangePropriedade}
+                  defaultValue=""
+                  value={propriedadeData.cidade_propriedade || ''}
+                  name='cidade_propriedade'
+                  autoComplete='cidade_propriedade'
+                  MenuProps={{ PaperProps: { sx: { maxHeight: 200 } } }}
                   sx={
                     {
                       '& .MuiInputBase-root': {
                         borderRadius: '0px',
                       },
+                      
                     }
                   }
-                />
+                >
+                   {cidadesValidas.map((cidade, index) => (
+                    <MenuItem key={index} value={cidade}>{cidade}</MenuItem>
+                  ))}
+                </Select>
+
               </Grid>
 
               <Grid item xs={12} lg={12} mt={3}>
@@ -690,8 +713,6 @@ function Register() {
                 >
                   <MenuItem value="">Selecione um estado</MenuItem>
                   <MenuItem value="SP">São Paulo</MenuItem>
-                  <MenuItem value="RJ">Rio de Janeiro</MenuItem>
-                  <MenuItem value="MG">Minas Gerais</MenuItem>
                 </Select>
 
               </Grid>
@@ -970,80 +991,14 @@ function Register() {
                     Tornar-se um associado ?
                   </Typography>
                   <Link style={{ color: '#140C9F', fontWeight: 700, textDecorationColor: '#140C9F' }}>Saiba mais</Link>
-              
 
+
+
+                </Grid>
 
               </Grid>
 
-            </Grid>
-
-            {matches &&
-              <>
-                <Grid item xs={12} lg={12} mt={8}>
-                  <Box sx={{ display: 'flex', gap: '20px', flexDirection: !matches ? 'column' : 'row' }}>
-
-                    <button className='button-purple'
-                      onClick={onSubmit}
-                      disabled={pending}
-                      style={{backgroundColor: pending && colors.main_white}}
-                    >
-                      {pending ? <CircularProgress color="success" style={{ padding: '5px' }} /> : 'Cadastrar'}
-                    </button>
-
-                    <button className='button-white'
-                      onClick={() => navigate('/entrar')}
-                    >
-                      Entrar
-                    </button>
-
-
-                  </Box>
-
-                </Grid>
-              </>
-            }
-
-          </Grid>
-
-          <Grid item xs={12} lg={6} mt={5}>
-
-            <Grid item xs={12} lg={12} mt={3} pt={matches ? 8 : 0}>
-
-              <Box sx={{ display: 'flex', gap: '10px', flexDirection: !matches ? 'column' : 'row', alignItems: 'center' }}>
-                <img src="https://via.placeholder.com/150" alt="logo" style={{
-                  borderRadius: '100px',
-                  width: '150px',
-                }} />
-
-                <Grid item xs={12} lg={6} mt={2} sx={{ textAlign: 'center' }}>
-                  <h3 sx={{ fontWeight: 540, color: '#000000' }}>
-                    Logo da sua marca
-                  </h3>
-
-
-                  <TextField
-                    required
-                    fullWidth
-                    id="logo"
-                    name="logo"
-                    autoComplete="logo" type="file"
-                    inputRef={fileInputRef}
-                    onChange={handleLogo}
-                    sx={
-                      {
-                        '& .MuiInputBase-root': {
-                          borderRadius: '0px',
-                        },
-
-                      }
-                    }
-                  />
-
-                </Grid>
-
-              </Box>
-
-              {!matches &&
+              {matches &&
                 <>
                   <Grid item xs={12} lg={12} mt={8}>
                     <Box sx={{ display: 'flex', gap: '20px', flexDirection: !matches ? 'column' : 'row' }}>
@@ -1051,7 +1006,7 @@ function Register() {
                       <button className='button-purple'
                         onClick={onSubmit}
                         disabled={pending}
-                        style={{backgroundColor: pending && colors.main_white}}
+                        style={{ backgroundColor: pending && colors.main_white }}
                       >
                         {pending ? <CircularProgress color="success" style={{ padding: '5px' }} /> : 'Cadastrar'}
                       </button>
@@ -1071,13 +1026,79 @@ function Register() {
 
             </Grid>
 
+            <Grid item xs={12} lg={6} mt={5}>
+
+              <Grid item xs={12} lg={12} mt={3} pt={matches ? 8 : 0}>
+
+                <Box sx={{ display: 'flex', gap: '10px', flexDirection: !matches ? 'column' : 'row', alignItems: 'center' }}>
+                  <img src="https://via.placeholder.com/150" alt="logo" style={{
+                    borderRadius: '100px',
+                    width: '150px',
+                  }} />
+
+                  <Grid item xs={12} lg={6} mt={2} sx={{ textAlign: 'center' }}>
+                    <h3 sx={{ fontWeight: 540, color: '#000000' }}>
+                      Logo da sua marca
+                    </h3>
+
+
+                    <TextField
+                      required
+                      fullWidth
+                      id="logo"
+                      name="logo"
+                      autoComplete="logo" type="file"
+                      inputRef={fileInputRef}
+                      onChange={handleLogo}
+                      sx={
+                        {
+                          '& .MuiInputBase-root': {
+                            borderRadius: '0px',
+                          },
+
+                        }
+                      }
+                    />
+
+                  </Grid>
+
+                </Box>
+
+                {!matches &&
+                  <>
+                    <Grid item xs={12} lg={12} mt={8}>
+                      <Box sx={{ display: 'flex', gap: '20px', flexDirection: !matches ? 'column' : 'row' }}>
+
+                        <button className='button-purple'
+                          onClick={onSubmit}
+                          disabled={pending}
+                          style={{ backgroundColor: pending && colors.main_white }}
+                        >
+                          {pending ? <CircularProgress color="success" style={{ padding: '5px' }} /> : 'Cadastrar'}
+                        </button>
+
+                        <button className='button-white'
+                          onClick={() => navigate('/entrar')}
+                        >
+                          Entrar
+                        </button>
+
+
+                      </Box>
+
+                    </Grid>
+                  </>
+                }
+
+              </Grid>
+
+            </Grid>
+
           </Grid>
-
         </Grid>
-      </Grid>
 
 
-      {/*
+        {/*
       <Modal
         open={openTerms}
         onClose={handleOpenTerms}
@@ -1112,7 +1133,7 @@ function Register() {
 
 
 
-    </Box >
+      </Box >
       <Footer />
 
     </>

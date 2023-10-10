@@ -381,7 +381,7 @@ function Dashboard() {
           {/* Notícias */}
           <Grid container spacing={2} pl={matches ? 0 : 34} pt={matches && 0} className="noticias">
 
-            <Grid item xs={12} lg={9}>
+            <Grid item xs={12} lg={9.7}>
 
               <Box sx={{
                 display: 'flex',
@@ -421,7 +421,7 @@ function Dashboard() {
 
             </Grid>
 
-            <Grid item xs={12} lg={9} pt={matches && 0} >
+            <Grid item xs={12} lg={9.7} pt={matches && 0} >
               <Box sx={{
                 display: 'flex',
                 justifyContent: 'space-between',

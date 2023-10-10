@@ -109,12 +109,10 @@ function Traceability() {
             </div>
 
 
-            <div className="rastreio-lado">
+          
+              <img src={require('../../imgs/seloFoto.png')} alt="rastreio" className="rastreio-img" />
 
-              <img src={require('../../imgs/codigo-exemplo.png')} alt="rastreio" className="rastreio-img" />
-
-            </div>
-
+         
 
 
           </div>
@@ -141,7 +139,7 @@ function Traceability() {
 
               <img src={require('../../imgs/Ellipse.png')} alt="elipse" className="elipse" />
 
-              <img src={producer.pathFoto ? producer.pathFoto : 'https://placehold.co/300x300'} alt="Foto do produto" className='foto-produtor' />
+              <img src={producer?.dados_pessoais?.profilePhoto ? producer?.dados_pessoais?.profilePhoto : 'https://placehold.co/300x300'} alt="Foto do produto" className='foto-produtor' />
             </div>
             <div className="produtos-information">
               <div className="nome">

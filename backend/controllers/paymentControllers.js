@@ -9,7 +9,7 @@ const paySelos = asyncHandler(async (req, res) => {
     const { quantity, userId } = req.body
     const user = await User.findById(userId)
 
-    if(!user) return res.status(404).json({ error: 'Usuário não encontrado' })
+    if (!user) return res.status(404).json({ error: 'Usuário não encontrado' })
 
     const session = await stripe.checkout.sessions.create({
         line_items: [
@@ -56,13 +56,16 @@ const getSubscription = asyncHandler(async (req, res) => {
 
     const { email } = req.body;
 
+
     try {
+        const user = await User.findOne({ 'dados_pessoais.email': email });
+
         const customer = await stripe.customers.list({
             email: email,
             limit: 1
         });
 
-        if(!customer.data.length) return res.status(200).json({subscription: null });
+        if (!customer.data.length) return res.status(200).json({ subscription: null });
 
         const subscription = await stripe.subscriptions.list({
             customer: customer.data[0].id,
@@ -76,12 +79,21 @@ const getSubscription = asyncHandler(async (req, res) => {
                 return_url: 'http://localhost:3000/credencial',
             });
 
-            res.status(200).json({ portal: portal.url, subscription: subscription.data[0].status  });
+            user.credencial = subscription.data[0].status;
 
-            return 
+            try {
+                await user.save();
+            } catch (error) {
+                console.error('Erro ao salvar o usuário:', error);
+
+                return res.status(500).json({ error: 'Erro ao salvar o usuário' });
+            }
+            res.status(200).json({ portal: portal.url, subscription: subscription.data[0].status });
+
+            return
         }
 
-        res.status(200).json({subscription: null });
+        res.status(200).json({ subscription: null });
 
     } catch (error) {
         res.status(500).json({ error: 'Um erro ocorreu' });
@@ -92,14 +104,14 @@ const getSubscription = asyncHandler(async (req, res) => {
 
 const getBalance = asyncHandler(async (req, res) => {
 
-    try{
+    try {
         const balance = await stripe.balance.retrieve();
         res.status(200).json({ balance });
     }
-    catch(error){
+    catch (error) {
         res.status(500).json({ error: 'Um erro ocorreu' });
     }
-    
+
 })
 
 

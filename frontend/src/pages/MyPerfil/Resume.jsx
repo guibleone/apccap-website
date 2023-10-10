@@ -4,6 +4,7 @@ import { createResume, reset, updateResume } from '../../features/resume/resumeS
 import { toast } from 'react-toastify'
 import { Button, Typography, TextareaAutosize, Box, CircularProgress } from '@mui/material';
 import {styleError, styleSuccess} from '../toastStyles'
+import { colors } from '../colors';
 
 function Resume() {
 
@@ -92,12 +93,11 @@ function Resume() {
       <TextareaAutosize minRows={4} onChange={onChange} name="body" id="body" defaultValue={body} style={{
         padding: '10px',
         resize: 'none',
+        backgroundColor:colors.main_white
       }} />
 
-      {resume ?
-          <button className='button-purple' onClick={handleUpdate} disabled={isLoading && resume} color="primary">{isLoading && resume ? <CircularProgress color="success" /> : 'Atualizar'}</button>
-
-        : <button className='button-purple' onClick={submitResume} disabled={isLoading && resume} color="primary">{isLoading  && resume ? <CircularProgress color="success" /> : 'Criar'}</button>}
+      {resume?.body ? <button className='button-purple' onClick={handleUpdate} disabled={isLoading && resume} color="primary">{isLoading && resume ? <CircularProgress color="success" /> : 'Atualizar'}</button>
+       : <button className='button-purple' onClick={submitResume} disabled={isLoading && resume} color="primary">{isLoading  && resume ? <CircularProgress color="success" /> : 'Criar'}</button>}
 
 
     </Box>

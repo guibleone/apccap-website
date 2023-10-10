@@ -99,7 +99,7 @@ export default function Credencial() {
                                         Produtor Não Associado
                                     </h1>
                                     <button onClick={handleAssociate} className='button-purple'>
-                                        Associa-se
+                                        Associar-se
                                     </button>
                                 </>)}
 

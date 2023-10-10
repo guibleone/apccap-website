@@ -261,6 +261,18 @@ const repproveRecurso = async(data) => {
 }
 
 
+// QUEM SOMOS
+
+const getMembros = async () => {
+    const response = await axios.get(API_URI + '/membros')
+    return response.data
+}
+
+const getProducers = async () => {
+    const response = await axios.get(API_URI + '/produtores')
+    return response.data
+}
+
 // EMAILS
 
 const sendEmail = async (emailData) => {
@@ -311,6 +323,8 @@ const adminService = {
     sendRecursoEmail,
     repproveRecurso,
     sendProductRelatoryEmail,
+    getMembros,
+    getProducers
 }
 
 export default adminService

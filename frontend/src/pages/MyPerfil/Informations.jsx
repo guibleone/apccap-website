@@ -12,6 +12,7 @@ import { useMediaQuery } from "@mui/material"
 import { styleError, styleSuccess } from '../toastStyles'
 import { AiFillInfoCircle } from "react-icons/ai"
 import './Styles.css'
+import { colors } from "../colors"
 
 function Informations() {
 
@@ -38,6 +39,19 @@ function Informations() {
         cidade: user && user.dados_pessoais ? user.dados_pessoais.cidade : '',
         estado: user && user.dados_pessoais ? user.dados_pessoais.estado : '',
     })
+
+    const cidadesValidas = [
+        'Águas de Lindóia',
+        'Amparo',
+        'Holambra',
+        'Jaguariúna',
+        'Lindóia',
+        'Monte Alegre do Sul',
+        'Pedreira',
+        'Serra Negra',
+        'Socorro',
+
+    ]
 
     const handleChangeDadosPessoais = (e) => {
         setDadosPessoaisData((prevState) => ({
@@ -434,8 +448,6 @@ function Informations() {
                             >
                                 <MenuItem value="">Selecione um estado</MenuItem>
                                 <MenuItem value="SP">São Paulo</MenuItem>
-                                <MenuItem value="RJ">Rio de Janeiro</MenuItem>
-                                <MenuItem value="MG">Minas Gerais</MenuItem>
                             </Select>
 
                         </Grid>
@@ -445,22 +457,27 @@ function Informations() {
                                 Cidade
                             </Typography>
 
-                            <TextField
-                                required
+                            <Select
                                 fullWidth
-                                id="cidade"
-                                placeholder='Campinas'
-                                name="cidade"
-                                autoComplete="cidade" onChange={handleChangeDadosPessoais} type="text"
-                                value={dadosPessoaisData.cidade}
+                                onChange={handleChangeDadosPessoais}
+                                defaultValue=""
+                                value={dadosPessoaisData.cidade || ''}
+                                name='cidade'
+                                autoComplete='cidade'
+                                MenuProps={{ PaperProps: { sx: { maxHeight: 200 } } }}
                                 sx={
                                     {
                                         '& .MuiInputBase-root': {
                                             borderRadius: '0px',
                                         },
+
                                     }
                                 }
-                            />
+                            >
+                                {cidadesValidas.map((cidade, index) => (
+                                    <MenuItem key={index} value={cidade}>{cidade}</MenuItem>
+                                ))}
+                            </Select>
                         </Grid>
 
                     </Grid>
@@ -468,7 +485,7 @@ function Informations() {
 
                     <Grid item xs={12} lg={6} mt={3} pt={matches ? 8 : 0}>
 
-                        <Box sx={{ display: 'flex', gap: '20px', flexDirection: !matches ? 'column' : 'row', alignItems: 'center', justifyContent:'center' }}>
+                        <Box sx={{ display: 'flex', gap: '20px', flexDirection: !matches ? 'column' : 'row', alignItems: 'center', justifyContent: 'center' }}>
                             <Avatar sx={{ width: 120, height: 120 }} src={user && user.dados_pessoais && user.dados_pessoais.profilePhoto ? user.dados_pessoais.profilePhoto : ''} />
 
                             <Grid item xs={12} lg={6} mt={2} sx={{ textAlign: 'center' }}>
@@ -600,22 +617,28 @@ function Informations() {
                                 Cidade
                             </Typography>
 
-                            <TextField
-                                required
+
+                            <Select
                                 fullWidth
-                                id="cidade-propriedade"
-                                placeholder='Campinas'
-                                name="cidade-propriedade"
-                                autoComplete="cidade-propriedade" onChange={handleChangePropriedade} type="text"
-                                value={propriedadeData.cidade_propriedade}
+                                onChange={handleChangePropriedade}
+                                defaultValue=""
+                                value={propriedadeData.cidade_propriedade || ''}
+                                name='cidade_propriedade'
+                                autoComplete='cidade_propriedade'
+                                MenuProps={{ PaperProps: { sx: { maxHeight: 200 } } }}
                                 sx={
                                     {
                                         '& .MuiInputBase-root': {
                                             borderRadius: '0px',
                                         },
+
                                     }
                                 }
-                            />
+                            >
+                                {cidadesValidas.map((cidade, index) => (
+                                    <MenuItem key={index} value={cidade}>{cidade}</MenuItem>
+                                ))}
+                            </Select>
                         </Grid>
 
                         <Grid item xs={12} lg={12} mt={3}>
@@ -638,8 +661,6 @@ function Informations() {
                             >
                                 <MenuItem value="">Selecione um estado</MenuItem>
                                 <MenuItem value="SP">São Paulo</MenuItem>
-                                <MenuItem value="RJ">Rio de Janeiro</MenuItem>
-                                <MenuItem value="MG">Minas Gerais</MenuItem>
                             </Select>
 
                         </Grid>
@@ -916,6 +937,9 @@ function Informations() {
                                         <button className='button-purple'
                                             onClick={onSubmit}
                                             disabled={isLoading}
+                                            style={{
+                                                backgroundColor: isLoading && colors.main_white
+                                            }}
                                         >
                                             {isLoading ? <CircularProgress color="success" style={{ padding: '5px' }} /> : 'Salvar Alterações'}
                                         </button>
@@ -977,6 +1001,9 @@ function Informations() {
                                             <button className='button-purple'
                                                 onClick={onSubmit}
                                                 disabled={isLoading}
+                                                style={{
+                                                    backgroundColor: isLoading && colors.main_white
+                                                }}
                                             >
                                                 {isLoading ? <CircularProgress color="success" style={{ padding: '5px' }} /> : 'Salvar Alterações'}
                                             </button>

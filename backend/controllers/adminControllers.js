@@ -31,6 +31,35 @@ const getUsers = asyncHandler(async (req, res) => {
     }
 })
 
+// pegar membros da associação
+const getMembros = asyncHandler(async (req, res) => {
+    try {
+        const users = await User.find({ role: ['presidente', 'secretario', 'tesoureiro', 'conselho'] })
+            .select('dados_pessoais.name dados_pessoais.profilePhoto role')
+            .exec()
+        res.status(200).json(users)
+    } catch (error) {
+        res.status(400)
+        throw new Error('Erro ao carrgegar usuários')
+
+    }
+})
+
+// pegar produtores
+
+const getProducers = asyncHandler(async (req, res) => {
+    try {
+        const users = await User.find({ role: ['produtor', 'produtor_associado'] })
+            .select('propriedade.cidade_propriedade propriedade.nome_propriedade marca.whatsapp marca.instagram marca.logo dados_pessoais.name')
+            .exec()
+        res.status(200).json(users)
+    } catch (error) {
+        res.status(400)
+        throw new Error('Erro ao carrgegar usuários')
+    }
+})
+
+
 // pegar dados do usuário
 const getUserData = asyncHandler(async (req, res) => {
     try {
@@ -132,7 +161,7 @@ const deleteUser = asyncHandler(async (req, res) => {
             await deleteObject(storageRef)
         }
 
-        if(user.marca.logo){
+        if (user.marca.logo) {
             const storageRef = ref(storage, `logos/${user._id}`)
             await deleteObject(storageRef)
         }
@@ -209,7 +238,7 @@ const alterRole = asyncHandler(async (req, res) => {
             throw new Error('Informe o nível de acesso')
         }
 
-        if(user.oldRole){
+        if (user.oldRole) {
             user.oldRole = ''
 
             await user.save()
@@ -655,6 +684,8 @@ module.exports = {
     repproveRelatory,
     approveRecurso,
     repproveRecurso,
-    
+    getMembros,
+    getProducers
+
 
 }

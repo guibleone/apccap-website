@@ -503,16 +503,15 @@ export default function SingleUserProduct() {
               <Typography color='error' variant="p" > Será enviado um email ao produtor.</Typography>
 
               <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
-                <Button color='error' variant='contained' onClick={handleOpenApprove}>Cancelar</Button>
+                <button className='button-white' onClick={handleOpenApprove}>Cancelar</button>
 
-                <Button
+                <button
                   disabled={isLoading}
-                  color="success"
-                  variant='contained'
+                  className='button-purple'
                   onClick={approveRelatory}
                 >
                   {isLoading ? <CircularProgress color="success" size={24} /> : 'Aprovar'}
-                </Button>
+                </button>
 
               </Box>
             </Box>
@@ -539,16 +538,15 @@ export default function SingleUserProduct() {
               <Typography color='error' variant="p" > Será enviado um email ao produtor.</Typography>
 
               <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
-                <Button color='error' variant='contained' onClick={handleOpenRepprove}>Cancelar</Button>
+                <button  className='button-white' o onClick={handleOpenRepprove}>Cancelar</button>
 
-                <Button
+                <button
                   disabled={isLoading}
-                  color="success"
-                  variant='contained'
+                  className='button-purple'
                   onClick={repproveRelatory}
                 >
                   {isLoading ? <CircularProgress color="success" size={24} /> : 'Reprovar'}
-                </Button>
+                </button>
 
               </Box>
             </Box>

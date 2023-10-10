@@ -2,7 +2,7 @@ import { Avatar, Box, Button, Container, Divider, Grid, Skeleton, Typography, Mo
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { useDispatch, useSelector, } from 'react-redux'
-import { getProducts, getUserData, sendEmail, sendRelatory } from '../../../../features/admin/adminSlice'
+import { deleteUser, getProducts, getUserData, sendEmail, sendRelatory } from '../../../../features/admin/adminSlice'
 import { getSubscription } from '../../../../features/payments/paymentsSlice'
 import { useMediaQuery } from '@mui/material'
 import { useNavigate } from 'react-router'
@@ -60,13 +60,13 @@ export default function User() {
 
     const [relatory, setRelatory] = useState('')
 
-    const handleDessaprove = () => {
+    const handleDelete = () => {
 
         if (!relatory) return toast.error('Preencha o relatório', styleError)
 
         dispatch(sendEmail({
-            email: produtor.email,
-            title: 'Descredenciamento de produtor',
+            email: produtor?.dados_pessoais?.email,
+            title: 'Exclusão de produtor',
             message: relatory,
         }))
 
@@ -77,9 +77,9 @@ export default function User() {
         }
 
         dispatch(sendRelatory(relatoryData))
-        dispatch(disapproveUser({ id, token: user.token }))
+        dispatch(deleteUser({ id, token: user.token }))
 
-        toast.success('Usuário descredenciado com sucesso', styleSuccess)
+        toast.success('Usuário excluído com sucesso', styleSuccess)
         navigate('/')
     }
 
@@ -298,7 +298,7 @@ export default function User() {
                                 <AiFillWarning color='red' size={30} />
                             </Box>
 
-                            <Typography textAlign={'center'} variant="h7" >Digite o motivo do descredenciamento.</Typography>
+                            <Typography textAlign={'center'} variant="h7" >Digite o motivo da exclusão</Typography>
 
                             <TextareaAutosize onChange={(e) => setRelatory(e.target.value)} minRows={8} style={{ width: '100%', padding: '10px', border: '1px solid black' }} />
 
@@ -306,16 +306,15 @@ export default function User() {
 
                             <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
 
-                                <Button color='error' variant='outlined' onClick={handleCloseDesaprove}>Cancelar</Button>
+                                <button  className='button-white' onClick={handleCloseDesaprove}>Cancelar</button>
 
-                                <Button
+                                <button
                                     disabled={isLoadingAdmin}
-                                    color="success"
-                                    variant='outlined'
-                                    onClick={handleDessaprove}
+                                    className='button-purple'
+                                    onClick={handleDelete}
                                 >
-                                    {isLoadingAdmin ? <CircularProgress color="success" size={24} /> : 'Descredenciar'}
-                                </Button>
+                                    {isLoadingAdmin ? <CircularProgress color="success" size={24} /> : 'Excluir'}
+                                </button>
 
                             </Box>
                         </Box>

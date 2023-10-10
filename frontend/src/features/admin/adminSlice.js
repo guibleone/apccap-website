@@ -3,6 +3,8 @@ import adminService from "./adminService";
 
 const initialState = {
     users: [],
+    membros: [],
+    produtores: [],
     userData: {},
     resumeData: null,
     documentsData: null,
@@ -244,6 +246,28 @@ export const repproveRecurso = createAsyncThunk('conselho/repproveRecurso', asyn
         // caso ocorra algum erro
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
         return thunkAPI.rejectWithValue(message)
+    }
+})
+
+// QUEM SOMOS
+
+export const getMembros = createAsyncThunk('quem-somos/membros', async (_, thunkAPI) => {
+    try {
+        const response = await adminService.getMembros()
+        return response
+    } catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message);
+    }
+})
+
+export const getProducers = createAsyncThunk('quem-somos/produtores', async (_, thunkAPI) => {
+    try {
+        const response = await adminService.getProducers()
+        return response
+    } catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message);
     }
 })
 
@@ -699,6 +723,33 @@ export const adminSlice = createSlice({
                 state.emailStatus.isError = true
                 state.emailStatus.isLoading = false
                 state.emailStatus.message = 'Erro ao enviar email!'
+            })
+            // QUEM SOMOS
+            // pegar membros
+            .addCase(getMembros.pending, state => {
+                state.isLoading = true
+            })
+            .addCase(getMembros.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isError = false
+                state.membros = action.payload
+            })
+            .addCase(getMembros.rejected, (state, action) => {
+                state.isError = true
+                state.message = action.payload
+            })
+            // pegar produtores
+            .addCase(getProducers.pending, state => {
+                state.isLoading = true
+            })
+            .addCase(getProducers.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isError = false
+                state.produtores = action.payload
+            })
+            .addCase(getProducers.rejected, (state, action) => {
+                state.isError = true
+                state.message = action.payload
             })
     }
 })
