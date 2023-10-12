@@ -3,7 +3,7 @@ import axios from 'axios';
 const API_URL = '/api/reunion'
 
 // criar reunião
-const createReunion = async (reunionData) => {
+const createReunion = async ({ reunionData, pdfInstance }) => {
 
     let token = reunionData.token
 
@@ -12,11 +12,16 @@ const createReunion = async (reunionData) => {
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
         },
     }
+    const formData = new FormData();
+    formData.append('reunionData', JSON.stringify(reunionData));
+    formData.append('pdfInstance', pdfInstance.blob, `CONVOCAÇÃO.pdf`);
 
-    const response = await axios.post(API_URL, reunionData, config);
-    return response.data;
+
+    const response = await axios.post(API_URL, formData, config);
+   return response.data;
 
 }
 
@@ -59,14 +64,14 @@ const finishReunion = async (reunionData) => {
 // adicionar ata de reunião
 
 const addReunionAta = async (reunionData) => {
-    console.log(reunionData)
+
     let token = reunionData.token
 
     // pegar o token do usuário
 
     const config = {
         headers: {
-            'Content-Type': 'multipart/form-data', 
+            'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${token}`,
         },
     }
@@ -153,8 +158,26 @@ const getOneReunion = async (reunionData) => {
 
 }
 
+// sistema de votação
 
-    
+const handleVoto = async (data) => {
+
+    let token = data.token
+
+    // pegar o token do usuário
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+    const response = await axios.post(API_URL + '/votos/' + data.id, data, config);
+    return response.data;
+
+}
+
+
+
 
 const reunionService = {
     createReunion,
@@ -164,8 +187,9 @@ const reunionService = {
     signAta,
     deleteReunion,
     presenceList,
-    getOneReunion
-    
+    getOneReunion,
+    handleVoto
+
 }
 
 export default reunionService;

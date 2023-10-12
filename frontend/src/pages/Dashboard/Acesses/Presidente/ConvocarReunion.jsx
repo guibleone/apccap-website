@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Grid, Typography, TextField, TextareaAutosize, Button, Box, FormGroup, FormControlLabel, Checkbox, CircularProgress, Container, useMediaQuery, Select, MenuItem } from '@mui/material'
 import { colors } from '../../../colors'
-import { BsArrowUpRight } from 'react-icons/bs'
+import { BsArrowUpRight, BsFileMinus, BsFilePlus, BsPlus } from 'react-icons/bs'
 import { useDispatch, useSelector } from 'react-redux'
-import { createReunion, getReunions } from '../../../../features/reunion/reunionSlice'
+import { createReunion, getReunions, reset } from '../../../../features/reunion/reunionSlice'
 import { toast } from 'react-toastify'
 import { styleError, styleSuccess } from '../../../toastStyles'
 import { useNavigate } from 'react-router-dom'
@@ -13,6 +13,7 @@ import { ptBR } from 'date-fns/locale'
 import { resetEmailStatus } from '../../../../features/admin/adminSlice'
 import { Page, Text, View, Document, StyleSheet, PDFViewer, PDFDownloadLink, BlobProvider, usePDF } from '@react-pdf/renderer';
 import PDFReunion from './PDFReunion'
+import { format } from 'date-fns'
 registerLocale('pt-BR', ptBR)
 setDefaultLocale('ptBR')
 
@@ -23,10 +24,14 @@ export default function ConvocarReunion({ onClose }) {
 
     const matches = useMediaQuery('(min-width:600px)');
 
+    const currentDate = new Date();
+    const dateConvocacao = format(currentDate, "dd 'de' MMMM 'de' yyyy", { locale: ptBR });
+
+    const [pdfInstance, updatePdf] = usePDF();
+
     // estados
     const [users, setUsers] = useState([])
     const [startDate, setStartDate] = useState(new Date());
-    const [instance, updateInstance] = usePDF({ document: <PDFReunion title={'teste'} /> });
 
     const [year, setYear] = useState(new Date().getFullYear())
 
@@ -34,7 +39,7 @@ export default function ConvocarReunion({ onClose }) {
     const { emailStatus } = useSelector((state) => state.admin)
     const { user, isLoading: isLoadingAuth } = useSelector((state) => state.auth)
     const { isLoading } = useSelector((state) => state.reunions)
-    const { reunionData } = useSelector((state) => state.reunions)
+    const { reunionData, isSuccess, isError, message: messageReunion } = useSelector((state) => state.reunions)
 
     // redux
     const dispatch = useDispatch()
@@ -54,37 +59,57 @@ export default function ConvocarReunion({ onClose }) {
         const selectedType = event.target.value
 
         setTypeReunion(selectedType)
-
-
     }
 
-
-
-    console.log(typeReunion)
-
-
     // enviar email
-    const handleSendEmail = () => {
+    const handleConvocate = () => {
         if (!message) return toast.error('Preencha a menssagem', styleError)
         if (!typeReunion) return toast.error('Selecione o tipo de reunião', styleError)
         try {
-            const reunions = {
-                title: `${(reunionData.length + 1).toString().padStart(3, "0")} / ${year}`,
+            const reunionData = {
+                title: title,
                 message,
+                dateConvocacao: currentDate.toLocaleString(),
                 date: startDate.toLocaleString(),
                 typeReunion,
+                pautas,
                 token: user.token
             }
 
-            dispatch(createReunion(reunions))
+            dispatch(createReunion({ reunionData, pdfInstance }))
             //dispatch(sendConvocationEmail({ message, date: startDate.toLocaleString(), typeReunion, title }))
-
-            toast.success('Reunião criada com sucesso!', styleSuccess)
         } catch (err) {
             toast.error('Erro ao criar reunião!', styleError)
         }
     }
 
+    // única pauta
+
+    const [singlePauta, setSinglePauta] = useState({
+        title: '',
+        description: ''
+    })
+
+    const { title: titlePauta, description: descriptionPauta } = singlePauta
+
+    const handleChangePauta = (e) => {
+        setSinglePauta((prevState) => ({
+            ...prevState,
+            [e.target.name]: e.target.value,
+        }))
+    }
+
+    // multiple pautas
+
+    const [pautas, setPautas] = useState([])
+
+    const addPauta = () => {
+        setPautas((prevState) => [...prevState, singlePauta])
+        setSinglePauta({
+            title: '',
+            description: ''
+        })
+    }
 
     // toast
     useEffect(() => {
@@ -99,7 +124,39 @@ export default function ConvocarReunion({ onClose }) {
 
         dispatch(resetEmailStatus())
 
+
     }, [emailStatus.isSuccess, emailStatus.isError])
+
+
+    useEffect(() => {
+
+        setTitle(`${(reunionData.length + 1).toString().padStart(3, "0")} / ${year}`)
+    }
+        , [reunionData])
+
+
+    useEffect(() => {
+
+        updatePdf(<PDFReunion title={title} message={message} pautas={pautas} typeReunion={typeReunion} date={startDate.toLocaleString()} dateConvocacao={dateConvocacao} />);
+
+    }, [title, message, pautas, typeReunion, startDate, dateConvocacao, updatePdf]);
+
+
+    useEffect(() => {
+
+        if (isError) {
+            toast.error(messageReunion, styleError)
+        }
+
+        if (isSuccess) {
+            toast.success(messageReunion, styleSuccess)
+        }
+
+        dispatch(reset())
+
+
+    }, [isError, isSuccess, messageReunion])
+
 
 
 
@@ -127,7 +184,7 @@ export default function ConvocarReunion({ onClose }) {
 
                         <h5>
                             {/* numero da reuniao*/}
-                            N.º {(reunionData.length + 1).toString().padStart(3, "0")} / {year}
+                            N.º {title}
                         </h5>
                     </Box>
                 </Grid>
@@ -162,21 +219,53 @@ export default function ConvocarReunion({ onClose }) {
                     <h4 className='medium black'>
                         Pautas
                     </h4>
+                    <Box sx={{ display: 'flex', gap: '10px' }}>
 
-                    <Box sx={{ display: 'flex', gap: '10px', width: '100%', flexDirection: 'column' }}>
-
-                        <TextareaAutosize
-                            minRows={6}
-                            placeholder='Pautas da reunião'
-                            style={{ width: "100%", resize: 'none', fontSize: '16px', padding: '10px', backgroundColor: colors.main_white }}
-                            maxRows={8}
-                            name='pautas'
-
-                        />
+                        <TextField sx={{ width: '50%' }} onChange={handleChangePauta} name='title' value={titlePauta} placeholder='Título da pauta' />
+                        <TextField sx={{ width: '50%' }} onChange={handleChangePauta} name='description' value={descriptionPauta} placeholder='Descrição da pauta' />
 
                     </Box>
 
 
+                    <Box sx={{
+                        display: 'flex',
+                        gap: '10px',
+                        justifyContent: 'flex-end',
+                        width: '100%',
+                        marginTop: '10px'
+                    }}>
+                        <button onClick={addPauta} className='button-purple small' style={{}}>
+                            Adicionar
+                        </button>
+
+                    </Box>
+
+                    <Box sx={{
+                        maxHeight: '220px',
+                        overflowY: 'scroll',
+                        paddingRigth: '10px',
+                    }}>
+                        {pautas?.length > 0 && pautas?.map((pauta, index) => (
+                            <Box sx={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                backgroundColor: colors.white,
+                                color: colors.main_blue,
+                                border: `1px solid ${colors.main_blue}`,
+                                padding: '10px',
+                                marginTop: '10px',
+                                alignItems: 'center',
+                            }}>
+                                <h4 className='black medium'>{pauta.title}</h4>
+                                <h4 className='black medium'>{pauta.description}</h4>
+
+                                <button className='button-white small' onClick={() => setPautas((prevState) => prevState.filter((pauta, i) => i !== index))} variant='contained' color='error'>
+                                    Remover
+                                </button>
+
+                            </Box>
+                        ))}
+                    </Box>
 
                 </Grid>
 
@@ -218,13 +307,12 @@ export default function ConvocarReunion({ onClose }) {
 
                 </Grid>
 
-
                 <Grid item xs={12} lg={4} >
                     <Box sx={{
                         display: 'flex',
                         gap: '10px',
                     }}>
-                        <button onClick={() => { handleSendEmail(); onClose(); }} className='button-purple small' style={{ width: '100%' }}>
+                        <button onClick={() => { handleConvocate(); onClose(); }} className='button-purple small' style={{ width: '100%' }}>
                             Convocar
                         </button>
                         <button onClick={onClose} className='button-white small' style={{ width: '100%' }}>
@@ -248,7 +336,7 @@ export default function ConvocarReunion({ onClose }) {
 
                         <Button
                             disabled={emailStatus.isLoading || isLoading}
-                            onClick={handleSendEmail}
+                            onClick={handleConvocate}
                             fullWidth
                             variant='contained'
                             color='success'> {emailStatus.isLoading ? <CircularProgress color="success" size={24} /> : 'Convocar'}

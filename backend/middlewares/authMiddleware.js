@@ -65,7 +65,7 @@ const hasRole = (roles) => {
       } catch (error) {
         console.log(error)
         res.status(401)
-        throw new Error('Não autorizado')
+        throw new Error('Não autorizado. Ocoreu um erro')
       }
     }
 

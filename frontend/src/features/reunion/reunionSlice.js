@@ -30,8 +30,9 @@ export const getReunions = createAsyncThunk('reunion/getReunions', async (reunio
 
 export const createReunion = createAsyncThunk('reunion/createReunion', async (reunion, thunkAPI) => {
     try {
-        const response = await reunionService.createReunion(reunion);
-        thunkAPI.dispatch(getReunions(reunion.token));
+        const response = await reunionService.createReunion(reunion);   
+        const token = thunkAPI.getState().auth.user.token
+        thunkAPI.dispatch(getReunions(token));
         return response;
     }
     catch (error) {
@@ -137,6 +138,24 @@ export const getOneReunion = createAsyncThunk('reunion/getOneReunion', async (re
 
     }
 })
+
+// sistema de votação
+
+export const handleVoto = createAsyncThunk('reunion/handleVoto', async (reunion, thunkAPI) => {
+    try {
+        const response = await reunionService.handleVoto(reunion);
+        thunkAPI.dispatch(getOneReunion(reunion));
+        return response;
+    }
+    catch (error) {
+        // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message);
+
+    }
+})
+
+
 
 export const reunionSlice = createSlice({
     name: 'reunion',
@@ -298,6 +317,23 @@ export const reunionSlice = createSlice({
                 state.reunionData = action.payload;
             })
             .addCase(getOneReunion.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = false;
+                state.isError = true;
+            })
+            // sistema de votação
+            .addCase(handleVoto.pending, (state) => {
+                state.isLoading = true;
+                state.isSuccess = false;
+                state.isError = false;
+            })
+            .addCase(handleVoto.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.isError = false;
+                state.message = 'Voto computado com sucesso'
+            })
+            .addCase(handleVoto.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isSuccess = false;
                 state.isError = true;

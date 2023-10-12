@@ -3,6 +3,10 @@ const mongoose = require('mongoose');
 // modelo da reunião
 
 const reunionSchema = mongoose.Schema({
+    pathPdf : {
+        type: String,
+        required: false
+    },
     title: {
         type: String,
         required: true
@@ -12,6 +16,10 @@ const reunionSchema = mongoose.Schema({
         required: false
     },
     date: {
+        type: String,
+        required: true
+    },
+    dateConvocacao: {
         type: String,
         required: true
     },
@@ -38,17 +46,23 @@ const reunionSchema = mongoose.Schema({
         }
     },
     pautas: [{
-        message: {
+        title: {
             type: String,
             required: false
         },
-        descricao: {
+        description: {
             type: String,
             required: false
         },
         votos: {
-            type: Array,
-            required: false
+            favor: {
+                type: Array,
+                required: false
+            },
+            contra: {
+                type: Array,
+                required: false
+            },
         },
     }],
     ata:{

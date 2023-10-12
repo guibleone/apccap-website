@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
 const { hasRole } = require('../middlewares/authMiddleware.js')
-const { createReunion, getReunions, finishReunion, addReunionAta, deleteReunion, deleteReunionAta, signAta, presenceList, getOneReunion } = require('../controllers/reunionControllers.js')
+const { createReunion, getReunions, finishReunion, addReunionAta, deleteReunion, deleteReunionAta, signAta, presenceList, getOneReunion, handleVotos } = require('../controllers/reunionControllers.js')
 const { uploadRelatory } = require('../middlewares/multer.js');
 
 // criar reunião
-router.route('/').post(hasRole('presidente'), createReunion)
+router.route('/').post(hasRole('presidente'), uploadRelatory.single('pdfInstance'), createReunion)
 
 // listar reuniões por data
 router.route('/').get(hasRole(['presidente', 'secretario', 'tesoureiro', 'conselho']), getReunions)
@@ -30,5 +30,8 @@ router.post('/presence/:id', presenceList)
 
 //pegar única reunião
 router.get('/single/:id', hasRole(['presidente', 'secretario', 'tesoureiro', 'conselho', 'produtor_associado', 'produtor']), getOneReunion)
+
+// sistema de votação
+router.post('/votos/:id', hasRole(['presidente', 'secretario', 'tesoureiro', 'conselho', 'produtor_associado', 'produtor']), handleVotos)
 
 module.exports = router

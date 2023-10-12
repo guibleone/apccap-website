@@ -9,11 +9,33 @@ const { storage } = require('../db/firebase.js');
 const createReunion = asyncHandler(async (req, res) => {
     try {
 
-        const { title, message, date, typeReunion, pautas } = req.body
+        const { reunionData } = req.body
+        const { title, message, date, typeReunion, pautas, dateConvocacao } = JSON.parse(reunionData)
 
         let type = ''
 
         const nomeMembros = []
+
+        if (!req.file) {
+            res.status(400)
+            throw new Error('Selecione um arquivo válido')
+        }
+
+
+        const storageRef = ref(storage, `convocacoes/${title.replace('/', '_')}.pdf`)
+        const metadata = {
+            contentType: 'application/pdf',
+        }
+
+        const snapshot = await uploadBytesResumable(storageRef, req.file.buffer, metadata);
+
+        const url = await getDownloadURL(snapshot.ref);
+
+        if (!url) {
+            res.status(400)
+            throw new Error('Algo de errado aconteceu')
+        }
+
 
         if (typeReunion === 'administrativa') {
             type = 'administrativa'
@@ -35,7 +57,7 @@ const createReunion = asyncHandler(async (req, res) => {
             })
         }
 
-        if (typeReunion=== 'assembleia_extraordinaria') {
+        if (typeReunion === 'assembleia_extraordinaria') {
             type = 'assembleia_extraordinaria'
 
             const associates = await User.find({ role: { $in: ['presidente', 'secretario', 'tesoureiro', 'conselho', 'produtor'] } })
@@ -47,8 +69,10 @@ const createReunion = asyncHandler(async (req, res) => {
 
         const reunion = await Reunion.create({
             title,
+            pathPdf: url,
             message,
             date,
+            dateConvocacao,
             type,
             status: 'agendada',
             membros: {
@@ -58,9 +82,12 @@ const createReunion = asyncHandler(async (req, res) => {
             },
             pautas: pautas?.map(pauta => {
                 return {
-                    nome: pauta.nome,
-                    descricao: pauta.descricao,
-                    votos: []
+                    title: pauta.title,
+                    description: pauta.description,
+                    votos: {
+                        favor: [],
+                        contra: [],
+                    }
                 }
             })
         })
@@ -68,6 +95,7 @@ const createReunion = asyncHandler(async (req, res) => {
 
 
         res.json(reunion)
+
 
         /*const { title, message, date, typeReunion } = req.body
  
@@ -326,15 +354,48 @@ const getOneReunion = asyncHandler(async (req, res) => {
         }
 
         res.status(200).json(reunion)
-        
+
     } catch (error) {
         res.status(500)
-        throw new Error('Erro ao buscar reunião')    
+        throw new Error('Erro ao buscar reunião')
     }
 })
+
+// sistema de votos
+
+const handleVotos = asyncHandler(async (req, res) => {
+    try {
+        const reunion = await Reunion.findById(req.params.id);
+
+        if (!reunion) {
+            return res.status(404).json({ message: 'Reunião não encontrada' });
+        }
+
+        const { name, voto, pauta } = req.body;
+
+        if (reunion.pautas[pauta].votos.favor.includes(name) || reunion.pautas[pauta].votos.contra.includes(name)) {
+            return res.status(400).json({ message: 'Você já votou nesta pauta' });
+        }
+
+        if (voto === 'favor') {
+            reunion.pautas[pauta].votos.favor.push(name);
+        } else if (voto === 'contra') {
+            reunion.pautas[pauta].votos.contra.push(name);
+        }
+
+        await reunion.save();
+
+        res.status(200).json({ message: 'Voto computado' });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Erro interno do servidor' });
+    }
+});
 
 module.exports = {
     createReunion, getReunions, finishReunion,
     addReunionAta, deleteReunion, deleteReunionAta,
-    signAta, presenceList,getOneReunion
+    signAta, presenceList, getOneReunion,
+    handleVotos
 }
