@@ -1,7 +1,11 @@
 const router = require('express').Router();
 const { hasRole } = require('../middlewares/authMiddleware');
-const { addSpreadSheet, getSpreadSheets, getOneSpread, deleteSpreadSheet, addExcel, deleteExcel, editSpreadSheet } = require('../controllers/spreadSheetControllers.js')
+const { addSpreadSheet, getSpreadSheets, getOneSpread, deleteSpreadSheet, addExcel, deleteExcel, editSpreadSheet, getSpreadsWithoutLogin } = require('../controllers/spreadSheetControllers.js')
 const { uploadExcel } = require('../middlewares/multer.js')
+
+
+// pegar planilhas sem login
+router.get('/spreadsheets', getSpreadsWithoutLogin)
 
 
 // adicioanr planilha
@@ -24,5 +28,6 @@ router.delete('/:id', hasRole('tesoureiro'), deleteSpreadSheet)
 
 // editar planilha
 router.put('/:id', hasRole('tesoureiro'), editSpreadSheet)
+
 
 module.exports = router

@@ -216,6 +216,28 @@ const addReunionAta = asyncHandler(async (req, res) => {
 
 })
 
+// pegar atas
+
+const getReunionAtas = asyncHandler(async (req, res) => {
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : 12;
+    const skip = (page - 1) * pageSize;
+
+    try {
+
+        const totalDocuments = await Reunion.countDocuments({});
+        const atas = await Reunion.find({ status: 'assinada' })
+            .select('ata')
+            .skip(skip)
+            .limit(pageSize);
+
+        res.json({ totalDocuments, atas });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Erro ao buscar atas' });
+    }
+});
 
 const signAta = asyncHandler(async (req, res) => {
     try {
@@ -397,5 +419,5 @@ module.exports = {
     createReunion, getReunions, finishReunion,
     addReunionAta, deleteReunion, deleteReunionAta,
     signAta, presenceList, getOneReunion,
-    handleVotos
+    handleVotos, getReunionAtas
 }

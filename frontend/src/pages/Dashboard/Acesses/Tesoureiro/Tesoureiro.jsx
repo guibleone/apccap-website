@@ -47,7 +47,6 @@ export default function Tesoureiro() {
       token: user.token
     }
 
-    console.log(excelData)
     dispatch(addExcel(excelData))
   }
 
@@ -63,17 +62,14 @@ export default function Tesoureiro() {
     dispatch(resetExcel())
 
   }
-
     , [excel])
 
+    useEffect(() => {
 
-  useEffect(() => {
+      dispatch(getSpreadSheets({ token: user.token }))
 
-    dispatch(getSpreadSheets(user))
+    }, [excel.isSuccess])
 
-    dispatch(resetSpreadSheet())
-
-  }, [])
 
   return (
     <Box sx={{
@@ -167,7 +163,7 @@ export default function Tesoureiro() {
           </Grid>
           <Grid container pt={'36px'} columnSpacing={'30px'} rowSpacing={'15px'}>
 
-            {spreadSheets && spreadSheets.slice(0, 6).map((spreadSheet) => (
+            {spreadSheets && spreadSheets?.slice(0, 6)?.map((spreadSheet) => (
               <Grid item xs={12} md={2} key={spreadSheet._id} >
 
                 <button className='button-documentos' >
@@ -197,7 +193,7 @@ export default function Tesoureiro() {
           </Grid>
 
           <Grid item xs={12} md={12}>
-            {(spreadSheets && spreadSheets.length > 6) && (
+            {(spreadSheets && spreadSheets?.length >= 6) && (
               <Box sx={{
                 display: 'flex',
                 justifyContent: 'flex-end',

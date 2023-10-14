@@ -44,7 +44,6 @@ export default function Balancos() {
             token: user.token
         }
 
-        console.log(excelData)
         dispatch(addExcel(excelData))
     }
 
@@ -68,8 +67,7 @@ export default function Balancos() {
     }, [])
 
     useEffect(() => {
-
-        dispatch(getSpreadSheets(user))
+        
 
         dispatch(resetSpreadSheet())
 

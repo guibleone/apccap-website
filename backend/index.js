@@ -18,6 +18,7 @@ const path = require('path')
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 const multer = require('multer');
 const { uploadRelatorys } = require('./middlewares/multer.js')
+const SpreadSheet = require('./models/spreadSheetModel.js')
 
 // inicializar o expresss
 const app = express()

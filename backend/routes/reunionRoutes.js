@@ -1,8 +1,11 @@
 const express = require('express')
 const router = express.Router()
 const { hasRole } = require('../middlewares/authMiddleware.js')
-const { createReunion, getReunions, finishReunion, addReunionAta, deleteReunion, deleteReunionAta, signAta, presenceList, getOneReunion, handleVotos } = require('../controllers/reunionControllers.js')
+const { createReunion, getReunions, finishReunion, addReunionAta, deleteReunion, deleteReunionAta, signAta, presenceList, getOneReunion, handleVotos, getReunionAtas } = require('../controllers/reunionControllers.js')
 const { uploadRelatory } = require('../middlewares/multer.js');
+
+//pegar atas de reuniões
+router.get('/atas', getReunionAtas)
 
 // criar reunião
 router.route('/').post(hasRole('presidente'), uploadRelatory.single('pdfInstance'), createReunion)

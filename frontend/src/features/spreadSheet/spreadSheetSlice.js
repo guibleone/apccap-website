@@ -9,7 +9,7 @@ const initialState = {
     isError: false,
     isLoading: false,
     message: '',
-    excel:{
+    excel: {
         isLoading: false,
         isError: false,
         isSuccess: false,
@@ -55,7 +55,6 @@ export const addSpreadSheet = createAsyncThunk('spreadSheet/add', async (spreadS
 export const deleteSpreadSheet = createAsyncThunk('spreadSheet/delete', async (spreadSheet, thunkAPI) => {
     try {
         const response = await spreadSheetService.deleteSpreadSheet(spreadSheet)
-        thunkAPI.dispatch(getSpreadSheets(spreadSheet))
         return response
     }
     catch (error) {
@@ -68,7 +67,6 @@ export const deleteSpreadSheet = createAsyncThunk('spreadSheet/delete', async (s
 export const addExcel = createAsyncThunk('spreadSheet/addExcel', async (spreadSheet, thunkAPI) => {
     try {
         const response = await spreadSheetService.addExcel(spreadSheet)
-        thunkAPI.dispatch(getSpreadSheets(spreadSheet))
         return response
     }
     catch (error) {
@@ -81,7 +79,6 @@ export const addExcel = createAsyncThunk('spreadSheet/addExcel', async (spreadSh
 export const deleteExcel = createAsyncThunk('spreadSheet/deleteExcel', async (spreadSheet, thunkAPI) => {
     try {
         const response = await spreadSheetService.deleteExcel(spreadSheet)
-        thunkAPI.dispatch(getSpreadSheets(spreadSheet))
         return response
     }
     catch (error) {
@@ -102,6 +99,17 @@ export const editSpreadSheet = createAsyncThunk('spreadSheet/edit', async (sprea
     }
 })
 
+// pegar planilhas sem login
+export const getSpreadsWithoutLogin = createAsyncThunk('spreadSheet/getWithoutLogin', async (spreadSheet, thunkAPI) => {
+    try {
+        const response = await spreadSheetService.getSpreadSheetsWithoutLogin(spreadSheet)
+        return response
+    }
+    catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message);
+    }
+})
 
 // slice
 
@@ -121,7 +129,10 @@ const spreadSheetSlice = createSlice({
             state.excel.isSuccess = false
             state.excel.isLoading = false
             state.excel.message = ''
-        }
+        },
+        setSpreadsheets: (state, action) => {
+            state.spreadSheets = action.payload
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -134,6 +145,19 @@ const spreadSheetSlice = createSlice({
                 state.spreadSheets = action.payload
             })
             .addCase(getSpreadSheets.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload
+            })
+            // pegar planilhas 
+            .addCase(getSpreadsWithoutLogin.pending, (state, action) => {
+                state.isLoading = false;
+            })
+            .addCase(getSpreadsWithoutLogin.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.spreadSheets = action.payload
+            })
+            .addCase(getSpreadsWithoutLogin.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.message = action.payload
@@ -222,8 +246,9 @@ const spreadSheetSlice = createSlice({
                 state.isError = true;
                 state.message = action.payload
             })
+            // pegar planilhas sem login
     }
 })
 
-export const { resetSpreadSheet,resetExcel, reset } = spreadSheetSlice.actions
+export const { resetSpreadSheet, resetExcel, reset,setSpreadsheets } = spreadSheetSlice.actions
 export default spreadSheetSlice.reducer

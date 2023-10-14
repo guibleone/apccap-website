@@ -4,6 +4,7 @@ import reunionService from "./reunionService";
 
 const initialState = {
     reunionData: null,
+    atas: null,
     isError: false,
     isLoading: false,
     isSuccess: false,
@@ -166,6 +167,9 @@ export const reunionSlice = createSlice({
             state.isSuccess = false;
             state.isError = false;
             state.message = '';
+        },
+        setAtas: (state, action) => {
+            state.atas = action.payload;
         }
     },
     extraReducers: (builder) => {
@@ -341,7 +345,7 @@ export const reunionSlice = createSlice({
     }
 })
 
-export const { reset } = reunionSlice.actions;
+export const { reset,setAtas } = reunionSlice.actions;
 
 export default reunionSlice.reducer;
 

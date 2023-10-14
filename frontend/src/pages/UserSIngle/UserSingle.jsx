@@ -197,7 +197,7 @@ function UserSingle() {
                                     {userData?.dados_pessoais?.name?.split(' ')[0]} {userData?.dados_pessoais?.name?.split(' ')[userData?.dados_pessoais?.name?.split(' ')?.length - 1]}
                                 </h3>
                                 <h3 className="regular black">
-                                    {userData?.role?.charAt(0)?.toUpperCase() + userData?.role?.slice(1)}
+                                    {userData?.role === 'produtor_associado' ? 'Produtor Associado' : userData?.role.charAt(0)?.toUpperCase() + userData?.role?.slice(1)}
                                 </h3>
 
                             </Box>
@@ -242,56 +242,56 @@ function UserSingle() {
                                     }} >
                                         Dados Pessoais
                                     </h3>
-                                    
+
                                     <Box sx={{
                                         display: 'flex',
                                         gap: '10px',
                                         flexWrap: 'wrap',
-                                        flexDirection:'column'
+                                        flexDirection: 'column'
                                     }} >
-                                    <div>
-                                        <label style={{ fontWeight: 600 }}>Nome </label>
-                                        <h4 className='regular black'>
-                                            {userData?.dados_pessoais?.name}
-                                        </h4>
-                                    </div>
+                                        <div>
+                                            <label style={{ fontWeight: 600 }}>Nome </label>
+                                            <h4 className='regular black'>
+                                                {userData?.dados_pessoais?.name}
+                                            </h4>
+                                        </div>
 
-                                    <div>
-                                        <label style={{ fontWeight: 600 }}>CPF</label>
-                                        <h4 className='regular black'>
-                                            {userData?.dados_pessoais?.cpf}
-                                        </h4>
-                                    </div>
-                                    <div>
-                                        <label style={{ fontWeight: 600 }}>Email</label>
-                                        <h4 className='regular black'>
-                                            {userData?.dados_pessoais?.email}
-                                        </h4>
-                                    </div>
-                                    <div>
-                                        <label style={{ fontWeight: 600 }}>Telefone</label>
-                                        <h4 className='regular black'>
-                                            {userData?.dados_pessoais?.telefone}
-                                        </h4>
-                                    </div>
-                                    <div>
-                                        <label style={{ fontWeight: 600 }}>Celular</label>
-                                        <h4 className='regular black'>
-                                            {userData?.dados_pessoais?.celular}
-                                        </h4>
-                                    </div>
-                                    <div>
-                                        <label style={{ fontWeight: 600 }}>CEP</label>
-                                        <h4 className='regular black'>
-                                            {userData?.dados_pessoais?.cep} <br />
-                                     </h4>
-                                     </div>
-                                    <div>
-                                        <label style={{ fontWeight: 600 }}>Endereço</label>
-                                        <h4 className='regular black'>
-                                            {userData?.dados_pessoais?.logradouro} , {userData?.dados_pessoais?.numero} - {userData?.dados_pessoais?.cidade} / {userData?.dados_pessoais?.estado}
-                                        </h4>
-                                    </div>
+                                        <div>
+                                            <label style={{ fontWeight: 600 }}>CPF</label>
+                                            <h4 className='regular black'>
+                                                {userData?.dados_pessoais?.cpf}
+                                            </h4>
+                                        </div>
+                                        <div>
+                                            <label style={{ fontWeight: 600 }}>Email</label>
+                                            <h4 className='regular black'>
+                                                {userData?.dados_pessoais?.email}
+                                            </h4>
+                                        </div>
+                                        <div>
+                                            <label style={{ fontWeight: 600 }}>Telefone</label>
+                                            <h4 className='regular black'>
+                                                {userData?.dados_pessoais?.telefone}
+                                            </h4>
+                                        </div>
+                                        <div>
+                                            <label style={{ fontWeight: 600 }}>Celular</label>
+                                            <h4 className='regular black'>
+                                                {userData?.dados_pessoais?.celular}
+                                            </h4>
+                                        </div>
+                                        <div>
+                                            <label style={{ fontWeight: 600 }}>CEP</label>
+                                            <h4 className='regular black'>
+                                                {userData?.dados_pessoais?.cep} <br />
+                                            </h4>
+                                        </div>
+                                        <div>
+                                            <label style={{ fontWeight: 600 }}>Endereço</label>
+                                            <h4 className='regular black'>
+                                                {userData?.dados_pessoais?.logradouro} , {userData?.dados_pessoais?.numero} - {userData?.dados_pessoais?.cidade} / {userData?.dados_pessoais?.estado}
+                                            </h4>
+                                        </div>
                                     </Box>
 
                                 </Box>
@@ -313,64 +313,64 @@ function UserSingle() {
                                         display: 'flex',
                                         gap: '10px',
                                         flexWrap: 'wrap',
-                                        flexDirection:'column'
+                                        flexDirection: 'column'
                                     }} >
 
-                                    <div>
-                                        <label style={{ fontWeight: 600 }}>Nome </label>
-                                        <h4 className='regular black'>
-                                            {userData?.propriedade?.nome_propriedade}
-                                        </h4>
-                                    </div>
+                                        <div>
+                                            <label style={{ fontWeight: 600 }}>Nome </label>
+                                            <h4 className='regular black'>
+                                                {userData?.propriedade?.nome_propriedade}
+                                            </h4>
+                                        </div>
 
-                                    <div>
-                                        <label style={{ fontWeight: 600 }}>Área Total </label>
-                                        <h4 className='regular black'>
-                                            {userData?.propriedade?.area_total}
-                                        </h4>
-                                    </div>
+                                        <div>
+                                            <label style={{ fontWeight: 600 }}>Área Total </label>
+                                            <h4 className='regular black'>
+                                                {userData?.propriedade?.area_total}
+                                            </h4>
+                                        </div>
 
 
-                                    <div>
-                                        <label style={{ fontWeight: 600 }}>CPF do Proprietário </label>
-                                        <h4 className='regular black'>
-                                            {userData?.propriedade?.cpfProprietario}
-                                        </h4>
-                                    </div>
+                                        <div>
+                                            <label style={{ fontWeight: 600 }}>CPF do Proprietário </label>
+                                            <h4 className='regular black'>
+                                                {userData?.propriedade?.cpfProprietario}
+                                            </h4>
+                                        </div>
 
-                                    <div>
-                                        <label style={{ fontWeight: 600 }}>CEP </label>
-                                        <h4 className='regular black'>
-                                            {userData?.propriedade?.cep_propriedade}
-                                        </h4>
-                                    </div>
-                                    <div>
-                                        <label style={{ fontWeight: 600 }}>Endereço </label>
-                                        <h4 className='regular black'>
-                                            {userData?.propriedade?.logradouro_propriedade} , {userData?.propriedade?.numero_propriedade} - {userData?.propriedade?.cidade_propriedade} / {userData?.propriedade?.estado_propriedade}
-                                        </h4>
-                                    </div>
+                                        <div>
+                                            <label style={{ fontWeight: 600 }}>CEP </label>
+                                            <h4 className='regular black'>
+                                                {userData?.propriedade?.cep_propriedade}
+                                            </h4>
+                                        </div>
+                                        <div>
+                                            <label style={{ fontWeight: 600 }}>Endereço </label>
+                                            <h4 className='regular black'>
+                                                {userData?.propriedade?.logradouro_propriedade} , {userData?.propriedade?.numero_propriedade} - {userData?.propriedade?.cidade_propriedade} / {userData?.propriedade?.estado_propriedade}
+                                            </h4>
+                                        </div>
 
-                                    <div>
-                                        <label style={{ fontWeight: 600 }}>Telefone</label>
-                                        <h4 className='regular black'>
-                                            {userData?.propriedade?.telefone_propriedade}
-                                        </h4>
-                                    </div>
+                                        <div>
+                                            <label style={{ fontWeight: 600 }}>Telefone</label>
+                                            <h4 className='regular black'>
+                                                {userData?.propriedade?.telefone_propriedade}
+                                            </h4>
+                                        </div>
 
-                                    <div>
-                                        <label style={{ fontWeight: 600 }}>Celular</label>
-                                        <h4 className='regular black'>
-                                            {userData?.propriedade?.celular_propriedade}
-                                        </h4>
-                                    </div>
+                                        <div>
+                                            <label style={{ fontWeight: 600 }}>Celular</label>
+                                            <h4 className='regular black'>
+                                                {userData?.propriedade?.celular_propriedade}
+                                            </h4>
+                                        </div>
 
-                                    <div>
-                                        <label style={{ fontWeight: 600 }}>Tempo de Produção</label>
-                                        <h4 className='regular black'>
-                                            {userData?.propriedade?.tempoProducao}
-                                        </h4>
-                                    </div>
+                                        <div>
+                                            <label style={{ fontWeight: 600 }}>Tempo de Produção</label>
+                                            <h4 className='regular black'>
+                                                {userData?.propriedade?.tempoProducao}
+                                            </h4>
+                                        </div>
                                     </Box>
 
                                 </Box>

@@ -1,13 +1,12 @@
-import { Box, Pagination } from '@mui/material'
+import { Box, Pagination } from '@mui/material';
 import axios from 'axios';
-import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from "react-redux"
-import { getSpreadsWithoutLogin, setSpreadsheets } from '../../features/spreadSheet/spreadSheetSlice';
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { setAtas } from '../../features/reunion/reunionSlice';
 
-export default function BalancosPagination({ setSpreadSheetsData }) {
+export default function AtasPagination({ setAtasData }) {
 
-    const { spreadSheets, excel } = useSelector((state) => state.spreadSheet);
-    const { user } = useSelector((state) => state.auth);
+    const { atas, isSuccess } = useSelector((state) => state.reunions);
 
     const dispatch = useDispatch();
     const pageSize = 6;
@@ -21,21 +20,28 @@ export default function BalancosPagination({ setSpreadSheetsData }) {
 
         fetchData(pagination.page);
 
-    }, [pagination.page, excel.isSuccess]);
+    }, [pagination.page, isSuccess]);
+
+    const handlePageChange = (event, page) => {
+        setPagination({
+            ...pagination,
+            page: page,
+        });
+    };
 
     useEffect(() => {
+        setAtasData(atas);
 
-        setSpreadSheetsData(spreadSheets);
-
-
-    }, [spreadSheets]);
+    }, [
+        atas,
+    ]);
 
     const fetchData = (page) => {
         const pageSize = 6;
 
-        axios.get(`/api/planilha/spreadsheets?pageSize=${pageSize}&page=${page}`)
+        axios.get(`/api/reunion/atas?pageSize=${pageSize}&page=${page}`)
             .then((response) => {
-                dispatch(setSpreadsheets(response.data.spreadsheets));
+                dispatch(setAtas(response.data.atas));
                 setPagination({
                     ...pagination,
                     count: response.data.totalDocuments,
@@ -46,15 +52,6 @@ export default function BalancosPagination({ setSpreadSheetsData }) {
                 // Handle errors here
             });
     };
-
-    const handlePageChange = (event, page) => {
-        setPagination({
-            ...pagination,
-            page: page,
-        });
-    };
-
-
 
     return (
         <Box sx={{
