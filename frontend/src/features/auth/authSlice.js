@@ -261,6 +261,7 @@ export const authSlice = createSlice({
             .addCase(resetAprove.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.isSuccess = true
+                state.message = 'Aprovação reiniciada com sucesso'
                 state.user = action.payload
             })
             .addCase(resetAprove.rejected, (state, action) => {
@@ -275,6 +276,7 @@ export const authSlice = createSlice({
             .addCase(sendRecurso.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.isSuccess = true
+                state.message = 'Recurso enviado com sucesso'
                 state.user = action.payload
             })
             .addCase(sendRecurso.rejected, (state, action) => {

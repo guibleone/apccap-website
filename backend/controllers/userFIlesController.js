@@ -174,7 +174,7 @@ const deleteDocument = asyncHandler(async (req, res) => {
         throw new Error('Documento não encontrado')
     }
 
-    const refStorage = ref(storage, `documents/${document.user}/${document.name}`)
+    const refStorage = ref(storage, `documentosProdutor/${document.user}/${document.name}`)
 
     await Document.findByIdAndDelete(id);
 

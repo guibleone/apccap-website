@@ -133,7 +133,7 @@ function UserSingle() {
     }, [user])
 
 
-    if (isLoading || isLoadingAuth) {
+    if (isLoading || isLoadingAuth || !userData?.dados_pessoais?.name) {
 
         return <Box sx={
             {
@@ -171,24 +171,54 @@ function UserSingle() {
             <CssBaseline />
 
             <Container maxWidth='xl' >
-                <Grid container spacing={2} p={matches ? 9 : 0} pt={!matches ? 9 : 2} >
-                    <Grid item xs={12} lg={12}>
-                        <div className='title'>
+                <Grid container spacing={2} pb={5} pt={'72px'}>
+                    <Grid item xs={12} md={12}>
+                        <h3 style={{ color: '#000', fontWeight: 600 }}>
+                            Gerencie os dados do usuário
+                        </h3>
+                    </Grid>
+
+                    <Grid item xs={12} md={6}>
+                        <Box sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            gap: '15px',
+                            alignItems: 'center',
+                        }}>
                             <Avatar src={userData.dados_pessoais ? userData.dados_pessoais.profilePhoto : 'https://placehold.co/600x400'} alt="Foto de Perfil"
                                 sx={{ width: 66, height: 66 }}
 
                             />
-                            <h2 className='black bold'>
-                                {userData?.dados_pessoais?.name.split(' ')[0]} {userData?.dados_pessoais?.name.split(' ')[userData?.dados_pessoais?.name.split(' ').length - 1]}
-                            </h2>
+                            <Box sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                            }}>
+                                <h3 className='black bold'>
+                                    {userData?.dados_pessoais?.name?.split(' ')[0]} {userData?.dados_pessoais?.name?.split(' ')[userData?.dados_pessoais?.name?.split(' ')?.length - 1]}
+                                </h3>
+                                <h3 className="regular black">
+                                    {userData?.role?.charAt(0)?.toUpperCase() + userData?.role?.slice(1)}
+                                </h3>
 
-                            <h3 className='regular black'>
-                                Gerencie os dados do usuário
-                            </h3>
+                            </Box>
 
-
-                        </div>
+                        </Box>
                     </Grid>
+
+
+                    <Grid item xs={12} md={6}>
+
+                        <h3 style={{
+                            fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: !matches ? '100%' : '270px',
+                            textAlign: matches ? 'left' : 'center'
+                        }} >
+                            Alterar Acesso
+                        </h3>
+
+                        <AccessLevel id={id} token={user.token} />
+
+                    </Grid>
+
                 </Grid>
 
 
@@ -196,10 +226,10 @@ function UserSingle() {
 
                     <>
 
-                        <Grid container columnSpacing={25} spacing={4} sx={{ marginTop: '20px' }}>
+                        <Grid container spacing={4} >
 
 
-                            <Grid item xs={12} md={3}>
+                            <Grid item xs={12} md={6}>
                                 <Box sx={{
                                     display: 'flex',
                                     flexDirection: 'column',
@@ -212,12 +242,20 @@ function UserSingle() {
                                     }} >
                                         Dados Pessoais
                                     </h3>
+                                    
+                                    <Box sx={{
+                                        display: 'flex',
+                                        gap: '10px',
+                                        flexWrap: 'wrap',
+                                        flexDirection:'column'
+                                    }} >
                                     <div>
                                         <label style={{ fontWeight: 600 }}>Nome </label>
                                         <h4 className='regular black'>
                                             {userData?.dados_pessoais?.name}
                                         </h4>
                                     </div>
+
                                     <div>
                                         <label style={{ fontWeight: 600 }}>CPF</label>
                                         <h4 className='regular black'>
@@ -243,17 +281,22 @@ function UserSingle() {
                                         </h4>
                                     </div>
                                     <div>
-                                        <label style={{ fontWeight: 600 }}>Endereço</label>
+                                        <label style={{ fontWeight: 600 }}>CEP</label>
                                         <h4 className='regular black'>
                                             {userData?.dados_pessoais?.cep} <br />
-                                            {userData?.dados_pessoais?.logradouro} , {userData?.dados_pessoais?.numero} <br />
-                                            {userData?.dados_pessoais?.cidade} / {userData?.dados_pessoais?.estado}
+                                     </h4>
+                                     </div>
+                                    <div>
+                                        <label style={{ fontWeight: 600 }}>Endereço</label>
+                                        <h4 className='regular black'>
+                                            {userData?.dados_pessoais?.logradouro} , {userData?.dados_pessoais?.numero} - {userData?.dados_pessoais?.cidade} / {userData?.dados_pessoais?.estado}
                                         </h4>
                                     </div>
+                                    </Box>
 
                                 </Box>
                             </Grid>
-                            <Grid item xs={12} md={3}>
+                            <Grid item xs={12} md={6}>
                                 <Box sx={{
                                     display: 'flex',
                                     flexDirection: 'column',
@@ -266,6 +309,12 @@ function UserSingle() {
                                     }} >
                                         Propriedade
                                     </h3>
+                                    <Box sx={{
+                                        display: 'flex',
+                                        gap: '10px',
+                                        flexWrap: 'wrap',
+                                        flexDirection:'column'
+                                    }} >
 
                                     <div>
                                         <label style={{ fontWeight: 600 }}>Nome </label>
@@ -283,18 +332,22 @@ function UserSingle() {
 
 
                                     <div>
-                                        <label style={{ fontWeight: 600 }}>CPF do proprietário </label>
+                                        <label style={{ fontWeight: 600 }}>CPF do Proprietário </label>
                                         <h4 className='regular black'>
                                             {userData?.propriedade?.cpfProprietario}
                                         </h4>
                                     </div>
 
-
+                                    <div>
+                                        <label style={{ fontWeight: 600 }}>CEP </label>
+                                        <h4 className='regular black'>
+                                            {userData?.propriedade?.cep_propriedade}
+                                        </h4>
+                                    </div>
                                     <div>
                                         <label style={{ fontWeight: 600 }}>Endereço </label>
                                         <h4 className='regular black'>
-                                            {userData?.propriedade?.logradouro_propriedade} , {userData?.propriedade?.numero_propriedade} <br />
-                                            {userData?.propriedade?.cidade_propriedade} / {userData?.propriedade?.estado_propriedade}
+                                            {userData?.propriedade?.logradouro_propriedade} , {userData?.propriedade?.numero_propriedade} - {userData?.propriedade?.cidade_propriedade} / {userData?.propriedade?.estado_propriedade}
                                         </h4>
                                     </div>
 
@@ -318,11 +371,12 @@ function UserSingle() {
                                             {userData?.propriedade?.tempoProducao}
                                         </h4>
                                     </div>
+                                    </Box>
 
                                 </Box>
                             </Grid>
 
-                            <Grid item xs={12} md={3}>
+                            <Grid item xs={12} md={6}>
                                 <Box sx={{
                                     display: 'flex',
                                     flexDirection: 'column',
@@ -356,10 +410,10 @@ function UserSingle() {
                                         </h4>
                                     </div>
 
-                                    <div style={{alignSelf: 'center'}}>
-                                    
+                                    <div>
+
                                         <Avatar src={userData?.marca?.logo} alt="Logo da Marca"
-                                            sx={{ width: 66, height: 66,  }}
+                                            sx={{ width: 66, height: 66, }}
                                         />
                                     </div>
 
@@ -368,7 +422,7 @@ function UserSingle() {
                             </Grid>
 
 
-                            <Grid item xs={12} md={3}>
+                            <Grid item xs={12} md={6}>
                                 <Box sx={{
                                     display: 'flex',
                                     flexDirection: 'column',
@@ -394,55 +448,44 @@ function UserSingle() {
 
                             </Grid>
 
-
-
-                            <Grid item xs={12} sx={styleBox3}>
-                            <h3 style={{
-                                        fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: !matches ? '100%' : '270px',
-                                        textAlign: matches ? 'left' : 'center'
-                                    }} >
-                                        Alterar Acesso
-                                    </h3>
-                                <AccessLevel id={id} token={user.token} />
-                            </Grid>
-                            </Grid>
-                            <Box sx={
-                                {
-                                    display: 'flex',
-                                    justifyContent: 'end',
-                                    alignItems: 'center',
-                                    gap: '10px',
-                                }
-                            }>
-                                <Box>
-                                    <Button variant="outlined" color="error" onClick={handleOpen} disabled={user._id === id}>Excluir</Button>
-                                    <Modal
-                                        open={open}
-                                        onClose={handleClose}
-                                        aria-labelledby="modal-modal-title"
-                                        aria-describedby="modal-modal-description"
-                                    >
-                                        <Box sx={style}>
-                                            <Typography id="modal-modal-title" variant="h6" component="h2">
-                                                Tem certeza que deseja excluir?
-                                            </Typography>
-                                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                                                Voce não poderá desfazer essa ação.
-                                                <Button onClick={handleClose}>Cancelar</Button>
-                                                <Button color="error" variant="outlined" onClick={() => (
-                                                    dispatch(deleteUser({ id, token: user.token }),
-                                                        (!isLoading && navigate('/'))
-                                                    ))}>Excluir</Button>
-                                            </Typography>
-                                        </Box>
-                                    </Modal>
-                                </Box>
-
-                                <div>
-                                    <Button variant="outlined" onClick={() => dispatch(aproveUser({ id, token: user.token }))} color="success"  disabled={userData.status === 'aprovado' || user._id === id}>Aprovar</Button>
-                                </div>
-
+                        </Grid>
+                        <Box sx={
+                            {
+                                display: 'flex',
+                                justifyContent: 'end',
+                                alignItems: 'center',
+                                gap: '10px',
+                            }
+                        }>
+                            <Box>
+                                <button className="button-white" onClick={handleOpen} disabled={user._id === id}>Excluir</button>
+                                <Modal
+                                    open={open}
+                                    onClose={handleClose}
+                                    aria-labelledby="modal-modal-title"
+                                    aria-describedby="modal-modal-description"
+                                >
+                                    <Box sx={style}>
+                                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                                            Tem certeza que deseja excluir?
+                                        </Typography>
+                                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                                            Voce não poderá desfazer essa ação.
+                                            <Button onClick={handleClose}>Cancelar</Button>
+                                            <Button color="error" variant="outlined" onClick={() => (
+                                                dispatch(deleteUser({ id, token: user.token }),
+                                                    (!isLoading && navigate('/'))
+                                                ))}>Excluir</Button>
+                                        </Typography>
+                                    </Box>
+                                </Modal>
                             </Box>
+
+                            <div>
+                                <button className="button-purple" o onClick={() => dispatch(aproveUser({ id, token: user.token }))} color="success" disabled={userData.status === 'aprovado' || user._id === id}>Aprovar</button>
+                            </div>
+
+                        </Box>
 
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '15px', margin: '15px 0' }}>
 
@@ -454,7 +497,7 @@ function UserSingle() {
                             {isError && <Alert severity="error">{message}</Alert>}
 
                         </Box>
-                       
+
                     </>) : (
                     <Box sx={
                         {

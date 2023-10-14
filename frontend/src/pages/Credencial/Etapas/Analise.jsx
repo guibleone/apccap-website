@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Button, Container, Grid, Modal, Typography, useMediaQuery } from '@mui/material'
+import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Button, CircularProgress, Container, Grid, Modal, TextField, Typography, useMediaQuery } from '@mui/material'
 import React, { useEffect, useRef, useState } from 'react'
 import { colors } from '../../colors'
 import { BsArrowDownShort, BsArrowRightShort, BsArrowUpRight, BsChevronDown, BsChevronRight } from 'react-icons/bs'
@@ -15,7 +15,7 @@ export default function Analise() {
     // inicializa o dispatch
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const { user } = useSelector(state => state.auth)
+    const { user,isLoading } = useSelector(state => state.auth)
 
 
     // informação do documento
@@ -77,6 +77,20 @@ export default function Analise() {
         }
     }, [recursoTime]);
 
+    if (isLoading || !user?.analise?.analise_laboratorial) {
+
+        return <Box sx={
+            {
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: colors.main_white,
+            }
+        }>
+            <CircularProgress size={100} />
+        </Box>
+    }
+
     return (
         <>
             <Box sx={{ textAlign: 'center' }}>
@@ -88,28 +102,27 @@ export default function Analise() {
                 </h5>
             </Box>
 
-            {user && user.status === 'analise' && user.analise && user.analise.analise_pedido.status === 'reprovado' &&
+            {user && user?.status === 'analise' && user?.analise && user?.analise?.analise_pedido?.status === 'reprovado' &&
                 user.analise.analise_pedido.recurso.path === '' &&
                 <>
                     <Typography textAlign={'center'} variant='h5'>Seus documentos foram inválidados <FcHighPriority style={{ verticalAlign: 'bottom' }} size={35} /></Typography>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
-                        <Button variant='outlined' href={user.analise && user.analise.analise_pedido.path}>Análise do Pedido</Button>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
                         <FcClock size={60} />
                         <Typography variant='h6'>{timeLeft}</Typography>
                         <Typography variant='p'>Tempo restante para o envio do recurso </Typography>
                         <form onSubmit={onSubmit}>
                             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
-                                <input onChange={onChange} type="file" name="recurso" ref={fileInput} />
-                                <Button type='submit' sx={{ minWidth: '100%' }} variant='outlined' color='success'>Enviar</Button>
+                                <TextField onChange={onChange} type="file" name="recurso" inputRef={fileInput} />
+                                <button className='button-purple' type='submit' style={{ minWidth: '100%' }} variant='outlined' color='success'>Enviar</button>
                             </Box>
                         </form>
                     </Box>
                 </>
             }
             
-            {user && user.status === 'analise' && user.analise.status === 'reprovado' && user.analise.analise_pedido.recurso.path &&
+            {user && user.status === 'analise' && user.analise.analise_pedido.status === 'reprovado' && user.analise.analise_pedido.recurso.path &&
                     <>
-                        <Typography textAlign={'center'} variant='h5'>Seu recurso foi enviado. Por favor aguarde<FcClock style={{ verticalAlign: 'bottom' }} size={35} /></Typography>
+                        <h3 className='black' textAlign={'center'} variant='h5'>Seu recurso foi enviado</h3>
                     </>
                 }
 

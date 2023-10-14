@@ -115,8 +115,6 @@ function Documentos() {
         }
 
 
-        dispatch(resetDocuments())
-
     }, [isError, isSuccess, message, documents, dispatch])
 
     useEffect(() => {

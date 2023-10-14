@@ -99,13 +99,11 @@ const addProfilePhoto = async (userData) => {
 
 // reiniciar aprovação
 const resetAprove = async ({ id, token }) => {
-
     const config = {
         headers: {
             Authorization: `Bearer ${token}`
         }
     }
-
     const response = await axios.put(API_URL + 'reset/' + id, {}, config)
 
     if (response.data) {

@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Container, Grid, Modal, useMediaQuery } from '@mui/material'
+import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Button, Container, Grid, Modal, useMediaQuery } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { colors } from '../colors'
 import { BsArrowDownShort, BsArrowRightShort, BsArrowUpRight, BsChevronDown, BsChevronRight } from 'react-icons/bs'
@@ -9,8 +9,9 @@ import { toast } from 'react-toastify'
 import { styleError, styleSuccess } from '../toastStyles'
 import Documentos from './Etapas/Documentos'
 import Analise from './Etapas/Analise'
-import { associate, cancelCredencial, reset } from '../../features/auth/authSlice'
+import { associate, cancelCredencial, reset, resetAprove } from '../../features/auth/authSlice'
 import Mensalidade from './Mensalidade'
+import { getDocuments } from '../../features/documents/documentsSlice'
 
 export default function Credencial() {
 
@@ -66,6 +67,14 @@ export default function Credencial() {
 
     }
 
+    useEffect(() => {
+    
+        if (user) {
+          dispatch(getDocuments(user.token))
+        }
+    
+      }, [user])
+
 
     return (
         <Box sx={{
@@ -102,6 +111,18 @@ export default function Credencial() {
                                         Associar-se
                                     </button>
                                 </>)}
+
+                                {(user?.status === 'reprovado' || user?.analise?.analise_laboratorial?.status==='reprovado'  || user?.analise?.vistoria?.status==='reprovado'  
+                                || user?.analise?.analise_pedido?.status==='reprovado') && (
+                                    <>
+                                    <button onClick={()=> dispatch(resetAprove({id:user._id,token:user.token}))} className='button-purple'>
+                                        Tentar Novamente
+                                    </button>
+                                    <Alert severity="error">
+                                        Você foi reprovado no pedido de credencial. Por favor, tente novamente.
+                                    </Alert>
+                                    </>
+                                )}
 
                         </Box>
                     </Grid>
@@ -405,7 +426,7 @@ export default function Credencial() {
                                             <Documentos />
                                         )}
 
-                                        {user && user.formulario_requerimento && documents[0] && !user.analise.analise_laboratorial.path && (
+                                        {user && user.formulario_requerimento && documents[0]?.path  && (
                                             <Analise />
                                         )}
 
@@ -445,6 +466,21 @@ export default function Credencial() {
                                             </h3>
 
                                         </Box>
+                                        <Box sx={{ display: 'flex', gap: '48px', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                                        {user && !user.formulario_requerimento && (
+                                            <Formulario />
+                                        )}
+
+                                        {user && user.formulario_requerimento && !documents[0] && (
+                                            <Documentos />
+                                        )}
+
+                                        {user && user.formulario_requerimento && documents[0]?.path  && (
+                                            <Analise />
+                                        )}
+
+                                    </Box>
+
 
                                     </Box>
                                 )}

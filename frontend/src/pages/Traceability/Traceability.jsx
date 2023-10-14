@@ -9,7 +9,7 @@ import './Styles.css'
 import { AiFillCheckCircle, AiFillInfoCircle } from 'react-icons/ai';
 import { BsExclamationTriangle } from 'react-icons/bs';
 import Footer from '../../components/Footer/Footer';
-import { purple } from '../colors.js'
+import { colors, purple } from '../colors.js'
 
 
 function Traceability() {
@@ -109,10 +109,10 @@ function Traceability() {
             </div>
 
 
-          
-              <img src={require('../../imgs/seloFoto.png')} alt="rastreio" className="rastreio-img" />
 
-         
+            <img src={require('../../imgs/seloFoto.png')} alt="rastreio" className="rastreio-img" />
+
+
 
 
           </div>
@@ -125,52 +125,58 @@ function Traceability() {
 
   return (
     <>
-      <Box>
+      <Box sx={{
+        backgroundColor: colors.main_white
+      }}>
         <CssBaseline />
 
         {!isError &&
-          <div className="box-produto">
-            <div>
-              <img src={require('../../imgs/Check.png')} alt="check" className="check-mark" />
+          <>
 
-              <div className="produto-esquerdo">
-                <img className="foto-produto" src={productData.path ? productData.path : 'https://placehold.co/300x300'} alt="Foto do produto" />
-              </div>
+            <div className="box-produto">
+              <div>
+                <img src={require('../../imgs/Check.png')} alt="check" className="check-mark" />
 
-              <img src={require('../../imgs/Ellipse.png')} alt="elipse" className="elipse" />
+                <div className="produto-esquerdo">
+                  <img className="foto-produto" src={productData.path ? productData.path : 'https://placehold.co/300x300'} alt="Foto do produto" />
+                </div>
 
-              <img src={producer?.dados_pessoais?.profilePhoto ? producer?.dados_pessoais?.profilePhoto : 'https://placehold.co/300x300'} alt="Foto do produto" className='foto-produtor' />
-            </div>
-            <div className="produtos-information">
-              <div className="nome">
-                <h2>
-                  Nome do Produto
-                </h2>
-                <h3>
-                  {productData.name}
-                </h3>
-              </div>
+                <img src={require('../../imgs/Ellipse.png')} alt="elipse" className="elipse" />
 
-              <div className="sobre">
-                <h2>
-                  Descrição do Produto
-                </h2>
-                <h3>
-                  {productData.description}
-                </h3>
-              </div>
-
-              <div className="sobre-production">
-                <h2>
-                  Sobre o Produtor
-                </h2>
-
-                {producerResume && producerResume[0] ? <h3>{producerResume[0].body}</h3> : <h3>Sem descrição.</h3>}
+                <img src={producer?.dados_pessoais?.profilePhoto ? producer?.dados_pessoais?.profilePhoto : 'https://placehold.co/300x300'} alt="Foto do produto" className='foto-produtor' />
 
               </div>
-            </div>
+              <div className="produtos-information">
+                <div className="nome">
+                  <h2>
+                    Nome do Produto
+                  </h2>
+                  <h3>
+                    {productData.name}
+                  </h3>
+                </div>
 
-            {/*  <Typography variant='h4'> Produto Oficial </Typography>
+                <div className="sobre">
+                  <h2>
+                    Descrição do Produto
+                  </h2>
+                  <h3>
+                    {productData.description}
+                  </h3>
+                </div>
+
+                <div className="sobre-production">
+                  <h2>
+                    Sobre o Produtor
+                  </h2>
+
+                  {producerResume && producerResume[0] ? <h3>{producerResume[0].body}</h3> : <h3>Sem descrição.</h3>}
+
+                </div>
+              </div>
+
+
+              {/*  <Typography variant='h4'> Produto Oficial </Typography>
 
           <img width={300} src={productData.path ? productData.path : 'https://placehold.co/300x300'} alt="Foto do produto" />
 
@@ -182,8 +188,10 @@ function Traceability() {
 
           */}
 
-          </div>
-        }
+            </div>
+
+          </>}
+
 
       </Box>
 

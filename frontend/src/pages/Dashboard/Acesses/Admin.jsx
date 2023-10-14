@@ -6,7 +6,7 @@ import UsersPagination from "../../../components/Pagination/Users"
 import { toast } from 'react-toastify'
 import { resetStatus } from "../../../features/admin/adminSlice"
 import { styleError, styleSuccess } from '../../toastStyles'
-import {FaUserEdit} from 'react-icons/fa'
+import { FaUserEdit } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom';
 
 export default function Admin() {
@@ -63,7 +63,7 @@ export default function Admin() {
             {users && users.map((user) => (
 
               <Grid key={user._id} item md={3}>
-                <Box 
+                <Box
                   onClick={() => navigate(`/usuario/${user._id}`)}
                   sx={{
                     borderRadius: '6px',
@@ -73,29 +73,29 @@ export default function Admin() {
                     '&:hover': {
                       cursor: 'pointer',
                       border: '1.5px solid #00007B',
-                    }       
+                    }
                   }} >
-                    <Box sx={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                    }}>
-                    <h3 style={{ color: '#000', fontWeight: 600 }}>    
+                  <Box sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                  }}>
+                    <h3 style={{ color: '#000', fontWeight: 600 }}>
                       {user.dados_pessoais.name.split(' ')[0]} {user.dados_pessoais.name.split(' ')[user.dados_pessoais.name.split(' ').length - 1]}
                     </h3>
 
                     <FaUserEdit style={{ color: '#000', fontSize: '20px' }} />
 
-                    </Box>
-
-                    <p sx={{
-                      color: '#000',
-                      fontWeight: 500,
-                      fontSize: '14px',
-                    }}>
-  
-                      {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
-                    </p>
                   </Box>
+
+                  <p sx={{
+                    color: '#000',
+                    fontWeight: 500,
+                    fontSize: '14px',
+                  }}>
+
+                    {user?.role === 'produtor_associado' ? 'Produtor Associado' : user?.role.charAt(0)?.toUpperCase() + user?.role?.slice(1)}
+                  </p>
+                </Box>
 
               </Grid>
 

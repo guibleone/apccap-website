@@ -249,30 +249,41 @@ export default function AnaliseCredencial() {
         }}>
             {userData.dados_pessoais ? (<>
                 <Container maxWidth='xl'>
-                <Grid container spacing={2} p={matches ? 9 : 0} pt={!matches ? 9 : 2} >
-                    <Grid item xs={12} lg={12}>
-                        <div className='title'>
-                            <Avatar src={userData.dados_pessoais ? userData.dados_pessoais.profilePhoto : 'https://placehold.co/600x400'} alt="Foto de Perfil"
-                                sx={{ width: 66, height: 66 }}
-
-                            />
-                            <h2 className='black bold'>
-                                {userData?.dados_pessoais?.name.split(' ')[0]} {userData?.dados_pessoais?.name.split(' ')[userData?.dados_pessoais?.name.split(' ').length - 1]}
-                            </h2>
-
-                            <h3 style={{textAlign:'center'}} className='regular black'>
-                                Administre o precesso de credencimento do produtor
+                    <Grid container spacing={2} pb={5} pt={'72px'}>
+                        <Grid item xs={12} md={12}>
+                            <h3 style={{ color: '#000', fontWeight: 600 }}>
+                                Administre o processo de credenciamento
                             </h3>
+                        </Grid>
 
+                        <Grid item xs={12} md={6}>
+                            <Box sx={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                gap: '15px',
+                                alignItems: 'center',
+                            }}>
+                                <Avatar src={userData.dados_pessoais ? userData.dados_pessoais.profilePhoto : 'https://placehold.co/600x400'} alt="Foto de Perfil"
+                                    sx={{ width: 66, height: 66 }}
 
-                        </div>
+                                />
+                                <Box sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                }}>
+                                    <h3 className='black bold'>
+                                        {userData?.dados_pessoais?.name?.split(' ')[0]} {userData?.dados_pessoais?.name?.split(' ')[userData?.dados_pessoais?.name?.split(' ')?.length - 1]}
+                                    </h3>
+                                </Box>
+
+                            </Box>
+                        </Grid>
+
                     </Grid>
-                </Grid>
-
-                    <Grid container spacing={2}  pt={!matches ? 9 : 2} >
+                    <Grid container spacing={2}  >
 
 
-                        <Grid item xs={12} md={3}>
+                        <Grid item xs={12} md={6}>
                             <Box sx={{
                                 display: 'flex',
                                 flexDirection: 'column',
@@ -285,38 +296,62 @@ export default function AnaliseCredencial() {
                                 }} >
                                     Dados Pessoais
                                 </h3>
-                                <div>
-                                    <label style={{ fontWeight: 600 }}>Nome </label>
-                                    <h4 className='regular black'>
-                                        {userData?.dados_pessoais?.name}
-                                    </h4>
-                                </div>
 
-                                <div>
-                                    <label style={{ fontWeight: 600 }}>Telefone</label>
-                                    <h4 className='regular black'>
-                                        {userData?.dados_pessoais?.telefone}
-                                    </h4>
-                                </div>
-                                <div>
-                                    <label style={{ fontWeight: 600 }}>Celular</label>
-                                    <h4 className='regular black'>
-                                        {userData?.dados_pessoais?.celular}
-                                    </h4>
-                                </div>
-                                <div>
-                                    <label style={{ fontWeight: 600 }}>Endereço</label>
-                                    <h4 className='regular black'>
-                                        {userData?.dados_pessoais?.cep} <br />
-                                        {userData?.dados_pessoais?.logradouro} , {userData?.dados_pessoais?.numero} <br />
-                                        {userData?.dados_pessoais?.cidade} / {userData?.dados_pessoais?.estado}
-                                    </h4>
-                                </div>
+                                <Box sx={{
+                                    display: 'flex',
+                                    gap: '10px',
+                                    flexWrap: 'wrap',
+                                    flexDirection: 'column'
+                                }} >
+                                    <div>
+                                        <label style={{ fontWeight: 600 }}>Nome </label>
+                                        <h4 className='regular black'>
+                                            {userData?.dados_pessoais?.name}
+                                        </h4>
+                                    </div>
+
+                                    <div>
+                                        <label style={{ fontWeight: 600 }}>CPF</label>
+                                        <h4 className='regular black'>
+                                            {userData?.dados_pessoais?.cpf}
+                                        </h4>
+                                    </div>
+                                    <div>
+                                        <label style={{ fontWeight: 600 }}>Email</label>
+                                        <h4 className='regular black'>
+                                            {userData?.dados_pessoais?.email}
+                                        </h4>
+                                    </div>
+                                    <div>
+                                        <label style={{ fontWeight: 600 }}>Telefone</label>
+                                        <h4 className='regular black'>
+                                            {userData?.dados_pessoais?.telefone}
+                                        </h4>
+                                    </div>
+                                    <div>
+                                        <label style={{ fontWeight: 600 }}>Celular</label>
+                                        <h4 className='regular black'>
+                                            {userData?.dados_pessoais?.celular}
+                                        </h4>
+                                    </div>
+                                    <div>
+                                        <label style={{ fontWeight: 600 }}>CEP</label>
+                                        <h4 className='regular black'>
+                                            {userData?.dados_pessoais?.cep} <br />
+                                        </h4>
+                                    </div>
+                                    <div>
+                                        <label style={{ fontWeight: 600 }}>Endereço</label>
+                                        <h4 className='regular black'>
+                                            {userData?.dados_pessoais?.logradouro} , {userData?.dados_pessoais?.numero} - {userData?.dados_pessoais?.cidade} / {userData?.dados_pessoais?.estado}
+                                        </h4>
+                                    </div>
+                                </Box>
 
                             </Box>
                         </Grid>
 
-                        <Grid item xs={12} md={4} >
+                        <Grid item xs={12} md={6} >
 
 
                             <h3 style={{
@@ -328,24 +363,53 @@ export default function AnaliseCredencial() {
 
                             <Box sx={{
                                 display: 'flex',
-                                
+
                                 paddingTop: '10px',
                                 gap: '20px'
 
                             }}>
-                                <Box>
+                                <Box sx={{
+                                    display: 'flex',
+                                    gap: '10px',
+                                    flexWrap: 'wrap',
+                                    flexDirection: 'column'
+                                }} >
+
                                     <div>
                                         <label style={{ fontWeight: 600 }}>Nome </label>
                                         <h4 className='regular black'>
                                             {userData?.propriedade?.nome_propriedade}
                                         </h4>
                                     </div>
+
                                     <div>
-                                        <label style={{ fontWeight: 600 }}>CPF do proprietário </label>
+                                        <label style={{ fontWeight: 600 }}>Área Total </label>
+                                        <h4 className='regular black'>
+                                            {userData?.propriedade?.area_total}
+                                        </h4>
+                                    </div>
+
+
+                                    <div>
+                                        <label style={{ fontWeight: 600 }}>CPF do Proprietário </label>
                                         <h4 className='regular black'>
                                             {userData?.propriedade?.cpfProprietario}
                                         </h4>
                                     </div>
+
+                                    <div>
+                                        <label style={{ fontWeight: 600 }}>CEP </label>
+                                        <h4 className='regular black'>
+                                            {userData?.propriedade?.cep_propriedade}
+                                        </h4>
+                                    </div>
+                                    <div>
+                                        <label style={{ fontWeight: 600 }}>Endereço </label>
+                                        <h4 className='regular black'>
+                                            {userData?.propriedade?.logradouro_propriedade} , {userData?.propriedade?.numero_propriedade} - {userData?.propriedade?.cidade_propriedade} / {userData?.propriedade?.estado_propriedade}
+                                        </h4>
+                                    </div>
+
                                     <div>
                                         <label style={{ fontWeight: 600 }}>Telefone</label>
                                         <h4 className='regular black'>
@@ -359,25 +423,6 @@ export default function AnaliseCredencial() {
                                             {userData?.propriedade?.celular_propriedade}
                                         </h4>
                                     </div>
-                           
-                                </Box>
-                                <Box>
-
-                                    <div>
-                                        <label style={{ fontWeight: 600 }}>Endereço </label>
-                                        <h4 className='regular black'>
-                                            {userData?.propriedade?.logradouro_propriedade} , {userData?.propriedade?.numero_propriedade} <br />
-                                            {userData?.propriedade?.cidade_propriedade} / {userData?.propriedade?.estado_propriedade}
-                                        </h4>
-                                    </div>
-
-
-                                    <div>
-                                        <label style={{ fontWeight: 600 }}>Área Total </label>
-                                        <h4 className='regular black'>
-                                            {userData?.propriedade?.area_total}
-                                        </h4>
-                                    </div>
 
                                     <div>
                                         <label style={{ fontWeight: 600 }}>Tempo de Produção</label>
@@ -385,11 +430,13 @@ export default function AnaliseCredencial() {
                                             {userData?.propriedade?.tempoProducao}
                                         </h4>
                                     </div>
+
                                 </Box>
+
                             </Box>
 
                         </Grid>
-                        <Grid item xs={12} md={5}>
+                        <Grid item xs={12} md={12}>
                             <Box sx={{
                                 display: 'flex',
                                 flexDirection: 'column',
@@ -405,12 +452,22 @@ export default function AnaliseCredencial() {
 
                             </Box>
 
-                            <Box >
+                            <Box sx={{
+                                display: 'flex',
+                                padding: '10px 0',
+                                gap: '10px',
+                                flexDirection: matches ? 'row' : 'column',
+                            }}>
                                 {documentsData && documentsData.length > 0 ? documentsData.map((doc) => (
                                     <>
-                                        <Box key={doc._id} sx={{ display: 'flex', justifyContent: 'space-between',paddingTop:'10px' }}>
-                                            <h4 className='regular black'>{doc.name}</h4>
-                                            <Button variant='outlined' color="success" href={doc.path} download={doc.name}><AiOutlineDownload /></Button>
+                                        <Box sx={{
+                                            width: '100%',
+                                        }} key={doc?._id} >
+                                            <button onClick={() => window.location.href = doc?.path} className="button-purple" style={{
+                                                width: '100%',
+                                            }}>
+                                                {doc?.name} <AiOutlineDownload size={20} style={{ verticalAlign: 'bottom' }} />
+                                            </button>
                                         </Box>
 
                                         <Divider sx={{ margin: '5px 0' }} />
@@ -421,14 +478,14 @@ export default function AnaliseCredencial() {
                         </Grid>
                     </Grid>
 
-    
 
-                   
-                  
+
+
+
 
                     <Grid container spacing={2} sx={{ marginTop: '20px', marginBottom: '40px' }} >
                         <Grid item xs={12} sm={12} lg={12} pb={4} >
-                        <h3 style={{
+                            <h3 style={{
                                 fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: !matches ? '100%' : '270px',
                                 textAlign: matches ? 'left' : 'center'
                             }} >
@@ -441,7 +498,7 @@ export default function AnaliseCredencial() {
                                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center' }}>
 
                                     <h3 >Análise do pedido</h3>
-                                    <h4 style={{textAlign:'center'}} className="regular black">Parecer sobre os documentos do produtor</h4>
+                                    <h4 style={{ textAlign: 'center' }} className="regular black">Parecer sobre os documentos do produtor</h4>
 
                                     {userData.analise && !userData.analise.analise_pedido.path ? (
                                         <>
@@ -493,12 +550,12 @@ export default function AnaliseCredencial() {
                                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center' }}>
 
                                     <h3 >Vistoria</h3>
-                                    <h4 style={{textAlign:'center'}}  className="regular black" >Parecer do técnico sobre a cadeia produtiva</h4>
+                                    <h4 style={{ textAlign: 'center' }} className="regular black" >Parecer do técnico sobre a cadeia produtiva</h4>
 
                                     {(userData.analise && !userData.analise.vistoria.path) ?
                                         (userData.analise && userData.analise.analise_pedido.status !== 'aprovado') ? (<FcPrivacy size={35} />) : (
                                             <>
-                                                <TextField size="small"  onChange={onChange} type="file" name="vistoria" id="vistoria" inputRef={fileInput} />
+                                                <TextField size="small" onChange={onChange} type="file" name="vistoria" id="vistoria" inputRef={fileInput} />
                                                 <button type="submit" className="button-purple">Adicionar</button>
                                             </>
                                         )
@@ -544,12 +601,12 @@ export default function AnaliseCredencial() {
                                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center' }}>
 
                                     <h3 >Análise Laboratorial</h3>
-                                    <h4 style={{textAlign:'center'}}  className="regular black" >Parecer do laboratório credenciado</h4>
+                                    <h4 style={{ textAlign: 'center' }} className="regular black" >Parecer do laboratório credenciado</h4>
 
                                     {userData.analise && !userData.analise.analise_laboratorial.path ?
                                         (userData.analise.analise_pedido.status !== 'aprovado' || userData.analise.vistoria.status !== 'aprovado') ? (<FcPrivacy size={35} />) : (
                                             <>
-                                                <TextField size="small"  onChange={onChange} type="file" name="analise_laboratorial" inputRef={fileInput} />
+                                                <TextField size="small" onChange={onChange} type="file" name="analise_laboratorial" inputRef={fileInput} />
                                                 <button type="submit" className="button-purple">Adicionar</button>
                                             </>
                                         ) : (
@@ -588,14 +645,19 @@ export default function AnaliseCredencial() {
                         </Grid>
                     </Grid>
 
-           
-                    <Grid container spacing={2} >
+
+                    <Grid container spacing={2} pb={10} >
 
                         <Grid item xs={12} sm={12} lg={3} >
                             {userData.analise && userData.analise.analise_pedido.recurso.status &&
-                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                    <h4 >Recurso</h4>
-                                    <h4 >O produtor pode enviar um recurso sobre a análise do pedido</h4>
+                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                    <h3 style={{
+                                        fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: !matches ? '100%' : '270px',
+                                        textAlign: matches ? 'left' : 'center'
+                                    }} >
+                                        Recurso
+                                    </h3>
+                                    <h4 className="black regular" >O produtor pode enviar um recurso sobre a análise do pedido</h4>
                                 </Box>
                             }
                         </Grid>
@@ -605,14 +667,17 @@ export default function AnaliseCredencial() {
                                 {userData.analise.analise_pedido.recurso.path === '' ? (
                                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                         <FcClock size={50} />
-                                        <h4 >{timeLeft}</h4>
-                                        <h4 >Para invalidar recurso</h4>
+                                        <h3 className="semi-bold" >{timeLeft}</h3>
+                                        <h4 className="regular black" >Para invalidar recurso</h4>
                                     </Box>
                                 ) :
                                     <>
                                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                            <h4 >Recurso Produtor</h4>
-                                            <Button href={userData.analise && userData.analise.analise_pedido.recurso.path} target="_blank" variant='outlined' >Baixar Recurso</Button>
+                                            <h3 style={{
+                                                fontWeight: 540
+                                            }} >Recurso pronto</h3>
+                                            <button className="button-purple" href={userData.analise && userData.analise.analise_pedido.recurso.path} target="_blank" variant='outlined' >
+                                                Baixar <AiOutlineDownload size={25} style={{ verticalAlign: 'bottom' }} /> </button>
                                         </Box>
                                     </>
                                 }
@@ -623,21 +688,37 @@ export default function AnaliseCredencial() {
                             {userData.analise && userData.analise.analise_pedido.recurso.status &&
                                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
 
-                                    <h4 >Parecer do recurso</h4>
+                                    <h3 style={{
+                                        fontWeight: 540
+                                    }} >Parecer do recurso</h3>
 
                                     {userData.analise.analise_pedido.recurso.status === 'pendente' &&
                                         <>
                                             {emailStatus.isLoading ? <CircularProgress sx={{ margin: '20px' }} size={60} /> :
-                                                <>
-                                                    <Button
-                                                        fullWidth
-                                                        disabled={userData.analise.analise_pedido.recurso.path === ''}
-                                                        onClick={handleRepproveRecurso} variant="outlined" color="error">Reprovar</Button>
-                                                    <Button
-                                                        fullWidth
-                                                        disabled={userData.analise.analise_pedido.recurso.path === ''}
-                                                        onClick={handleApproveRecurso} variant="outlined" color="success">Aprovar</Button>
-                                                </>
+                                                <Box sx={{
+                                                    display: 'flex',
+                                                    gap: '10px',
+                                                }}>
+                                                    {userData.analise.analise_pedido.recurso.path === '' ? (
+                                                        <FcPrivacy size={35} />
+                                                    ) : (<>
+                                                        <button
+                                                            className="button-white"
+                                                            style={{
+                                                                width: '100%',
+                                                            }}
+                                                            disabled={userData.analise.analise_pedido.recurso.path === ''}
+                                                            onClick={handleRepproveRecurso} variant="outlined" color="error">Reprovar</button>
+                                                        <button
+                                                            className="button-purple"
+                                                            style={{
+                                                                width: '100%',
+                                                            }}
+                                                            fullWidth
+                                                            disabled={userData.analise.analise_pedido.recurso.path === ''}
+                                                            onClick={handleApproveRecurso} variant="outlined" color="success">Aprovar</button>
+                                                    </>)}
+                                                </Box>
                                             }
                                         </>
                                     }

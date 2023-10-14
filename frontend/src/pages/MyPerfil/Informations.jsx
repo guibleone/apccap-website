@@ -621,8 +621,7 @@ function Informations() {
                             <Select
                                 fullWidth
                                 onChange={handleChangePropriedade}
-                                defaultValue=""
-                                value={propriedadeData.cidade_propriedade || ''}
+                                defaultValue={propriedadeData.cidade_propriedade || ''}
                                 name='cidade_propriedade'
                                 autoComplete='cidade_propriedade'
                                 MenuProps={{ PaperProps: { sx: { maxHeight: 200 } } }}
@@ -890,7 +889,7 @@ function Informations() {
                                 required
                                 fullWidth
                                 id="instagram"
-                                placeholder='Link do Instagram'
+                                placeholder='Nome de usuário'
                                 name="instagram"
                                 autoComplete="instagram" onChange={handleChangeMarca} type="text"
                                 value={marcaData.instagram}

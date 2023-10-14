@@ -76,7 +76,7 @@ function Register() {
     'Pedreira',
     'Serra Negra',
     'Socorro',
-   
+
   ]
 
   /* propriedade */
@@ -542,7 +542,7 @@ function Register() {
                       '& .MuiInputBase-root': {
                         borderRadius: '0px',
                       },
-                      
+
                     }
                   }
                 >
@@ -682,11 +682,11 @@ function Register() {
                       '& .MuiInputBase-root': {
                         borderRadius: '0px',
                       },
-                      
+
                     }
                   }
                 >
-                   {cidadesValidas.map((cidade, index) => (
+                  {cidadesValidas.map((cidade, index) => (
                     <MenuItem key={index} value={cidade}>{cidade}</MenuItem>
                   ))}
                 </Select>
@@ -942,7 +942,7 @@ function Register() {
                   required
                   fullWidth
                   id="instagram"
-                  placeholder='Link do Instagram'
+                  placeholder='Nome de usuário'
                   name="instagram"
                   autoComplete="instagram" onChange={handleChangeMarca} type="text"
                   value={marcaData.instagram}
@@ -1040,7 +1040,6 @@ function Register() {
                     <h3 sx={{ fontWeight: 540, color: '#000000' }}>
                       Logo da sua marca
                     </h3>
-
 
                     <TextField
                       required

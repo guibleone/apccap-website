@@ -168,7 +168,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 
         if (documents) {
             documents.map(async (document) => {
-                const storageRef = ref(storage, `documents/${user._id}/${document.name}`)
+                const storageRef = ref(storage, `documentosProdutor/${user._id}/${document.name}`)
                 await deleteObject(storageRef)
             })
 

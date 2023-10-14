@@ -59,6 +59,11 @@ const registerUser = asyncHandler(async (req, res) => {
 
             if (user) {
 
+                if (isAssociado) {
+                    user.role = 'produtor_associado'
+                    user.status = 'analise'
+                }
+
                 user.token = generateToken(user._id);
 
                 const storageRef = ref(storage, `logos/${user._id}`)
@@ -70,13 +75,14 @@ const registerUser = asyncHandler(async (req, res) => {
                 const snapshot = await uploadBytesResumable(storageRef, logo.buffer, metadata);
 
                 const url = await getDownloadURL(snapshot.ref);
+               
 
-                user.marca.logo = url
+                const updatedMarca = {
+                    ...user.marca,
+                    logo: url,
+                };
 
-                if (isAssociado) {
-                    user.role = 'produtor_associado'
-                    user.status = 'analise'
-                }
+                user.marca = updatedMarca
                 
                 await user.save();
 
@@ -307,38 +313,53 @@ const restartAprove = asyncHandler(async (req, res) => {
             throw new Error('Usuário não encontrado')
         }
 
-        if (user.status === 'analise') {
-            res.status(400)
-            throw new Error('Usuário já está em análise')
-        }
-
-        if (user.analise.analise_pedido.recurso.path) {
-            const storageRef = ref(storage, `conselhoRelatórios/${user._id}/recurso`)
-            await deleteObject(storageRef)
-
-            user.analise.analise_pedido.recurso.path = ''
-            user.analise.analise_pedido.recurso.time = null
-            user.analise.analise_pedido.recurso.status = ''
-
-            await user.save()
-        }
-
+   
         if (user.analise.analise_pedido.path) {
             const storageRef = ref(storage, `conselhoRelatórios/${user._id}/analise_pedido`)
             await deleteObject(storageRef)
+        }
 
-            user.analise.analise_pedido.status = ''
-            user.analise.analise_pedido.path = ''
+        if (user.analise.vistoria.path) {
+            const storageRef = ref(storage, `conselhoRelatórios/${user._id}/vistoria`)
+            await deleteObject(storageRef)
+        }
 
-            await user.save()
+        if (user.analise.analise_laboratorial.path) {
+            const storageRef = ref(storage, `conselhoRelatórios/${user._id}/analise_laboratorial`)
+            await deleteObject(storageRef)
+        }
+        if (user.analise.analise_pedido.recurso.path) {
+            const storageRef = ref(storage, `conselhoRelatórios/${user._id}/recurso`)
+            await deleteObject(storageRef)
         }
 
         user.status = 'analise'
         user.relatory = ''
+        user.analise = {
+            analise_pedido: {
+                status: '',
+                path: '',
+                time: null,
+                recurso: {
+                    status: '',
+                    path: '',
+                    time: null,
+                }
+            },
+            vistoria: {
+                status: '',
+                path: '',
+            },
+            analise_laboratorial: {
+                status: '',
+                path: '',
+            },
+
+        }
 
         if (documents) {
             documents.map(async (document) => {
-                const storageRef = ref(storage, `documents/${document.user}/${document.name}`)
+                const storageRef = ref(storage, `documentosProdutor/${document.user}/${document.name}`)
                 await deleteObject(storageRef)
             })
         }

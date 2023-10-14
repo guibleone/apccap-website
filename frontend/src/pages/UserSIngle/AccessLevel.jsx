@@ -87,11 +87,8 @@ function AccessLevel({ id, token }) {
         </Select>
       </FormControl>
 
-      <Typography variant="body2" color="text.secondary"> <b>Acesso Atual: </b> {acesso}</Typography>
-
       <button className='button-purple' onClick={handleSubmit} style={
         {
-          margin: '15px 0',
           width: '100%'
         }
       } disabled={user._id === id}>Alterar</button>

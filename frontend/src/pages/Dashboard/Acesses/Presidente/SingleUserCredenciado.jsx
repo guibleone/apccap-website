@@ -132,31 +132,45 @@ export default function User() {
         }}>
             <Container maxWidth='xl'>
                 {produtor && produtor.dados_pessoais && (
-                    <Grid container spacing={2} p={matches ? 9 : 0} pt={!matches ? 9 : 2} pb={5} >
-                        <Grid item xs={12} lg={12}>
-                            <div className='title'>
+                    <Grid container spacing={2} pb={5} pt={'72px'}>
+                        <Grid item xs={12} md={12}>
+                            <h3 style={{ color: '#000', fontWeight: 600 }}>
+                                Gerencie a utilização
+                            </h3>
+                        </Grid>
+
+                        <Grid item xs={12} md={6}>
+                            <Box sx={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                gap: '15px',
+                                alignItems: 'center',
+                            }}>
                                 <Avatar src={produtor.dados_pessoais ? produtor.dados_pessoais.profilePhoto : 'https://placehold.co/600x400'} alt="Foto de Perfil"
                                     sx={{ width: 66, height: 66 }}
 
                                 />
-                                <h2 className='black bold'>
-                                    {produtor?.dados_pessoais?.name.split(' ')[0]} {produtor?.dados_pessoais?.name.split(' ')[produtor?.dados_pessoais?.name.split(' ').length - 1]}
-                                </h2>
+                                <Box sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                }}>
+                                    <h3 className='black bold'>
+                                        {produtor?.dados_pessoais?.name?.split(' ')[0]} {produtor?.dados_pessoais?.name?.split(' ')[produtor?.dados_pessoais?.name?.split(' ')?.length - 1]}
+                                    </h3>
+                                    <h3 className="regular black">
+                                        {produtor?.role === 'produtor_associado' ? 'Produtor Associado' : produtor?.role.charAt(0)?.toUpperCase() + produtor?.role?.slice(1)}
+                                    </h3>
 
-                                <h3 style={{ textAlign: 'center' }} className='regular black'>
-                                    Gerencie a utilização do produtor
-                                </h3>
+                                </Box>
 
-
-                            </div>
+                            </Box>
                         </Grid>
-
                     </Grid>
                 )}
 
                 <Grid container  >
 
-                    <Grid item xs={12} md={5}>
+                    <Grid item xs={12} md={12}>
                         <Box sx={{
                             display: 'flex',
                             flexDirection: 'column',
@@ -167,27 +181,40 @@ export default function User() {
                                 fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: !matches ? '100%' : '270px',
                                 textAlign: matches ? 'left' : 'center'
                             }} >
-                                Documentos
+                                Laudos
                             </h3>
+
+                            {!produtor?.analise?.analise_pedido?.path && (
+                                <h3 className='regular black'>
+                                    Nenhum laudo cadastrado
+                                </h3>
+                            )}
 
                             <Box sx={{
                                 display: 'flex',
-                                flexDirection: 'column',
+                                flexDirection: matches ? 'row' : 'column',
                                 gap: '10px'
                             }}>
+
                                 {produtor.analise && produtor.analise.analise_pedido.path &&
                                     <>
-                                        <button className='button-white' startIcon={<AiOutlineDownload />} fullWidth variant='outlined' color='primary' href={produtor.analise.analise_pedido.path}>Análise do pedido</button >
+                                        <button className='button-white' style={{ width: '100%' }} startIcon={<AiOutlineDownload />} fullWidth variant='outlined' color='primary' href={produtor.analise.analise_pedido.path}>
+                                            Análise do pedido <AiOutlineDownload size={25} style={{ verticalAlign: 'bottom' }} />
+                                        </button >
                                     </>}
 
                                 {produtor.analise && produtor.analise.vistoria.path &&
                                     <>
-                                        <button className='button-white' startIcon={<AiOutlineDownload />} fullWidth variant='outlined' color='primary' href={produtor.analise.vistoria.path}> Vistoria</button >
+                                        <button className='button-white' style={{ width: '100%' }} startIcon={<AiOutlineDownload />} fullWidth variant='outlined' color='primary' href={produtor.analise.vistoria.path}>
+                                            Vistoria <AiOutlineDownload size={25} style={{ verticalAlign: 'bottom' }} />
+                                        </button >
                                     </>}
 
                                 {produtor.analise && produtor.analise.analise_laboratorial.path &&
                                     <>
-                                        <button className='button-white' startIcon={<AiOutlineDownload />} fullWidth variant='outlined' color='primary' href={produtor.analise.analise_laboratorial.path}> Análise Laboratorial</button >
+                                        <button className='button-white' style={{ width: '100%' }} startIcon={<AiOutlineDownload />} fullWidth variant='outlined' color='primary' href={produtor.analise.analise_laboratorial.path}>
+                                            Análise Laboratorial <AiOutlineDownload size={25} style={{ verticalAlign: 'bottom' }} />
+                                        </button >
                                     </>}
                             </Box>
 
@@ -274,7 +301,7 @@ export default function User() {
                     display: 'flex',
                     justifyContent: 'flex-end',
                     gap: '10px',
-                    paddingBottom:'72px'
+                    paddingBottom: '72px'
                 }} >
 
                     <button className='button-white' onClick={() => navigate('/')}>Voltar</button>
@@ -306,7 +333,7 @@ export default function User() {
 
                             <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
 
-                                <button  className='button-white' onClick={handleCloseDesaprove}>Cancelar</button>
+                                <button className='button-white' onClick={handleCloseDesaprove}>Cancelar</button>
 
                                 <button
                                     disabled={isLoadingAdmin}

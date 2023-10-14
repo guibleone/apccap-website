@@ -237,75 +237,69 @@ export default function SingleReunion() {
         }}>
             <Container maxWidth='xl'>
 
-                <Grid container spacing={2} pb={5}>
+                <Grid container spacing={2} pb={5} pt={'72px'}>
                     <Grid item xs={12} md={12}>
+                        <h3 style={{ color: '#000', fontWeight: 600 }}>
+                            Gerencie a reunião como {user?.role}
+                        </h3>
+                    </Grid>
+
+                    <Grid item xs={12} md={6}>
                         <Box sx={{
                             display: 'flex',
                             flexDirection: 'column',
-                            alignItems: 'center',
-                            textAlign: 'center',
-                            padding: '72px 0',
                             gap: '10px'
                         }}>
-                            <h1 className='bold black'>
-                                Reunião {reunionData?.title}
-                            </h1>
-                            <h5 className='regular black'>
-                                Gerencie a reunião como {user?.role}
-                            </h5>
 
-                            <h5 className='italic'>
-                                {reunionData?.status}
-                            </h5>
+                            <Box>
+                                <h3 className='bold black'>
+                                    Reunião {reunionData?.title}
+                                </h3>
+                                <h4 className='italic black medium'>
+                                    {reunionData?.status?.toUpperCase()}
+                                </h4>
+                            </Box>
+                        </Box>
+                    </Grid>
+
+                    <Grid item xs={12} md={6}>
+
+                        <Box sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '10px'
+                        }}>
+                            <h3 style={{
+                                fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: !matches ? '100%' : '270px',
+                                textAlign: matches ? 'left' : 'center'
+                            }} >
+                                Informações
+                            </h3>
+                            <h4 className='regular black'>
+                                {reunionData?.date}
+                            </h4>
+                            <h4 className='regular black'>
+                                {reunionData?.message}
+                            </h4>
                         </Box>
                     </Grid>
                 </Grid>
 
                 <Grid container spacing={2} pb={5}>
-                    <Grid item xs={12} md={3}>
-                        <Box sx={{
-                            maxHeight: '500px',
-                            display: 'flex',
-                            flexDirection: 'column',
-                        }}>
-                            <h2 className='bold black'>
-                                Membros Convocados
-                            </h2>
-                            {reunionData?.membros?.convocados.map((member, index) => {
-                                return (
-                                    <h3 className='regular black' key={index}>
-                                        {member}
-                                    </h3>
-                                )
-                            })}
-                        </Box>
-                    </Grid>
 
-                    <Grid item xs={12} md={3}>
-                        <Box sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                        }}>
-                            <h2 className='bold black'>
-                                Informações
-                            </h2>
-                            <h3 className='regular black'>
-                                {reunionData?.date}
-                            </h3>
-                            <h3 className='regular black'>
-                                {reunionData?.message}
-                            </h3>
-                        </Box>
-                    </Grid>
 
-                    <Grid item xs={12} md={3}>
+                    <Grid item xs={12} md={6}>
                         <Box sx={{
                             display: 'flex',
                             flexDirection: 'column',
+                            gap: '10px'
                         }}>
-                            <h2 className='bold black'>
+                            <h3 style={{
+                                fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: !matches ? '100%' : '270px',
+                                textAlign: matches ? 'left' : 'center'
+                            }} >
                                 Pautas
-                            </h2>
+                            </h3>
 
                             {reunionData?.pautas?.length > 0 ? reunionData?.pautas?.map((pauta, index) => {
                                 return (
@@ -315,9 +309,9 @@ export default function SingleReunion() {
                                             alignItems: 'center',
                                             gap: '15px'
                                         }}>
-                                            <h3 className='regular black'>
+                                            <h4 className='regular black'>
                                                 {pauta.title}
-                                            </h3>
+                                            </h4>
 
                                             <Link className='regular black italic' onClick={() => { handleOpenPauta(); setPauta(pauta); setIndexPauta(index) }}>
                                                 <h5>Ver Pauta</h5>
@@ -346,25 +340,191 @@ export default function SingleReunion() {
 
 
 
-                    <Grid item xs={12} md={3}>
+                    <Grid item xs={12} md={6}>
                         <Box sx={{
                             display: 'flex',
                             flexDirection: 'column',
+                            gap: '10px'
                         }}>
-                            <h2 className='bold black'>
+                            <h3 style={{
+                                fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: !matches ? '100%' : '270px',
+                                textAlign: matches ? 'left' : 'center'
+                            }} >
                                 Documentos
-                            </h2>
+                            </h3>
 
                             <Box sx={{
                                 display: 'flex',
                                 flexDirection: 'column',
                                 gap: '10px'
                             }}>
+                                {reunionData?.pathPdf ? <button style={{ maxWidth: '350px' }} c className='button-purple' onClick={() => window.location.href = reunionData?.pathPdf} target='_blank' >Convocação</button> : 'Sem convocação da reunião'}
+                                <Box sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '15px'
+                                }}>
+
+                                    {reunionData?.ata?.path ? <button style={{ maxWidth: '350px' }} className='button-purple' onClick={() => window.location.href = reunionData?.ata?.path} target='_blank' >Ata</button> : 'Sem ata adicionada'}
+                                    {reunionData?.ata?.path && (
+                                        <Box sx={{ display: 'flex', gap: '5px', maxWidth: '350px', justifyContent: 'flex-end' }}>
+                                            <Link sx={{ cursor: 'pointer' }} onClick={() => { handleOpenDetailsSign(); setAssinaturas(reunionData?.ata?.assinaturas); setExpectedAssinaturas(reunionData?.membros?.presentes) }}>
+                                                Assinaturas
+                                            </Link>
+                                        </Box>
+                                    )}
+
+                                </Box>
+
+                                <Box sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                }}>
 
 
-                                {reunionData?.pathPdf ? <button className='button-purple' onClick={() => window.location.href = reunionData?.pathPdf} target='_blank' >PDF</button> : 'Sem PDF da reunião'}
+                                    <Box sx={{ display: 'flex', gap: '10px', maxWidth: '350px' }}>
+                                        {user.role === 'presidente' && (
+                                            <Grid container spacing={2}>
+                                                {reunionData && reunionData?.status === 'nao_assinada' && reunionData?.ata?.path && (
+                                                    <>
+                                                        <Grid item xs={12} lg={12}>
+                                                            <Box sx={{ display: 'flex', gap: '5px' }}>
+                                                                {reunionData?.ata?.path && !reunionData.ata?.assinaturas.includes((`${user.dados_pessoais.name} - ${user.role}`)) && reunionData?.membros?.presentes.includes(`${user.dados_pessoais.name} - ${user.role}`) && (
+                                                                    <Button variant='outlined' color='success' onClick={() => {
+                                                                        const data = {
+                                                                            id: reunionData._id,
+                                                                            memberName: `${user.dados_pessoais.name} - ${user.role}`,
+                                                                            token: user.token
+                                                                        }
+                                                                        dispatch(signAta(data))
+                                                                    }}>Assinar</Button>
+                                                                )}
+                                                            </Box>
+                                                        </Grid>
+                                                        {!reunionData?.ata === 'assinada' && reunionData?.ata?.assinaturas.includes(`${user.dados_pessoais.name} - ${user.role}`) && (
+                                                            <Grid item xs={12} lg={7}>
+                                                                <Alert severity="success" >
+                                                                    Assinado
+                                                                </Alert>
+                                                            </Grid>
+                                                        )}
+                                                    </>
+                                                )}
+                                                {reunionData && reunionData.status === 'requer_ata' && !reunionData?.ata?.path && !reunionData?.membros?.faltantes.includes(`${user.dados_pessoais.name} - ${user.role}`) && (
+                                                    <Grid item xs={12} lg={12}>
+                                                        <Alert severity="warning">Aguardando Ata</Alert>
+                                                    </Grid>
+                                                )}
+                                                {reunionData && reunionData.membros && reunionData.membros.faltantes.includes(`${user.dados_pessoais.name} - ${user.role}`) && (
+                                                    <Grid item xs={12} lg={12}>
+                                                        <Alert severity="error" >
+                                                            <Typography variant='h7'>Você faltou</Typography>
+                                                        </Alert>
+                                                    </Grid>
+                                                )}
+                                                {reunionData && reunionData.status === 'agendada' && (
+                                                    <Grid item xs={12} lg={12}>
+                                                        <Button variant='outlined' color='success' onClick={() => handleFinishReunion()} >Concluir</Button>
+                                                    </Grid>
+                                                )}
+                                                {reunionData && reunionData.status === 'assinada' && (
+                                                    <Grid item xs={12} lg={12}>
+                                                        <Box sx={{ display: 'flex', gap: '5px', flexDirection: 'column' }}>
+                                                            <Alert severity="success">Ata Assinada</Alert>
+                                                        </Box>
+                                                    </Grid>
+                                                )}
+                                            </Grid>
+                                        )}
+                                        {user.role === 'secretario' && (
+                                            <Grid container spacing={2}>
+                                                {reunionData?.ata?.path ? (
+                                                    <></>
+                                                ) : (
+                                                    <Grid item xs={12} lg={12}>
+                                                        {reunionData?.membros && reunionData?.membros?.convocados.length > 0 && reunionData?.membros?.presentes.length < 1 ? (
+                                                            <Button variant='outlined' color='warning' onClick={() => { handleOpenList(); setMembers(reunionData?.membros?.convocados); }} >
+                                                                Lista de Presença
+                                                            </Button>
+                                                        ) : (
+                                                            <Button variant='outlined' color='success' onClick={() => { handleOpenAta(); setFile(null); }} >Adicionar Ata</Button>
+                                                        )}
+                                                    </Grid>
+                                                )}
+                                                {reunionData?.ata?.path && !reunionData.ata?.assinaturas.includes((`${user.dados_pessoais.name} - ${user.role}`)) && reunionData?.membros?.presentes.includes(`${user.dados_pessoais.name} - ${user.role}`) && (
+                                                    <Grid item xs={12} lg={6}>
+                                                        <Button variant='outlined' color='success' onClick={() => {
+                                                            const data = {
+                                                                id: reunionData._id,
+                                                                memberName: `${user.dados_pessoais.name} - ${user.role}`,
+                                                                token: user.token
+                                                            }
+                                                            dispatch(signAta(data))
+                                                        }}>Assinar</Button>
+                                                    </Grid>
+                                                )}
+                                                {reunionData?.ata !== 'assinada' && reunionData?.ata?.assinaturas.includes(`${user.dados_pessoais.name} - ${user.role}`) && (
+                                                    <Grid item xs={12} lg={12}>
+                                                        <Alert severity="success" >
+                                                            Assinado
+                                                        </Alert>
+                                                    </Grid>
+                                                )}
+                                                {reunionData?.membros && reunionData?.membros?.faltantes.includes(`${user.dados_pessoais.name} - ${user.role}`) && (
+                                                    <Grid item xs={12} lg={12}>
+                                                        <Alert severity="error" >
+                                                            <Typography variant='h7'>Você faltou</Typography>
+                                                        </Alert>
+                                                    </Grid>
+                                                )}
+                                                {reunionData?.status === 'assinada' && (
+                                                    <Grid item xs={12} lg={12}>
+                                                        <Alert severity="success">Ata Assinada</Alert>
+                                                    </Grid>
+                                                )}
+                                            </Grid>
+                                        )}
+                                        {user.role !== 'presidente' && user.role !== 'secretario' && (
+                                            <Grid container spacing={2}>
+                                                {reunionData?.ata?.path && (
+                                                    <></>
+                                                )}
+                                                {reunionData?.ata?.path && !reunionData.ata?.assinaturas.includes((`${user.dados_pessoais.name} - ${user.role}`)) && reunionData?.membros?.presentes.includes(`${user.dados_pessoais.name} - ${user.role}`) && (
+                                                    <Grid item xs={12} lg={6}>
+                                                        <Button variant='outlined' color='success' onClick={() => {
+                                                            const data = {
+                                                                id: reunionData._id,
+                                                                memberName: `${user.dados_pessoais.name} - ${user.role}`,
+                                                                token: user.token
+                                                            }
+                                                            dispatch(signAta(data))
+                                                        }}>Assinar</Button>
+                                                    </Grid>
+                                                )}
+                                                {!reunionData?.ata === 'assinada' && reunionData?.ata?.assinaturas.includes(`${user.dados_pessoais.name} - ${user.role}`) && (
+                                                    <Grid item xs={12} lg={7}>
+                                                        <Alert severity="success" >
+                                                            Assinado
+                                                        </Alert>
+                                                    </Grid>
+                                                )}
+                                                {reunionData?.membros && reunionData?.membros?.faltantes.includes(`${user.dados_pessoais.name} - ${user.role}`) && (
+                                                    <Grid item xs={12} lg={12}>
+                                                        <Alert severity="error" >
+                                                            <Typography variant='h7'>Você faltou</Typography>
+                                                        </Alert>
+                                                    </Grid>
+                                                )}
+                                                {reunionData?.status === 'assinada' && (
+                                                    <Grid item xs={12} lg={12}>
+                                                        <Alert severity="success">Ata Assinada</Alert>
+                                                    </Grid>
+                                                )}
+                                            </Grid>
+                                        )}
+                                    </Box>
 
-                                {reunionData?.ata?.path ? <button className='button-purple' onClick={() => window.location.href = reunionData?.ata?.path} target='_blank' >Ata</button> : 'Sem ata adicionada'}
+                                </Box>
 
                             </Box>
 
@@ -374,169 +534,55 @@ export default function SingleReunion() {
 
                 </Grid>
 
-
-
-                <Grid container spacing={2} pb={5}>
-                    <Grid item xs={12}>
+                <Grid container spacing={2} pb={10}>
+                    <Grid item xs={12} md={6}>
                         <Box sx={{
+                            maxHeight: '500px',
                             display: 'flex',
-                            justifyContent: 'flex-end',
                             flexDirection: 'column',
-                            alignItems: 'flex-end',
+                            gap: '10px'
                         }}>
-
-                            {reunionData?.ata?.path && (
-                                <Box sx={{ display: 'flex', gap: '5px' }}>
-                                    <Link sx={{ cursor: 'pointer' }} onClick={() => { handleOpenDetailsSign(); setAssinaturas(reunionData?.ata?.assinaturas); setExpectedAssinaturas(reunionData?.membros?.presentes) }}>
-                                        Assinaturas
-                                    </Link>
-                                </Box>
-                            )}
-
-                            <Box sx={{ display: 'flex', gap: '10px' }}>
-                                {user.role === 'presidente' && (
-                                    <Grid container spacing={2}>
-                                        {reunionData && reunionData?.status === 'nao_assinada' && reunionData?.ata?.path && (
-                                            <>
-                                                <Grid item xs={12} lg={12}>
-                                                    <Box sx={{ display: 'flex', gap: '5px' }}>
-                                                        {reunionData?.ata?.path && !reunionData.ata?.assinaturas.includes((`${user.dados_pessoais.name} - ${user.role}`)) && reunionData?.membros?.presentes.includes(`${user.dados_pessoais.name} - ${user.role}`) && (
-                                                            <Button variant='outlined' color='success' onClick={() => {
-                                                                const data = {
-                                                                    id: reunionData._id,
-                                                                    memberName: `${user.dados_pessoais.name} - ${user.role}`,
-                                                                    token: user.token
-                                                                }
-                                                                dispatch(signAta(data))
-                                                            }}>Assinar</Button>
-                                                        )}
-                                                    </Box>
-                                                </Grid>
-                                                {!reunionData?.ata === 'assinada' && reunionData?.ata?.assinaturas.includes(`${user.dados_pessoais.name} - ${user.role}`) && (
-                                                    <Grid item xs={12} lg={7}>
-                                                        <Alert severity="success" >
-                                                            Assinado
-                                                        </Alert>
-                                                    </Grid>
-                                                )}
-                                            </>
-                                        )}
-                                        {reunionData && reunionData.status === 'requer_ata' && !reunionData?.ata?.path && !reunionData?.membros?.faltantes.includes(`${user.dados_pessoais.name} - ${user.role}`) && (
-                                            <Grid item xs={12} lg={12}>
-                                                <Alert severity="warning">Aguardando Ata</Alert>
-                                            </Grid>
-                                        )}
-                                        {reunionData && reunionData.membros && reunionData.membros.faltantes.includes(`${user.dados_pessoais.name} - ${user.role}`) && (
-                                            <Grid item xs={12} lg={12}>
-                                                <Alert severity="error" >
-                                                    <Typography variant='h7'>Você faltou</Typography>
-                                                </Alert>
-                                            </Grid>
-                                        )}
-                                        {reunionData && reunionData.status === 'agendada' && (
-                                            <Grid item xs={12} lg={12}>
-                                                <Button variant='outlined' color='success' onClick={() => handleFinishReunion()} >Concluir</Button>
-                                            </Grid>
-                                        )}
-                                        {reunionData && reunionData.status === 'assinada' && (
-                                            <Grid item xs={12} lg={12}>
-                                                <Box sx={{ display: 'flex', gap: '5px', flexDirection: 'column' }}>
-                                                    <Alert severity="success">Ata Assinada</Alert>
-                                                </Box>
-                                            </Grid>
-                                        )}
-                                    </Grid>
-                                )}
-                                {user.role === 'secretario' && (
-                                    <Grid container spacing={2}>
-                                        {reunionData?.ata?.path ? (
-                                            <></>
-                                        ) : (
-                                            <Grid item xs={12} lg={12}>
-                                                {reunionData?.membros && reunionData?.membros?.convocados.length > 0 && reunionData?.membros?.presentes.length < 1 ? (
-                                                    <Button variant='outlined' color='warning' onClick={() => { handleOpenList(); setMembers(reunionData?.membros?.convocados); }} >
-                                                        Lista de Presença
-                                                    </Button>
-                                                ) : (
-                                                    <Button variant='outlined' color='success' onClick={() => { handleOpenAta(); setFile(null); }} >Adicionar Ata</Button>
-                                                )}
-                                            </Grid>
-                                        )}
-                                        {reunionData?.ata?.path && !reunionData.ata?.assinaturas.includes((`${user.dados_pessoais.name} - ${user.role}`)) && reunionData?.membros?.presentes.includes(`${user.dados_pessoais.name} - ${user.role}`) && (
-                                            <Grid item xs={12} lg={6}>
-                                                <Button variant='outlined' color='success' onClick={() => {
-                                                    const data = {
-                                                        id: reunionData._id,
-                                                        memberName: `${user.dados_pessoais.name} - ${user.role}`,
-                                                        token: user.token
-                                                    }
-                                                    dispatch(signAta(data))
-                                                }}>Assinar</Button>
-                                            </Grid>
-                                        )}
-                                        {reunionData?.ata !== 'assinada' && reunionData?.ata?.assinaturas.includes(`${user.dados_pessoais.name} - ${user.role}`) && (
-                                            <Grid item xs={12} lg={12}>
-                                                <Alert severity="success" >
-                                                    Assinado
-                                                </Alert>
-                                            </Grid>
-                                        )}
-                                        {reunionData?.membros && reunionData?.membros?.faltantes.includes(`${user.dados_pessoais.name} - ${user.role}`) && (
-                                            <Grid item xs={12} lg={12}>
-                                                <Alert severity="error" >
-                                                    <Typography variant='h7'>Você faltou</Typography>
-                                                </Alert>
-                                            </Grid>
-                                        )}
-                                        {reunionData?.status === 'assinada' && (
-                                            <Grid item xs={12} lg={12}>
-                                                <Alert severity="success">Ata Assinada</Alert>
-                                            </Grid>
-                                        )}
-                                    </Grid>
-                                )}
-                                {user.role !== 'presidente' && user.role !== 'secretario' && (
-                                    <Grid container spacing={2}>
-                                        {reunionData?.ata?.path && (
-                                            <></>
-                                        )}
-                                        {reunionData?.ata?.path && !reunionData.ata?.assinaturas.includes((`${user.dados_pessoais.name} - ${user.role}`)) && reunionData?.membros?.presentes.includes(`${user.dados_pessoais.name} - ${user.role}`) && (
-                                            <Grid item xs={12} lg={6}>
-                                                <Button variant='outlined' color='success' onClick={() => {
-                                                    const data = {
-                                                        id: reunionData._id,
-                                                        memberName: `${user.dados_pessoais.name} - ${user.role}`,
-                                                        token: user.token
-                                                    }
-                                                    dispatch(signAta(data))
-                                                }}>Assinar</Button>
-                                            </Grid>
-                                        )}
-                                        {!reunionData?.ata === 'assinada' && reunionData?.ata?.assinaturas.includes(`${user.dados_pessoais.name} - ${user.role}`) && (
-                                            <Grid item xs={12} lg={7}>
-                                                <Alert severity="success" >
-                                                    Assinado
-                                                </Alert>
-                                            </Grid>
-                                        )}
-                                        {reunionData?.membros && reunionData?.membros?.faltantes.includes(`${user.dados_pessoais.name} - ${user.role}`) && (
-                                            <Grid item xs={12} lg={12}>
-                                                <Alert severity="error" >
-                                                    <Typography variant='h7'>Você faltou</Typography>
-                                                </Alert>
-                                            </Grid>
-                                        )}
-                                        {reunionData?.status === 'assinada' && (
-                                            <Grid item xs={12} lg={12}>
-                                                <Alert severity="success">Ata Assinada</Alert>
-                                            </Grid>
-                                        )}
-                                    </Grid>
-                                )}
-                            </Box>
-
+                            <h3 style={{
+                                fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: !matches ? '100%' : '270px',
+                                textAlign: matches ? 'left' : 'center'
+                            }} >
+                                Membros convocados
+                            </h3>
+                            {reunionData?.membros?.convocados.map((member, index) => {
+                                return (
+                                    <h4 className='regular black' key={index}>
+                                        {member}
+                                    </h4>
+                                )
+                            })}
                         </Box>
+                    </Grid>
 
+                    <Grid item xs={12} md={6}>
+                    <Box sx={{
+                            maxHeight: '500px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '10px'
+                        }}>
+                            <h3 style={{
+                                fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: !matches ? '100%' : '270px',
+                                textAlign: matches ? 'left' : 'center'
+                            }} >
+                                Membros Presentes
+                            </h3>
+                            {reunionData?.membros?.presentes ? reunionData?.membros?.presentes.map((member, index) => {
+                                return (
+                                    <h4 className='regular black' key={index}>
+                                        {member}
+                                    </h4>
+                                )
+                            }): (
+                                <h4 className='regular black'>
+                                    Sem membros presentes
+                                </h4>
+                            )}
+                        </Box>
                     </Grid>
 
                 </Grid>
@@ -725,7 +771,7 @@ export default function SingleReunion() {
 
                                     </>)
                                         : (<>
-                                            <Alert severity="warning">Confirme sua presença.</Alert>
+                                            <Alert severity="warning">Aguardando presença.</Alert>
                                         </>)}
 
                                     {user?.credencial !== 'active' &&
@@ -733,7 +779,6 @@ export default function SingleReunion() {
                                             <Alert severity="warning">Assine a credencial.</Alert>
                                         </>
                                         )}
-
 
                                 </Box>
                             </Grid>
