@@ -1,5 +1,5 @@
 import { Alert, Box, Button, Checkbox, CircularProgress, Container, Grid, Modal, Typography, useMediaQuery } from '@mui/material'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { colors } from '../../pages/colors'
 import { useDispatch, useSelector } from 'react-redux'
 import { addReunionAta, finishReunion, getOneReunion, handleVoto, presenceList, reset, signAta } from '../../features/reunion/reunionSlice'
@@ -7,8 +7,8 @@ import { Link, useParams } from 'react-router-dom'
 import { useDropzone } from 'react-dropzone'
 import { styleError, styleSuccess } from '../../pages/toastStyles'
 import { toast } from 'react-toastify'
-import { BsInfoCircle, BsPen } from 'react-icons/bs'
-import { AiFillBook, AiOutlineDropbox } from 'react-icons/ai'
+import { BsDownload, BsInfoCircle, BsPen, BsPlusCircle } from 'react-icons/bs'
+import { AiFillBook, AiOutlineDropbox, AiOutlineEdit } from 'react-icons/ai'
 import { FcCancel, FcCheckmark } from 'react-icons/fc'
 
 export default function SingleReunion() {
@@ -77,43 +77,39 @@ export default function SingleReunion() {
 
     const [file, setFile] = useState(null)
 
-    // on drop arquivos
-    const onDrop = useCallback(async (acceptedFiles, rejectedFiles) => {
 
-        if (rejectedFiles.length > 0) {
-            // Handle files with invalid extensions here
-            console.error('Arquivos inválidos', rejectedFiles);
-            return;
-        }
 
-        setFile(acceptedFiles)
-    }, []);
+    // ref do input file
+    const fileInputRef = useRef(null);
 
-    // configurações do dropzone
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({
-        onDrop,
-        accept: 'application/pdf',
-        multiple: false,
-    });
+    // função para abrir o input file
+    const handleButtonClick = () => {
+        fileInputRef.current.click();
+    };
 
-    const handleAddAta = () => {
+    const [selectedFile, setSelectedFile] = useState(null); // armazena o arquivo selecionado
 
-        if (!file) return toast.error('Selecione um arquivo', styleError)
+    // função para pegar o arquivo selecionado
+    const handleFileChange = (event) => {
+        setSelectedFile(event.target.files[0]);
+    };
 
-        const reunionData = {
+
+    // função para enviar a planilha
+    const handleSubmit = (e) => {
+        e.preventDefault()
+
+        const data = {
             id,
-            ata: file[0],
+            ata: fileInputRef.current?.files[0],
             token: user.token
         }
 
-        dispatch(addReunionAta(reunionData))
+        dispatch(addReunionAta(data))
 
         handleOpenAta()
-
-        setFile(null)
-
-
     }
+
 
     // lista de presença
 
@@ -390,14 +386,14 @@ export default function SingleReunion() {
                                                         <Grid item xs={12} lg={12}>
                                                             <Box sx={{ display: 'flex', gap: '5px' }}>
                                                                 {reunionData?.ata?.path && !reunionData.ata?.assinaturas.includes((`${user.dados_pessoais.name} - ${user.role}`)) && reunionData?.membros?.presentes.includes(`${user.dados_pessoais.name} - ${user.role}`) && (
-                                                                    <Button variant='outlined' color='success' onClick={() => {
+                                                                    <button className='button-white' onClick={() => {
                                                                         const data = {
                                                                             id: reunionData._id,
                                                                             memberName: `${user.dados_pessoais.name} - ${user.role}`,
                                                                             token: user.token
                                                                         }
                                                                         dispatch(signAta(data))
-                                                                    }}>Assinar</Button>
+                                                                    }}>Assinar</button>
                                                                 )}
                                                             </Box>
                                                         </Grid>
@@ -453,14 +449,14 @@ export default function SingleReunion() {
                                                 )}
                                                 {reunionData?.ata?.path && !reunionData.ata?.assinaturas.includes((`${user.dados_pessoais.name} - ${user.role}`)) && reunionData?.membros?.presentes.includes(`${user.dados_pessoais.name} - ${user.role}`) && (
                                                     <Grid item xs={12} lg={6}>
-                                                        <Button variant='outlined' color='success' onClick={() => {
+                                                        <button className='button-white' onClick={() => {
                                                             const data = {
                                                                 id: reunionData._id,
                                                                 memberName: `${user.dados_pessoais.name} - ${user.role}`,
                                                                 token: user.token
                                                             }
                                                             dispatch(signAta(data))
-                                                        }}>Assinar</Button>
+                                                        }}>Assinar</button>
                                                     </Grid>
                                                 )}
                                                 {reunionData?.ata !== 'assinada' && reunionData?.ata?.assinaturas.includes(`${user.dados_pessoais.name} - ${user.role}`) && (
@@ -491,14 +487,14 @@ export default function SingleReunion() {
                                                 )}
                                                 {reunionData?.ata?.path && !reunionData.ata?.assinaturas.includes((`${user.dados_pessoais.name} - ${user.role}`)) && reunionData?.membros?.presentes.includes(`${user.dados_pessoais.name} - ${user.role}`) && (
                                                     <Grid item xs={12} lg={6}>
-                                                        <Button variant='outlined' color='success' onClick={() => {
+                                                        <button className='button-white' onClick={() => {
                                                             const data = {
                                                                 id: reunionData._id,
                                                                 memberName: `${user.dados_pessoais.name} - ${user.role}`,
                                                                 token: user.token
                                                             }
                                                             dispatch(signAta(data))
-                                                        }}>Assinar</Button>
+                                                        }}>Assinar</button>
                                                     </Grid>
                                                 )}
                                                 {!reunionData?.ata === 'assinada' && reunionData?.ata?.assinaturas.includes(`${user.dados_pessoais.name} - ${user.role}`) && (
@@ -559,7 +555,7 @@ export default function SingleReunion() {
                     </Grid>
 
                     <Grid item xs={12} md={6}>
-                    <Box sx={{
+                        <Box sx={{
                             maxHeight: '500px',
                             display: 'flex',
                             flexDirection: 'column',
@@ -577,7 +573,7 @@ export default function SingleReunion() {
                                         {member}
                                     </h4>
                                 )
-                            }): (
+                            }) : (
                                 <h4 className='regular black'>
                                     Sem membros presentes
                                 </h4>
@@ -587,10 +583,9 @@ export default function SingleReunion() {
 
                 </Grid>
 
-
                 <Modal
                     open={openAta}
-                >
+                    onClose={handleOpenAta}                >
                     <Box sx={style}>
                         <Box sx={{
                             display: 'flex',
@@ -604,30 +599,28 @@ export default function SingleReunion() {
 
                             <Box sx={{
                                 display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px',
-                                p: 1,
-                                border: isDragActive ? '1px solid #E4E3E3' : '',
-                                borderRadius: '5px',
-                                boxShadow: isDragActive ? '0px 0px 5px 0px rgba(0,0,0,0.75)' : '',
-                            }} {...getRootProps()}>
-                                <input multiple {...getInputProps()} />
-                                <Button variant='outlined' color='success'><AiOutlineDropbox size={80} /> </Button>
-                                <Typography textAlign={'center'} variant='p'>Arraste e solte o arquivo ou clique para selecionar</Typography>
+                            }} >
+                                <input
+                                    style={{ display: 'none' }}
+                                    accept='.pdf, .csv'
+                                    type='file'
+                                    ref={fileInputRef}
+                                    onChange={handleFileChange}
+                                />
+                                <button onClick={handleButtonClick} className='button-white-bottom-border' style={{ width: '220px' }}>
+                                    {selectedFile ? <>{selectedFile.name.slice(0, 10)} ... <AiOutlineEdit size={25} style={{ verticalAlign: 'bottom', marginLeft: '5px' }} /> </> : <>Selecionar Arquivo<BsPlusCircle size={20} style={{ verticalAlign: 'bottom', marginLeft: '5px' }} /></>}
+                                </button>
+
                             </Box>
 
                             {file && <Typography textAlign={'center'} variant='p'>Arquivo selecionado: {file[0].name}</Typography>}
 
                             <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
-                                <Button color='error' variant='outlined' onClick={handleOpenAta}>Cancelar</Button>
+                                <button className='button-white' onClick={handleOpenAta}>Cancelar</button>
 
-                                <Button
-                                    disabled={isLoading}
-                                    color="success"
-                                    variant='outlined'
-                                    onClick={handleAddAta}
-                                >
-                                    {isLoading ? <CircularProgress color="success" size={24} /> : 'Adicionar'}
-                                </Button>
-
+                                <button onClick={handleSubmit} className='button-purple' style={{ marginLeft: '10px', backgroundColor: isLoading && colors.main_white }}>
+                                    {isLoading ? <CircularProgress color="success" style={{ padding: '5px' }} /> : <> <BsDownload size={20} style={{ verticalAlign: 'bottom', marginRight: '5px' }} /> Adicionar</>}
+                                </button>
                             </Box>
                         </Box>
                     </Box>
@@ -760,25 +753,27 @@ export default function SingleReunion() {
                                     gap: '10px',
                                     justifyContent: 'flex-end'
                                 }}>
-                                    {reunionData?.membros?.presentes.includes(`${user.dados_pessoais.name} - ${user.role}`) ? (<>
-                                        {user?.credencial === 'active' && (pauta?.votos?.favor.includes(`${user.dados_pessoais.name} - ${user.role}`) || pauta?.votos?.contra.includes(`${user.dados_pessoais.name} - ${user.role}`)) ? (
-                                            <Alert severity="success">Voto submetido.</Alert>
-                                        ) : (<>
-                                            <button name='contra' onClick={submitVoto} className='button-white' >Contra</button>
-                                            <button name='favor' onClick={submitVoto} className='button-purple' >A favor</button>
-                                        </>
-                                        )}
 
-                                    </>)
-                                        : (<>
-                                            <Alert severity="warning">Aguardando presença.</Alert>
-                                        </>)}
+                                    {user?.credencial === 'active' ? (
+                                        <>
+                                            {reunionData?.membros?.presentes.includes(`${user.dados_pessoais.name} - ${user.role}`) ? (<>
+                                                {user?.credencial === 'active' && (pauta?.votos?.favor.includes(`${user.dados_pessoais.name} - ${user.role}`) || pauta?.votos?.contra.includes(`${user.dados_pessoais.name} - ${user.role}`)) ? (
+                                                    <Alert severity="success">Voto submetido.</Alert>
+                                                ) : (<>
+                                                    <button name='contra' onClick={submitVoto} className='button-white' >Contra</button>
+                                                    <button name='favor' onClick={submitVoto} className='button-purple' >A favor</button>
+                                                </>
+                                                )}
 
-                                    {user?.credencial !== 'active' &&
-                                        (<>
-                                            <Alert severity="warning">Assine a credencial.</Alert>
-                                        </>
-                                        )}
+                                            </>)
+                                                : (<>
+                                                    <Alert severity="warning">Aguardando presença.</Alert>
+                                                </>)}
+
+                                        </>)
+                                        :
+                                        <Alert severity="warning">Assine a credencial.</Alert>
+                                    }
 
                                 </Box>
                             </Grid>

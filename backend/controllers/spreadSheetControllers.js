@@ -137,13 +137,24 @@ const getSpreadsWithoutLogin = expressAsyncHandler(async (req, res) => {
     const page = req.query.page ? parseInt(req.query.page) : 1;
     const pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : 12;
     const skip = (page - 1) * pageSize;
+    const search = req.query.search || ''; 
 
     try {
+        let query = {}; 
 
-        const totalDocuments = await SpreadSheet.countDocuments({});
-        const spreadsheets = await SpreadSheet.find({})
+        if (search) {
+            query = {
+                $or: [
+                    { title_spread: { $regex: search, $options: 'i' } }, 
+                ],
+            };
+        }
+
+        const totalDocuments = await SpreadSheet.countDocuments(query);
+        const spreadsheets = await SpreadSheet.find(query)
             .skip(skip)
-            .limit(pageSize);
+            .limit(pageSize)
+            .sort({ createdAt: -1 })
 
         res.json({ totalDocuments, spreadsheets });
 

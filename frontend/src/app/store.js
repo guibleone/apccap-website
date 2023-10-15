@@ -7,7 +7,7 @@ import productsReducer from '../features/products/productsSlice'
 import spreadSheetReducer from '../features/spreadSheet/spreadSheetSlice'
 import paymentsReducer from '../features/payments/paymentsSlice'
 import reunionReducer from '../features/reunion/reunionSlice'
-
+import relatorysReducer from '../features/relatorys/relatorysSlice'
 
 export const store = configureStore({
   reducer: {
@@ -19,5 +19,6 @@ export const store = configureStore({
     spreadSheet: spreadSheetReducer,
     payments: paymentsReducer,
     reunions: reunionReducer,
+    relatorys: relatorysReducer,
   },
 });

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { listUsers } from "../../features/admin/adminSlice"
 import { Typography, Box, Container, CssBaseline, Button, TextField, CircularProgress, useMediaQuery, Grid, Card, Avatar, CardMedia } from '@mui/material';
 import { trackProduct, clear } from "../../features/products/productsSlice";
-import Secretary from "./Acesses/Secretary"
+import Secretary from "./Acesses/Secretario/Secretary"
 import Tesoureiro from "./Acesses/Tesoureiro/Tesoureiro"
 import President from "./Acesses/Presidente/President"
 import Admin from "./Acesses/Admin"

@@ -13,11 +13,13 @@ import { styleError, styleSuccess } from '../toastStyles'
 import './Style.css'
 import Footer from '../../components/Footer/Footer'
 import { colors } from '../colors'
+import TermsAcceptanceDialog from './Terms'
 
 
 function Register() {
 
   const matches = useMediaQuery('(min-width:600px)');
+
 
   const style = matches ? {
     position: 'absolute',
@@ -204,6 +206,15 @@ function Register() {
 
   useEffect(() => {
     window.scrollTo(0, 0)
+  }, [])
+
+  // termos e condições
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(!open);
+
+
+  useEffect(() => {
+    handleOpen()
   }, [])
 
   const onSubmit = (e) => {
@@ -1130,10 +1141,11 @@ function Register() {
       </Modal>
       */}
 
-
+        <TermsAcceptanceDialog open={open} handleOpen={handleOpen} />
 
       </Box >
       <Footer />
+
 
     </>
   )

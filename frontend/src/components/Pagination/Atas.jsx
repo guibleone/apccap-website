@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { setAtas } from '../../features/reunion/reunionSlice';
 
-export default function AtasPagination({ setAtasData }) {
+export default function AtasPagination({ setAtasData, search }) {
 
     const { atas, isSuccess } = useSelector((state) => state.reunions);
 
@@ -20,7 +20,7 @@ export default function AtasPagination({ setAtasData }) {
 
         fetchData(pagination.page);
 
-    }, [pagination.page, isSuccess]);
+    }, [pagination.page, isSuccess, search]);
 
     const handlePageChange = (event, page) => {
         setPagination({
@@ -39,7 +39,7 @@ export default function AtasPagination({ setAtasData }) {
     const fetchData = (page) => {
         const pageSize = 6;
 
-        axios.get(`/api/reunion/atas?pageSize=${pageSize}&page=${page}`)
+        axios.get(`/api/reunion/atas?pageSize=${pageSize}&page=${page}&search=${search}`)
             .then((response) => {
                 dispatch(setAtas(response.data.atas));
                 setPagination({

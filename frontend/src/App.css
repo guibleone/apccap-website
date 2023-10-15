@@ -147,6 +147,28 @@ html {
     border-bottom: 1px solid var(--main-white);
 }
 
+.input-white-bottom-border {
+    background-color: var(--main-white);
+    color: var(--main-purple);
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border: none;
+    border-bottom: 1px solid var(--main-purple);
+}
+.input-white-bottom-border::placeholder {
+    color: var(--main-purple);
+}
+
+.input-white-bottom-border:focus {
+    background-color: var(--main-purple);
+    color: var(--main-white);
+    border: none;
+    border-bottom: 1px solid var(--main-white);
+}
+
 .button-grey-bottom-border {
     background-color: var(--main-grey);
     color: var(--main-purple);

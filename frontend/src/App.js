@@ -17,8 +17,6 @@ import UserSingle from './pages/UserSingle/UserSingle';
 import Festival from './pages/Festival/Festival';
 import QuemSomos from './pages/QuemSomos/QuemSomos';
 import User from './pages/Dashboard/Acesses/Presidente/SingleUserCredenciado';
-import StripeBalance from './pages/Dashboard/Acesses/Tesoureiro/StripeBalance';
-import AllSpreadSheets from './pages/Dashboard/Acesses/Tesoureiro/AllSpreadSheets';
 import AnaliseCredencial from './pages/Dashboard/Acesses/Conselho/AnaliseCredencial';
 import ProductAnalise from './pages/Products/ProductAnalise';
 import UserProducts from './pages/Dashboard/Acesses/Conselho/Products/UserProducts';
@@ -35,6 +33,7 @@ import SingleReunion from './components/Reunions/SingleReunion';
 import DocumentosPublicos from './pages/Documentos/DocumentosPublicos';
 import Credenciamento from './pages/Dashboard/Acesses/Conselho/Credenciamento';
 import TodosProdutos from './pages/Dashboard/Acesses/Conselho/TodosProdutos';
+import Relatorios from './pages/Dashboard/Acesses/Secretario/Relatorios';
 
 function App() {
   return (
@@ -56,10 +55,8 @@ function App() {
           <Route path={`/credencial`} element={<Credencial />} />
           <Route path='/produtor/:id' element={<SingleProducer />} />
           <Route path='/planilha/:id' element={<SingleSpread />} />
-          <Route path='/planilhas' element={<AllSpreadSheets />} />
           <Route path='/festival-cachaca' element={<Festival />} />
           <Route path='/quem-somos' element={<QuemSomos />} />
-          <Route path='/balancete' element={<StripeBalance />} />
           <Route path='/analise-credencial/:id' element={<AnaliseCredencial />} />
           <Route path='/acompanhar-analise/:id' element={<ProductAnalise />} />
           <Route path='/produtos-usuario/:id' element={<UserProducts />} />
@@ -73,6 +70,7 @@ function App() {
           <Route path='/documentos' element={<DocumentosPublicos />} />
           <Route path='/credenciamento' element={<Credenciamento />} />
           <Route path='/produtos-conselho' element={<TodosProdutos />} />
+          <Route path='/relatorios' element={<Relatorios />} />
           <Route path='*' element={<h1>Not Found 404</h1>} />
         </Routes> 
       </Router>

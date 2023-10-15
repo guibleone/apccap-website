@@ -2,12 +2,11 @@ import { Box, Pagination } from '@mui/material'
 import axios from 'axios';
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from "react-redux"
-import { getSpreadsWithoutLogin, setSpreadsheets } from '../../features/spreadSheet/spreadSheetSlice';
+import { setRelatorys } from '../../features/relatorys/relatorysSlice';
 
-export default function BalancosPagination({ setSpreadSheetsData, search }) {
+export default function RelatorysPagination({ setRelatorysData, invisible, search }) {
 
-    const { spreadSheets, excel } = useSelector((state) => state.spreadSheet);
-    const { user } = useSelector((state) => state.auth);
+    const { relatorys, isSuccess } = useSelector((state) => state.relatorys);
 
     const dispatch = useDispatch();
     const pageSize = 6;
@@ -21,21 +20,20 @@ export default function BalancosPagination({ setSpreadSheetsData, search }) {
 
         fetchData(pagination.page);
 
-    }, [pagination.page, excel.isSucces, search]);
+    }, [pagination.page, isSuccess, search]);
 
     useEffect(() => {
 
-        setSpreadSheetsData(spreadSheets);
+        setRelatorysData(relatorys);
 
-
-    }, [spreadSheets]);
+    }, [relatorys]);
 
     const fetchData = (page) => {
         const pageSize = 6;
 
-        axios.get(`/api/planilha/spreadsheets?pageSize=${pageSize}&page=${page}&search=${search}`)
+        axios.get(`/api/relatorys?pageSize=${pageSize}&page=${page}&search=${search}`)
             .then((response) => {
-                dispatch(setSpreadsheets(response.data.spreadsheets));
+                dispatch(setRelatorys(response.data.relatorys));
                 setPagination({
                     ...pagination,
                     count: response.data.totalDocuments,
@@ -43,7 +41,6 @@ export default function BalancosPagination({ setSpreadSheetsData, search }) {
             })
             .catch((error) => {
                 console.error(error);
-                // Handle errors here
             });
     };
 
@@ -70,6 +67,9 @@ export default function BalancosPagination({ setSpreadSheetsData, search }) {
                 count={Math.ceil(pagination.count / pageSize)}
                 page={pagination.page}
                 onChange={handlePageChange}
+                style={{
+                    display: invisible ? 'none' : 'flex'
+                }}
             />
         </Box>
     )
