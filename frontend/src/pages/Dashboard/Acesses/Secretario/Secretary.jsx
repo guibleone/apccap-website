@@ -1,14 +1,11 @@
-import { Box, Container, Typography, Button, Grid, Divider, Modal, useMediaQuery, CircularProgress, Alert } from '@mui/material'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { Box, Container, Grid, useMediaQuery, CircularProgress } from '@mui/material'
+import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addReunionAta, deleteReunionAta, getReunions, reset, signAta } from '../../../../features/reunion/reunionSlice'
+import {  getReunions } from '../../../../features/reunion/reunionSlice'
 import { addRelatory, reset as resetRelatory } from '../../../../features/relatorys/relatorysSlice'
-import { AiFillBook, AiFillWarning, AiOutlineDelete, AiOutlineDownload, AiOutlineDropbox, AiOutlineEdit, AiOutlineFile } from 'react-icons/ai'
-import { useDropzone } from 'react-dropzone'
-import { styleError, styleSuccess } from '../../../toastStyles'
+import { AiOutlineDelete, AiOutlineDownload, AiOutlineEdit, AiOutlineFile } from 'react-icons/ai'
+import { styleSuccess } from '../../../toastStyles'
 import { toast } from 'react-toastify'
-import ButtonChangeRole from '../../../../components/ChangeRole/ButtonChangeRole'
-import Reunion from '../../../../components/Reunions/Reunion'
 import { colors } from '../../../colors'
 import { BsArrowUpRight, BsDownload, BsPlusCircle } from 'react-icons/bs'
 import { Link, useNavigate } from 'react-router-dom'
@@ -16,12 +13,11 @@ import RelatorysPagination from '../../../../components/Pagination/Relatorys'
 import { deleteRelatory } from '../../../../features/relatorys/relatorysSlice'
 
 export default function Secretary() {
-  const [openAta, setOpeneAta] = useState(false)
   const matches = useMediaQuery('(min-width:600px)');
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const { isLoading, isSuccess, isError, message } = useSelector((state) => state.reunions)
+  const { isLoading } = useSelector((state) => state.reunions)
   const { isSuccess: isSuccessRelatory, isError: isErrorRelatory, message: messageRelatory, isLoading: isLoadingRelatory } = useSelector((state) => state.relatorys)
   const { user } = useSelector((state) => state.auth)
   const { reunionData } = useSelector((state) => state.reunions)
@@ -202,7 +198,7 @@ export default function Secretary() {
               </Grid>
             ))}
 
-          <Grid item xs={12} sm={12} lg={12} pb={4}>
+          <Grid item xs={12} sm={12} lg={12} pb={4} mt={5}>
 
             <Box sx={{
               display: 'flex',
@@ -292,7 +288,7 @@ export default function Secretary() {
 
           </Grid>
 
-          <RelatorysPagination setRelatorysData={(relatory) => setRelatorys(relatory)} invisible={true} />
+          <RelatorysPagination setRelatorysData={(relatory) => setRelatorys(relatory)} invisible={true} search={''}/>
 
 
         </Grid>

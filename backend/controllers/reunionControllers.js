@@ -95,43 +95,6 @@ const createReunion = asyncHandler(async (req, res) => {
 
 
         res.json(reunion)
-
-
-        /*const { title, message, date, typeReunion } = req.body
- 
-
-        const membros = {
-            nome:[],
-            role:[]
-        }
-
-        if (typeReunion.administrativa) {
-            type = 'administrativa'
-            associates = await User.find({ role: { $in: ['presidente', 'secretario', 'tesoureiro', 'conselho'] } })
-        } else if (typeReunion.assembleia_ordinal) {
-            type = 'assembleia_ordinal'
-        } else if (typeReunion.assembleia_extraordinaria) {
-            type = 'assembleia_extraordinaria'
-        }
-
-
-        associates.forEach(associate => {
-            membros.push({
-                nome: associate.name,
-                role: associate.role,
-            })})
-
-        console.log(membros)
-
-        const reunion = await Reunion.create({
-            title,
-            message,
-            date,
-            type,
-            status: 'agendada'
-        })
-
-        res.status(201).json(reunion)*/
     }
     catch (error) {
         res.status(400)

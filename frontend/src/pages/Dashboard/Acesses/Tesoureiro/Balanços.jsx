@@ -3,7 +3,7 @@ import { AiOutlineFile, AiOutlineDownload, AiOutlineDelete, AiOutlineEdit } from
 import { BsPlusCircle, BsDownload } from 'react-icons/bs'
 import { Grid, Box, CircularProgress, useMediaQuery, Container } from '@mui/material'
 import { useSelector, useDispatch } from 'react-redux'
-import { addExcel, deleteExcel, getSpreadSheets, resetExcel, resetSpreadSheet } from '../../../../features/spreadSheet/spreadSheetSlice'
+import { addExcel, deleteExcel, resetExcel, resetSpreadSheet } from '../../../../features/spreadSheet/spreadSheetSlice'
 import { colors } from '../../../colors'
 import { toast } from 'react-toastify'
 import { styleSuccess } from '../../../toastStyles'
@@ -16,6 +16,8 @@ export default function Balancos() {
     const { user } = useSelector((state) => state.auth)
     const { excel } = useSelector((state) => state.spreadSheet)
     const dispatch = useDispatch()
+
+    const { isLoading } = excel
 
     const [spreadSheets, setSpreadSheets] = useState(null)
 
@@ -59,7 +61,6 @@ export default function Balancos() {
         dispatch(resetExcel())
 
     }
-
         , [excel])
 
     useEffect(() => {
@@ -67,7 +68,7 @@ export default function Balancos() {
     }, [])
 
     useEffect(() => {
-        
+
 
         dispatch(resetSpreadSheet())
 
@@ -114,8 +115,8 @@ export default function Balancos() {
                                     <button onClick={handleButtonClick} className='button-white-bottom-border' style={{ width: '220px' }}>
                                         {selectedFile ? <>{selectedFile.name.slice(0, 10)} ... <AiOutlineEdit size={25} style={{ verticalAlign: 'bottom', marginLeft: '5px' }} /> </> : <>Novo Balanço <BsPlusCircle size={20} style={{ verticalAlign: 'bottom', marginLeft: '5px' }} /></>}
                                     </button>
-                                    <button onClick={handleSubmit} className='button-purple' style={{ marginLeft: '10px', backgroundColor: excel.isLoading && colors.main_white }}>
-                                        {excel.isLoading ? <CircularProgress color="success" style={{ padding: '5px' }} /> : <> <BsDownload size={20} style={{ verticalAlign: 'bottom', marginRight: '5px' }} /> Adicionar</>}
+                                    <button onClick={handleSubmit} className='button-purple' style={{ marginLeft: '10px', backgroundColor: isLoading && colors.main_white }}>
+                                        {isLoading ? <CircularProgress color="success" style={{ padding: '5px' }} /> : <> <BsDownload size={20} style={{ verticalAlign: 'bottom', marginRight: '5px' }} /> Adicionar</>}
                                     </button>
                                 </Box>
 
@@ -162,8 +163,8 @@ export default function Balancos() {
 
                     </Grid>
 
-                    <BalancosPagination setSpreadSheetsData={(u) => setSpreadSheets(u)} />
-                    
+                    <BalancosPagination setSpreadSheetsData={(u) => setSpreadSheets(u)} search={''} />
+
                 </Grid>
             </Container >
         </Box>

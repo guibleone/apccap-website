@@ -112,19 +112,6 @@ export const sendRecurso = createAsyncThunk('auth/sendRecurso', async (resource,
     }
 })
 
-// se tornar produtor
-
-export const becomeProducer = createAsyncThunk('auth/becomeProducer', async (user, thunkAPI) => {
-    try {
-        const response = await authService.becomeProducer(user)
-        return response
-    } catch (error) {
-        // caso ocorra algum erro
-        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
-        return thunkAPI.rejectWithValue(message)
-    }
-})
-
 // associação ter acesso de produtor
 
 export const associateProducer = createAsyncThunk('auth/associateProducer', async (user, thunkAPI) => {
@@ -280,20 +267,6 @@ export const authSlice = createSlice({
                 state.user = action.payload
             })
             .addCase(sendRecurso.rejected, (state, action) => {
-                state.isLoading = false
-                state.isError = true
-                state.message = action.payload
-            })
-            // se tornar produtor
-            .addCase(becomeProducer.pending, (state) => {
-                state.isLoading = true
-            })
-            .addCase(becomeProducer.fulfilled, (state, action) => {
-                state.isLoading = false
-                state.isSuccess = true
-                state.user = action.payload
-            })
-            .addCase(becomeProducer.rejected, (state, action) => {
                 state.isLoading = false
                 state.isError = true
                 state.message = action.payload

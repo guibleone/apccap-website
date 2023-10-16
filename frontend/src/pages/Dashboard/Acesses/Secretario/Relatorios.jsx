@@ -161,7 +161,7 @@ export default function Relatorios() {
 
                     </Grid>
 
-                    <RelatorysPagination setRelatorysData={(relatory) => setRelatorys(relatory)} />
+                    <RelatorysPagination setRelatorysData={(relatory) => setRelatorys(relatory)} search={''} />
 
                 </Grid>
             </Container>

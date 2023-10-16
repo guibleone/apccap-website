@@ -2,8 +2,6 @@ import { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useParams, useNavigate } from "react-router-dom"
 import { getDocumentsData, getResumeData, getUserData, deleteUser, reset, aproveUser } from "../../features/admin/adminSlice"
-import { downloadDocument } from '../../features/documents/documentsSlice'
-import { FaDownload } from 'react-icons/fa'
 import { Button, Stack, Avatar, Typography, Modal, Box, Container, CssBaseline, Divider, CircularProgress, Alert, useMediaQuery, TextareaAutosize, Grid, TextField } from '@mui/material';
 import AccessLevel from "./AccessLevel"
 import { toast } from 'react-toastify'
@@ -17,28 +15,9 @@ function UserSingle() {
 
     const { user, isLoading: isLoadingAuth } = useSelector((state) => state.auth)
 
-    const { userData, resumeData, documentsData, isLoading, message, isError, isSuccess } = useSelector((state) => state.admin)
-
-    const name = userData ? userData.name : ''
-    const cpf = userData ? userData.cpf : ''
-    const pathFoto = userData ? userData.pathFoto : ''
-    const email = userData ? userData.email : ''
-
-    const address = userData ? userData.address :
-        {
-            logradouro: '',
-            cidade: '',
-            estado: '',
-            cep: '',
-            numero: '',
-            complemento: '',
-            bairro: '',
-        }
-
+    const { userData, resumeData, isLoading, message, isError } = useSelector((state) => state.admin)
 
     const body = resumeData ? resumeData.body : ''
-
-    const documents = documentsData ? documentsData : []
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -70,47 +49,6 @@ function UserSingle() {
 
     }
 
-    const styleBox1 = matches ? {
-        display: 'flex',
-        alignItems: 'center',
-        width: '100%',
-        gap: '10px',
-        padding: '10px 0'
-    } : {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        width: '100%',
-        justifyItems: 'center',
-        gap: '10px'
-    }
-
-    const styleBox2 = matches ? {
-        display: 'flex',
-        width: '100%',
-        gap: '10px',
-        flexDirection: 'column',
-    } : {
-        display: 'flex',
-        flexDirection: 'column',
-        width: '100%',
-        justifyItems: 'center',
-        gap: '10px'
-    }
-
-    const styleBox3 = matches ? {
-        display: 'flex',
-        width: '100%',
-        flexDirection: 'column',
-        gap: '10px',
-    } : {
-        display: 'flex',
-        flexDirection: 'column',
-        width: '100%',
-        justifyItems: 'center',
-        gap: '10px'
-    }
-
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -131,6 +69,10 @@ function UserSingle() {
         }
 
     }, [user])
+
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [])
 
 
     if (isLoading || isLoadingAuth || !userData?.dados_pessoais?.name) {

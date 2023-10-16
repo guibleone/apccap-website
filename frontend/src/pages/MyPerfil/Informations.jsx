@@ -1,16 +1,15 @@
 import { useEffect, useState, useRef } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { Link, useNavigate } from "react-router-dom"
+import {  useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { reset, updateUser, addProfilePhoto, becomeProducer } from '../../features/auth/authSlice'
 import './Styles.css'
 import Resume from "./Resume"
 import { getResume } from "../../features/resume/resumeSlice"
 import { getDocuments } from "../../features/documents/documentsSlice"
-import { Button, Stack, Avatar, Typography, Divider, Box, Container, CssBaseline, TextField, Grid, MenuItem, Select, Checkbox, CircularProgress } from '@mui/material'
+import {  Avatar, Typography, Box, Container, CssBaseline, TextField, Grid, MenuItem, Select, Checkbox, CircularProgress } from '@mui/material'
 import { useMediaQuery } from "@mui/material"
 import { styleError, styleSuccess } from '../toastStyles'
-import { AiFillInfoCircle } from "react-icons/ai"
 import './Styles.css'
 import { colors } from "../colors"
 
@@ -173,14 +172,6 @@ function Informations() {
     }, [isError, isSuccess, message, dispatch])
 
 
-    // se tornar produtor
-
-    const handleBecomeProducer = () => {
-
-        dispatch(becomeProducer(user.token))
-
-    }
-
     const onSubmit = (e) => {
         e.preventDefault()
 
@@ -210,22 +201,23 @@ function Informations() {
         }}>
             <CssBaseline />
 
-            <Grid container spacing={2} p={matches ? 9 : 4} pt={9} >
-                <Grid item xs={12} lg={4} >
-                    <Box sx={{ display: 'flex', gap: '20px', flexDirection: 'column', paddingLeft: !matches ? 0 : '60px' }}>
-                        <h1 style={{ fontWeight: 700, fontSize: !matches ? '24px' : '' }}>
-                            Seus Dados
-                        </h1>
+            <Container maxWidth='xl'>
+                <Grid container spacing={2} pt={9} columnSpacing={22}   >
+                    <Grid item xs={12} lg={12} >
+                        <Box sx={{ display: 'flex', gap: '20px', flexDirection: 'column' }}>
+                            <h1 style={{ fontWeight: 700, fontSize: !matches ? '24px' : '' }}>
+                                Seus Dados
+                            </h1>
 
-                        <p style={{ fontWeight: 400, fontSize: !matches ? '14px' : '' }}>
-                            Confira e atualize seus dados pessoais, da sua propriedade e da sua marca.
-                        </p>
-                    </Box>
+                            <p style={{ fontWeight: 400, fontSize: !matches ? '14px' : '' }}>
+                                Confira e atualize seus dados pessoais, da sua propriedade e da sua marca.
+                            </p>
+                        </Box>
 
-                </Grid>
+                    </Grid>
 
-                <Grid container spacing={2} p={matches ? 10 : 0} pt={4} columnSpacing={22} >
-                    <Grid item xs={12}>
+
+                    <Grid item xs={12} mt={5}>
                         <Typography pb={1} variant={matches ? 'h5' : 'h6'}
                             sx={{
                                 fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: !matches ? '100%' : '210px',
@@ -527,13 +519,13 @@ function Informations() {
                         <Resume />
                     </Grid>
 
-                </Grid>
 
 
 
+                    {/**PROPRIEDADE */}
 
-                <Grid container spacing={2} p={matches ? 10 : 0} pt={4} columnSpacing={22}  >
-                    <Grid item xs={12}>
+
+                    <Grid item xs={12} mt={5}>
                         <Typography pb={1} variant={matches ? 'h5' : 'h6'}
                             sx={{
                                 fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: !matches ? '100%' : '210px',
@@ -842,10 +834,10 @@ function Informations() {
                             </Grid>
                         </Box>
                     </Grid>
-                </Grid>
 
-                <Grid container spacing={2} p={matches ? 10 : 0} pt={4} columnSpacing={22} >
-                    <Grid item xs={12}>
+                    {/**MARCA */}
+
+                    <Grid item xs={12} mt={5}>
                         <Typography pb={1} variant={matches ? 'h5' : 'h6'}
                             sx={{
                                 fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: !matches ? '100%' : '210px',
@@ -1020,13 +1012,14 @@ function Informations() {
                                 </>
                             }
 
+
                         </Grid>
 
                     </Grid>
-
                 </Grid>
-            </Grid>
-        </Box>
+
+            </Container>
+        </Box >
 
     )
 }

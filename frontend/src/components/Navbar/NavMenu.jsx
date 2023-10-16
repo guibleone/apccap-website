@@ -546,7 +546,7 @@ function NavMenu() {
                     {!user ? (
                         <>
                             <ListItem style={{ display: 'flex', justifyContent: 'center' }}>
-                                <button className='button-white' onClick={() => navigate('/entrar')}>Área Produtor</button>
+                                <button className='button-white' onClick={() => window.location.href = '/entrar'}>Área Produtor</button>
                             </ListItem>
                         </>
                     ) : (

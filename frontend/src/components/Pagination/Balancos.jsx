@@ -21,7 +21,7 @@ export default function BalancosPagination({ setSpreadSheetsData, search }) {
 
         fetchData(pagination.page);
 
-    }, [pagination.page, excel.isSucces, search]);
+    }, [pagination.page, excel, search]);
 
     useEffect(() => {
 

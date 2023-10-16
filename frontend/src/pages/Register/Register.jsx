@@ -265,24 +265,27 @@ function Register() {
         paddingBottom: '120px'
       }}>
 
-        <CssBaseline />
+        <Container maxWidth='xl'>
+          <CssBaseline />
 
-        <Grid container spacing={2} p={matches ? 9 : 0} pt={9} >
-          <Grid item xs={12} lg={12}>
-            <div className='title'>
-              <h1>
-                Cadastro
-              </h1>
+          <Grid container spacing={2} pt={9} columnSpacing={22}>
+            <Grid item xs={12} lg={12}>
+              <div className='title'>
+                <h1>
+                  Cadastro
+                </h1>
 
-              <p>
-                Para você que  não é um produtor associado, cumpre com os <br />
-                <Link style={{ color: '#140C9F', fontWeight: 700, textDecorationColor: '#140C9F' }} >requisitos</Link> e deseja se associar.
-              </p>
-            </div>
-          </Grid>
+                <p>
+                  Para você que  não é um produtor associado, cumpre com os <br />
+                  <Link style={{ color: '#140C9F', fontWeight: 700, textDecorationColor: '#140C9F' }} >requisitos</Link> e deseja se associar.
+                </p>
+              </div>
+            </Grid>
 
-          <Grid container spacing={2} p={matches ? 10 : 4} columnSpacing={22} >
-            <Grid item xs={12}>
+             {/**DADOS PESSOAIS */}
+
+            <Grid item xs={12} mt={5}>
+              
               <Typography pb={1} variant={matches ? 'h5' : 'h6'}
                 sx={{
                   fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: !matches ? '100%' : '210px',
@@ -593,10 +596,9 @@ function Register() {
 
             </Grid>
 
-          </Grid>
+           {/**PROPRIEDADE */}
 
-          <Grid container spacing={2} p={matches ? 10 : 4} columnSpacing={22}  >
-            <Grid item xs={12}>
+            <Grid item xs={12} mt={5}>
               <Typography pb={1} variant={matches ? 'h5' : 'h6'}
                 sx={{
                   fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: !matches ? '100%' : '210px',
@@ -906,10 +908,10 @@ function Register() {
                 </Grid>
               </Box>
             </Grid>
-          </Grid>
 
-          <Grid container spacing={2} p={matches ? 10 : 4} columnSpacing={22} >
-            <Grid item xs={12}>
+            {/**MARCA */}
+
+            <Grid item xs={12} mt={5}>
               <Typography pb={1} variant={matches ? 'h5' : 'h6'}
                 sx={{
                   fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: !matches ? '100%' : '210px',
@@ -1104,48 +1106,14 @@ function Register() {
 
             </Grid>
 
+
           </Grid>
-        </Grid>
 
+          <TermsAcceptanceDialog open={open} handleOpen={handleOpen} />
 
-        {/*
-      <Modal
-        open={openTerms}
-        onClose={handleOpenTerms}
-      >
-        <Box sx={style}>
-          <Box sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '10px'
-          }}>
-            <Box display={'flex'} justifyContent={'space-between'}>
-              <Typography variant="h6" >Termos de Uso</Typography>
-              <AiOutlinePaperClip size={30} />
-            </Box>
-            <Typography variant="body1" >
-              Lorem ipsum dolor si
-              amet, consectetur adipiscing elit. Nullam
-              ac ante mollis quam tristique convallis
-            </Typography>
-            <Typography variant="body1" >
-              Lorem ipsum dolor si
-              amet, consectetur adipiscing elit. Nullam
-              ac ante mollis quam tristique convallis
-            </Typography>
-            <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
-              <Button color='info' variant='contained' onClick={handleOpenTerms}>Voltar</Button>
-            </Box>
-          </Box>
-        </Box>
-      </Modal>
-      */}
-
-        <TermsAcceptanceDialog open={open} handleOpen={handleOpen} />
-
+        </Container>
       </Box >
       <Footer />
-
 
     </>
   )
