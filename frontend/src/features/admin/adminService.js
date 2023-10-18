@@ -268,11 +268,6 @@ const getMembros = async () => {
     return response.data
 }
 
-const getProducers = async () => {
-    const response = await axios.get(API_URI + '/produtores')
-    return response.data
-}
-
 // EMAILS
 
 const sendEmail = async (emailData) => {
@@ -324,7 +319,6 @@ const adminService = {
     repproveRecurso,
     sendProductRelatoryEmail,
     getMembros,
-    getProducers
 }
 
 export default adminService

@@ -34,6 +34,7 @@ import DocumentosPublicos from './pages/Documentos/DocumentosPublicos';
 import Credenciamento from './pages/Dashboard/Acesses/Conselho/Credenciamento';
 import TodosProdutos from './pages/Dashboard/Acesses/Conselho/TodosProdutos';
 import Relatorios from './pages/Dashboard/Acesses/Secretario/Relatorios';
+import TodosProdutores from './pages/QuemSomos/TodosProdutores';
 
 function App() {
   return (
@@ -71,6 +72,7 @@ function App() {
           <Route path='/credenciamento' element={<Credenciamento />} />
           <Route path='/produtos-conselho' element={<TodosProdutos />} />
           <Route path='/relatorios' element={<Relatorios />} />
+          <Route path='/todos-produtores' element={<TodosProdutores />} />
           <Route path='*' element={<h1>Not Found 404</h1>} />
         </Routes> 
       </Router>

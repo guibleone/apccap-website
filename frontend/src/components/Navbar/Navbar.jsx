@@ -322,7 +322,7 @@ function Navbar() {
                 <Link className="links" to="/reunioes"><h4>Reuniões</h4></Link>
                 <Link className="links" to="/relatorios"><h4>Relatórios</h4></Link>
                 {user && (
-                  ((user.role !== 'admin' && (user.role !== 'user')) || user.oldRole)
+                  ((user.role !== 'admin' && user.role !== 'produtor' && user.role !== 'produtor_associado') || user.oldRole)
                     ?
                     <ButtonChangeRole />
 

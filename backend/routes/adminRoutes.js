@@ -11,14 +11,15 @@ const {
 
 const { uploadRelatory } = require('../middlewares/multer.js');
 
+// pegar produtores 
+router.get('/produtores', getProducers)
+
 // Pegar todos os usuários
 router.get('/', hasRole(['admin', 'secretario', 'presidente', 'conselho']), getUsers);
 
 // pegar membros da associação
 router.get('/membros', getMembros)
 
-// pegar produtores 
-router.get('/produtores', getProducers)
 
 // Pegar dados do usuário
 router.get('/user/:id', hasRole(['admin', 'secretario', 'presidente', 'conselho']), getUserData);

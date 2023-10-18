@@ -623,7 +623,7 @@ function NavMenu() {
                 <List>
 
                     {user && (
-                        ((user.role !== 'admin' && (user.role !== 'user')) || user.oldRole)
+                        ((user.role !== 'admin' && user.role !== 'produtor' && user.role !== 'produtor_associado') || user.oldRole)
                             ?
                             <ListItem sx={{ justifyContent: 'center' }}>
                                 <ButtonChangeRole />

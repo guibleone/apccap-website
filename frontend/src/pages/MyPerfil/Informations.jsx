@@ -627,8 +627,7 @@ function Informations() {
                             <Select
                                 fullWidth
                                 onChange={handleChangePropriedade}
-                                defaultValue=""
-                                value={propriedadeData.estado_propriedade || ''}
+                                defaultValue={propriedadeData.estado_propriedade || ''}
                                 name='estado'
                                 sx={
                                     {
@@ -679,10 +678,10 @@ function Informations() {
                                 <TextField
                                     required
                                     fullWidth
-                                    id="cep-propriedade"
+                                    id="cep_propriedade"
                                     placeholder='00000-000'
-                                    name="cep-propriedade"
-                                    autoComplete="cep-propriedade" onChange={handleChangePropriedade} type="number"
+                                    name="cep_propriedade"
+                                    autoComplete="cep_propriedade" onChange={handleChangePropriedade} type="number"
                                     value={propriedadeData.cep_propriedade}
                                     sx={
                                         {
@@ -706,10 +705,10 @@ function Informations() {
                                 <TextField
                                     required
                                     fullWidth
-                                    id="numero-propriedade"
+                                    id="numero_propriedade"
                                     placeholder='00000-000'
-                                    name="numero-propriedade"
-                                    autoComplete="numero-propriedade" onChange={handleChangePropriedade} type="number"
+                                    name="numero_propriedade"
+                                    autoComplete="numero_propriedade" onChange={handleChangePropriedade} type="number"
                                     value={propriedadeData.numero_propriedade}
                                     sx={
                                         {

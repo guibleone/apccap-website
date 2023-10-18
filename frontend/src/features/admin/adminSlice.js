@@ -4,7 +4,18 @@ import adminService from "./adminService";
 const initialState = {
     users: [],
     membros: [],
-    produtores: [],
+    produtores: {
+        todos: [],
+        amparo: [],
+        águas_de_lindóia: [],
+        serra_negra: [],
+        holambra: [],
+        jaguariúna: [],
+        lindóia: [],
+        monte_alegre_do_sul: [],
+        pedreira: [],
+        socorro: [],
+    },
     userData: {},
     resumeData: null,
     documentsData: null,
@@ -261,17 +272,6 @@ export const getMembros = createAsyncThunk('quem-somos/membros', async (_, thunk
     }
 })
 
-export const getProducers = createAsyncThunk('quem-somos/produtores', async (_, thunkAPI) => {
-    try {
-        const response = await adminService.getProducers()
-        return response
-    } catch (error) {
-        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
-        return thunkAPI.rejectWithValue(message);
-    }
-})
-
-
 // EMAIL
 export const sendEmail = createAsyncThunk('admin/email', async (user, thunkAPI) => {
     try {
@@ -341,6 +341,9 @@ export const adminSlice = createSlice({
         resetEmailStatus: state => {
             state.emailStatus = initialState.emailStatus
             state.isSuccess = false
+        },
+        setProdutores: (state, action) => {
+            state.produtores = {...state.produtores, [action.payload.formatedCidade]: action.payload.produtores}
         }
     },
     extraReducers: (builder) => {
@@ -738,22 +741,9 @@ export const adminSlice = createSlice({
                 state.isError = true
                 state.message = action.payload
             })
-            // pegar produtores
-            .addCase(getProducers.pending, state => {
-                state.isLoading = true
-            })
-            .addCase(getProducers.fulfilled, (state, action) => {
-                state.isLoading = false
-                state.isError = false
-                state.produtores = action.payload
-            })
-            .addCase(getProducers.rejected, (state, action) => {
-                state.isError = true
-                state.message = action.payload
-            })
     }
 })
 
 
-export const { reset, resetEmailStatus, resetStatus } = adminSlice.actions
+export const { reset, resetEmailStatus, resetStatus,setProdutores } = adminSlice.actions
 export default adminSlice.reducer

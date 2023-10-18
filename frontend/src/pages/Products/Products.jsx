@@ -225,13 +225,7 @@ function Products() {
         </Grid>
 
         <Grid container columnSpacing={0} rowSpacing={3} >
-          <Grid item >
-            {!productsData && (
-              <h3 className='regular black'>
-                Você ainda não cadastrou nenhum produto.
-              </h3>
-            )}
-          </Grid>
+
           {productsData &&
             productsData.map((product) => (
               <Grid item xs={12} pr={!matches ? 2 : 0} md={3} key={product._id}>
@@ -285,6 +279,15 @@ function Products() {
 
             ))
           }
+
+          <Grid item >
+            {productsData.length === 0 && (
+              <h3 className='regular black'>
+                Você ainda não cadastrou nenhum produto.
+              </h3>
+            )}
+          </Grid>
+
         </Grid>
 
         <ProductsPagination setProductsData={(p) => setProductsData(p)} />

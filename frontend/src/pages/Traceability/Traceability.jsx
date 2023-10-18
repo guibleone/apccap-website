@@ -1,15 +1,12 @@
-import { Box, Container, Typography, CircularProgress, Button, TextField, Alert, CssBaseline, Avatar } from '@mui/material'
-import { useNavigate } from 'react-router-dom';
+import { Box, CircularProgress, CssBaseline, useMediaQuery } from '@mui/material'
 import { useSelector, useDispatch } from 'react-redux'
-import { FcApproval, FcOk } from "react-icons/fc";
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { getProducer, getProducerResume, reset, trackProduct } from '../../features/products/productsSlice';
 import './Styles.css'
-import { AiFillCheckCircle, AiFillInfoCircle } from 'react-icons/ai';
-import { BsExclamationTriangle } from 'react-icons/bs';
+import { AiFillInfoCircle } from 'react-icons/ai';
 import Footer from '../../components/Footer/Footer';
-import { colors, purple } from '../colors.js'
+import { colors, } from '../colors.js'
 
 
 function Traceability() {
@@ -17,7 +14,7 @@ function Traceability() {
   const { productData, producer, producerResume, isLoading, isError, message } = useSelector((state) => state.products)
   const dispatch = useDispatch()
 
-  const navigate = useNavigate()
+  const matches = useMediaQuery('(max-width:1200px)')
 
   useEffect(() => {
     dispatch(reset())
@@ -32,7 +29,6 @@ function Traceability() {
     dispatch(trackProduct({ selo }))
 
   }
-
 
   useEffect(() => {
 
@@ -109,8 +105,11 @@ function Traceability() {
             </div>
 
 
-
-            <img src={require('../../imgs/seloFoto.png')} alt="rastreio" className="rastreio-img" />
+            {!matches && (<>
+              <img src={require('../../imgs/seloFoto.png')} alt="rastreio" style={{
+                marginTop: '-130px',
+              }} />
+            </>)}
 
 
 

@@ -48,11 +48,37 @@ const getMembros = asyncHandler(async (req, res) => {
 // pegar produtores
 
 const getProducers = asyncHandler(async (req, res) => {
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : 12;
+    const skip = (page - 1) * pageSize;
+    const cidade = req.query.cidade ? req.query.cidade : '';
+
+    const formatedCidade = cidade.toLowerCase().replaceAll(' ', '_');
+
     try {
-        const users = await User.find({ role: ['produtor', 'produtor_associado'] })
-            .select('propriedade.cidade_propriedade propriedade.nome_propriedade marca.whatsapp marca.instagram marca.logo dados_pessoais.name')
+
+        let query = {};
+
+        if (cidade) {
+            query = {
+                $or: [
+                    { 'propriedade.cidade_propriedade': cidade },
+                ],
+            };
+        }
+
+        if (cidade === 'todos') query = { 'propriedade.cidade_propriedade': { $exists: true } };
+
+        const totalDocuments = await User.countDocuments(query);
+
+        const produtores = await User
+            .find(query)
+            .skip(skip)
+            .limit(pageSize)
+            .select('propriedade.cidade_propriedade propriedade.estado_propriedade propriedade.logradouro_propriedade propriedade.cep_propriedade propriedade.nome_propriedade marca.whatsapp marca.instagram marca.logo marca.site dados_pessoais.name')
             .exec()
-        res.status(200).json(users)
+
+        res.status(200).json({ totalDocuments, produtores, formatedCidade })
     } catch (error) {
         res.status(400)
         throw new Error('Erro ao carrgegar usuários')

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Accordion, AccordionDetails, AccordionSummary, Box, Container, Divider, Grid, Paper, Typography, useMediaQuery } from '@mui/material';
 import { colors } from '../colors';
 import { useSelector, useDispatch } from 'react-redux';
@@ -9,12 +9,16 @@ import { AiOutlineArrowRight, AiOutlineInstagram, AiOutlineWhatsApp } from 'reac
 import Footer from '../../components/Footer/Footer';
 import { BsArrowUpRight, BsChevronDown, BsChevronRight } from 'react-icons/bs';
 import { BiMinus, BiPlus } from 'react-icons/bi';
+import ProdutoresPagination from '../../components/Pagination/Produtores';
 
 export default function QuemSomos() {
 
     const dispatch = useDispatch();
-    const { membros, produtores } = useSelector(state => state.admin)
-    const { hash } = useLocation()
+    const { membros } = useSelector(state => state.admin)
+    const [produtores, setProdutores] = useState([])
+
+    const location = useLocation();
+    const lastHash = useRef('');
 
     const navigate = useNavigate()
 
@@ -29,26 +33,30 @@ export default function QuemSomos() {
     useEffect(() => {
 
         dispatch(getMembros())
-        dispatch(getProducers())
 
     }
         , [dispatch])
 
-
     useEffect(() => {
-
-        const element = document.getElementById(window.location.hash.slice(1));
-
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
+        if (location.hash) {
+            lastHash.current = location.hash.slice(1); 
         }
 
-    }, [hash]);
+        if (lastHash.current && document.getElementById(lastHash.current)) {
+            setTimeout(() => {
+                document
+                    .getElementById(lastHash.current)
+                    ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                lastHash.current = '';
+            }, 100);
+        }
+    }, [location]);
+
 
 
     return (
         <>
-            <Box id='associacao' sx={{
+            <Box  id='associacao' sx={{
                 backgroundColor: colors.main_blue,
                 padding: '80px 0 150px 0',
 
@@ -56,7 +64,7 @@ export default function QuemSomos() {
                 <Container maxWidth='xl'>
                     <Grid container rowSpacing={5} pb={'100px'} >
                         <Grid item xs={12} lg={6}>
-                            <Box id='associacao' sx={{
+                            <Box sx={{
                                 display: 'flex',
                                 flexDirection: 'column',
                                 gap: '40px',
@@ -141,9 +149,9 @@ export default function QuemSomos() {
                 position: 'relative',
             }}>
 
-                <div class="custom-shape-divider-top-1697630840">
+                <div className="custom-shape-divider-top-1697630840">
                     <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                        <path d="M1200 0L0 0 598.97 114.72 1200 0z" class="shape-fill"></path>
+                        <path d="M1200 0L0 0 598.97 114.72 1200 0z" className="shape-fill"></path>
                     </svg>
                 </div>
 
@@ -162,7 +170,7 @@ export default function QuemSomos() {
                             </h3>
                         </Grid>
 
-                        {produtores?.filter((produtor) => produtor.propriedade.cidade_propriedade === 'Amparo').length > 0 ? produtores.filter((produtor) => produtor.propriedade.cidade_propriedade === 'Amparo').slice(0, 6).map((produtor, index) => (
+                        {produtores?.amparo?.length > 0 ? produtores?.amparo?.map((produtor, index) => (
                             <Grid key={index} item xs={12} lg={3} xl={2} >
                                 <Box sx={{
                                     display: 'flex',
@@ -186,7 +194,7 @@ export default function QuemSomos() {
                                         justifyContent: 'space-between',
                                     }}>
                                         <div>
-                                            <a href={`/produtor/${produtor._id}`} style={{ textDecorationColor: colors.main_white }}>
+                                        <a target='_blank' rel="noreferrer" href={produtor?.marca?.site ? `https://${produtor?.marca?.site} `: `https://www.google.com/maps/dir//${produtor?.propriedade?.logradouro_propriedade}%20-%20${produtor?.propriedade?.cidade_propriedade},%20${produtor?.propriedade?.estado_propriedade},%20${produtor?.propriedade?.cep_propriedade}/data=!4m6!4m5!1m1!4e2!1m2!1m1!1s0x94c6c6b0a0a0a0a7:0x1b0b0b0b0b0b0b0b?sa=X&ved=2ahUKEwjJ6Z7X2Z7zAhVYIbkGHXZrDZIQ9RcwDHoECBQQBQ`} style={{ textDecorationColor: colors.main_white }}>
                                                 <h3 className='white semi-bold'>
                                                     {produtor.propriedade.nome_propriedade}
                                                 </h3>
@@ -208,6 +216,9 @@ export default function QuemSomos() {
                                     </Box>
 
                                 </Box>
+
+
+
                             </Grid>
 
                         )) :
@@ -218,6 +229,11 @@ export default function QuemSomos() {
 
                             </Grid>
                         }
+                        <Grid item xs={12} lg={12}>
+
+                            <ProdutoresPagination setProdutoresData={(produtor) => setProdutores(produtor)} cidade={'Amparo'} />
+
+                        </Grid>
 
                     </Grid>
 
@@ -233,7 +249,7 @@ export default function QuemSomos() {
                             </h3>
                         </Grid>
 
-                        {produtores?.filter((produtor) => produtor.propriedade.cidade_propriedade === 'Serra Negra').length > 0 ? produtores.filter((produtor) => produtor.propriedade.cidade_propriedade === 'Serra Negra').slice(0, 6).map((produtor, index) => (
+                        {produtores?.serra_negra?.length > 0 ? produtores?.serra_negra?.map((produtor, index) => (
                             <Grid key={index} item xs={12} lg={3} xl={2} >
                                 <Box sx={{
                                     display: 'flex',
@@ -256,7 +272,7 @@ export default function QuemSomos() {
                                         justifyContent: 'space-between',
                                     }}>
                                         <div>
-                                            <a href={`/produtor/${produtor._id}`} style={{ textDecorationColor: colors.main_white }}>
+                                        <a target='_blank' rel="noreferrer" href={produtor?.marca?.site ? `https://${produtor?.marca?.site} `: `https://www.google.com/maps/dir//${produtor?.propriedade?.logradouro_propriedade}%20-%20${produtor?.propriedade?.cidade_propriedade},%20${produtor?.propriedade?.estado_propriedade},%20${produtor?.propriedade?.cep_propriedade}/data=!4m6!4m5!1m1!4e2!1m2!1m1!1s0x94c6c6b0a0a0a0a7:0x1b0b0b0b0b0b0b0b?sa=X&ved=2ahUKEwjJ6Z7X2Z7zAhVYIbkGHXZrDZIQ9RcwDHoECBQQBQ`} style={{ textDecorationColor: colors.main_white }}>
                                                 <h3 className='white semi-bold'>
                                                     {produtor.propriedade.nome_propriedade}
                                                 </h3>
@@ -289,24 +305,29 @@ export default function QuemSomos() {
                             </Grid>
                         }
 
+                        <Grid item xs={12} lg={12}>
+
+                            <ProdutoresPagination setProdutoresData={(produtor) => setProdutores(produtor)} cidade={'Holambra'} />
+
+                        </Grid>
 
                         <Grid item xs={12} lg={6}>
 
-                            <Link to='/' style={{ 
-                                textUnderlineOffset:'8px',
+                            <Link to='/todos-produtores' style={{
+                                textUnderlineOffset: '8px',
                                 textDecorationColor: colors.main_blue_dark,
                                 textDecorationThickness: '3px',
                                 textDecorationLine: 'underline',
-                                
-                                }}>
 
-                            <h4 className='semi-bold italic' style={{ color: colors.main_blue_dark }}>
-                                        Ver Todos 
-                             </h4>
+                            }}>
+
+                                <h4 className='semi-bold italic' style={{ color: colors.main_blue_dark, textAlign: matches ? 'start' : 'center' }}>
+                                    Todas Cidades
+                                </h4>
                             </Link>
                         </Grid>
 
-                        </Grid>
+                    </Grid>
 
                 </Container>
 
@@ -318,9 +339,9 @@ export default function QuemSomos() {
                 minHeight: '300px',
             }}>
 
-                <div class="custom-shape-divider-top-1697630736">
+                <div className="custom-shape-divider-top-1697630736">
                     <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                        <path d="M1200 0L0 0 598.97 114.72 1200 0z" class="shape-fill"></path>
+                        <path d="M1200 0L0 0 598.97 114.72 1200 0z" className="shape-fill"></path>
                     </svg>
                 </div>
 
@@ -381,9 +402,9 @@ export default function QuemSomos() {
                 minHeight: '300px',
             }}>
 
-                <div class="custom-shape-divider-top-1697630909">
+                <div className="custom-shape-divider-top-1697630909">
                     <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                        <path d="M1200 0L0 0 598.97 114.72 1200 0z" class="shape-fill"></path>
+                        <path d="M1200 0L0 0 598.97 114.72 1200 0z" className="shape-fill"></path>
                     </svg>
                 </div>
                 <Container id='associar' maxWidth='xl'>

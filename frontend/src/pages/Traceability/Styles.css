@@ -8,7 +8,7 @@
 
 .text-side-produto {
     color: #140C9F;
-    max-width: 444px;
+    max-width: 504px;
     display: flex;
     flex-direction: column;
     gap:25px;
@@ -36,6 +36,10 @@
     padding: 15px;
 }
 
+.rastreio-img{
+    width: 20%;
+    align-self: auto;
+}
 
 .rastrear-produto button{
     background-color: #140C9F;
@@ -149,6 +153,9 @@
 
     .rastrear-produto input {
        width: 100%;
+    }
+    .rastreio-img{
+        width: auto;
     }
 
     .rastreio-lado {
