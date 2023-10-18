@@ -1,13 +1,13 @@
 import { useEffect, useState, useRef } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import {  useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { reset, updateUser, addProfilePhoto, becomeProducer } from '../../features/auth/authSlice'
 import './Styles.css'
 import Resume from "./Resume"
 import { getResume } from "../../features/resume/resumeSlice"
 import { getDocuments } from "../../features/documents/documentsSlice"
-import {  Avatar, Typography, Box, Container, CssBaseline, TextField, Grid, MenuItem, Select, Checkbox, CircularProgress } from '@mui/material'
+import { Avatar, Typography, Box, Container, CssBaseline, TextField, Grid, MenuItem, Select, Checkbox, CircularProgress } from '@mui/material'
 import { useMediaQuery } from "@mui/material"
 import { styleError, styleSuccess } from '../toastStyles'
 import './Styles.css'
@@ -449,27 +449,15 @@ function Informations() {
                                 Cidade
                             </Typography>
 
-                            <Select
+                            <TextField
                                 fullWidth
                                 onChange={handleChangeDadosPessoais}
                                 defaultValue=""
                                 value={dadosPessoaisData.cidade || ''}
                                 name='cidade'
                                 autoComplete='cidade'
-                                MenuProps={{ PaperProps: { sx: { maxHeight: 200 } } }}
-                                sx={
-                                    {
-                                        '& .MuiInputBase-root': {
-                                            borderRadius: '0px',
-                                        },
+                            />
 
-                                    }
-                                }
-                            >
-                                {cidadesValidas.map((cidade, index) => (
-                                    <MenuItem key={index} value={cidade}>{cidade}</MenuItem>
-                                ))}
-                            </Select>
                         </Grid>
 
                     </Grid>

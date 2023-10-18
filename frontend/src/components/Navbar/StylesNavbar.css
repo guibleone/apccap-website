@@ -74,8 +74,7 @@
 /* Dropdown.css */
 .dropdown {
     position: relative;
-    display: inline-block;
-    width: 100%;
+display: 'flex';
 }
 
 .dropdown-content {
@@ -86,7 +85,7 @@
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     padding: 12px 16px;
     z-index: 1;
-    right: 20px;
+    left: 0px;
 }
 
 .link-content {

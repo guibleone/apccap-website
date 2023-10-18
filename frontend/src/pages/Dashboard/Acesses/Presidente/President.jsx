@@ -11,7 +11,7 @@ import { sendConvocationEmail, resetEmailStatus } from '../../../../features/adm
 import { styleError, styleSuccess } from '../../../toastStyles'
 import UsersCredenciados from './UsersCredenciados';
 import { Link, useNavigate } from 'react-router-dom';
-import { createReunion, finishReunion, getReunions, signAta } from '../../../../features/reunion/reunionSlice';
+import { createReunion, finishReunion, getReunions, reset, signAta } from '../../../../features/reunion/reunionSlice';
 import ReunionPagination from '../../../../components/Pagination/Reunions';
 import { BsArrowUpRight, BsPlusCircle, BsTrash } from 'react-icons/bs'
 import { associateProducer } from '../../../../features/auth/authSlice';
@@ -30,8 +30,9 @@ export default function President() {
   // redux
   const { emailStatus } = useSelector((state) => state.admin)
   const { user, isLoading: isLoadingAuth } = useSelector((state) => state.auth)
-  const { reunionData } = useSelector((state) => state.reunions)
   const { users } = useSelector((state) => state.admin)
+  const { reunionData, isSuccess, isError, message: messageReunion } = useSelector((state) => state.reunions)
+
 
   // modal
 
@@ -64,6 +65,24 @@ export default function President() {
     dispatch(resetEmailStatus())
 
   }, [emailStatus.isSuccess, emailStatus.isError])
+
+  
+  useEffect(() => {
+
+    if (isError) {
+        toast.error(messageReunion, styleError)
+    }
+
+    if (isSuccess) {
+        toast.success(messageReunion, styleSuccess)
+    }
+
+    dispatch(reset())
+
+
+}, [isError, isSuccess, messageReunion])
+
+
 
   return (
     <Box sx={{

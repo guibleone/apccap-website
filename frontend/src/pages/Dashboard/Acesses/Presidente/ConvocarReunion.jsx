@@ -73,6 +73,7 @@ export default function ConvocarReunion({ onClose }) {
                 date: startDate.toLocaleString(),
                 typeReunion,
                 pautas,
+                convocado_por: `${user?.dados_pessoais?.name}_${user.role}`,
                 token: user.token
             }
 
@@ -104,6 +105,8 @@ export default function ConvocarReunion({ onClose }) {
     const [pautas, setPautas] = useState([])
 
     const addPauta = () => {
+        if (!singlePauta.title) return toast.error('Preencha o título da pauta', styleError)
+        if (!singlePauta.description) return toast.error('Preencha a descrição da pauta', styleError)
         setPautas((prevState) => [...prevState, singlePauta])
         setSinglePauta({
             title: '',
@@ -137,7 +140,14 @@ export default function ConvocarReunion({ onClose }) {
 
     useEffect(() => {
 
-        updatePdf(<PDFReunion title={title} message={message} pautas={pautas} typeReunion={typeReunion} date={startDate.toLocaleString()} dateConvocacao={dateConvocacao} />);
+        updatePdf(<PDFReunion
+            title={title}
+            message={message}
+            pautas={pautas}
+            typeReunion={typeReunion}
+            date={startDate.toLocaleString()}
+            dateConvocacao={dateConvocacao}
+            convocado_por={`${user?.dados_pessoais?.name}_${user.role}`} />);
 
     }, [title, message, pautas, typeReunion, startDate, dateConvocacao, updatePdf]);
 
@@ -283,7 +293,7 @@ export default function ConvocarReunion({ onClose }) {
 
                         <Select defaultValue={typeReunion} onChange={handleChange}>
                             <MenuItem value={'administrativa'}>Administrativa</MenuItem>
-                            <MenuItem value={'assembleia_ordinal'}>Assembleia Ordinal</MenuItem>
+                            <MenuItem value={'assembleia_ordinaria'}>Assembleia Ordinária</MenuItem>
                             <MenuItem value={'assembleia_extraordinaria'}>Assembleia Extraordinária</MenuItem>
                         </Select>
 
@@ -323,32 +333,6 @@ export default function ConvocarReunion({ onClose }) {
                 </Grid>
 
             </Grid>
-
-            {/*
-                <Grid item xs={12} lg={12}>
-
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
-                        <FormGroup row>
-                            <FormControlLabel control={<Checkbox checked={typeReunion.administrativa} onChange={handleChange} name='administrativa' />} label={'Administrativa'} />
-                            <FormControlLabel control={<Checkbox checked={typeReunion.assembleia_ordinal} onChange={handleChange} name='assembleia_ordinal' />} label={'Assembleia ordinal'} />
-                            <FormControlLabel control={<Checkbox checked={typeReunion.assembleia_extraordinaria} onChange={handleChange} name='assembleia_extraordinaria' />} label={'Assembleia extraordinária'} />
-                        </FormGroup>
-
-                        <Button
-                            disabled={emailStatus.isLoading || isLoading}
-                            onClick={handleConvocate}
-                            fullWidth
-                            variant='contained'
-                            color='success'> {emailStatus.isLoading ? <CircularProgress color="success" size={24} /> : 'Convocar'}
-                        </Button>
-
-                    </Box>
-
-                </Grid>
-                }*/}
-
-
-
 
         </Box>
     )

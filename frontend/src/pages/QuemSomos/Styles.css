@@ -1,32 +1,4 @@
-.top {
-    clip-path: polygon(0 0,100% 0,100% calc(100% - 190px),calc(50% + 1077.54px) calc(100% - 190px),50% 100%,calc(50% - 1077.54px) calc(100% - 190px),0 calc(100% - 190px));
-  }
-  .bottom {
-    clip-path: polygon(0 0,calc(50% - 0.00px - 1077.54px) 0,50% calc(190px + 0.00px),calc(50% + 0.00px + 1077.54px) 0,100% 0,100% 100%,0 100%);
-    margin-top: -190px;
-  }
-
-  .custom-shape-divider-top-1696977159 {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    overflow: hidden;
-    line-height: 0;
-}
-
-.custom-shape-divider-top-1696977159 svg {
-    position: relative;
-    display: block;
-    width: calc(100% + 1.3px);
-    height: 73px;
-}
-
-.custom-shape-divider-top-1696977159 .shape-fill {
-    fill: #0F0A70;
-}
-
-.custom-shape-divider-top-1696977691 {
+.custom-shape-divider-top-1697630840 {
   position: absolute;
   top: 0;
   left: 0;
@@ -35,33 +7,54 @@
   line-height: 0;
 }
 
-.custom-shape-divider-top-1696977691 svg {
-  position: relative;
-  display: block;
-  width: calc(113% + 1.3px);
-  height: 79px;
-}
-
-.custom-shape-divider-top-1696977691 .shape-fill {
-  fill: #FAF8F8;
-}
-
-.custom-shape-divider-top-1696978231 {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  overflow: hidden;
-  line-height: 0;
-}
-
-.custom-shape-divider-top-1696978231 svg {
+.custom-shape-divider-top-1697630840 svg {
   position: relative;
   display: block;
   width: calc(100% + 1.3px);
-  height: 73px;
+  height: 50px;
 }
 
-.custom-shape-divider-top-1696978231 .shape-fill {
+.custom-shape-divider-top-1697630840 .shape-fill {
+  fill: #0F0A70;
+}
+
+
+.custom-shape-divider-top-1697630736 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.custom-shape-divider-top-1697630736 svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 50px;
+}
+
+.custom-shape-divider-top-1697630736 .shape-fill {
+  fill: #FAF8F8;
+}
+
+.custom-shape-divider-top-1697630909 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.custom-shape-divider-top-1697630909 svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 50px;
+}
+
+.custom-shape-divider-top-1697630909 .shape-fill {
   fill: #00AFAB;
 }

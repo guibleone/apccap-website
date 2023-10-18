@@ -77,8 +77,6 @@ export default function SingleReunion() {
 
     const [file, setFile] = useState(null)
 
-
-
     // ref do input file
     const fileInputRef = useRef(null);
 
@@ -135,8 +133,6 @@ export default function SingleReunion() {
         handleOpenList()
 
         setPresence({})
-
-
 
     }
 
@@ -727,7 +723,7 @@ export default function SingleReunion() {
                                 </h3>
                             </Grid>
 
-                            <Grid item xs={12} md={12}>
+                           {/**  <Grid item xs={12} md={12}>
                                 <h3 className='semi-bold black'>
                                     Votos
                                 </h3>
@@ -777,6 +773,7 @@ export default function SingleReunion() {
 
                                 </Box>
                             </Grid>
+                            */}
 
                         </Grid>
 

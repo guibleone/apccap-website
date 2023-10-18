@@ -45,7 +45,7 @@ const senConvocationEmail = asyncHandler(async (req, res) => {
         roles.push('presidente', 'secretario', 'admin', 'tesoureiro')
     }
 
-    if (typeReunion.assembleia_ordinal) {
+    if (typeReunion.assembleia_ordinaria) {
         roles.push('presidente', 'secretario', 'admin', 'tesoureiro', 'produtor')
     }
 

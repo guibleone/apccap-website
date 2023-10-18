@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Accordion, AccordionDetails, AccordionSummary, Box, Container, Divider, Grid, Paper, Typography, useMediaQuery } from '@mui/material';
 import { colors } from '../colors';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './Styles.css'
 import { getMembros, getProducers } from '../../features/admin/adminSlice';
-import { AiOutlineInstagram, AiOutlineWhatsApp } from 'react-icons/ai';
+import { AiOutlineArrowRight, AiOutlineInstagram, AiOutlineWhatsApp } from 'react-icons/ai';
 import Footer from '../../components/Footer/Footer';
 import { BsArrowUpRight, BsChevronDown, BsChevronRight } from 'react-icons/bs';
 import { BiMinus, BiPlus } from 'react-icons/bi';
@@ -14,6 +14,7 @@ export default function QuemSomos() {
 
     const dispatch = useDispatch();
     const { membros, produtores } = useSelector(state => state.admin)
+    const { hash } = useLocation()
 
     const navigate = useNavigate()
 
@@ -33,9 +34,21 @@ export default function QuemSomos() {
     }
         , [dispatch])
 
+
+    useEffect(() => {
+
+        const element = document.getElementById(window.location.hash.slice(1));
+
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+
+    }, [hash]);
+
+
     return (
         <>
-            <Box sx={{
+            <Box id='associacao' sx={{
                 backgroundColor: colors.main_blue,
                 padding: '80px 0 150px 0',
 
@@ -43,7 +56,7 @@ export default function QuemSomos() {
                 <Container maxWidth='xl'>
                     <Grid container rowSpacing={5} pb={'100px'} >
                         <Grid item xs={12} lg={6}>
-                            <Box sx={{
+                            <Box id='associacao' sx={{
                                 display: 'flex',
                                 flexDirection: 'column',
                                 gap: '40px',
@@ -126,12 +139,16 @@ export default function QuemSomos() {
             <Box sx={{
                 backgroundColor: colors.main_white,
                 position: 'relative',
-            }}>  <div class="custom-shape-divider-top-1696977159">
+            }}>
+
+                <div class="custom-shape-divider-top-1697630840">
                     <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
                         <path d="M1200 0L0 0 598.97 114.72 1200 0z" class="shape-fill"></path>
                     </svg>
                 </div>
-                <Container maxWidth='xl'>
+
+
+                <Container id='produtores' maxWidth='xl'>
 
                     <Grid container rowSpacing={5} pt={10} pb={10} columnGap={'43px'} >
                         <Grid item xs={12}>
@@ -272,8 +289,24 @@ export default function QuemSomos() {
                             </Grid>
                         }
 
-                    </Grid>
 
+                        <Grid item xs={12} lg={6}>
+
+                            <Link to='/' style={{ 
+                                textUnderlineOffset:'8px',
+                                textDecorationColor: colors.main_blue_dark,
+                                textDecorationThickness: '3px',
+                                textDecorationLine: 'underline',
+                                
+                                }}>
+
+                            <h4 className='semi-bold italic' style={{ color: colors.main_blue_dark }}>
+                                        Ver Todos 
+                             </h4>
+                            </Link>
+                        </Grid>
+
+                        </Grid>
 
                 </Container>
 
@@ -285,13 +318,13 @@ export default function QuemSomos() {
                 minHeight: '300px',
             }}>
 
-                <div class="custom-shape-divider-top-1696977691">
+                <div class="custom-shape-divider-top-1697630736">
                     <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                        <path d="M1200 0L0 0 892.25 114.72 1200 0z" class="shape-fill"></path>
+                        <path d="M1200 0L0 0 598.97 114.72 1200 0z" class="shape-fill"></path>
                     </svg>
                 </div>
 
-                <Container maxWidth='xl'>
+                <Container maxWidth='xl' id='ig'>
 
                     <Grid container rowSpacing={5} pb={'100px'} pt={12} >
                         <Grid item xs={12} lg={6}>
@@ -348,13 +381,12 @@ export default function QuemSomos() {
                 minHeight: '300px',
             }}>
 
-                <div class="custom-shape-divider-top-1696978231">
+                <div class="custom-shape-divider-top-1697630909">
                     <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
                         <path d="M1200 0L0 0 598.97 114.72 1200 0z" class="shape-fill"></path>
                     </svg>
                 </div>
-
-                <Container maxWidth='xl'>
+                <Container id='associar' maxWidth='xl'>
 
                     <Box sx={{
                         padding: '160px 0 120px 0',
@@ -682,7 +714,7 @@ export default function QuemSomos() {
                             <Box sx={{
                                 display: 'flex',
                                 flexDirection: 'column',
-                                gap:'16px'
+                                gap: '16px'
                             }}>
                                 <h1>
                                     Você também pode ser um produtor APCCAP.

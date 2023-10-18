@@ -10,7 +10,7 @@ const createReunion = asyncHandler(async (req, res) => {
     try {
 
         const { reunionData } = req.body
-        const { title, message, date, typeReunion, pautas, dateConvocacao } = JSON.parse(reunionData)
+        const { title, message, date, typeReunion, pautas, dateConvocacao, convocado_por } = JSON.parse(reunionData)
 
         let type = ''
 
@@ -47,8 +47,8 @@ const createReunion = asyncHandler(async (req, res) => {
             })
         }
 
-        if (typeReunion === 'assembleia_ordinal') {
-            type = 'assembleia_ordinal'
+        if (typeReunion === 'assembleia_ordinaria') {
+            type = 'assembleia_ordinaria'
 
             const associates = await User.find({ role: { $in: ['presidente', 'secretario', 'tesoureiro', 'conselho', 'produtor'] } })
 
@@ -73,6 +73,7 @@ const createReunion = asyncHandler(async (req, res) => {
             message,
             date,
             dateConvocacao,
+            convocado_por,
             type,
             status: 'agendada',
             membros: {
@@ -197,7 +198,9 @@ const getReunionAtas = async (req, res) => {
         }
 
         const totalDocuments = await Reunion.countDocuments(query);
-        const atas = await Reunion.find(query)
+        const atas = await Reunion
+            .find(query)
+            .find({ status: 'assinada' })
             .select('ata')
             .skip(skip)
             .limit(pageSize);

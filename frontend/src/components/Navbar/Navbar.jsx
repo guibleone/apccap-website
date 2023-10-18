@@ -6,21 +6,24 @@ import { resetDocuments } from "../../features/documents/documentsSlice"
 import { reset as resetAdmin } from "../../features/admin/adminSlice"
 import { reset as resetProducts } from "../../features/products/productsSlice"
 import { reset as resetSpreadsheet } from "../../features/spreadSheet/spreadSheetSlice"
-import { Button, Container, Box, Typography, CssBaseline, Avatar, Grid, Menu, Tooltip, IconButton, MenuItem, Divider, TextField } from '@mui/material'
+import { Button, Container, Box, Typography, CssBaseline, Avatar, Grid, Menu, Tooltip, IconButton, MenuItem, Divider, TextField, AppBar } from '@mui/material'
 import { useMediaQuery } from "@mui/material"
 import NavMenu from "./NavMenu"
 import ButtonChangeRole from "../ChangeRole/ButtonChangeRole"
 import { useState } from "react"
 import { CiSearch } from "react-icons/ci";
 import './StylesNavbar.css'
-import { AiOutlineArrowDown } from "react-icons/ai"
+import { AiOutlineArrowDown, AiOutlineUser } from "react-icons/ai"
 import { resetPayments } from '../../features/payments/paymentsSlice'
+import { MdOutlineLiquor } from "react-icons/md"
+import { BiMap, BiUserPlus } from "react-icons/bi"
+import { TbMap2 } from "react-icons/tb"
 
 
 function Navbar() {
 
   const { user } = useSelector(state => state.auth)
-  const {payments} = useSelector(state => state.payments)
+  const { payments } = useSelector(state => state.payments)
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -47,8 +50,7 @@ function Navbar() {
     navigate('/')
   }
 
-  const matches = useMediaQuery('(max-width:800px)')
-
+  const matches = useMediaQuery('(max-width:1400px)')
 
   if (matches) {
 
@@ -84,10 +86,11 @@ function Navbar() {
             padding: '10px 0',
             width: '100%',
             textAlign: 'center',
+            position: 'sticky'
           }}>
             <h4 style={{ color: '#FAF8F8', fontWeight: 500 }}>
-              Você está logado como <span style={{ color: '#FAF8F8', fontWeight: 600 }}>{user.role === 'produtor' ? 'produtor' : 'produtor associado'} {user.status === 'analise' && '(análise)'} 
-              {user.status === 'aprovado' &&  payments && !payments.portal && '(requer assinatura)'}
+              Você está logado como <span style={{ color: '#FAF8F8', fontWeight: 600 }}>{user.role === 'produtor' ? 'produtor' : 'produtor associado'} {user.status === 'analise' && '(análise)'}
+                {user.status === 'aprovado' && payments && !payments.portal && '(requer assinatura)'}
               </span>
             </h4>
           </Box>
@@ -111,7 +114,7 @@ function Navbar() {
                 <Link className="links" to="/"><h4>Início</h4></Link>
                 <Link className="links" to="/produtos"><h4>Produtos</h4></Link>
                 <Link className="links" to="/credencial"><h4>Credencial</h4></Link>
-                
+
                 {user && user.oldRole
                   ?
                   <ButtonChangeRole />
@@ -203,12 +206,14 @@ function Navbar() {
 
       {user && (user.role === 'admin') && (
         <>
-          <Box sx={{
-            backgroundColor: '#0F0A70',
-            padding: '10px 0',
-            width: '100%',
-            textAlign: 'center',
-          }}>
+          <Box
+            sx={{
+              backgroundColor: '#0F0A70',
+              padding: '10px 0',
+              width: '100%',
+              textAlign: 'center',
+            }}
+          >
             <h4 style={{ color: '#FAF8F8', fontWeight: 500 }}>
               Você está logado como <span style={{ color: '#FAF8F8', fontWeight: 600 }}>{user.role === 'admin' ? 'gerente administrativo' : user.role}</span>
             </h4>
@@ -267,7 +272,7 @@ function Navbar() {
                       </button>
 
                       <svg xmlns="http://www.w3.org/2000/svg" width="10" height="5" viewBox="0 0 10 5" fill="none">
-                        <path d="M9 0.984375L5.64018 3.78422C5.26934 4.09326 4.73066 4.09326 4.35982 3.78422L1 0.984376" stroke="#0F0A70" strokeLinecap="round" stroke-linejoin="round" />
+                        <path d="M9 0.984375L5.64018 3.78422C5.26934 4.09326 4.73066 4.09326 4.35982 3.78422L1 0.984376" stroke="#0F0A70" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </Box>
 
@@ -359,7 +364,7 @@ function Navbar() {
                       </button>
 
                       <svg xmlns="http://www.w3.org/2000/svg" width="10" height="5" viewBox="0 0 10 5" fill="none">
-                        <path d="M9 0.984375L5.64018 3.78422C5.26934 4.09326 4.73066 4.09326 4.35982 3.78422L1 0.984376" stroke="#0F0A70" strokeLinecap="round" stroke-linejoin="round" />
+                        <path d="M9 0.984375L5.64018 3.78422C5.26934 4.09326 4.73066 4.09326 4.35982 3.78422L1 0.984376" stroke="#0F0A70" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </Box>
 
@@ -455,7 +460,7 @@ function Navbar() {
                       </button>
 
                       <svg xmlns="http://www.w3.org/2000/svg" width="10" height="5" viewBox="0 0 10 5" fill="none">
-                        <path d="M9 0.984375L5.64018 3.78422C5.26934 4.09326 4.73066 4.09326 4.35982 3.78422L1 0.984376" stroke="#0F0A70" strokeLinecap="round" stroke-linejoin="round" />
+                        <path d="M9 0.984375L5.64018 3.78422C5.26934 4.09326 4.73066 4.09326 4.35982 3.78422L1 0.984376" stroke="#0F0A70" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </Box>
 
@@ -546,7 +551,7 @@ function Navbar() {
                       </button>
 
                       <svg xmlns="http://www.w3.org/2000/svg" width="10" height="5" viewBox="0 0 10 5" fill="none">
-                        <path d="M9 0.984375L5.64018 3.78422C5.26934 4.09326 4.73066 4.09326 4.35982 3.78422L1 0.984376" stroke="#0F0A70" strokeLinecap="round" stroke-linejoin="round" />
+                        <path d="M9 0.984375L5.64018 3.78422C5.26934 4.09326 4.73066 4.09326 4.35982 3.78422L1 0.984376" stroke="#0F0A70" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </Box>
 
@@ -641,7 +646,7 @@ function Navbar() {
                       </button>
 
                       <svg xmlns="http://www.w3.org/2000/svg" width="10" height="5" viewBox="0 0 10 5" fill="none">
-                        <path d="M9 0.984375L5.64018 3.78422C5.26934 4.09326 4.73066 4.09326 4.35982 3.78422L1 0.984376" stroke="#0F0A70" strokeLinecap="round" stroke-linejoin="round" />
+                        <path d="M9 0.984375L5.64018 3.78422C5.26934 4.09326 4.73066 4.09326 4.35982 3.78422L1 0.984376" stroke="#0F0A70" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </Box>
 
@@ -677,7 +682,47 @@ function Navbar() {
             <Link className="links" to="/"><h4>Inicial</h4></Link>
             <Link className="links" to="/rastreabilidade"><h4>Rastreabilidade</h4></Link>
             <Link className="links" to="/festival-cachaca"><h4>Festival da Cachaça</h4></Link>
-            <Link className="links" to="/quem-somos"><h4>Quem Somos ?</h4></Link>
+
+            <div className="dropdown">
+              <h4 style={{
+                cursor: 'pointer'
+              }}>Quem somos ?</h4>
+
+              <div className="dropdown-content">
+                <Link className="links" to="/quem-somos#associacao">
+                  <Box sx={{
+                    display: 'flex',
+                    gap: '5px',
+                  }}>
+                    <AiOutlineUser /><h5>Associação</h5>
+                  </Box>
+                </Link>
+                <Link className="links" to="/quem-somos#produtores">
+                  <Box sx={{
+                    display: 'flex',
+                    gap: '5px'
+                  }}><MdOutlineLiquor /><h5>Produtores</h5>
+                  </Box>
+                </Link>
+                <Link className="links" to="/quem-somos#ig">
+                  <Box sx={{
+                    display: 'flex',
+                    gap: '5px'
+                  }}><TbMap2 /><h5>IG</h5>
+                  </Box>
+                </Link>
+
+                <Link className="links" to="/quem-somos#associar">
+                  <Box sx={{
+                    display: 'flex',
+                    gap: '5px'
+                  }}><BiUserPlus /><h5>Credenciamento</h5>
+                  </Box>
+                </Link>
+
+              </div>
+
+            </div>
             <Link className="links" to="/blog"><h4>Blog</h4></Link>
             <Link className="links" to="/documentos"><h4>Documentos</h4></Link>
 

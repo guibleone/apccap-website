@@ -81,6 +81,12 @@ function Register() {
 
   ]
 
+  const estadosValidos = [
+    'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG',
+    'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'
+  ];
+  
+
   /* propriedade */
 
   const [propriedadeData, setPropriedadeData] = useState({
@@ -282,10 +288,10 @@ function Register() {
               </div>
             </Grid>
 
-             {/**DADOS PESSOAIS */}
+            {/**DADOS PESSOAIS */}
 
             <Grid item xs={12} mt={5}>
-              
+
               <Typography pb={1} variant={matches ? 'h5' : 'h6'}
                 sx={{
                   fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: !matches ? '100%' : '210px',
@@ -525,15 +531,19 @@ function Register() {
                   defaultValue=""
                   value={dadosPessoaisData.estado || ''}
                   name='estado'
+                  MenuProps={{ PaperProps: { sx: { maxHeight: 200 } } }}
                   sx={
                     {
                       '& .MuiInputBase-root': {
                         borderRadius: '0px',
                       },
+                      
                     }
                   }
                 >
-                  <MenuItem value="SP">São Paulo</MenuItem>
+                  {estadosValidos.map((estado, index) => (
+                    <MenuItem key={index} value={estado}>{estado}</MenuItem>
+                  ))}
                 </Select>
 
               </Grid>
@@ -543,27 +553,14 @@ function Register() {
                   Cidade
                 </Typography>
 
-                <Select
+                <TextField
                   fullWidth
                   onChange={handleChangeDadosPessoais}
                   defaultValue=""
                   value={dadosPessoaisData.cidade || ''}
                   name='cidade'
                   autoComplete='cidade'
-                  MenuProps={{ PaperProps: { sx: { maxHeight: 200 } } }}
-                  sx={
-                    {
-                      '& .MuiInputBase-root': {
-                        borderRadius: '0px',
-                      },
-
-                    }
-                  }
-                >
-                  {cidadesValidas.map((cidade, index) => (
-                    <MenuItem key={index} value={cidade}>{cidade}</MenuItem>
-                  ))}
-                </Select>
+                />
 
               </Grid>
 
@@ -596,7 +593,7 @@ function Register() {
 
             </Grid>
 
-           {/**PROPRIEDADE */}
+            {/**PROPRIEDADE */}
 
             <Grid item xs={12} mt={5}>
               <Typography pb={1} variant={matches ? 'h5' : 'h6'}

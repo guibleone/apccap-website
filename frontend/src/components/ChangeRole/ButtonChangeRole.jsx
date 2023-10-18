@@ -38,7 +38,8 @@ export default function ButtonChangeRole() {
         <>
             <CssBaseline />
             <button
-                className='button-white small'
+                className='button-white'
+                style={{ width: '85%' }}
                 onClick={handleAssociateProducer}
                 disabled={timer}
             >

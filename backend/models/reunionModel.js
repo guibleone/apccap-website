@@ -7,6 +7,10 @@ const reunionSchema = mongoose.Schema({
         type: String,
         required: false
     },
+    convocado_por: {
+        type: String,
+        required: true
+    },
     title: {
         type: String,
         required: true

@@ -136,9 +136,11 @@ function Dashboard() {
 
               <div className="rastrear">
 
-                <Link to={'/rastreabilidade'} className="link">
+                <Link to={'/rastreabilidade'} className="link" style={{
+                     borderBottom: '3px solid #140C9F',
+                  }}>
 
-                  <h3>
+                  <h3 >
                     Rastrear
                   </h3>
 
@@ -147,8 +149,6 @@ function Dashboard() {
                   </div>
 
                 </Link>
-
-                <div className="animated-border"></div>
 
               </div>
             </div>

@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const PDFReunion = ({ title, message, pautas, type, date, dateConvocacao }) => (
+const PDFReunion = ({ title, message, pautas, typeReunion, date, dateConvocacao, convocado_por }) => (
   <Document>
     <Page size="A4" style={styles.page}>
 
@@ -95,10 +95,13 @@ const PDFReunion = ({ title, message, pautas, type, date, dateConvocacao }) => (
         <Text style={{
           fontSize: '12px',
         }}>
-          A administração da APCCAP, no uso de suas atribuições, convoca os membros associadas para uma reunião 
-          {type === 'assembleia_ordinal' ? ' assembléia ordinal ' : ' assembléia extraordinária '}     
+          A administração da APCCAP, no uso de suas atribuições, convoca os membros associados para uma reunião do tipo
+          {typeReunion === 'assembleia_ordinaria' && ' Assembleia Ordinária '}
+          {typeReunion === 'assembleia_extraordinaria' && ' Assembleia Extraordinária '}
+          {typeReunion === 'administrativa' && ' Administrativa '}
           de acordo com o estatuto da associação.
         </Text>
+
 
         <Text style={{
           fontSize: '12px',
@@ -113,19 +116,31 @@ const PDFReunion = ({ title, message, pautas, type, date, dateConvocacao }) => (
           {message}
         </Text>
 
+        {pautas?.length > 0 && (
+          <>
+            <Text style={{
+              fontSize: '12px',
+            }}>
+              Pautas:
+            </Text>
+
+            {pautas.map((pauta, index) => (
+              <Text key={index} style={{
+                fontSize: '12px',
+              }}>
+                {index + 1}. {pauta.title};
+              </Text>
+            ))}
+          </>
+        )}
+
         <Text style={{
           fontSize: '12px',
         }}>
-          Pautas:
-        </Text>
 
-        {pautas.map((pauta, index) => (
-          <Text key={index} style={{
-            fontSize: '12px',
-          }}>
-            {index + 1}. {pauta.title};
-          </Text>
-        ))}
+          Esta reunião foi convocado por {convocado_por.split('_')[0]} na função de {convocado_por.split('_')[1]}.
+
+        </Text>
 
         <Text style={{
           fontSize: '12px',
