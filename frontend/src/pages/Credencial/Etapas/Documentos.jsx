@@ -1,17 +1,16 @@
-import { useCallback, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useEffect } from "react"
 import { toast } from "react-toastify"
-import { Button, Typography, Box, Stack, CircularProgress, Grid, Divider, Alert, TextField, OutlinedInput } from '@mui/material';
-import { FaDownload, FaTrash } from 'react-icons/fa'
+import { Typography, Box, CircularProgress, Grid, Alert, TextField, OutlinedInput, useMediaQuery } from '@mui/material';
 import { styleError, styleSuccess } from '../../toastStyles'
-import { useDropzone } from "react-dropzone"
-import { AiOutlineDropbox } from "react-icons/ai"
-import { addDocument, deleteDocument, getDocuments, resetDocuments } from "../../../features/documents/documentsSlice"
-import { colors } from "../../colors";
+import {  getDocuments,  } from "../../../features/documents/documentsSlice"
 import axios from "axios";
 
 function Documentos() {
+
+
+    const matches = useMediaQuery('(min-width:600px)');
 
     // inicializar redux
     const { user } = useSelector((state) => state.auth)
@@ -144,7 +143,7 @@ function Documentos() {
 
     return (
         <Box sx={{
-            paddingBottom: '120px',
+            paddingBottom: matches ? '120px' : '0px',
         }}>
             <Box sx={{ textAlign: 'center' }}>
                 <h1 className='bold black'>

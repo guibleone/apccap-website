@@ -10,6 +10,7 @@ import { AiFillUnlock } from 'react-icons/ai'
 import { styleError, styleSuccess } from '../toastStyles'
 import './Style.css'
 import Footer from "../../components/Footer/Footer"
+import { cpfMask } from "../Mask"
 
 function Login() {
   const matches = useMediaQuery('(min-width:600px)');
@@ -51,17 +52,31 @@ function Login() {
 
 
   const onChange = (e) => {
+    const { name, value } = e.target;
+
+    let newValue;
+
+    if (name === 'cpf') {
+      newValue = cpfMask(value);
+    } else {
+      newValue = value;
+    }
+
     setFormData((prevState) => ({
       ...prevState,
-      [e.target.name]: e.target.value,
-    }))
+      [name]: newValue,
+    }));
   }
 
   const onSubmit = (e) => {
     e.preventDefault()
 
+    if (!cpf || !password) {
+      return toast.error('Preencha todos os campos', styleError)
+    }
+
     const userData = {
-      cpf,
+      cpf: cpf.replace(/\D/g, ''),
       password
     }
 
@@ -99,7 +114,7 @@ function Login() {
                 name="cpf"
                 autoComplete="cpf"
                 onChange={onChange}
-                type="number"
+                type="text"
                 value={cpf}
                 fullWidth
                 placeholder="000.000.000-00"
@@ -110,6 +125,9 @@ function Login() {
                     },
                   }
                 }
+                inputProps={{
+                  maxLength: 14,
+                }}
               />
             </Grid>
 
@@ -137,7 +155,7 @@ function Login() {
 
             </Grid>
 
-            <Grid item xs={12} lg={12} mt={5} >
+            <Grid item xs={12} lg={12}  >
 
               <div className="esqueci-senha">
                 <Link to="/" style={{ color: '#140C9F', textDecoration: 'none', cursor: 'pointer' }}>Esqueci minha senha</Link>
@@ -145,7 +163,7 @@ function Login() {
 
             </Grid>
 
-            <Grid item xs={12} lg={12} mt={5} >
+            <Grid item xs={12} lg={12} mt={3} >
               <Box sx={{
                 display: 'flex',
                 gap: '1rem',
@@ -167,7 +185,7 @@ function Login() {
       </Box >
 
       <Footer />
-      
+
     </>
   )
 }

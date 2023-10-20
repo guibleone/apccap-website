@@ -68,12 +68,12 @@ export default function Credencial() {
     }
 
     useEffect(() => {
-    
+
         if (user) {
-          dispatch(getDocuments(user.token))
+            dispatch(getDocuments(user.token))
         }
-    
-      }, [user])
+
+    }, [user])
 
 
     return (
@@ -112,15 +112,15 @@ export default function Credencial() {
                                     </button>
                                 </>)}
 
-                                {(user?.status === 'reprovado' || user?.analise?.analise_laboratorial?.status==='reprovado'  || user?.analise?.vistoria?.status==='reprovado'  
-                                || user?.analise?.analise_pedido?.status==='reprovado') && (
+                            {(user?.status === 'reprovado' || user?.analise?.analise_laboratorial?.status === 'reprovado' || user?.analise?.vistoria?.status === 'reprovado'
+                                || user?.analise?.analise_pedido?.status === 'reprovado') && (
                                     <>
-                                    <button onClick={()=> dispatch(resetAprove({id:user._id,token:user.token}))} className='button-purple'>
-                                        Tentar Novamente
-                                    </button>
-                                    <Alert severity="error">
-                                        Você foi reprovado no pedido de credencial. Por favor, tente novamente.
-                                    </Alert>
+                                        <button onClick={() => dispatch(resetAprove({ id: user._id, token: user.token }))} className='button-purple'>
+                                            Tentar Novamente
+                                        </button>
+                                        <Alert severity="error">
+                                            Você foi reprovado no pedido de credencial. Por favor, tente novamente.
+                                        </Alert>
                                     </>
                                 )}
 
@@ -193,7 +193,7 @@ export default function Credencial() {
                                                     Dúvidas ?
                                                 </h5>
                                                 <h5 className='regular black'>
-                                                    Visite nosso <a href='https://www.google.com.br' target='_blank' rel="noreferrer" className='purple'>FAQ</a> ou vá até a <a href='https://www.google.com.br' target='_blank' rel="noreferrer" className='purple'>nossa sede presencial</a>
+                                                    Visite nosso <a href='/quem-somos#faq' target='_blank' rel="noreferrer" className='purple'>FAQ</a> ou vá até a <a href='https://www.google.com/maps/dir//Rod.Amparo-Serra%20Negra,Km%20138-%20Almeidas,%20Amparo%20-%20SP,%2013902-800' target='_blank' rel="noreferrer" className='purple'>nossa sede presencial</a>
                                                 </h5>
                                             </Box>
                                         </Grid>
@@ -261,7 +261,7 @@ export default function Credencial() {
                                                 <h5 className='regular'>
 
                                                 </h5>
-                                                <Button onClick={handleCancel} color='success' variant='outlined'  disabled={payments.subscription !== 'active' ? true : false} className='Button-purple'>
+                                                <Button onClick={handleCancel} color='success' variant='outlined' disabled={payments.subscription !== 'active' ? true : false} className='Button-purple'>
                                                     Cancelar
                                                 </Button>
                                             </Box>
@@ -273,7 +273,7 @@ export default function Credencial() {
                                                     Dúvidas ?
                                                 </h5>
                                                 <h5 className='regular black'>
-                                                    Visite nosso <a href='https://www.google.com.br' target='_blank' rel="noreferrer" className='purple'>FAQ</a> ou vá até a <a href='https://www.google.com.br' target='_blank' rel="noreferrer" className='purple'>nossa sede presencial</a>
+                                                    Visite nosso <a href='/quem-somos#faq' target='_blank' rel="noreferrer" className='purple'>FAQ</a> ou vá até a <a href='https://www.google.com/maps/dir//Rod.Amparo-Serra%20Negra,Km%20138-%20Almeidas,%20Amparo%20-%20SP,%2013902-800' target='_blank' rel="noreferrer" className='purple'>nossa sede presencial</a>
                                                 </h5>
                                             </Box>
                                         </Grid>
@@ -289,7 +289,7 @@ export default function Credencial() {
 
                     {/* aprovar credencial */}
 
-                    {user && (user.role === 'produtor_associado' && user.status === 'analise' && !user.oldRole) && (<>
+                    {user && (user.role === 'produtor_associado' &&  payments && payments.subscription !== 'active' && !user.oldRole) && (<>
                         <Grid item xs={12} md={12}>
 
                             <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} sx={{
@@ -353,7 +353,7 @@ export default function Credencial() {
                                                     Dúvidas ?
                                                 </h5>
                                                 <h5 className='regular black'>
-                                                    Visite nosso <a href='https://www.google.com.br' target='_blank' rel="noreferrer" className='purple'>FAQ</a> ou vá até a <a href='https://www.google.com.br' target='_blank' rel="noreferrer" className='purple'>nossa sede presencial</a>
+                                                    Visite nosso <a href='/quem-somos#faq' target='_blank' rel="noreferrer" className='purple'>FAQ</a> ou vá até a <a href='https://www.google.com/maps/dir//Rod.Amparo-Serra%20Negra,Km%20138-%20Almeidas,%20Amparo%20-%20SP,%2013902-800' target='_blank' rel="noreferrer" className='purple'>nossa sede presencial</a>
                                                 </h5>
                                             </Box>
                                         </Grid>
@@ -398,16 +398,7 @@ export default function Credencial() {
                                         </Box>
 
                                         <Box sx={{
-                                            opacity: (user && !user.analise.analise_laboratorial.path) ? '0.5' : '1',
-                                        }}>
-                                            <h5 className='semi-bold black'>
-                                                Pagamento <BsArrowRightShort size={20} style={{ verticalAlign: 'bottom' }} />
-                                            </h5>
-
-                                        </Box>
-
-                                        <Box sx={{
-                                            opacity: (user && !user.pagamento) ? '0.5' : '1',
+                                            opacity: (user && !user?.analise?.analise_laboratorial?.path) ? '0.5' : '1',
                                         }}>
 
                                             <h5 className='semi-bold black'>
@@ -426,7 +417,7 @@ export default function Credencial() {
                                             <Documentos />
                                         )}
 
-                                        {user && user.formulario_requerimento && documents[0]?.path  && (
+                                        {user && user.formulario_requerimento && documents[0]?.path && (
                                             <Analise />
                                         )}
 
@@ -443,43 +434,87 @@ export default function Credencial() {
                                             flexDirection: 'column',
                                             alignItems: 'center',
                                         }}>
-                                            <h3 className='semi-bold black'>
-                                                Fomulário
-                                            </h3>
-                                            <BsArrowDownShort size={20} />
+                                            {user && user.formulario_requerimento && (
+                                                <>
+                                                    <h3 className='semi-bold black'>
+                                                        Fomulário
+                                                    </h3>
 
-                                            <h3 className='semi-bold black'>
-                                                Documentos
-                                            </h3>
-                                            <BsArrowDownShort size={20} />
+                                                    <Alert severity="success">
+                                                        Formulário enviado com sucesso.
+                                                    </Alert>
 
-                                            <h3 className='semi-bold black'>
-                                                Análise
-                                            </h3>
-                                            <BsArrowDownShort size={20} />
-                                            <h3 className='semi-bold black'>
-                                                Pagamento
-                                            </h3>
-                                            <BsArrowDownShort size={20} />
+                                                    <BsArrowDownShort size={20} />
+                                                </>
+                                            )}
+
+
+                                            {user && !user.formulario_requerimento && (
+                                                <>
+                                                    <Formulario />
+                                                    <BsArrowDownShort size={20} />
+                                                </>
+                                            )}
+
+
+                                            {user && user.formulario_requerimento && documents[0] && (
+                                                <>
+                                                    <h3 className='semi-bold black'>
+                                                        Documentos
+                                                    </h3>
+
+
+                                                    <Alert severity="success">
+                                                        Formulário enviado com sucesso.
+                                                    </Alert>
+
+
+                                                    <BsArrowDownShort size={20} />
+
+                                                </>
+                                            )}
+
+                                            {user && user.formulario_requerimento && !documents[0] && (
+
+                                                <>
+                                                    <Documentos />
+                                                    <BsArrowDownShort size={20} />
+                                                </>
+                                            )}
+
+                                            {user && user?.analise_laboratorial?.status === 'aprovado' && (<>
+                                                <h3 className='semi-bold black'>
+                                                    Análise
+                                                </h3>
+
+                                                <Alert severity="success">
+                                                    Análise concluída com sucesso.
+                                                </Alert>
+
+                                                <BsArrowDownShort size={20} />
+                                            </>
+                                            )}
+
+                                            {user && user.formulario_requerimento && documents[0]?.path && (
+                                                <>
+                                                    <Analise />
+
+                                                    <BsArrowDownShort size={20} />
+                                                </>
+                                            )}
+
+
                                             <h3 className='semi-bold black'>
                                                 Acesso
                                             </h3>
 
                                         </Box>
                                         <Box sx={{ display: 'flex', gap: '48px', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                                        {user && !user.formulario_requerimento && (
-                                            <Formulario />
-                                        )}
 
-                                        {user && user.formulario_requerimento && !documents[0] && (
-                                            <Documentos />
-                                        )}
 
-                                        {user && user.formulario_requerimento && documents[0]?.path  && (
-                                            <Analise />
-                                        )}
 
-                                    </Box>
+
+                                        </Box>
 
 
                                     </Box>

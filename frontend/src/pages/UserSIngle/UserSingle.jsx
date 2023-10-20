@@ -400,7 +400,7 @@ function UserSingle() {
                             }
                         }>
                             <Box>
-                                <button className="button-white" onClick={handleOpen} disabled={user._id === id}>Excluir</button>
+                                <button className="button-purple" onClick={handleOpen} disabled={user._id === id}>Excluir</button>
                                 <Modal
                                     open={open}
                                     onClose={handleClose}
@@ -408,35 +408,35 @@ function UserSingle() {
                                     aria-describedby="modal-modal-description"
                                 >
                                     <Box sx={style}>
-                                        <Typography id="modal-modal-title" variant="h6" component="h2">
+
+                                        <h3 className="semi-bold" >
                                             Tem certeza que deseja excluir?
-                                        </Typography>
-                                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                                        </h3>
+
+
+                                        <h4 className="regular black" style={{marginTop:'20px'}}>
                                             Voce não poderá desfazer essa ação.
-                                            <Button onClick={handleClose}>Cancelar</Button>
-                                            <Button color="error" variant="outlined" onClick={() => (
+                                        </h4>
+
+                                        <Box sx={{
+                                            display: 'flex',
+                                            justifyContent: 'end',
+                                            alignItems: 'center',
+                                            gap: '10px',
+                                            marginTop: '30px'
+                                        }}>
+                                            <button className="button-white" onClick={handleClose}>Cancelar</button>
+                                            <button className="button-purple" onClick={() => (
                                                 dispatch(deleteUser({ id, token: user.token }),
                                                     (!isLoading && navigate('/'))
-                                                ))}>Excluir</Button>
-                                        </Typography>
+                                                ))}>Excluir</button>
+
+                                        </Box>
+
                                     </Box>
                                 </Modal>
                             </Box>
 
-                            <div>
-                                <button className="button-purple" o onClick={() => dispatch(aproveUser({ id, token: user.token }))} color="success" disabled={userData.status === 'aprovado' || user._id === id}>Aprovar</button>
-                            </div>
-
-                        </Box>
-
-                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '15px', margin: '15px 0' }}>
-
-                            {(userData.status === 'aprovado' && !isError)
-                                ? <Alert severity="success">Usuário credenciado</Alert>
-                                : <Alert severity="error">Usuário aguardando aprovação.</Alert>
-                            }
-
-                            {isError && <Alert severity="error">{message}</Alert>}
 
                         </Box>
 

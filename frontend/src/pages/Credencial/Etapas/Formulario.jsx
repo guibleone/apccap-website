@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import { Box } from '@mui/system'
 import { BsArrowUpRight } from 'react-icons/bs'
-import { Grid, Modal, TextField } from '@mui/material'
+import { Dialog, Grid, Modal, TextField } from '@mui/material'
 import { styleForm } from '../../modalStyles'
 import { colors } from '../../colors'
 import { useSelector, useDispatch } from 'react-redux'
 import { submitForm } from '../../../features/auth/authSlice'
+import { toast } from 'react-toastify'
+import { styleError } from '../../toastStyles'
 
 export default function Formulario() {
 
@@ -38,6 +40,11 @@ export default function Formulario() {
 
     // enviar dados do formulário
     const handleSubmitForm = () => {
+
+        if(!formData.nome || !formData.cpf || !formData.cnpj || !formData.propriedade) {
+            return toast.error('Preencha todos os campos', styleError)
+        }
+
         const data = {
             id: user._id,
             token: user.token,
@@ -62,7 +69,7 @@ export default function Formulario() {
             </button>
 
 
-            <Modal open={openForm} title='Formulário' sx={styleForm} >
+            <Dialog open={openForm} title='Formulário' onClose={handleOpenForm} >
                 <Box sx={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -107,7 +114,7 @@ export default function Formulario() {
                     </Box>
 
                 </Box>
-            </Modal>
+            </Dialog>
 
         </>
 

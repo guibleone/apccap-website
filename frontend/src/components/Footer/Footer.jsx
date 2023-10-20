@@ -1,5 +1,8 @@
 import { AiFillFacebook as Facebook, AiFillInstagram as Instagram, AiFillTwitterCircle as Twitter } from 'react-icons/ai'
-import { Box, Paper, Container, Typography, Avatar, Grid, Link, useMediaQuery } from '@mui/material'
+import { Box, Paper, Container, Typography, Avatar, Grid, useMediaQuery } from '@mui/material'
+import { Link } from 'react-router-dom'
+import { RiTwitterXFill } from 'react-icons/ri'
+import { colors } from '../../pages/colors';
 
 function Footer() {
 
@@ -20,18 +23,18 @@ function Footer() {
           <Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column', gap: '20px' }}>
             <img src={require('../../imgs/logo-title.png')} alt="logo" width="150px" />
             <Box>
-              <Link href="https://www.facebook.com/" color="inherit">
+              <Link to="https://www.facebook.com/" style={{ color: colors.main_white }}>
                 <Facebook />
               </Link>
               <Link
-                href="https://www.instagram.com/"
-                color="inherit"
+                to="https://www.instagram.com/"
+                style={{ color: colors.main_white }}
                 sx={{ pl: 1, pr: 1 }}
               >
                 <Instagram />
               </Link>
-              <Link href="https://www.twitter.com/" color="inherit">
-                <Twitter />
+              <Link to="https://www.twitter.com/" style={{ color: colors.main_white }}>
+                <RiTwitterXFill />
               </Link>
             </Box>
           </Box>
@@ -39,105 +42,108 @@ function Footer() {
 
         <Grid item xs={12} sm={8} sx={{ display: 'flex', flexDirection: matches ? 'column' : 'row', gap: '20px' }}  >
           <Grid item xs={12} sm={2}>
-            <Typography variant="h6" gutterBottom>
+
+            <h3 className='white medium' style={{ paddingBottom: '10px' }}>
               Páginas
-            </Typography>
+            </h3>
 
             <div>
-              <Link href="/rastreabilidade" variant="body2" color="inherit" sx={{ textDecoration: 'none' }}>
-                Rastreabilidade
+              <Link to="/rastreabilidade" variant="body2" color="inherit" style={{ textDecoration: 'none' }}>
+                <h5 className='white regular'>Rastreabilidade</h5>
               </Link>
             </div>
 
             <div>
-              <Link href="/festival-cachaca" variant="body2" color="inherit" sx={{ textDecoration: 'none' }}>
-                Festival da Cachaça
+              <Link to="/festival-cachaca" variant="body2" color="inherit" style={{ textDecoration: 'none' }}>
+                <h5 className='white regular'> Festival da Cachaça</h5>
               </Link>
             </div>
 
             <div>
-              <Link href="/blog" variant="body2" color="inherit" sx={{ textDecoration: 'none' }}>
-                Blog
+              <Link to="/blog" variant="body2" color="inherit" style={{ textDecoration: 'none' }}>
+                <h5 className='white regular'> Blog </h5>
               </Link>
             </div>
 
 
           </Grid>
           <Grid item xs={12} sm={2}>
-            <Typography variant="h6" gutterBottom>
+
+            <h3 className='white medium' style={{ paddingBottom: '10px' }}>
               Sobre Nós
-            </Typography>
+            </h3>
+
             <div>
-              <Link href="/rastreabilidade" variant="body2" color="inherit" sx={{ textDecoration: 'none' }}>
-                Indicação Geográfica
+              <Link to="/quem-somos#ig" variant="body2" color="inherit" style={{ textDecoration: 'none' }}>
+                <h5 className='white regular'> Indicação Geográfica </h5>
               </Link>
             </div>
 
             <div>
-              <Link href="/festival-cachaca" variant="body2" color="inherit" sx={{ textDecoration: 'none' }}>
-                Nossos Produtores
+              <Link to="/quem-somos#produtores" variant="body2" color="inherit" style={{ textDecoration: 'none' }}>
+                <h5 className='white regular'>  Nossos Produtores </h5>
               </Link>
             </div>
 
             <div>
-              <Link href="/blog" variant="body2" color="inherit" sx={{ textDecoration: 'none' }}>
-                Encontre nossos produtos
+              <Link to="/quem-somos#associacao" variant="body2" color="inherit" style={{ textDecoration: 'none' }}>
+                <h5 className='white regular'> Associção </h5>
               </Link>
             </div>
 
           </Grid>
           <Grid item xs={12} sm={2}>
-            <Typography variant="h6" gutterBottom>
+            <h3 className='white medium' style={{ paddingBottom: '10px' }}>
               Associa-se
-            </Typography>
+            </h3>
             <div>
-              <Link href="/festival-cachaca" variant="body2" color="inherit" sx={{ textDecoration: 'none' }}>
-                FAQ
+              <Link to="/quem-somos#faq" variant="body2" color="inherit" style={{ textDecoration: 'none' }}>
+                <h5 className='white regular'> FAQ </h5>
               </Link>
             </div>
 
             <div>
-              <Link href="/blog" variant="body2" color="inherit" sx={{ textDecoration: 'none' }}>
-                Cadastre-se
+              <Link to="/registrar" variant="body2" color="inherit" style={{ textDecoration: 'none' }}>
+                <h5 className='white regular'> Cadastre-se </h5>
               </Link>
             </div>
           </Grid>
           <Grid item xs={12} sm={2}>
-            <Typography variant="h6" gutterBottom>
+            <h3 className='white medium' style={{ paddingBottom: '10px' }}>
               Entre em contato
-            </Typography>
-
-        
-        <Box sx={{ display: 'flex',flexDirection: 'column', gap: '5px' }}>
-              <Typography variant="body2" color="inherit" sx={{ textDecoration: 'none' }}>
-                (31) 99999-9999
-              </Typography>
-       
-
-         
-              <Typography variant="body2" color="inherit"  >
-                apccap@gmail.com
-              </Typography>
-          
-
-      
-              <Typography variant="body2" color="inherit"  >
-                Rod. Amparo-Serra Negra, Km 138 - s/n - Almeidas, Amparo - SP, 13902-800
-              </Typography>
-          </Box>
+            </h3>
 
 
+            <Box style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+              <h5 className='white regular'>
+                <a target="_blank" rel='noreferrer' href={`https://api.whatsapp.com/send?phone=5519999999999`} style={{ color: colors.main_white, textDecoration: 'none' }}>
+                  (19) 99999-9999
+                </a>
+              </h5>
+
+              <h5 className='white regular'>
+                <a target="_blank" rel='noreferrer' href={'mailto:appcap@gmail.com'} style={{ color: colors.main_white, textDecoration: 'none' }}>
+                  appcap@gmail.com
+                </a>
+              </h5>
+
+              <h5 className='white regular'>
+                <a target="_blank" rel='noreferrer' href='https://www.google.com/maps/dir//Rod.Amparo-Serra%20Negra,Km%20138-%20Almeidas,%20Amparo%20-%20SP,%2013902-800' style={{ color: colors.main_white, textDecoration: 'none' }}>
+                  Rod. Amparo-Serra Negra, Km 138 - s/n - Almeidas, Amparo - SP, 13902-800
+                </a>
+              </h5>
+
+            </Box>
           </Grid>
         </Grid>
       </Grid>
 
 
       <Box mt={5}>
-        <Typography variant="body2" align="center">
+        <h5 className='white regular' style={{ textAlign: 'center' }}>
           {"Copyright ©  Apccap  "}
           {new Date().getFullYear()}
-          {"."}
-        </Typography>
+        </h5>
       </Box>
 
 

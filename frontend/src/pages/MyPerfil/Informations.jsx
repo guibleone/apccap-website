@@ -12,6 +12,8 @@ import { useMediaQuery } from "@mui/material"
 import { styleError, styleSuccess } from '../toastStyles'
 import './Styles.css'
 import { colors } from "../colors"
+import { celularMask, cepMask, cpfMask, removeMask, telefoneMask } from "../Mask"
+import { cpf } from "cpf-cnpj-validator"
 
 function Informations() {
 
@@ -26,7 +28,7 @@ function Informations() {
     const navigate = useNavigate()
 
     /* Dados Pessoais */
-    const [dadosPessoaisData, setDadosPessoaisData] = useState({
+    const [dadosPessoais, setdadosPessoais] = useState({
         name: user && user.dados_pessoais ? user.dados_pessoais.name : '',
         cpf: user && user.dados_pessoais ? user.dados_pessoais.cpf : '',
         email: user && user.dados_pessoais ? user.dados_pessoais.email : '',
@@ -52,16 +54,38 @@ function Informations() {
 
     ]
 
+    const estadosValidos = [
+        'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG',
+        'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'
+    ];
+
+
     const handleChangeDadosPessoais = (e) => {
-        setDadosPessoaisData((prevState) => ({
+        const { name, value } = e.target;
+
+        let newValue;
+
+        if (name === 'cpf') {
+            newValue = cpfMask(value);
+        } else if (name === 'cep') {
+            newValue = cepMask(value);
+        } else if (name === 'telefone') {
+            newValue = telefoneMask(value)
+        } else if (name === 'celular') {
+            newValue = celularMask(value)
+        } else {
+            newValue = value;
+        }
+
+        setdadosPessoais((prevState) => ({
             ...prevState,
-            [e.target.name]: e.target.value,
-        }))
-    }
+            [name]: newValue,
+        }));
+    };
 
     /* propriedade */
 
-    const [propriedadeData, setPropriedadeData] = useState({
+    const [propriedade, setpropriedade] = useState({
         cpfProprietario: user && user.propriedade ? user.propriedade.cpfProprietario : '',
         logradouro_propriedade: user && user.propriedade ? user.propriedade.logradouro_propriedade : '',
         cidade_propriedade: user && user.propriedade ? user.propriedade.cidade_propriedade : '',
@@ -76,7 +100,7 @@ function Informations() {
     })
 
     const handleChangePropriedade = (e) => {
-        setPropriedadeData((prevState) => ({
+        setpropriedade((prevState) => ({
             ...prevState,
             [e.target.name]: e.target.value,
         }))
@@ -84,7 +108,7 @@ function Informations() {
 
     /* marca */
 
-    const [marcaData, setMarcaData] = useState({
+    const [marca, setmarca] = useState({
         site: user && user.marca ? user.marca.site : '',
         instagram: user && user.marca ? user.marca.instagram : '',
         whatsapp: user && user.marca ? user.marca.whatsapp : '',
@@ -92,7 +116,7 @@ function Informations() {
     })
 
     const handleChangeMarca = (e) => {
-        setMarcaData((prevState) => ({
+        setmarca((prevState) => ({
             ...prevState,
             [e.target.name]: e.target.value,
         }))
@@ -108,22 +132,22 @@ function Informations() {
     const sameCpf = (e) => {
         const isChecked = e.target.checked;
 
-        setPropriedadeData((prevState) => ({
+        setpropriedade((prevState) => ({
             ...prevState,
-            cpfProprietario: isChecked ? dadosPessoaisData.cpf : ''
+            cpfProprietario: isChecked ? dadosPessoais.cpf : ''
         }));
     };
 
     const sameAddress = (e) => {
         const isChecked = e.target.checked;
 
-        setPropriedadeData((prevState) => ({
+        setpropriedade((prevState) => ({
             ...prevState,
-            logradouro_propriedade: isChecked ? dadosPessoaisData.logradouro : '',
-            cidade_propriedade: isChecked ? dadosPessoaisData.cidade : '',
-            cep_propriedade: isChecked ? dadosPessoaisData.cep : '',
-            numero_propriedade: isChecked ? dadosPessoaisData.numero : '',
-            estado_propriedade: isChecked ? dadosPessoaisData.estado : '',
+            logradouro_propriedade: isChecked ? dadosPessoais.logradouro : '',
+            cidade_propriedade: isChecked ? dadosPessoais.cidade : '',
+            cep_propriedade: isChecked ? dadosPessoais.cep : '',
+            numero_propriedade: isChecked ? dadosPessoais.numero : '',
+            estado_propriedade: isChecked ? dadosPessoais.estado : '',
         }));
     };
 
@@ -175,11 +199,37 @@ function Informations() {
     const onSubmit = (e) => {
         e.preventDefault()
 
-        if (!dadosPessoaisData || !propriedadeData || !marcaData) {
+        if (!dadosPessoais || !propriedade || !marca) {
             return toast.error('Preencha todos os campos.', styleError)
         }
 
+        if (!cpf.isValid(removeMask(propriedade.cpfProprietario))) {
+            return toast.error('CPF do proprietário inválido.', styleError)
+        }
+
         else {
+
+            const dadosPessoaisData = {
+                ...dadosPessoais,
+                cpf: removeMask(dadosPessoais.cpf),
+                cep: removeMask(dadosPessoais.cep),
+                telefone: removeMask(dadosPessoais.telefone),
+                celular: removeMask(dadosPessoais.celular),
+            }
+
+            const propriedadeData = {
+                ...propriedade,
+                cpfProprietario: removeMask(propriedade.cpfProprietario),
+                cep_propriedade: removeMask(propriedade.cep_propriedade),
+                telefone_propriedade: removeMask(propriedade.telefone_propriedade),
+                celular_propriedade: removeMask(propriedade.celular_propriedade),
+            }
+
+            const marcaData = {
+                ...marca,
+                whatsapp: removeMask(marca.whatsapp)
+            }
+
 
             const userData = {
                 dadosPessoaisData,
@@ -239,7 +289,7 @@ function Informations() {
                             fullWidth
                             placeholder='André Luiz'
                             autoFocus
-                            onChange={handleChangeDadosPessoais} type="text" id="name" name="name" value={dadosPessoaisData.name}
+                            onChange={handleChangeDadosPessoais} type="text" id="name" name="name" value={dadosPessoais.name}
                             sx={
                                 {
                                     '& .MuiInputBase-root': {
@@ -259,7 +309,7 @@ function Informations() {
                             id="email"
                             placeholder='appcap@gmail.com'
                             name="email"
-                            onChange={handleChangeDadosPessoais} type='email' value={dadosPessoaisData.email}
+                            onChange={handleChangeDadosPessoais} type='email' value={dadosPessoais.email}
 
                             sx={
                                 {
@@ -282,8 +332,10 @@ function Informations() {
                                     id="cep"
                                     placeholder='00000-000'
                                     name="cep"
-                                    autoComplete="cep" onChange={handleChangeDadosPessoais} type="number"
-                                    value={dadosPessoaisData.cep}
+                                    autoComplete="cep"
+                                    onChange={handleChangeDadosPessoais}
+                                    type="text"
+                                    value={cepMask(dadosPessoais.cep)}
                                     sx={
                                         {
                                             '& .MuiInputBase-root': {
@@ -291,6 +343,9 @@ function Informations() {
                                             },
                                         }
                                     }
+                                    inputProps={{
+                                        maxLength: 9,
+                                    }}
                                 />
                             </Grid>
 
@@ -308,7 +363,7 @@ function Informations() {
                                     placeholder='000'
                                     name="numero"
                                     autoComplete="number" onChange={handleChangeDadosPessoais} type="number"
-                                    value={dadosPessoaisData.numero}
+                                    value={dadosPessoais.numero}
                                     sx={
                                         {
                                             '& .MuiInputBase-root': {
@@ -332,7 +387,7 @@ function Informations() {
                                 placeholder='Rua das Flores'
                                 name="logradouro"
                                 autoComplete="logradouro" onChange={handleChangeDadosPessoais} type="text"
-                                value={dadosPessoaisData.logradouro}
+                                value={dadosPessoais.logradouro}
                                 sx={
                                     {
                                         '& .MuiInputBase-root': {
@@ -357,8 +412,8 @@ function Informations() {
                             id="cpf"
                             placeholder='000.000.000-00'
                             name="cpf"
-                            autoComplete="cpf" onChange={handleChangeDadosPessoais} type="number"
-                            value={dadosPessoaisData.cpf}
+                            autoComplete="cpf" onChange={handleChangeDadosPessoais} type="text"
+                            value={cpfMask(dadosPessoais.cpf)}
                             sx={
                                 {
                                     '& .MuiInputBase-root': {
@@ -380,8 +435,10 @@ function Informations() {
                                     id="telefone"
                                     placeholder='(19) 3261-5485'
                                     name="telefone"
-                                    autoComplete="telefone" onChange={handleChangeDadosPessoais} type="number"
-                                    value={dadosPessoaisData.telefone}
+                                    autoComplete="telefone"
+                                    onChange={handleChangeDadosPessoais}
+                                    type="text"
+                                    value={telefoneMask(dadosPessoais.telefone)}
                                     sx={
                                         {
                                             '& .MuiInputBase-root': {
@@ -389,6 +446,9 @@ function Informations() {
                                             },
                                         }
                                     }
+                                    inputProps={{
+                                        maxLength: 14,
+                                    }}
                                 />
                             </Grid>
 
@@ -405,8 +465,10 @@ function Informations() {
                                     id="celular"
                                     placeholder='(19) 99999-9999'
                                     name="celular"
-                                    autoComplete="celular" onChange={handleChangeDadosPessoais} type="number"
-                                    value={dadosPessoaisData.celular}
+                                    autoComplete="celular"
+                                    onChange={handleChangeDadosPessoais}
+                                    type="text"
+                                    value={celularMask(dadosPessoais.celular)}
                                     sx={
                                         {
                                             '& .MuiInputBase-root': {
@@ -414,6 +476,9 @@ function Informations() {
                                             },
                                         }
                                     }
+                                    inputProps={{
+                                        maxLength: 15,
+                                    }}
                                 />
 
                             </Grid>
@@ -427,9 +492,9 @@ function Informations() {
                             <Select
                                 fullWidth
                                 onChange={handleChangeDadosPessoais}
-                                defaultValue=""
-                                value={dadosPessoaisData.estado || ''}
+                                value={dadosPessoais.estado || ''}
                                 name='estado'
+                                MenuProps={{ PaperProps: { sx: { maxHeight: 200 } } }}
                                 sx={
                                     {
                                         '& .MuiInputBase-root': {
@@ -439,7 +504,9 @@ function Informations() {
                                 }
                             >
                                 <MenuItem value="">Selecione um estado</MenuItem>
-                                <MenuItem value="SP">São Paulo</MenuItem>
+                                {estadosValidos.map((estado, index) => (
+                                    <MenuItem key={index} value={estado}>{estado}</MenuItem>
+                                ))}
                             </Select>
 
                         </Grid>
@@ -452,8 +519,7 @@ function Informations() {
                             <TextField
                                 fullWidth
                                 onChange={handleChangeDadosPessoais}
-                                defaultValue=""
-                                value={dadosPessoaisData.cidade || ''}
+                                value={dadosPessoais.cidade || ''}
                                 name='cidade'
                                 autoComplete='cidade'
                             />
@@ -534,8 +600,10 @@ function Informations() {
                             id="cpfProprietario"
                             placeholder='000.000.000-00'
                             name="cpfProprietario"
-                            autoComplete="cpfProprietario" onChange={handleChangePropriedade} type="number"
-                            value={propriedadeData.cpfProprietario}
+                            autoComplete="cpfProprietario"
+                            onChange={handleChangePropriedade}
+                            type="text"
+                            value={cpfMask(propriedade.cpfProprietario)}
                             sx={
                                 {
                                     '& .MuiInputBase-root': {
@@ -543,11 +611,14 @@ function Informations() {
                                     },
                                 }
                             }
+                            inputProps={{
+                                maxLength: 14,
+                            }}
                         />
 
                         <Checkbox
                             onChange={sameCpf}
-                            disabled={!dadosPessoaisData.cpf} sx={{ marginLeft: '-10px', marginTop: '-3px' }} />
+                            disabled={!dadosPessoais.cpf} sx={{ marginLeft: '-10px', marginTop: '-3px' }} />
                         <Typography variant='caption'
                             sx={{
                                 varticalAlign: 'bottom',
@@ -569,7 +640,7 @@ function Informations() {
                                 placeholder='Rua das Flores'
                                 name="logradouro_propriedade"
                                 autoComplete="logradouro_propriedade" onChange={handleChangePropriedade} type="text"
-                                value={propriedadeData.logradouro_propriedade}
+                                value={propriedade.logradouro_propriedade}
                                 sx={
                                     {
                                         '& .MuiInputBase-root': {
@@ -580,7 +651,7 @@ function Informations() {
                             />
 
                             <Checkbox
-                                disabled={!dadosPessoaisData.logradouro || !dadosPessoaisData.cep || !dadosPessoaisData.numero || !dadosPessoaisData.cidade || !dadosPessoaisData.estado}
+                                disabled={!dadosPessoais.logradouro || !dadosPessoais.cep || !dadosPessoais.numero || !dadosPessoais.cidade || !dadosPessoais.estado}
                                 onChange={sameAddress} sx={{ marginLeft: '-10px', marginTop: '-3px' }} />
                             <Typography variant='caption'
                                 sx={{
@@ -601,7 +672,7 @@ function Informations() {
                             <Select
                                 fullWidth
                                 onChange={handleChangePropriedade}
-                                defaultValue={propriedadeData.cidade_propriedade || ''}
+                                defaultValue={propriedade.cidade_propriedade || ''}
                                 name='cidade_propriedade'
                                 autoComplete='cidade_propriedade'
                                 MenuProps={{ PaperProps: { sx: { maxHeight: 200 } } }}
@@ -627,8 +698,8 @@ function Informations() {
                             <Select
                                 fullWidth
                                 onChange={handleChangePropriedade}
-                                defaultValue={propriedadeData.estado_propriedade || ''}
-                                name='estado'
+                                defaultValue={propriedade.estado_propriedade || ''}
+                                name='estado_propriedade'
                                 sx={
                                     {
                                         '& .MuiInputBase-root': {
@@ -655,7 +726,7 @@ function Informations() {
                                 placeholder='13 anos'
                                 name="tempoProducao"
                                 autoComplete="tempoProducao" onChange={handleChangePropriedade} type="text"
-                                value={propriedadeData.tempoProducao}
+                                value={propriedade.tempoProducao}
                                 sx={
                                     {
                                         '& .MuiInputBase-root': {
@@ -681,8 +752,10 @@ function Informations() {
                                     id="cep_propriedade"
                                     placeholder='00000-000'
                                     name="cep_propriedade"
-                                    autoComplete="cep_propriedade" onChange={handleChangePropriedade} type="number"
-                                    value={propriedadeData.cep_propriedade}
+                                    autoComplete="cep_propriedade"
+                                    onChange={handleChangePropriedade}
+                                    type="text"
+                                    value={cepMask(propriedade.cep_propriedade)}
                                     sx={
                                         {
                                             '& .MuiInputBase-root': {
@@ -690,6 +763,9 @@ function Informations() {
                                             },
                                         }
                                     }
+                                    inputProps={{
+                                        maxLength: 9,
+                                    }}
                                 />
 
 
@@ -709,7 +785,7 @@ function Informations() {
                                     placeholder='00000-000'
                                     name="numero_propriedade"
                                     autoComplete="numero_propriedade" onChange={handleChangePropriedade} type="number"
-                                    value={propriedadeData.numero_propriedade}
+                                    value={propriedade.numero_propriedade}
                                     sx={
                                         {
                                             '& .MuiInputBase-root': {
@@ -734,7 +810,7 @@ function Informations() {
                                 placeholder='Fazenda São Pedro'
                                 name="nome_propriedade"
                                 autoComplete="nome_propriedade" onChange={handleChangePropriedade} type="text"
-                                value={propriedadeData.nome_propriedade}
+                                value={propriedade.nome_propriedade}
                                 sx={
                                     {
                                         '& .MuiInputBase-root': {
@@ -758,7 +834,7 @@ function Informations() {
                                 placeholder='1000 m²'
                                 name="area_total"
                                 autoComplete="area_total" onChange={handleChangePropriedade} type="number"
-                                value={propriedadeData.area_total}
+                                value={propriedade.area_total}
                                 sx={
                                     {
                                         '& .MuiInputBase-root': {
@@ -782,8 +858,10 @@ function Informations() {
                                     id="telefone_propriedade"
                                     placeholder='(19) 3261-5485'
                                     name="telefone_propriedade"
-                                    autoComplete="telefone_propriedade" onChange={handleChangePropriedade} type="number"
-                                    value={propriedadeData.telefone_propriedade}
+                                    autoComplete="telefone_propriedade"
+                                    onChange={handleChangePropriedade}
+                                    type="text"
+                                    value={telefoneMask(propriedade.telefone_propriedade)}
                                     sx={
                                         {
                                             '& .MuiInputBase-root': {
@@ -791,6 +869,9 @@ function Informations() {
                                             },
                                         }
                                     }
+                                    inputProps={{
+                                        maxLength: 14,
+                                    }}
                                 />
                             </Grid>
 
@@ -807,8 +888,10 @@ function Informations() {
                                     id="celular_propriedade"
                                     placeholder='(19) 99999-9999'
                                     name="celular_propriedade"
-                                    autoComplete="celular_propriedade" onChange={handleChangePropriedade} type="number"
-                                    value={propriedadeData.celular_propriedade}
+                                    autoComplete="celular_propriedade"
+                                    onChange={handleChangePropriedade}
+                                    type="text"
+                                    value={celularMask(propriedade.celular_propriedade)}
                                     sx={
                                         {
                                             '& .MuiInputBase-root': {
@@ -816,6 +899,9 @@ function Informations() {
                                             },
                                         }
                                     }
+                                    inputProps={{
+                                        maxLength: 15,
+                                    }}
                                 />
 
                             </Grid>
@@ -848,7 +934,7 @@ function Informations() {
                                 placeholder='Link do site'
                                 name="site"
                                 autoComplete="site" onChange={handleChangeMarca} type="text"
-                                value={marcaData.site}
+                                value={marca.site}
                                 sx={
                                     {
                                         '& .MuiInputBase-root': {
@@ -871,7 +957,7 @@ function Informations() {
                                 placeholder='Nome de usuário'
                                 name="instagram"
                                 autoComplete="instagram" onChange={handleChangeMarca} type="text"
-                                value={marcaData.instagram}
+                                value={marca.instagram}
                                 sx={
                                     {
                                         '& .MuiInputBase-root': {
@@ -894,8 +980,10 @@ function Informations() {
                                 id="whatsapp"
                                 placeholder='(19) 99999-9999'
                                 name="whatsapp"
-                                autoComplete="whatsapp" onChange={handleChangeMarca} type="number"
-                                value={marcaData.whatsapp}
+                                autoComplete="whatsapp"
+                                onChange={handleChangeMarca}
+                                type="text"
+                                value={celularMask(marca.whatsapp)}
                                 sx={
                                     {
                                         '& .MuiInputBase-root': {
@@ -903,6 +991,9 @@ function Informations() {
                                         },
                                     }
                                 }
+                                inputProps={{
+                                    maxLength: 15,
+                                }}
                             />
 
                         </Grid>
@@ -944,9 +1035,9 @@ function Informations() {
                             <Box sx={{ display: 'flex', gap: '20px', flexDirection: !matches ? 'column' : 'row', alignItems: 'center' }}>
                                 <Avatar sx={{ width: 120, height: 120 }} src={user && user.marca ? user.marca.logo : ''} />
 
-                                <Grid item xs={12} lg={6} mt={2} sx={{ textAlign: 'center' }}>
+                                <Grid item xs={12} lg={7} mt={2} sx={{ textAlign: 'center' }}>
                                     <h3 sx={{ fontWeight: 540, color: '#000000' }}>
-                                        Logo da sua marca
+                                        Logo da marca ou foto da fazenda
                                     </h3>
 
                                     <TextField

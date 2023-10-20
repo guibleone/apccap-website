@@ -231,7 +231,7 @@ function Dashboard() {
                   Onde Encontrar ?
                 </h1>
                 <h4 style={{ color: colors.main_black, fontWeight: 400 }}>
-                  Confira nossas lojas parceiras
+                  Confira nossos produtores
                 </h4>
               </Box>
             </Grid>
@@ -245,8 +245,6 @@ function Dashboard() {
                 gap: '20px',
                 alignItems: 'center',
               }}>
-
-
                 {
                   produtores?.todos?.map((produtor, index) => (
                     <div key={index}>
@@ -258,255 +256,255 @@ function Dashboard() {
                           gap: '20px',
 
                         }}>
-                          <a target='_blank' rel="noreferrer" href={produtor?.marca?.site ? `https://${produtor?.marca?.site} `: `https://www.google.com/maps/dir//${produtor?.propriedade?.logradouro_propriedade}%20-%20${produtor?.propriedade?.cidade_propriedade},%20${produtor?.propriedade?.estado_propriedade},%20${produtor?.propriedade?.cep_propriedade}/data=!4m6!4m5!1m1!4e2!1m2!1m1!1s0x94c6c6b0a0a0a0a7:0x1b0b0b0b0b0b0b0b?sa=X&ved=2ahUKEwjJ6Z7X2Z7zAhVYIbkGHXZrDZIQ9RcwDHoECBQQBQ`}>
-                          <h4 style={{ color: colors.main_black, fontWeight: 600 }}>
-                            {produtor.propriedade.nome_propriedade}
-                          </h4>
-                        </a>
-
-                        <Avatar src={produtor?.marca?.logo} alt="avatar" sx={{ width: '45px', height: '45px' }} />
-
-                      </Box>
-
-                      <Box sx={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        gap: '40px',
-
-                      }}>
-                        <h6 style={{ color: colors.main_black, fontWeight: 500 }}>
-                          <a href={`https://www.google.com/maps/dir//${produtor?.propriedade?.logradouro_propriedade}%20-%20${produtor?.propriedade?.cidade_propriedade},%20${produtor?.propriedade?.estado_propriedade},%20${produtor?.propriedade?.cep_propriedade}/data=!4m6!4m5!1m1!4e2!1m2!1m1!1s0x94c6c6b0a0a0a0a7:0x1b0b0b0b0b0b0b0b?sa=X&ved=2ahUKEwjJ6Z7X2Z7zAhVYIbkGHXZrDZIQ9RcwDHoECBQQBQ`} target='_blank' rel="noreferrer"
-                            style={{ textDecoration: 'none', color: colors.main_black }}>
-                            {produtor?.propriedade?.logradouro_propriedade},  {produtor?.propriedade?.cidade_propriedade} -  {produtor?.propriedade?.estado_propriedade},  {produtor?.propriedade?.cep_propriedade}
+                          <a target='_blank' rel="noreferrer" href={produtor?.marca?.site ? `https://${produtor?.marca?.site} ` : `https://www.google.com/maps/dir//${produtor?.propriedade?.logradouro_propriedade}%20-%20${produtor?.propriedade?.cidade_propriedade},%20${produtor?.propriedade?.estado_propriedade},%20${produtor?.propriedade?.cep_propriedade}/data=!4m6!4m5!1m1!4e2!1m2!1m1!1s0x94c6c6b0a0a0a0a7:0x1b0b0b0b0b0b0b0b?sa=X&ved=2ahUKEwjJ6Z7X2Z7zAhVYIbkGHXZrDZIQ9RcwDHoECBQQBQ`}>
+                            <h4 style={{ color: colors.main_black, fontWeight: 600 }}>
+                              {produtor.propriedade.nome_propriedade}
+                            </h4>
                           </a>
-                        </h6>
 
-                        <Box sx={{ display: 'flex', gap: '5px', flexDirection: 'column', paddingRight: '10px' }}>
-                          <a href={`https://api.whatsapp.com/send?phone=55${produtor.marca.whatsapp}`} target='_blank' rel="noreferrer" style={{ textDecorationColor: colors.main_white }}>
-                            <AiOutlineWhatsApp size={20} style={{ color: colors.main_black }} />
-                          </a>
-                          <a href={`https://www.instagram.com/${produtor.marca.instagram}`} target='_blank' rel="noreferrer" style={{ textDecorationColor: colors.main_black }}>
-                            <AiOutlineInstagram size={20} style={{ color: colors.main_black }} />
-                          </a>
+                          <Avatar src={produtor?.marca?.logo} alt="avatar" sx={{ width: '45px', height: '45px' }} />
+
+                        </Box>
+
+                        <Box sx={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          gap: '40px',
+
+                        }}>
+                          <h6 style={{ color: colors.main_black, fontWeight: 500 }}>
+                            <a href={`https://www.google.com/maps/dir//${produtor?.propriedade?.logradouro_propriedade}%20-%20${produtor?.propriedade?.cidade_propriedade},%20${produtor?.propriedade?.estado_propriedade},%20${produtor?.propriedade?.cep_propriedade}/data=!4m6!4m5!1m1!4e2!1m2!1m1!1s0x94c6c6b0a0a0a0a7:0x1b0b0b0b0b0b0b0b?sa=X&ved=2ahUKEwjJ6Z7X2Z7zAhVYIbkGHXZrDZIQ9RcwDHoECBQQBQ`} target='_blank' rel="noreferrer"
+                              style={{ textDecoration: 'none', color: colors.main_black }}>
+                              {produtor?.propriedade?.logradouro_propriedade},  {produtor?.propriedade?.cidade_propriedade} -  {produtor?.propriedade?.estado_propriedade},  {produtor?.propriedade?.cep_propriedade}
+                            </a>
+                          </h6>
+
+                          <Box sx={{ display: 'flex', gap: '5px', flexDirection: 'column', paddingRight: '10px' }}>
+                            <a href={`https://api.whatsapp.com/send?phone=55${produtor.marca.whatsapp}`} target='_blank' rel="noreferrer" style={{ textDecorationColor: colors.main_white }}>
+                              <AiOutlineWhatsApp size={20} style={{ color: colors.main_black }} />
+                            </a>
+                            <a href={`https://www.instagram.com/${produtor.marca.instagram}`} target='_blank' rel="noreferrer" style={{ textDecorationColor: colors.main_black }}>
+                              <AiOutlineInstagram size={20} style={{ color: colors.main_black }} />
+                            </a>
+                          </Box>
+
+                        </Box>
+
+
+                      </Card>
+
+                    </div>))}
+
+              </Box>
+
+              <ProdutoresPagination setProdutoresData={(produtor) => setProdutores(produtor)} cidade={'todos'} />
+
+            </Grid>
+
+          </Grid>
+
+          {/* Não Associado */}
+
+          <Grid container spacing={2} pl={matches ? 0 : 34} className="nao-associado">
+
+            <Grid item xs={12} lg={7}>
+
+              <Box sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                width: matches ? '100%' : '542px',
+                gap: '40px',
+                color: colors.main_purple,
+                padding: matches ? ' 20px' : '0',
+              }}>
+                <h1 style={{ fontWeight: 700, fontSize: matches ? '26px' : '' }}>
+                  Você também pode se tornar um produtor da APCCAP
+                </h1>
+                <h4 style={{ fontWeight: 400, fontSize: matches ? '14px' : '' }}>
+                  Lorem ipsum dolor sit amet consectetur. Id non enim nulla tempus ridiculus sed vitae. Lorem ipsum dolor sit amet consectetur, id non enim nulla tempus ridiculus sed vitae.
+                </h4>
+                <h4 style={{ fontWeight: 400, fontSize: matches ? '14px' : '' }}>
+                  Lorem ipsum dolor sit amet consectetur. Id non enim nulla tempus ridiculus sed vitae. Lorem ipsum dolor sit amet consectetur, id non enim nulla tempus ridiculus sed vitae.
+                </h4>
+
+                <Link className="saiba-mais">
+                  <h3>
+                    Saiba mais
+                  </h3>
+                </Link>
+
+              </Box>
+
+            </Grid>
+
+            <Grid item xs={12} lg={5} >
+              <Box sx={{
+                display: 'flex',
+                padding: matches ? ' 20px' : '0',
+              }}>
+
+                <img src={'https://placehold.co/352x289'} alt="associacao" style={{ width: matches ? '100%' : '350px' }} />
+
+              </Box>
+
+            </Grid>
+
+          </Grid>
+
+          {/* Notícias */}
+          <Grid container spacing={2} pl={matches ? 0 : 34} pt={matches && 0} className="noticias">
+
+            <Grid item xs={12} lg={9.7}>
+
+              <Box sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: matches ? ' 20px' : '0',
+                flexDirection: matches ? 'column' : 'row',
+              }}>
+
+                <Box sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '16px',
+                  width: matches ? '100%' : '542px',
+                }}>
+                  <h1 style={{ fontWeight: 700, fontSize: matches ? '26px' : '' }}>
+                    Acompanhe as notícias
+                  </h1>
+                  <h4 style={{ fontWeight: 400, fontSize: matches ? '14px' : '' }}>
+                    Lorem ipsum dolor sit amet consectetur. Id non enim nulla tempus ridiculus sed vitae
+                  </h4>
+                </Box>
+
+                {!matches && (<>
+                  <Link to='/' style={{ textDecoration: 'none' }}>
+                    <Box sx={{ display: 'flex', gap: '10px' }} className='ver-mais'>
+                      <h3>
+                        Ver Mais
+                      </h3>
+                      <AiOutlineArrowRight style={{ verticalAlign: 'bottom', color: colors.main_purple, }} size={20} />
+                    </Box>
+                  </Link>
+                </>)}
+
+
+              </Box>
+
+            </Grid>
+
+            <Grid item xs={12} lg={9.7} pt={matches && 0} >
+              <Box sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                flexDirection: matches ? 'column' : 'row',
+                alignItems: 'center',
+                gap: '20px',
+                marginTop: matches ? '-40px' : '0',
+
+              }}>
+
+                {noticias.map((item, index) => (
+                  <div key={index}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', padding: matches ? '30px' : 0 }}>
+
+                      <img src={'https://www.pcgamesn.com/wp-content/sites/pcgamesn/2019/10/best-farming-games-header-stardew-valley.jpg'} alt="associacao" style={{ width: matches ? '100%' : '350px' }} />
+
+                      <Box sx={{ display: 'flex', gap: '24px', flexDirection: 'column', maxWidth: '350px', padding: '40px 30px' }}>
+                        <Box>
+                          <Link className="temas" ><h5 >Jogos</h5></Link>
+                          <h3 style={{ color: colors.main_black }}>Fazenda Feliz</h3>
+                        </Box>
+
+                        <Typography variant='p'
+                          sx={{
+                            color: colors.main_black,
+                            fontSize: '14px',
+                            fontWeight: '400',
+                            lineHeight: '20px',
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            display: "-webkit-box",
+                            WebkitLineClamp: "3",
+                            WebkitBoxOrient: "vertical",
+                          }}>
+                          Fazenda Feliz é um jogo social de fazenda online desenvolvido pela empresa de software e jogos para dispositivos móveis.
+                        </Typography>
+
+                        <Box sx={{ display: 'flex', gap: '10px' }}>
+                          <Avatar src={'https://media.licdn.com/dms/image/C4D03AQHOWiDAnJxjbA/profile-displayphoto-shrink_800_800/0/1599782375416?e=2147483647&v=beta&t=h_6dGk8YUdD4q5kAetjP1ZFiZhs0dDvi30A3j5q7NJs'} alt="avatar" sx={{ width: '45px', height: '45px' }} />
+
+                          <Box sx={{ display: 'flex', gap: '45px' }}>
+                            <div>
+                              <h5 style={{ color: colors.main_black, fontWeight: 600, fontSize: '14px' }}>Guilherme Leone</h5>
+                              <h5 style={{ color: colors.main_black, fontWeight: 500, fontStyle: 'italic', fontSize: '11px' }}>Presidente</h5>
+                            </div>
+
+
+                            <h5 style={{ color: colors.main_black, fontWeight: 500, fontSize: '11px', justifySelf: 'flex-end', alignSelf: 'center' }}>20/09/2021</h5>
+                          </Box>
+
                         </Box>
 
                       </Box>
 
+                    </Box>
+                  </div>
 
-                    </Card>
+                ))}
 
-                    </div>))}
+                {matches && (<>
+                  <Link to='/' style={{ textDecoration: 'none', paddingBottom: '120px' }}>
+                    <Box sx={{ display: 'flex', gap: '10px' }} className='ver-mais'>
+                      <h3>
+                        Ver Mais
+                      </h3>
+                      <AiOutlineArrowRight style={{ verticalAlign: 'bottom', color: '#140C9F' }} size={20} />
+                    </Box>
+                  </Link>
+                </>)}
+              </Box>
 
-            </Box>
-
-            <ProdutoresPagination setProdutoresData={(produtor) => setProdutores(produtor)} cidade={'todos'} />
+            </Grid>
 
           </Grid>
 
-        </Grid>
+          <Footer />
 
-      {/* Não Associado */}
+        </>
 
-      <Grid container spacing={2} pl={matches ? 0 : 34} className="nao-associado">
+      ) : (
 
-        <Grid item xs={12} lg={7}>
+        <>
 
-          <Box sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            width: matches ? '100%' : '542px',
-            gap: '40px',
-            color: colors.main_purple,
-            padding: matches ? ' 20px' : '0',
-          }}>
-            <h1 style={{ fontWeight: 700, fontSize: matches ? '26px' : '' }}>
-              Você também pode se tornar um produtor da APCCAP
-            </h1>
-            <h4 style={{ fontWeight: 400, fontSize: matches ? '14px' : '' }}>
-              Lorem ipsum dolor sit amet consectetur. Id non enim nulla tempus ridiculus sed vitae. Lorem ipsum dolor sit amet consectetur, id non enim nulla tempus ridiculus sed vitae.
-            </h4>
-            <h4 style={{ fontWeight: 400, fontSize: matches ? '14px' : '' }}>
-              Lorem ipsum dolor sit amet consectetur. Id non enim nulla tempus ridiculus sed vitae. Lorem ipsum dolor sit amet consectetur, id non enim nulla tempus ridiculus sed vitae.
-            </h4>
+          {(user.role === "produtor" || user.role === 'produtor_associado') && (
+            <Produtor />
+          )}
 
-            <Link className="saiba-mais">
-              <h3>
-                Saiba mais
-              </h3>
-            </Link>
+          {(user.role === "admin") && (
+            <Admin />
+          )}
 
-          </Box>
+          {(user.role === 'secretario') && (
+            <Secretary />
+          )}
 
-        </Grid>
+          {(user.role === 'tesoureiro') && (
+            <Tesoureiro />
+          )}
 
-        <Grid item xs={12} lg={5} >
-          <Box sx={{
-            display: 'flex',
-            padding: matches ? ' 20px' : '0',
-          }}>
+          {(user.role === 'presidente') && (
+            <President />
+          )}
 
-            <img src={'https://placehold.co/352x289'} alt="associacao" style={{ width: matches ? '100%' : '350px' }} />
+          {(user.role === 'conselho') && (
+            <Conselho />
+          )}
 
-          </Box>
-
-        </Grid>
-
-      </Grid>
-
-      {/* Notícias */}
-      <Grid container spacing={2} pl={matches ? 0 : 34} pt={matches && 0} className="noticias">
-
-        <Grid item xs={12} lg={9.7}>
-
-          <Box sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            padding: matches ? ' 20px' : '0',
-            flexDirection: matches ? 'column' : 'row',
-          }}>
-
-            <Box sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '16px',
-              width: matches ? '100%' : '542px',
-            }}>
-              <h1 style={{ fontWeight: 700, fontSize: matches ? '26px' : '' }}>
-                Acompanhe as notícias
-              </h1>
-              <h4 style={{ fontWeight: 400, fontSize: matches ? '14px' : '' }}>
-                Lorem ipsum dolor sit amet consectetur. Id non enim nulla tempus ridiculus sed vitae
-              </h4>
-            </Box>
-
-            {!matches && (<>
-              <Link to='/' style={{ textDecoration: 'none' }}>
-                <Box sx={{ display: 'flex', gap: '10px' }} className='ver-mais'>
-                  <h3>
-                    Ver Mais
-                  </h3>
-                  <AiOutlineArrowRight style={{ verticalAlign: 'bottom', color: colors.main_purple, }} size={20} />
-                </Box>
-              </Link>
-            </>)}
-
-
-          </Box>
-
-        </Grid>
-
-        <Grid item xs={12} lg={9.7} pt={matches && 0} >
-          <Box sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            flexDirection: matches ? 'column' : 'row',
-            alignItems: 'center',
-            gap: '20px',
-            marginTop: matches ? '-40px' : '0',
-
-          }}>
-
-            {noticias.map((item, index) => (
-              <div key={index}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', padding: matches ? '30px' : 0 }}>
-
-                  <img src={'https://www.pcgamesn.com/wp-content/sites/pcgamesn/2019/10/best-farming-games-header-stardew-valley.jpg'} alt="associacao" style={{ width: matches ? '100%' : '350px' }} />
-
-                  <Box sx={{ display: 'flex', gap: '24px', flexDirection: 'column', maxWidth: '350px', padding: '40px 30px' }}>
-                    <Box>
-                      <Link className="temas" ><h5 >Jogos</h5></Link>
-                      <h3 style={{ color: colors.main_black }}>Fazenda Feliz</h3>
-                    </Box>
-
-                    <Typography variant='p'
-                      sx={{
-                        color: colors.main_black,
-                        fontSize: '14px',
-                        fontWeight: '400',
-                        lineHeight: '20px',
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        display: "-webkit-box",
-                        WebkitLineClamp: "3",
-                        WebkitBoxOrient: "vertical",
-                      }}>
-                      Fazenda Feliz é um jogo social de fazenda online desenvolvido pela empresa de software e jogos para dispositivos móveis.
-                    </Typography>
-
-                    <Box sx={{ display: 'flex', gap: '10px' }}>
-                      <Avatar src={'https://media.licdn.com/dms/image/C4D03AQHOWiDAnJxjbA/profile-displayphoto-shrink_800_800/0/1599782375416?e=2147483647&v=beta&t=h_6dGk8YUdD4q5kAetjP1ZFiZhs0dDvi30A3j5q7NJs'} alt="avatar" sx={{ width: '45px', height: '45px' }} />
-
-                      <Box sx={{ display: 'flex', gap: '45px' }}>
-                        <div>
-                          <h5 style={{ color: colors.main_black, fontWeight: 600, fontSize: '14px' }}>Guilherme Leone</h5>
-                          <h5 style={{ color: colors.main_black, fontWeight: 500, fontStyle: 'italic', fontSize: '11px' }}>Presidente</h5>
-                        </div>
-
-
-                        <h5 style={{ color: colors.main_black, fontWeight: 500, fontSize: '11px', justifySelf: 'flex-end', alignSelf: 'center' }}>20/09/2021</h5>
-                      </Box>
-
-                    </Box>
-
-                  </Box>
-
-                </Box>
-              </div>
-
-            ))}
-
-            {matches && (<>
-              <Link to='/' style={{ textDecoration: 'none', paddingBottom: '120px' }}>
-                <Box sx={{ display: 'flex', gap: '10px' }} className='ver-mais'>
-                  <h3>
-                    Ver Mais
-                  </h3>
-                  <AiOutlineArrowRight style={{ verticalAlign: 'bottom', color: '#140C9F' }} size={20} />
-                </Box>
-              </Link>
-            </>)}
-          </Box>
-
-        </Grid>
-
-      </Grid>
-
-      <Footer />
-
-    </>
-
-  ) : (
-
-    <>
-
-      {(user.role === "produtor" || user.role === 'produtor_associado') && (
-        <Produtor />
-      )}
-
-      {(user.role === "admin") && (
-        <Admin />
-      )}
-
-      {(user.role === 'secretario') && (
-        <Secretary />
-      )}
-
-      {(user.role === 'tesoureiro') && (
-        <Tesoureiro />
-      )}
-
-      {(user.role === 'presidente') && (
-        <President />
-      )}
-
-      {(user.role === 'conselho') && (
-        <Conselho />
-      )}
-
-    </>
-  )
-}
+        </>
+      )
+      }
 
     </Box >
 

@@ -138,7 +138,6 @@ function NavMenu() {
                         width: drawerWidth,
                     },
                 }}
-                variant="persistent"
                 anchor="right"
                 open={open}
                 PaperProps={{
@@ -147,6 +146,7 @@ function NavMenu() {
                         color: "#FAF8F8",
                     }
                 }}
+                onClose={handleDrawerClose}
             >
                 <DrawerHeader sx={{
                     backgroundColor: '#140C9F',
