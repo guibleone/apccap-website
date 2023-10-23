@@ -8,6 +8,7 @@ import { FcClock, FcPrivacy } from "react-icons/fc"
 import { toast } from "react-toastify"
 import { styleError, styleSuccess } from '../../../toastStyles'
 import { colors } from "../../../colors"
+import { FaUserEdit } from "react-icons/fa"
 
 export default function AnaliseCredencial() {
     const { id } = useParams()
@@ -26,10 +27,12 @@ export default function AnaliseCredencial() {
 
     const [openApprove, setOpenApprove] = useState(false)
     const [openRepprove, setOpenRepprove] = useState(false)
+    const [openFormulario, setOpenFormulario] = useState(false)
     const [type, setType] = useState('')
 
     const handleOpenApprove = () => setOpenApprove(!openApprove)
     const handleOpenRepprove = () => setOpenRepprove(!openRepprove)
+    const handleOpenFormulario = () => setOpenFormulario(!openFormulario)
 
     useEffect(() => {
         if (recursoTime) {
@@ -253,9 +256,24 @@ export default function AnaliseCredencial() {
                                 </Box>
 
                             </Box>
+                            <Grid item xs={12} md={7} mt={2}>
+                            <Box sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                            }}>
+                                <button className="button-purple" onClick={handleOpenFormulario} style={{
+                                    width:'100%'
+                                }}>
+                                    Formulário de Requerimento
+                                </button>
+                            </Box>
+                        </Grid>
                         </Grid>
 
+                  
+
                     </Grid>
+                    
                     <Grid container spacing={2}  >
 
 
@@ -739,7 +757,7 @@ export default function AnaliseCredencial() {
                                 <h4 className="black regular" > Essa ação é permanente. </h4>
                                 <h4 className="black regular" > Será enviado um email ao produtor.</h4>
 
-                                <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'flex-end',marginTop:'30px' }}>
+                                <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '30px' }}>
                                     <button className="button-white" color='error' variant="outlined" onClick={handleOpenApprove}>Cancelar</button>
 
                                     <button
@@ -773,7 +791,7 @@ export default function AnaliseCredencial() {
 
                                 <h4 className="black regular" > Essa ação é permanente. </h4>
                                 <h4 className="black regular" > Será enviado um email ao produtor.</h4>
-                                <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'flex-end',marginTop:'30px' }}>
+                                <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '30px' }}>
                                     <button className="button-white" color='error' variant="outlined" onClick={handleOpenRepprove}>Cancelar</button>
 
                                     <button
@@ -788,6 +806,37 @@ export default function AnaliseCredencial() {
                             </Box>
                         </DialogContent>
                     </Dialog>
+
+                    <Dialog
+                        open={openFormulario}
+                        onClose={handleOpenFormulario}
+                    >   <DialogContent >
+                            <Box sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '10px'
+                            }}>
+                                <Box sx={{display:'flex',gap:'50px'}}>
+                                    <h3 className="black"  >Confira as informações</h3>
+                                    <FaUserEdit size={30} />
+                                </Box>
+
+                                <h4 className="black" >Nome</h4>
+                                <h4 className="black regular" >{userData?.formulario_requerimento?.nome}</h4>
+                                <h4 className="black" >CPF</h4>
+                                <h4 className="black regular" >{userData?.formulario_requerimento?.cpf}</h4>
+                                <h4 className="black" >CNPJ</h4>
+                                <h4 className="black regular" >{userData?.formulario_requerimento?.cnpj}</h4>
+                                <h4 className="black" >Propriedade</h4>
+                                <h4 className="black regular" >{userData?.formulario_requerimento?.propriedade}</h4>
+
+                            </Box>
+
+                        </DialogContent>
+
+                    </Dialog>
+
+
 
 
                 </Container>

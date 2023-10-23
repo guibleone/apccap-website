@@ -1,21 +1,16 @@
 import { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { listUsers } from "../../features/admin/adminSlice"
-import { Typography, Box, Container, CssBaseline, Button, TextField, CircularProgress, useMediaQuery, Grid, Card, Avatar, CardMedia } from '@mui/material';
-import { trackProduct, clear } from "../../features/products/productsSlice";
+import { Typography, Box,  CssBaseline,CircularProgress, useMediaQuery, Grid, Card, Avatar,  } from '@mui/material';
 import Secretary from "./Acesses/Secretario/Secretary"
 import Tesoureiro from "./Acesses/Tesoureiro/Tesoureiro"
 import President from "./Acesses/Presidente/President"
 import Admin from "./Acesses/Admin"
 import { getSubscription } from "../../features/payments/paymentsSlice"
-import { FcLock } from 'react-icons/fc'
 import Conselho from "./Acesses/Conselho/Conselho";
 import { CiCircleCheck } from 'react-icons/ci'
 import './Style.css'
-import { BsExclamationTriangle, BsInstagram, BsWhatsapp } from "react-icons/bs";
-import { AiFillCheckCircle, AiOutlineArrowRight, AiOutlineInstagram, AiOutlineWhatsApp } from "react-icons/ai";
-import { MdWhatsapp } from "react-icons/md";
+import {  AiOutlineArrowRight, AiOutlineInstagram, AiOutlineWhatsApp } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import Footer from "../../components/Footer/Footer";
 import { colors } from '../colors'
@@ -23,13 +18,13 @@ import { getDocuments } from "../../features/documents/documentsSlice";
 import Produtor from "./Acesses/Produtor/Produtor";
 import ProdutoresPagination from "../../components/Pagination/Produtores";
 
+
 function Dashboard() {
   
 
   const { user } = useSelector((state) => state.auth)
   const { isLoading: isLoadingPayments } = useSelector((state) => state.payments)
 
-  const navigate = useNavigate()
   const dispatch = useDispatch()
 
   const [produtores, setProdutores] = useState([])
@@ -40,6 +35,12 @@ function Dashboard() {
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = require('../../imgs/seloFoto.png');
+  }, []);
+
 
   useEffect(() => {
 
@@ -74,7 +75,6 @@ function Dashboard() {
       } size={100} />
     </Box>
   }
-
 
 
   const numberNoticias = 3
@@ -504,11 +504,7 @@ function Dashboard() {
       )
       }
 
-    </Box >
-
-
-
-
+    </Box>
 
   )
 }

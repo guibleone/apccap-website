@@ -237,6 +237,10 @@ function Register() {
   const onSubmit = (e) => {
     e.preventDefault()
 
+    if(!dadosPessoais.name || !dadosPessoais.cpf || !dadosPessoais.email || !dadosPessoais.cep || !dadosPessoais.logradouro || !dadosPessoais.numero || !dadosPessoais.cidade || !dadosPessoais.estado || !dadosPessoais.password || !dadosPessoais.password2 || !propriedade.cpfProprietario || !propriedade.logradouro_propriedade || !propriedade.cidade_propriedade || !propriedade.estado_propriedade || !propriedade.cep_propriedade || !propriedade.numero_propriedade || !propriedade.nome_propriedade || !propriedade.area_total || !propriedade.telefone_propriedade || !propriedade.celular_propriedade || !propriedade.tempoProducao || !marca.site || !marca.instagram || !marca.whatsapp || !logo) {
+      return toast.error('Preencha todos os campos.', styleError)
+    }
+    
     if (dadosPessoais.password !== dadosPessoais.password2) {
       return toast.error('As senhas não coincidem.', styleError)
     }

@@ -1,4 +1,4 @@
-import { Box, CircularProgress, CssBaseline, useMediaQuery } from '@mui/material'
+import { Avatar, Box, CircularProgress, CssBaseline, useMediaQuery } from '@mui/material'
 import { useSelector, useDispatch } from 'react-redux'
 import { useEffect } from 'react';
 import { useState } from 'react';
@@ -33,7 +33,6 @@ function Traceability() {
   useEffect(() => {
 
     if (productData && Object.keys(productData).length > 0) {
-      console.log(productData)
 
       const id = productData.producer
       dispatch(getProducer(id))
@@ -132,19 +131,28 @@ function Traceability() {
         {!isError &&
           <>
 
+
+
             <div className="box-produto">
-              <div>
+
+              <Box sx={{
+                position: 'relative',
+                paddingBottom: '50px',
+              }}>
+
                 <img src={require('../../imgs/Check.png')} alt="check" className="check-mark" />
 
-                <div className="produto-esquerdo">
-                  <img className="foto-produto" src={productData.path ? productData.path : 'https://placehold.co/300x300'} alt="Foto do produto" />
-                </div>
 
-                <img src={require('../../imgs/Ellipse.png')} alt="elipse" className="elipse" />
+                <Avatar sx={{
+                  width: matches ? 250 : 600,
+                  height: matches ? 250 : 600,
+                }} src={productData.path ? productData.path : 'https://placehold.co/300x300'} alt="Foto do produto" />
+
 
                 <img src={producer?.dados_pessoais?.profilePhoto ? producer?.dados_pessoais?.profilePhoto : 'https://placehold.co/300x300'} alt="Foto do produto" className='foto-produtor' />
 
-              </div>
+              </Box>
+
               <div className="produtos-information">
                 <div className="nome">
                   <h2>
@@ -169,7 +177,7 @@ function Traceability() {
                     Sobre o Produtor
                   </h2>
 
-                  {producerResume && producerResume[0] ? <h3>{producerResume[0].body}</h3> : <h3>Sem descrição.</h3>}
+                  {producerResume && producerResume[0] ? <h3>{producerResume[0].body}</h3> : <h3>Sem informações.</h3>}
 
                 </div>
               </div>

@@ -99,35 +99,20 @@
 
 .check-mark {
     position: absolute;
-    top: 150px;
+    top: 0px;
     left: 470px;
     z-index: 1;
     width: 205px;
 }
 
-.foto-produto {
-    max-width: 275px;
-    max-height: 275px;
-    z-index: 2;
-    object-fit: cover;
-}
-
-.elipse {
-    position: absolute;
-    width: 465px;
-    height: 465px;
-    top: 255px;
-    left: 225px;
-    z-index: 0;
-}
 
 .foto-produtor {
     position: absolute;
     width: 150px;
     height: 150px;
     border-radius: 50%;
-    top: 600px;
-    left: 250px;
+    top: 500px;
+    left: 0px;
     object-fit: cover;
 }
 
@@ -174,6 +159,7 @@ margin-left: auto;
 @media (max-width: 768px) {
     .box-produto {
         flex-direction: column;
+        padding: 60px 0;
     }
 
     .produto-esquerdo {
@@ -181,8 +167,8 @@ margin-left: auto;
     }
 
     .check-mark {
-        top: 120px; /* Adjust top position for smaller screens */
-        left: 240px; /* Adjust left position for smaller screens */
+        top: 0px;
+        left: 190px; /* Adjust top position for smaller screens */
         width: 100px;
         z-index: 4;
     }
@@ -192,18 +178,12 @@ margin-left: auto;
         z-index: 3;
     }
 
-    .elipse{
-        width: 250px;
-        height: 250px;
-        left: 68px;
-        top: 135px;
-    }
 
     .foto-produtor {
         width: 80px; /* Adjust width for smaller screens */
         height: 80px; /* Adjust height for smaller screens */
-        top: 320px; /* Adjust top position for smaller screens */
-        left: 55px; /* Adjust left position for smaller screens */
+        top: 200px; /* Adjust top position for smaller screens */
+        left: 0px; /* Adjust left position for smaller screens */
     }
 
     .produtos-information{
