@@ -1,15 +1,14 @@
 import React from 'react'
 import { colors } from '../../../colors'
-import { Box, Button, Container, Grid, Typography, useMediaQuery } from '@mui/material'
+import { Box, Container, Grid, useMediaQuery } from '@mui/material'
 import { useState, useEffect } from 'react'
 import UsersPagination from '../../../../components/Pagination/Users'
 import { useSelector } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link,  } from 'react-router-dom'
 import { AiOutlineEdit } from 'react-icons/ai'
 
 
 export default function Produtores() {
-    const navigate = useNavigate()
 
     const [users, setUsers] = useState([])
     const { users: usersData } = useSelector((state) => state.admin)
@@ -44,7 +43,7 @@ export default function Produtores() {
                         </Box>
                     </Grid>
 
-                    {users && users.filter(user => user.role === 'produtor_associado' || user.role === 'produtor').map((user) => (
+                    {users && users?.todos?.map((user) => (
 
 
                         <Grid item xs={12} md={3} pr={matches ? 2 : 0} key={user._id}  >
@@ -85,7 +84,7 @@ export default function Produtores() {
 
                 </Grid>
 
-                <UsersPagination setUsersData={(u) => setUsers(u)} />
+                <UsersPagination setUsersData={(u) => setUsers(u)} role={['produtor','produtor_associado']} pages={4} />
                 
             </Container>
         </Box>

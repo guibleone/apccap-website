@@ -1,5 +1,5 @@
-import { AiFillFacebook as Facebook, AiFillInstagram as Instagram, AiFillTwitterCircle as Twitter } from 'react-icons/ai'
-import { Box, Paper, Container, Typography, Avatar, Grid, useMediaQuery } from '@mui/material'
+import { AiFillFacebook as Facebook, AiFillInstagram as Instagram} from 'react-icons/ai'
+import { Box, Grid, useMediaQuery } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { RiTwitterXFill } from 'react-icons/ri'
 import { colors } from '../../pages/colors';

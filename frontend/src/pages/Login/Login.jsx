@@ -158,7 +158,7 @@ function Login() {
             <Grid item xs={12} lg={12}  >
 
               <div className="esqueci-senha">
-                <Link to="/" style={{ color: '#140C9F', textDecoration: 'none', cursor: 'pointer' }}>Esqueci minha senha</Link>
+                <Link to="/esqueci-senha" style={{ color: '#140C9F', textDecoration: 'none', cursor: 'pointer' }}>Esqueci minha senha</Link>
               </div>
 
             </Grid>

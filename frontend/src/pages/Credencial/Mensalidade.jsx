@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { Box, Button, TextField, Typography, Alert, useMediaQuery, CircularProgress, Skeleton } from '@mui/material'
+import { Box,  Alert,  CircularProgress, Skeleton } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { toast } from 'react-toastify'
 import { getSubscription } from '../../features/payments/paymentsSlice'
-import { styleSuccess, styleError } from '../toastStyles'
 import { BsArrowUpRight } from 'react-icons/bs'
 import { colors } from '../colors'
 
@@ -26,6 +24,7 @@ export default function Mensalidade() {
 
       const response = await axios.post('/api/payment/comprar-mensalidade', {
         email: user.dados_pessoais.email,
+        cpf: user.dados_pessoais.cpf,
       })
 
       if (response.data) {
@@ -59,6 +58,7 @@ export default function Mensalidade() {
 
     const userData = {
       email: user.dados_pessoais.email,
+      cpf: user.dados_pessoais.cpf,
       token: user.token
     }
 

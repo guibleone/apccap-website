@@ -2,18 +2,18 @@ import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import {
     Box, AppBar as MuiAppBar, Toolbar, IconButton, Typography,
-    CssBaseline, Drawer, Divider, List, ListItem, ListItemIcon, ListItemText, Button, Avatar, Accordion, AccordionSummary, AccordionDetails
+    CssBaseline, Drawer, Divider, List, ListItem, ListItemIcon, Avatar, Accordion, AccordionSummary, AccordionDetails
 } from '@mui/material';
 import {
     TbMenu2, TbArrowNarrowLeft, TbArrowNarrowRight,
-    TbSearch, TbHome2, TbUsers, TbNews, TbHome, TbMessage, TbFile, TbId, TbGlass, TbBrandZoom, TbFiles, TbMap2
+    TbSearch, TbHome2, TbUsers, TbNews, TbHome, TbMessage, TbFile, TbId, TbFiles, TbMap2
 } from "react-icons/tb";
 import { MdLiquor, MdOutlineLiquor } from "react-icons/md";
-import { useNavigate, Link, useSearchParams, useLocation } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'
 import { logout, reset } from '../../features/auth/authSlice';
 import ButtonChangeRole from '../ChangeRole/ButtonChangeRole';
-import { AiOutlineClose, AiOutlineUser } from 'react-icons/ai';
+import { AiOutlineUser } from 'react-icons/ai';
 import { resetResume } from "../../features/resume/resumeSlice"
 import { resetDocuments } from "../../features/documents/documentsSlice"
 import { reset as resetAdmin } from "../../features/admin/adminSlice"
@@ -22,7 +22,6 @@ import { reset as resetSpreadsheet } from "../../features/spreadSheet/spreadShee
 import { resetPayments } from "../../features/payments/paymentsSlice"
 import { IoDocumentsOutline } from "react-icons/io5";
 import { BiUserPlus } from 'react-icons/bi';
-import { colors } from '../../pages/colors';
 import { useEffect } from 'react';
 
 const drawerWidth = '65%';
@@ -516,6 +515,20 @@ function NavMenu() {
                             }
                         } to="/balancos">Balanços</Link>
                     </ListItem>
+                    <ListItem >
+
+                        <ListItemIcon>
+                            <TbMessage style={{ color: "#FAF8F8" }} />
+                        </ListItemIcon>
+                        <Link style={
+                            {
+                                color: 'inherit',
+                                textDecoration: 'none',
+                            }
+                        } to="/reunioes">Reuniões</Link>
+                    </ListItem>
+
+
 
                 </>}
 

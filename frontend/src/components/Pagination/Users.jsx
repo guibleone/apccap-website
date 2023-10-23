@@ -1,77 +1,75 @@
 import { Box, Pagination } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from "react-redux"
-import { listUsers } from '../../features/admin/adminSlice'
+import { listUsers, setUsers } from '../../features/admin/adminSlice'
+import axios from 'axios'
 
 
-export default function UsersPagination({ setUsersData, status, productsQuantity }) {
-    const dispatch = useDispatch()
+export default function UsersPagination({ setUsersData, status, productsQuantity, role, invisible, pages }) {
 
     const { users } = useSelector((state) => state.admin)
-    const { user } = useSelector((state) => state.auth)
 
-    useEffect(() => {
-
-        if (user && (user.role === "admin" || user.role === 'secretario' || user.role === 'presidente' || user.role === 'conselho')) {
-            dispatch(listUsers(user.token))
-        }
-
-    }, [user])
-
-
-    const service = {
-        getData: ({ from, to }) => {
-            return new Promise((resolve, reject) => {
-
-                const data = users
-                    .filter(user => (!status || user.status === status))
-                    .filter(user => (productsQuantity ? user.productsQuantity >= 1 : user))
-                    .slice(from, to)
-
-                resolve({
-                    count: users.length,
-                    data: data
-                })
-            })
-        }
-    }
-
-    const pageSize = 8
+    const dispatch = useDispatch();
+    const pageSize = pages ? pages : 6;
 
     const [pagination, setPagination] = useState({
         count: 0,
-        from: 0,
-        to: pageSize
-    })
+        page: 1,
+    });
 
     useEffect(() => {
-        service.getData({ from: pagination.from, to: pagination.to }).then(response => {
-            setPagination({ ...pagination, count: response.count })
 
-            setUsersData(response.data)
-        })
-    }, [pagination.from, pagination.to, users])
+        fetchData(pagination.page);
+
+    }, [pagination.page]);
 
     const handlePageChange = (event, page) => {
-        const from = (page - 1) * pageSize
-        const to = (page - 1) * pageSize + pageSize
+        setPagination({
+            ...pagination,
+            page: page,
+        });
+    };
 
-        setPagination({ ...pagination, from: from, to: to })
-    }
+    useEffect(() => {
 
+        setUsersData(users);
+
+    }, [users]);
+
+    const fetchData = (page) => {
+        const pageSize = pages ? pages : 6;
+
+        axios.get(`/api/admin/users?pageSize=${pageSize}&page=${page}&status=${status}&productsQuantity=${productsQuantity}&role=${role}`)
+            .then((response) => {
+                dispatch(setUsers(response.data));
+                setPagination({
+                    ...pagination,
+                    count: response.data.totalDocuments,
+                });
+            })
+            .catch((error) => {
+                console.error(error);
+                // Handle errors here
+            });
+    };
     return (
         <Box sx={{
             alignContent: 'center',
             justifyContent: 'center',
+            alignItems: 'center',
             display: 'flex',
-            margin: '20px 0'
+            margin: 'auto',
+            padding: '20px 0 72px 0',
         }}>
 
             <Pagination
                 count={Math.ceil(pagination.count / pageSize)}
+                page={pagination.page}
                 onChange={handlePageChange}
+                style={{
+                    display: invisible ? 'none' : 'flex'
+                }}
             />
-
         </Box>
     )
 }

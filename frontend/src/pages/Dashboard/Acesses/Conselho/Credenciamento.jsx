@@ -2,7 +2,6 @@ import { Box, Container, Grid, useMediaQuery } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { colors } from '../../../colors'
 import { useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
 import UsersPagination from '../../../../components/Pagination/Users'
 
 export default function Credenciamento() {
@@ -52,8 +51,18 @@ export default function Credenciamento() {
                             </Box>
                         </Box>
                     </Grid>
+
+
+                    {(users && users?.credenciamento?.length === 0) && (
+                        <Grid item >
+                            <h3 className='regular black'>
+                                Nenhum pedido de credenciamento pendente.
+                            </h3>
+                        </Grid>
+                    )}
+
                     {users &&
-                        users.map((user) => (
+                        users?.credenciamento?.map((user) => (
                             <Grid item xs={12} md={2} pr={matches ? 2 : 0} key={user._id}>
                                 <Box sx={{
                                     backgroundColor: colors.main_grey,
@@ -86,7 +95,7 @@ export default function Credenciamento() {
                         ))}
                 </Grid>
 
-                <UsersPagination setUsersData={(u) => setUsers(u)} status={'analise'} />
+                <UsersPagination setUsersData={(u) => setUsers(u)} status={'analise'} productsQuantity={'false'} />
 
             </Container>
         </Box>

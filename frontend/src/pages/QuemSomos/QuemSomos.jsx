@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Accordion, AccordionDetails, AccordionSummary, Box, Container, Divider, Grid, Paper, Typography, useMediaQuery } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Box, Container, Grid,  Typography, useMediaQuery } from '@mui/material';
 import { colors } from '../colors';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './Styles.css'
-import { getMembros, getProducers } from '../../features/admin/adminSlice';
-import { AiOutlineArrowRight, AiOutlineInstagram, AiOutlineWhatsApp } from 'react-icons/ai';
+import { getMembros,  } from '../../features/admin/adminSlice';
+import {  AiOutlineInstagram, AiOutlineWhatsApp } from 'react-icons/ai';
 import Footer from '../../components/Footer/Footer';
-import { BsArrowUpRight, BsChevronDown, BsChevronRight } from 'react-icons/bs';
+import { BsArrowUpRight,  } from 'react-icons/bs';
 import { BiMinus, BiPlus } from 'react-icons/bi';
 import ProdutoresPagination from '../../components/Pagination/Produtores';
 

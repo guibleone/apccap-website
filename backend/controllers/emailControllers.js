@@ -237,4 +237,61 @@ const sendRecursoEmail = asyncHandler(async (req, res) => {
 })
 
 
-module.exports = { sendEmail, senConvocationEmail, sendRelatoryEmail,sendRecursoEmail,sendProductRelatoryEmail }
+// codigo de reset de senha
+
+const sendResetEmail = asyncHandler(async (req, res) => {
+
+    const { email } = req.body
+    const emailExists = await User.findOne({ "dados_pessoais.email": email })
+
+    const token = genterateResetCode()
+
+    const resend = new Resend(process.env.RESEND_API_KEY)
+
+    if (!email) {
+        res.status(400)
+        throw new Error('Insira seu email')
+    }
+
+    if (!emailExists) {
+        res.status(400)
+        throw new Error('Email não encontrado')
+    }
+
+    if (!token) {
+        res.status(400)
+        throw new Error('Erro ao gerar código de validação')
+    }
+
+    try {
+        const data = await resend.sendEmail({
+            from: 'Apccap <redifinir.senha@apccap.shop>',
+            to: `${email}`, // TODO: change to `email
+            subject: 'Redefinição de Senha', // TODO: change to `title
+            html: `<p>Atenção Produtor, </p>
+
+                <p>Para redefinir sua senha, insira o seguinte código de validação.</p> 
+                
+                <h4>${token}</h4> 
+                
+                <p>Atenciosamente, </p>
+
+                <p>Direção APCCAP</p>
+
+                `
+        });
+
+        return res.status(200).json(token);
+
+    } catch (error) {
+        console.log(error)
+
+    }
+})
+
+// gerar código de reset de senha
+const genterateResetCode = () => {
+    return Math.floor(100000 + Math.random() * 900000)
+}
+
+module.exports = { sendEmail, senConvocationEmail, sendRelatoryEmail, sendRecursoEmail, sendProductRelatoryEmail, sendResetEmail }

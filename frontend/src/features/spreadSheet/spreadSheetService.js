@@ -26,14 +26,6 @@ const getSpreadSheets = async (user) => {
     return response.data
 }
 
-// pegar planilhas sem login
-
-const getSpreadSheetsWithoutLogin = async ({ page, pageSize }) => {
-    const response = await axios.get(`/api/spreadsheets?pageSize=${pageSize}&page=${page}`);
-    return response.data.spreadsheets;
-}
-
-
 
 // adicionar planilha
 const addSpreadSheet = async (data) => {
@@ -108,7 +100,6 @@ const spreadSheetService = {
     addExcel,
     deleteExcel,
     editSpreadSheet,
-    getSpreadSheetsWithoutLogin
 }
 
 export default spreadSheetService

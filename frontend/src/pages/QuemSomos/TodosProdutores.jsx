@@ -3,7 +3,7 @@ import { Box, Container, Grid } from '@mui/material'
 import { AiOutlineWhatsApp, AiOutlineInstagram } from 'react-icons/ai'
 import { colors } from '../../pages/colors'
 import ProdutoresPagination from '../../components/Pagination/Produtores'
-import { Link } from 'react-router-dom'
+
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 

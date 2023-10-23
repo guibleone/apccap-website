@@ -60,7 +60,7 @@ export default function Admin() {
             rowSpacing={5}
             columnSpacing={{ xs: 8, sm: 6, md: 3 }} >
 
-            {users && users.map((user) => (
+            {users && users?.todos?.map((user) => (
 
               <Grid key={user._id} item md={3}>
                 <Box
@@ -103,7 +103,7 @@ export default function Admin() {
 
           </Grid>
 
-          <UsersPagination setUsersData={(u) => setUsers(u)} />
+          <UsersPagination setUsersData={(u) => setUsers(u)} role={'todos'} pages={8} />
 
         </Box>
 

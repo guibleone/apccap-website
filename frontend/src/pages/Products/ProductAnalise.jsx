@@ -1,8 +1,6 @@
-import { Box, Container, CssBaseline, Typography, Button, CircularProgress, Link, Grid, Divider, useMediaQuery, Alert } from '@mui/material'
-import { useEffect, useRef, useState } from 'react'
+import { Box, Container,  Button, CircularProgress,  Grid, useMediaQuery, Alert } from '@mui/material'
+import { useEffect,  } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { toast } from 'react-toastify'
-import { styleError } from '../toastStyles'
 import { AiOutlineDownload } from 'react-icons/ai'
 import { useParams } from 'react-router-dom'
 import { getSingleProduct } from '../../features/products/productsSlice'
@@ -22,8 +20,6 @@ export default function ProductAnalise() {
     useEffect(() => {
         dispatch(getSingleProduct(id));
     }, [id, dispatch]);
-
-
 
     if (isLoading) {
         return <Box sx={

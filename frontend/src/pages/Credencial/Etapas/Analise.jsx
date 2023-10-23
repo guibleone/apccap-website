@@ -1,11 +1,9 @@
-import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Button, CircularProgress, Container, Grid, Modal, TextField, Typography, useMediaQuery } from '@mui/material'
+import { Alert, Box, Button, CircularProgress, Grid,  TextField, Typography } from '@mui/material'
 import React, { useEffect, useRef, useState } from 'react'
 import { colors } from '../../colors'
-import { BsArrowDownShort, BsArrowRightShort, BsArrowUpRight, BsChevronDown, BsChevronRight } from 'react-icons/bs'
-import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
-import { styleError, styleSuccess } from '../../toastStyles'
+import { styleError, } from '../../toastStyles'
 import { AiOutlineDownload } from 'react-icons/ai'
 import { FcClock, FcHighPriority } from 'react-icons/fc'
 import { repproveRecurso } from '../../../features/admin/adminSlice'
@@ -13,7 +11,6 @@ import { sendRecurso } from '../../../features/auth/authSlice'
 
 export default function Analise() {
     // inicializa o dispatch
-    const navigate = useNavigate()
     const dispatch = useDispatch()
     const { user,isLoading } = useSelector(state => state.auth)
 
@@ -129,9 +126,9 @@ export default function Analise() {
             <Grid container spacing={2} columnSpacing={5} sx={{ marginTop: '20px', marginBottom: '40px' }} >
 
                 <Grid item xs={12} sm={12} lg={4} >
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', border: '1px solid #000', padding: '20px', borderRadius: '10px' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', border: '1px solid #000', padding: '20px'}}>
 
-                        <h4> Análise do pedido</h4>
+                        <h4 className='black'> Análise do pedido</h4>
 
                         {user && user.analise && user.analise.analise_pedido.path && user.analise.analise_pedido.status !== 'pendente' ? (
                             <>
@@ -162,9 +159,9 @@ export default function Analise() {
                 </Grid>
 
                 <Grid item xs={12} sm={12} lg={4} >
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', border: '1px solid #000', padding: '20px', borderRadius: '10px' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', border: '1px solid #000', padding: '20px'}}>
 
-                        <h4 >Vistoria</h4>
+                        <h4 className='black' >Vistoria</h4>
 
                         {user && user.analise && user.analise.vistoria.path && user.analise.vistoria.status !== 'pendente' ? (
                             <>
@@ -194,9 +191,9 @@ export default function Analise() {
                 </Grid>
 
                 <Grid item xs={12} sm={12} lg={4} >
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', border: '1px solid #000', padding: '20px', borderRadius: '10px' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', border: '1px solid #000', padding: '20px'}}>
 
-                        <h4 >Análise Laboratorial</h4>
+                        <h4 className='black' >Análise Laboratorial</h4>
 
                         {user && user.analise && user.analise.analise_laboratorial.path && user.analise.analise_laboratorial.status !== 'pendente' ? (
                             <>

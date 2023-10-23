@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom"
 import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { addRelatorys, approveRecurso, approveRelatory, deleteRelatorys, getDocumentsData, getUserData, repproveRecurso, repproveRelatory, resetEmailStatus, sendRecursoEmail, sendRelatoryEmail } from "../../../../features/admin/adminSlice"
-import { Alert, Avatar, Box, Button, CircularProgress, Container, Divider, Grid, Modal, TextField, Typography, useMediaQuery } from "@mui/material"
+import { Alert, Avatar, Box, Button, CircularProgress, Container, Divider, Grid, Dialog, TextField, useMediaQuery, DialogContent } from "@mui/material"
 import { AiFillWarning, AiOutlineDelete, AiOutlineDownload } from "react-icons/ai"
 import { FcClock, FcPrivacy } from "react-icons/fc"
 import { toast } from "react-toastify"
@@ -30,30 +30,6 @@ export default function AnaliseCredencial() {
 
     const handleOpenApprove = () => setOpenApprove(!openApprove)
     const handleOpenRepprove = () => setOpenRepprove(!openRepprove)
-
-    const style = matches ? {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 400,
-        bgcolor: 'background.paper',
-        border: '2px solid #000',
-        boxShadow: 24,
-        p: 4,
-
-    } : {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: '90%',
-        bgcolor: 'background.paper',
-        border: '2px solid #000',
-        boxShadow: 24,
-        p: 4,
-
-    }
 
     useEffect(() => {
         if (recursoTime) {
@@ -472,7 +448,7 @@ export default function AnaliseCredencial() {
 
                                         <Divider sx={{ margin: '5px 0' }} />
                                     </>
-                                )) : <h4 >Nenhum documento enviado</h4>}
+                                )) : <h4 >Aguardando documentos</h4>}
 
                             </Box>
                         </Grid>
@@ -517,8 +493,8 @@ export default function AnaliseCredencial() {
                                                 <>
                                                     {userData.analise.analise_pedido.status === 'pendente' &&
                                                         <Box sx={{ display: 'flex', gap: '5px' }}>
-                                                            <Button onClick={() => { handleOpenRepprove(); setType('analise_pedido'); }} color='error'>Reprovar</Button>
-                                                            <Button onClick={() => { handleOpenApprove(); setType('analise_pedido'); }} color='success'>Aprovar</Button>
+                                                            <Button onClick={() => { handleOpenRepprove(); setType('analise_pedido'); }} color='error' variant="outlined">Reprovar</Button>
+                                                            <Button onClick={() => { handleOpenApprove(); setType('analise_pedido'); }} color='success' variant="outlined" >Aprovar</Button>
                                                         </Box>
                                                     }
 
@@ -571,8 +547,8 @@ export default function AnaliseCredencial() {
                                                     <>
                                                         {userData.analise.vistoria.status === 'pendente' && <>
                                                             <Box sx={{ display: 'flex', gap: '5px' }}>
-                                                                <Button onClick={() => { handleOpenRepprove(); setType('vistoria'); }} color='error'>Reprovar</Button>
-                                                                <Button onClick={() => { handleOpenApprove(); setType('vistoria'); }} color='success'>Aprovar</Button>
+                                                                <Button onClick={() => { handleOpenRepprove(); setType('vistoria'); }} color='error' variant="outlined">Reprovar</Button>
+                                                                <Button onClick={() => { handleOpenApprove(); setType('vistoria'); }} color='success' variant="outlined" >Aprovar</Button>
                                                             </Box>
                                                         </>
                                                         }
@@ -622,8 +598,8 @@ export default function AnaliseCredencial() {
                                                     <>
                                                         {userData.analise && userData.analise.analise_laboratorial.status === 'pendente' &&
                                                             <Box sx={{ display: 'flex', gap: '5px' }}>
-                                                                <Button onClick={() => { handleOpenRepprove(); setType('analise_laboratorial'); }} color='error'>Reprovar</Button>
-                                                                <Button onClick={() => { handleOpenApprove(); setType('analise_laboratorial'); }} color='success'>Aprovar</Button>
+                                                                <Button onClick={() => { handleOpenRepprove(); setType('analise_laboratorial'); }} color='error' variant="outlined">Reprovar</Button>
+                                                                <Button onClick={() => { handleOpenApprove(); setType('analise_laboratorial'); }} color='success' variant="outlined" >Aprovar</Button>
                                                             </Box>
                                                         }
                                                         {userData.analise && userData.analise.analise_laboratorial.status === 'aprovado' &&
@@ -745,76 +721,73 @@ export default function AnaliseCredencial() {
                     </Grid>
 
 
-                    <Modal
+                    <Dialog
                         open={openApprove}
                         onClose={handleOpenApprove}
                     >
-                        <Box sx={style}>
+                        <DialogContent >
                             <Box sx={{
                                 display: 'flex',
                                 flexDirection: 'column',
                                 gap: '10px'
                             }}>
                                 <Box display={'flex'} justifyContent={'space-between'}>
-                                    <h4 variant="h6" >Tem certeza ? </h4>
+                                    <h4 className="black"  >Tem certeza ? </h4>
                                     <AiFillWarning color='red' size={30} />
                                 </Box>
 
-                                <h4 variant="h7" > Essa ação é permanente. </h4>
-                                <h4 color='error' variant="p" > Será enviado um email ao produtor.</h4>
+                                <h4 className="black regular" > Essa ação é permanente. </h4>
+                                <h4 className="black regular" > Será enviado um email ao produtor.</h4>
 
-                                <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
-                                    <Button color='error' variant='contained' onClick={handleOpenApprove}>Cancelar</Button>
+                                <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'flex-end',marginTop:'30px' }}>
+                                    <button className="button-white" color='error' variant="outlined" onClick={handleOpenApprove}>Cancelar</button>
 
-                                    <Button
+                                    <button
+                                        className="button-purple"
                                         disabled={isLoading}
-                                        color="success"
-                                        variant='contained'
                                         onClick={handleApprove}
                                     >
                                         {isLoading ? <CircularProgress color="success" size={24} /> : 'Aprovar'}
-                                    </Button>
+                                    </button>
 
                                 </Box>
                             </Box>
-                        </Box>
-                    </Modal>
+                        </DialogContent>
+                    </Dialog>
 
 
-                    <Modal
+                    <Dialog
                         open={openRepprove}
                         onClose={handleOpenRepprove}
                     >
-                        <Box sx={style}>
+                        <DialogContent >
                             <Box sx={{
                                 display: 'flex',
                                 flexDirection: 'column',
                                 gap: '10px'
                             }}>
                                 <Box display={'flex'} justifyContent={'space-between'}>
-                                    <h4 variant="h6" >Tem certeza ? </h4>
+                                    <h4 className="black"  >Tem certeza ? </h4>
                                     <AiFillWarning color='red' size={30} />
                                 </Box>
 
-                                <h4 variant="h7" > Essa ação é permanente. </h4>
-                                <h4 color='error' variant="p" > Será enviado um email ao produtor.</h4>
+                                <h4 className="black regular" > Essa ação é permanente. </h4>
+                                <h4 className="black regular" > Será enviado um email ao produtor.</h4>
+                                <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'flex-end',marginTop:'30px' }}>
+                                    <button className="button-white" color='error' variant="outlined" onClick={handleOpenRepprove}>Cancelar</button>
 
-                                <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
-                                    <Button color='error' variant='contained' onClick={handleOpenRepprove}>Cancelar</Button>
-
-                                    <Button
+                                    <button
+                                        className="button-purple"
                                         disabled={isLoading}
-                                        color="success"
-                                        variant='contained'
                                         onClick={handleRepprove}
                                     >
                                         {isLoading ? <CircularProgress color="success" size={24} /> : 'Reprovar'}
-                                    </Button>
+                                    </button>
 
                                 </Box>
                             </Box>
-                        </Box>
-                    </Modal>
+                        </DialogContent>
+                    </Dialog>
 
 
                 </Container>

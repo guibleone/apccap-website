@@ -24,9 +24,9 @@ import Produtor from "./Acesses/Produtor/Produtor";
 import ProdutoresPagination from "../../components/Pagination/Produtores";
 
 function Dashboard() {
+  
 
   const { user } = useSelector((state) => state.auth)
-  const { isLoading: productLoading } = useSelector((state) => state.products)
   const { isLoading: isLoadingPayments } = useSelector((state) => state.payments)
 
   const navigate = useNavigate()
@@ -43,20 +43,18 @@ function Dashboard() {
 
   useEffect(() => {
 
-    if (user && (user.role === "admin" || user.role === 'secretario' || user.role === 'presidente' || user.role === 'conselho')) {
-      dispatch(listUsers(user.token))
-    }
-
     if (user) {
+
       const userData = {
-        email: user.dados_pessoais.email,
+        cpf: user.dados_pessoais.cpf,
         token: user.token
       }
+
       dispatch(getSubscription(userData))
       dispatch(getDocuments(user.token))
     }
 
-  }, [])
+  }, [user, dispatch])
 
   if (isLoadingPayments) {
 
@@ -297,7 +295,7 @@ function Dashboard() {
 
               </Box>
 
-              <ProdutoresPagination setProdutoresData={(produtor) => setProdutores(produtor)} cidade={'todos'} />
+              <ProdutoresPagination setProdutoresData={(produtor) => setProdutores(produtor)} cidade={'todos'} pages={6} />
 
             </Grid>
 

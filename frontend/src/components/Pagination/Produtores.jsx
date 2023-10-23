@@ -5,12 +5,12 @@ import { setProdutores } from '../../features/admin/adminSlice';
 import { Box, Pagination } from '@mui/material';
 
 
-export default function ProdutoresPagination({ setProdutoresData, cidade }) {
+export default function ProdutoresPagination({ setProdutoresData, cidade, pages }) {
 
     const { produtores } = useSelector(state => state.admin)
 
     const dispatch = useDispatch();
-    const pageSize = 6;
+    const pageSize = pages || 5;
 
     const [pagination, setPagination] = useState({
         count: 0,
@@ -37,11 +37,11 @@ export default function ProdutoresPagination({ setProdutoresData, cidade }) {
     }, [produtores]);
 
     const fetchData = (page) => {
-        const pageSize = 6;
+        const pageSize = pages || 5;
 
         axios.get(`/api/admin/produtores?pageSize=${pageSize}&page=${page}&cidade=${cidade}`)
             .then((response) => {
-                 dispatch(setProdutores(response.data));
+                dispatch(setProdutores(response.data));
                 setPagination({
                     ...pagination,
                     count: response.data.totalDocuments,

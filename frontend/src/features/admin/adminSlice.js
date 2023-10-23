@@ -2,7 +2,11 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import adminService from "./adminService";
 
 const initialState = {
-    users: [],
+    users: {
+        todos: [],
+        credenciamento: [],
+        produtos: []
+    },
     membros: [],
     produtores: {
         todos: [],
@@ -31,7 +35,7 @@ const initialState = {
     message: '',
 }
 
-// pegar usuário
+// pegar usuário ** APAGAR **
 export const getUserData = createAsyncThunk('admin/user', async (user, thunkAPI) => {
     try {
         const response = await adminService.getUserData(user)
@@ -47,7 +51,7 @@ export const getUserData = createAsyncThunk('admin/user', async (user, thunkAPI)
 export const deleteUser = createAsyncThunk('admin/delete', async (user, thunkAPI) => {
     try {
         const response = await adminService.deleteUser(user)
-        thunkAPI.dispatch(listUsers(user.token)) // atualizar lista de usuários 
+ // atualizar lista de usuários 
         return response
     } catch (error) {
         // caso ocorra algum erro
@@ -93,17 +97,6 @@ export const alterAccess = createAsyncThunk('admin/role', async (user, thunkAPI)
     }
 })
 
-// listar usuários
-export const listUsers = createAsyncThunk('admin/list', async (user, thunkAPI) => {
-    try {
-        const response = await adminService.listUsers(user)
-        return response
-    } catch (error) {
-        // caso ocorra algum erro
-        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
-        return thunkAPI.rejectWithValue(message);
-    }
-})
 
 // aprovar usuário
 export const aproveUser = createAsyncThunk('admin/aprove', async (user, thunkAPI) => {
@@ -122,7 +115,7 @@ export const aproveUser = createAsyncThunk('admin/aprove', async (user, thunkAPI
 export const disapproveUser = createAsyncThunk('admin/disapprove', async (user, thunkAPI) => {
     try {
         const response = await adminService.disapproveUser(user)
-        thunkAPI.dispatch(listUsers(user.token)) // atualizar lista de usuários
+ // atualizar lista de usuários
         return response
     } catch (error) {
         // caso ocorra algum erro
@@ -186,7 +179,7 @@ export const approveSelos = createAsyncThunk('presidente/approveSelos', async (u
 
     try {
         const response = await adminService.approveSelos(user)
-        thunkAPI.dispatch(listUsers(user.token))
+
         return response
     } catch (error) {
         // caso ocorra algum erro
@@ -201,7 +194,7 @@ export const disaproveSelos = createAsyncThunk('presidente/disaproveSelos', asyn
 
     try {
         const response = await adminService.disaproveSelos(user)
-        thunkAPI.dispatch(listUsers(user.token))
+
         return response
     } catch (error) {
         // caso ocorra algum erro
@@ -326,6 +319,16 @@ export const sendProductRelatoryEmail = createAsyncThunk('admin/produtoEmail', a
 })
 
 
+export const sendResetEmail = createAsyncThunk('admin/resetEmail', async (user, thunkAPI) => {
+    try {
+        const response = await adminService.sendResetEmail(user)
+        return response
+    } catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
 
 export const adminSlice = createSlice({
     name: 'admin',
@@ -343,7 +346,20 @@ export const adminSlice = createSlice({
             state.isSuccess = false
         },
         setProdutores: (state, action) => {
-            state.produtores = {...state.produtores, [action.payload.formatedCidade]: action.payload.produtores}
+            state.produtores = { ...state.produtores, [action.payload.formatedCidade]: action.payload.produtores }
+        },
+        setUsers: (state, action) => {
+            if (action.payload.productsQuantity === 'true') {
+                state.users.produtos = action.payload.users
+            }
+            if (action.payload.productsQuantity === 'false') {
+                state.users.credenciamento = action.payload.users
+            }
+            if(action.payload.roles){
+                state.users.todos = action.payload.users
+            }
+
+            state.users = { ...state.users }
         }
     },
     extraReducers: (builder) => {
@@ -421,22 +437,6 @@ export const adminSlice = createSlice({
                 state.userData = action.payload
             })
             .addCase(alterAccess.rejected, (state, action) => {
-                state.isError = true
-                state.isLoading = false
-                state.message = action.payload
-            })
-            // listar usuários
-            .addCase(listUsers.pending, state => {
-                state.isLoading = true
-                state.isSuccess = false
-                state.isError = false
-            })
-            .addCase(listUsers.fulfilled, (state, action) => {
-                state.isLoading = false
-                state.isError = false
-                state.users = action.payload
-            })
-            .addCase(listUsers.rejected, (state, action) => {
                 state.isError = true
                 state.isLoading = false
                 state.message = action.payload
@@ -741,9 +741,29 @@ export const adminSlice = createSlice({
                 state.isError = true
                 state.message = action.payload
             })
+            // enviar email de reset
+            .addCase(sendResetEmail.pending, state => {
+                state.emailStatus.isLoading = true
+                state.isSuccess = false
+                state.isError = false
+                state.emailStatus.isError = false
+                state.emailStatus.isSuccess = false
+                state.emailStatus.message = ''
+            })
+            .addCase(sendResetEmail.fulfilled, (state, action) => {
+                state.emailStatus.isSuccess = true
+                state.emailStatus.isLoading = false
+                state.emailStatus.isError = false
+                state.emailStatus.message = 'Código enviado ao seu email!'
+            })
+            .addCase(sendResetEmail.rejected, (state, action) => {
+                state.emailStatus.isError = true
+                state.emailStatus.isLoading = false
+                state.emailStatus.message = action.payload
+            })
     }
 })
 
 
-export const { reset, resetEmailStatus, resetStatus,setProdutores } = adminSlice.actions
+export const { reset, resetEmailStatus, resetStatus, setProdutores, setUsers } = adminSlice.actions
 export default adminSlice.reducer

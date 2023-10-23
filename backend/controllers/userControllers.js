@@ -75,7 +75,7 @@ const registerUser = asyncHandler(async (req, res) => {
                 const snapshot = await uploadBytesResumable(storageRef, logo.buffer, metadata);
 
                 const url = await getDownloadURL(snapshot.ref);
-               
+
 
                 const updatedMarca = {
                     ...user.marca,
@@ -83,7 +83,7 @@ const registerUser = asyncHandler(async (req, res) => {
                 };
 
                 user.marca = updatedMarca
-                
+
                 await user.save();
 
                 return res.json(user);
@@ -313,7 +313,7 @@ const restartAprove = asyncHandler(async (req, res) => {
             throw new Error('Usuário não encontrado')
         }
 
-   
+
         if (user.analise.analise_pedido.path) {
             const storageRef = ref(storage, `conselhoRelatórios/${user._id}/analise_pedido`)
             await deleteObject(storageRef)
@@ -580,22 +580,22 @@ const cancelCredencial = asyncHandler(async (req, res) => {
 
         user.role = 'produtor';
 
-        if(user.analise.analise_pedido.path){
+        if (user.analise.analise_pedido.path) {
             const storageRef = ref(storage, `conselhoRelatórios/${user._id}/analise_pedido`)
             await deleteObject(storageRef)
         }
 
-        if(user.analise.analise_pedido.recurso.path){
+        if (user.analise.analise_pedido.recurso.path) {
             const storageRef = ref(storage, `conselhoRelatórios/${user._id}/recurso`)
             await deleteObject(storageRef)
         }
 
-      if(user.analise.vistoria.path){
-        const storageRef = ref(storage, `conselhoRelatórios/${user._id}/vistoria`)
-        await deleteObject(storageRef)
+        if (user.analise.vistoria.path) {
+            const storageRef = ref(storage, `conselhoRelatórios/${user._id}/vistoria`)
+            await deleteObject(storageRef)
         }
 
-        if(user.analise.analise_laboratorial.path){
+        if (user.analise.analise_laboratorial.path) {
             const storageRef = ref(storage, `conselhoRelatórios/${user._id}/analise_laboratorial`)
             await deleteObject(storageRef)
         }
@@ -632,7 +632,41 @@ const cancelCredencial = asyncHandler(async (req, res) => {
         console.error(error);
         res.status(500).json({ error: 'Erro ao associar produtor' });
     }
-}) 
+})
+
+// redefinir senha
+
+const resetPassword = asyncHandler(async (req, res) => {
+    try {
+        const { password, email } = req.body;
+        console.log(password, email);
+
+        const user = await User.findOne({ "dados_pessoais.email": email });
+
+        if (!user) {
+            res.status(400).json({ error: 'Email não encontrado' });
+            return;
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        const hashPassword = await bcrypt.hash(password, salt);
+
+        const updatedDadosPessoais = {
+            ...user.dados_pessoais,
+            password: hashPassword,
+        };
+
+        user.dados_pessoais = updatedDadosPessoais
+
+        await user.save()
+
+        res.status(200).json({ message: 'Senha redefinida com sucesso' });
+        
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Erro ao redefinir senha' });
+    }
+});
 
 // gerar token
 const generateToken = (userId) => {
@@ -653,5 +687,6 @@ module.exports = {
     associateProducer,
     submitForm,
     associate,
-    cancelCredencial
+    cancelCredencial,
+    resetPassword
 }

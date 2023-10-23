@@ -2,7 +2,6 @@ import React from 'react'
 import { useEffect, useState } from 'react'
 import { colors } from '../../../colors'
 import { useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
 import UsersPagination from '../../../../components/Pagination/Users'
 import { useMediaQuery, Box, Container, Grid } from '@mui/material'
 
@@ -12,8 +11,6 @@ export default function TodosProdutos() {
     const navigate = useNavigate()
 
     const [users, setUsers] = useState([])
-
-    const { user } = useSelector((state) => state.auth)
 
     useEffect(() => {
         window.scrollTo(0, 0)
@@ -55,8 +52,17 @@ export default function TodosProdutos() {
                             </Box>
                         </Box>
                     </Grid>
+
+                    {(users && users?.produtos?.length === 0) && (
+                        <Grid item >
+                            <h3 className='regular black'>
+                                Nenhum pedido de produto pendente.
+                            </h3>
+                        </Grid>
+                    )}    
+
                     {users &&
-                        users.map((user) => (
+                        users?.produtos?.map((user) => (
                             <Grid item xs={12} md={2} pr={matches ? 2 : 0} key={user._id}>
                                 <Box sx={{
                                     backgroundColor: colors.main_grey,

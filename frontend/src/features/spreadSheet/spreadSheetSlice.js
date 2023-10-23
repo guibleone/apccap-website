@@ -99,17 +99,6 @@ export const editSpreadSheet = createAsyncThunk('spreadSheet/edit', async (sprea
     }
 })
 
-// pegar planilhas sem login
-export const getSpreadsWithoutLogin = createAsyncThunk('spreadSheet/getWithoutLogin', async (spreadSheet, thunkAPI) => {
-    try {
-        const response = await spreadSheetService.getSpreadSheetsWithoutLogin(spreadSheet)
-        return response
-    }
-    catch (error) {
-        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
-        return thunkAPI.rejectWithValue(message);
-    }
-})
 
 // slice
 
@@ -145,19 +134,6 @@ const spreadSheetSlice = createSlice({
                 state.spreadSheets = action.payload
             })
             .addCase(getSpreadSheets.rejected, (state, action) => {
-                state.isLoading = false;
-                state.isError = true;
-                state.message = action.payload
-            })
-            // pegar planilhas 
-            .addCase(getSpreadsWithoutLogin.pending, (state, action) => {
-                state.isLoading = false;
-            })
-            .addCase(getSpreadsWithoutLogin.fulfilled, (state, action) => {
-                state.isLoading = false;
-                state.spreadSheets = action.payload
-            })
-            .addCase(getSpreadsWithoutLogin.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.message = action.payload

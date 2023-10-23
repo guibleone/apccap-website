@@ -1,9 +1,8 @@
-import React, { useEffect, useRef } from 'react'
-import { Grid, Typography, TextField, TextareaAutosize, Button, Box, FormGroup, FormControlLabel, Checkbox, CircularProgress, Container, useMediaQuery, Select, MenuItem } from '@mui/material'
+import React, { useEffect} from 'react'
+import { Grid,  TextField, TextareaAutosize,  Box,  useMediaQuery, Select, MenuItem } from '@mui/material'
 import { colors } from '../../../colors'
-import { BsArrowUpRight, BsFileMinus, BsFilePlus, BsPlus } from 'react-icons/bs'
 import { useDispatch, useSelector } from 'react-redux'
-import { createReunion, getReunions, reset } from '../../../../features/reunion/reunionSlice'
+import { createReunion,  reset } from '../../../../features/reunion/reunionSlice'
 import { toast } from 'react-toastify'
 import { styleError, styleSuccess } from '../../../toastStyles'
 import { useNavigate } from 'react-router-dom'
@@ -11,19 +10,13 @@ import { useState } from 'react'
 import DatePicker, { registerLocale, setDefaultLocale } from "react-datepicker";
 import { ptBR } from 'date-fns/locale'
 import { resetEmailStatus } from '../../../../features/admin/adminSlice'
-import { Page, Text, View, Document, StyleSheet, PDFViewer, PDFDownloadLink, BlobProvider, usePDF } from '@react-pdf/renderer';
+import { usePDF } from '@react-pdf/renderer';
 import PDFReunion from './PDFReunion'
 import { format } from 'date-fns'
 registerLocale('pt-BR', ptBR)
 setDefaultLocale('ptBR')
 
-
-
 export default function ConvocarReunion({ onClose }) {
-
-
-    const matches = useMediaQuery('(min-width:600px)');
-
     const currentDate = new Date();
     const dateConvocacao = format(currentDate, "dd 'de' MMMM 'de' yyyy", { locale: ptBR });
 
@@ -37,8 +30,7 @@ export default function ConvocarReunion({ onClose }) {
 
     // redux
     const { emailStatus } = useSelector((state) => state.admin)
-    const { user, isLoading: isLoadingAuth } = useSelector((state) => state.auth)
-    const { isLoading } = useSelector((state) => state.reunions)
+    const { user} = useSelector((state) => state.auth)
     const { reunionData, isSuccess, isError, message: messageReunion } = useSelector((state) => state.reunions)
 
     // redux

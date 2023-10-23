@@ -1,22 +1,16 @@
-import { Box, Container, Typography, Button, TextareaAutosize, Divider, CircularProgress, FormGroup, Checkbox, FormControlLabel, TextField, Grid, Select, MenuItem, InputLabel, Alert, useMediaQuery, Modal } from '@mui/material'
+import { Box, Container, Grid,  useMediaQuery, Modal } from '@mui/material'
 import { useState, useEffect } from 'react'
 import UsersPagination from '../../../../components/Pagination/Users'
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale, setDefaultLocale } from "react-datepicker";
 import ptBR from 'date-fns/locale/pt-BR';
 import { toast } from 'react-toastify'
 import { useSelector, useDispatch } from 'react-redux';
-import { sendConvocationEmail, resetEmailStatus } from '../../../../features/admin/adminSlice';
+import { resetEmailStatus } from '../../../../features/admin/adminSlice';
 import { styleError, styleSuccess } from '../../../toastStyles'
-import UsersCredenciados from './UsersCredenciados';
 import { Link, useNavigate } from 'react-router-dom';
-import { createReunion, finishReunion, getReunions, reset, signAta } from '../../../../features/reunion/reunionSlice';
-import ReunionPagination from '../../../../components/Pagination/Reunions';
-import { BsArrowUpRight, BsPlusCircle, BsTrash } from 'react-icons/bs'
-import { associateProducer } from '../../../../features/auth/authSlice';
-import ButtonChangeRole from '../../../../components/ChangeRole/ButtonChangeRole';
-import Reunion from '../../../../components/Reunions/Reunion';
+import {  getReunions, reset, } from '../../../../features/reunion/reunionSlice';
+import { BsArrowUpRight, BsPlusCircle } from 'react-icons/bs'
 import { colors } from '../../../colors';
 import { AiOutlineEdit } from 'react-icons/ai';
 import ConvocarReunion from './ConvocarReunion';
@@ -30,9 +24,10 @@ export default function President() {
   // redux
   const { emailStatus } = useSelector((state) => state.admin)
   const { user, isLoading: isLoadingAuth } = useSelector((state) => state.auth)
-  const { users } = useSelector((state) => state.admin)
   const { reunionData, isSuccess, isError, message: messageReunion } = useSelector((state) => state.reunions)
 
+
+  const [users, setUsers] = useState([])
 
   // modal
 
@@ -66,21 +61,21 @@ export default function President() {
 
   }, [emailStatus.isSuccess, emailStatus.isError])
 
-  
+
   useEffect(() => {
 
     if (isError) {
-        toast.error(messageReunion, styleError)
+      toast.error(messageReunion, styleError)
     }
 
     if (isSuccess) {
-        toast.success(messageReunion, styleSuccess)
+      toast.success(messageReunion, styleSuccess)
     }
 
     dispatch(reset())
 
 
-}, [isError, isSuccess, messageReunion])
+  }, [isError, isSuccess, messageReunion])
 
 
 
@@ -223,7 +218,7 @@ export default function President() {
           </Grid>
 
 
-          {(users && users.filter(user => user.role === 'produtor_associado' || user.role === 'produtor').length === 0) ? (
+          {(users && users?.todos?.length === 0) ? (
             <Grid item >
               <h3 className='regular black'>
                 Nenhum produtor credenciado.
@@ -232,7 +227,7 @@ export default function President() {
           ) : (
             <>
 
-              {(users && users.filter(user => user.role === 'produtor_associado' || user.role === 'produtor').slice(0, 4).map((user) => (
+              {(users && users?.todos?.map((user) => (
 
                 <Grid item xs={12} md={3} pr={matches ? 2 : 0} key={user._id}>
                   <Box sx={{
@@ -274,7 +269,7 @@ export default function President() {
 
 
           <Grid item xs={12} md={12} pb={10}>
-            {(users && users.filter(user => user.role === 'produtor_associado' && user.status === 'aprovado').length > 4) && (
+            {(users && users?.todos?.length > 4) && (
               <Box sx={{
                 display: 'flex',
                 justifyContent: 'flex-end',
@@ -283,6 +278,8 @@ export default function President() {
               </Box>
             )}
           </Grid>
+
+          <UsersPagination setUsersData={(u) => setUsers(u)} role={['produtor', 'produtor_associado']} invisible={true} pages={4} />
 
         </Grid>
 

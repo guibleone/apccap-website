@@ -28,96 +28,94 @@ const paySelos = asyncHandler(async (req, res) => {
 })
 
 const payMensalidade = asyncHandler(async (req, res) => {
-
     const URL = 'http://localhost:3000/credencial';
-    const { email } = req.body;
+    const { email, cpf } = req.body;
 
     try {
+        // Create a customer with the provided CPF
+        const customer = await stripe.customers.create({
+            email: email, 
+            description:cpf,
+        });
+
+        // Create a subscription session for the customer
         const session = await stripe.checkout.sessions.create({
+            customer: customer.id, // Use the customer's ID
             line_items: [
                 {
                     price: 'price_1NiGIeGd1qyb4oDeAHRJHfPW',
-                    quantity: 1
+                    quantity: 1,
                 },
             ],
             mode: 'subscription',
             success_url: `${URL}?success=true`,
             cancel_url: `${URL}?canceled=true`,
-            customer_email: email
         });
 
         res.status(200).json({ url: session.url });
     } catch (error) {
         res.status(500).json({ error: 'Um erro ocorreu' });
     }
-})
+});
+
 
 const getSubscription = asyncHandler(async (req, res) => {
 
-    const { email } = req.body;
-
+    const { cpf } = req.body; // Only need 'cpf' here, remove 'email' since you're using 'cpf'
 
     try {
-        const user = await User.findOne({ 'dados_pessoais.email': email });
+        const user = await User.findOne({ 'dados_pessoais.cpf': cpf }); // Use 'cpf' instead of 'email' to find the user
 
-        const customer = await stripe.customers.list({
-            email: email,
+        if (!user) {
+            return res.status(200).json({ subscription: null });
+        }
+
+        const customerResult = await stripe.customers.list({
+           email: user.dados_pessoais.email, // Use 'email' instead of 'user.email'
             limit: 1
         });
 
-        if (!customer.data.length) return res.status(200).json({ subscription: null });
+
+        if (!customerResult.data.length) {
+            return res.status(200).json({ subscription: null });
+        }
 
         const subscription = await stripe.subscriptions.list({
-            customer: customer.data[0].id,
+            customer: customerResult.data[0].id, // Use 'customer' instead of 'customerResult'
             limit: 1
         });
 
         if (subscription.data.length > 0) {
-
             const portal = await stripe.billingPortal.sessions.create({
-                customer: customer.data[0].id,
+                customer: customerResult.data[0].id, // Use 'customer' instead of 'customerResult'
                 return_url: 'http://localhost:3000/credencial',
             });
 
-            user.credencial = subscription.data[0].status;
-
             try {
+
+                user.credencial = subscription.data[0].status;
+
                 await user.save();
+
             } catch (error) {
                 console.error('Erro ao salvar o usuário:', error);
-
                 return res.status(500).json({ error: 'Erro ao salvar o usuário' });
             }
-            res.status(200).json({ portal: portal.url, subscription: subscription.data[0].status });
 
-            return
+            res.status(200).json({ portal: portal.url, subscription: subscription.data[0].status });
+        } else {
+            res.status(200).json({ subscription: null });
         }
 
-        res.status(200).json({ subscription: null });
-
     } catch (error) {
+        console.error('Um erro ocorreu:', error);
         res.status(500).json({ error: 'Um erro ocorreu' });
     }
-})
-
-// pegar saldos
-
-const getBalance = asyncHandler(async (req, res) => {
-
-    try {
-        const balance = await stripe.balance.retrieve();
-        res.status(200).json({ balance });
-    }
-    catch (error) {
-        res.status(500).json({ error: 'Um erro ocorreu' });
-    }
-
-})
+});
 
 
 module.exports = {
     paySelos,
     payMensalidade,
     getSubscription,
-    getBalance
 }

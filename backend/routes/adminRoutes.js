@@ -3,23 +3,23 @@ const router = express.Router();
 const { hasRole } = require('../middlewares/authMiddleware.js');
 const { 
     getUserData, getUserDocuments, getUserResume,
-    deleteUser, alterRole, getUsers, aproveUser,
+    deleteUser, alterRole, aproveUser,
     getPayment, disapproveUser, getProuducts, aproveSelos, 
     disaproveSelos, addRelatorys, deleteRelatorys, 
     approveRelatory, repproveRelatory, approveRecurso,
-    repproveRecurso, associateProducer, getMembros, getProducers } = require('../controllers/adminControllers.js');
+    repproveRecurso, getMembros, getProducers, getUsersData } = require('../controllers/adminControllers.js');
 
 const { uploadRelatory } = require('../middlewares/multer.js');
 
 // pegar produtores 
 router.get('/produtores', getProducers)
 
-// Pegar todos os usuários
-router.get('/', hasRole(['admin', 'secretario', 'presidente', 'conselho']), getUsers);
+// pegar usuários
+
+router.get('/users', getUsersData)
 
 // pegar membros da associação
 router.get('/membros', getMembros)
-
 
 // Pegar dados do usuário
 router.get('/user/:id', hasRole(['admin', 'secretario', 'presidente', 'conselho']), getUserData);

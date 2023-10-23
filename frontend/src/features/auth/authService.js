@@ -226,9 +226,16 @@ const cancelCredencial = async (data) => {
     }
 
     return response.data
-
 }
 
+// redefinir senha
+
+const resetPassword = async (data) => {
+
+    const response = await axios.post(API_URL + '/redefinir-senha', data)
+
+    return response.data
+}
 
 // logout de usuário
 const logout = async () => {
@@ -249,7 +256,8 @@ const authService = {
     associateProducer,
     submitForm,
     associate,
-    cancelCredencial
+    cancelCredencial,
+    resetPassword
 }
 
 export default authService;

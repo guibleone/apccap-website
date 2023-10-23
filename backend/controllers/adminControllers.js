@@ -6,30 +6,72 @@ const SpreadSheet = require('../models/spreadSheetModel')
 const asyncHandler = require('express-async-handler')
 const fs = require('fs')
 const { promisify, types } = require('util')
-const unlinkAsync = promisify(fs.unlink)
 const { ref, getDownloadURL, uploadBytesResumable, deleteObject } = require("firebase/storage");
 const { storage } = require('../db/firebase.js');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 const jwt = require('jsonwebtoken')
 
 
-// pegar usuário
-const getUsers = asyncHandler(async (req, res) => {
-    try {
-        const users = await User.find({}).select('-dados_pessoais.password')
-        // const token = req.user.token
 
-        if (users) {
-            res.status(200).json(users)
-        } else {
-            res.status(404)
-            throw new Error('Usuários não encontrados')
+// pegar usuários 
+
+const getUsersData = asyncHandler(async (req, res) => {
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : 12;
+    const skip = (page - 1) * pageSize;
+    const status = req.query.status ? req.query.status : '';
+    const productsQuantity = req.query.productsQuantity ? req.query.productsQuantity : '';
+    const roles = req.query.role ? req.query.role.split(',') : '';
+
+
+    try {
+        let query = {};
+
+        if (status !== 'undefined' && status !== '') {
+            query = {
+                $or: [
+                    { status: status },
+                ],
+            }
         }
+
+        if (productsQuantity === 'true') {
+            query = {
+                $and: [
+                    { productsQuantity: { $gte: 0.5 } }
+                ]
+            };
+        }
+
+        if (roles !== 'undefined' && roles !== '' && roles[0] !== 'undefined') {
+            query = {
+               $and: [
+                    { role: { $in: roles } }
+                ]
+            }
+        }
+
+        if(roles.includes('todos') && roles[0] !== 'undefined'){
+            query = {}
+        }
+
+        const totalDocuments = await User.countDocuments(query);
+
+        const users = await User
+            .find(query)
+            .skip(skip)
+            .limit(pageSize)
+            .select('-dados_pessoais.password')
+            .exec()        
+
+
+        res.status(200).json({ totalDocuments, users, productsQuantity , roles });
     } catch (error) {
-        res.status(400)
-        throw new Error('Erro ao carrgegar usuários')
+        res.status(400).json({ error: 'Erro ao carregar usuários' });
     }
-})
+});
+
+
 
 // pegar membros da associação
 const getMembros = asyncHandler(async (req, res) => {
@@ -692,7 +734,6 @@ const repproveRecurso = asyncHandler(async (req, res) => {
 
 
 module.exports = {
-    getUsers,
     getUserData,
     getUserDocuments,
     getUserResume,
@@ -711,7 +752,8 @@ module.exports = {
     approveRecurso,
     repproveRecurso,
     getMembros,
-    getProducers
+    getProducers,
+    getUsersData
 
 
 }

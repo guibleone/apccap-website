@@ -77,20 +77,7 @@ const alterAccess = async (accessData) => {
     return response.data
 }
 
-// listar todos os usuários
-const listUsers = async (token) => {
 
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-
-    }
-
-    const response = await axios.get(API_URI, config)
-
-    return response.data
-}
 
 // aprovar usuário
 const aproveUser = async ({ id, token }) => {
@@ -294,13 +281,24 @@ const sendProductRelatoryEmail = async (emailData) => {
     const response = await axios.post('/api/email/produto', emailData)
     return response.data
 }
+
+const sendResetEmail = async (emailData) => {
+    const response = await axios.post('/api/email/reset', emailData)
+    if(response.data){
+        localStorage.setItem('resetCode', response.data)
+    }
+    return response.data
+}
+
+
+
+
 const adminService = {
     getUserData,
     getResumeData,
     getDocumentsData,
     deleteUser,
     alterAccess,
-    listUsers,
     aproveUser,
     sendRelatory,
     sendEmail,
@@ -319,6 +317,7 @@ const adminService = {
     repproveRecurso,
     sendProductRelatoryEmail,
     getMembros,
+    sendResetEmail
 }
 
 export default adminService

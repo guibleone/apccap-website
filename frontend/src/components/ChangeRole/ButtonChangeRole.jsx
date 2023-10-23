@@ -1,7 +1,7 @@
-import { Box, Button, CircularProgress, CssBaseline, Link } from '@mui/material'
+import { CssBaseline } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { associateProducer } from '../../features/auth/authSlice'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 

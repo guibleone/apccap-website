@@ -293,10 +293,7 @@ export default function Produtor() {
                     Análise
                   </h5>
                   <BsArrowRightShort size={20} />
-                  <h5 className='semi-bold black'>
-                    Pagamento
-                  </h5>
-                  <BsArrowRightShort size={20} />
+
                   <h5 className='semi-bold black'>
                     Acesso
                   </h5>
@@ -335,10 +332,6 @@ export default function Produtor() {
 
                     <h3 className='semi-bold black'>
                       Análise
-                    </h3>
-                    <BsArrowDownShort size={20} />
-                    <h3 className='semi-bold black'>
-                      Pagamento
                     </h3>
                     <BsArrowDownShort size={20} />
                     <h3 className='semi-bold black'>

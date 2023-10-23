@@ -1,21 +1,16 @@
 import { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useParams, useNavigate } from "react-router-dom"
-import { getDocumentsData, getResumeData, getUserData, deleteUser, reset, aproveUser } from "../../features/admin/adminSlice"
-import { Button, Stack, Avatar, Typography, Modal, Box, Container, CssBaseline, Divider, CircularProgress, Alert, useMediaQuery, TextareaAutosize, Grid, TextField } from '@mui/material';
+import { getDocumentsData, getResumeData, getUserData, deleteUser, reset, } from "../../features/admin/adminSlice"
+import { Avatar,  Dialog, Box, Container, CssBaseline,  CircularProgress,  useMediaQuery,  Grid, DialogContent,  } from '@mui/material';
 import AccessLevel from "./AccessLevel"
-import { toast } from 'react-toastify'
-import Email from "../../components/Email/Email"
-import SecretaryLevel from "./SecretaryLevel"
-import PresidentLevel from "./PresidentLevel"
 import { colors } from '../colors'
-
 
 function UserSingle() {
 
     const { user, isLoading: isLoadingAuth } = useSelector((state) => state.auth)
 
-    const { userData, resumeData, isLoading, message, isError } = useSelector((state) => state.admin)
+    const { userData, resumeData, isLoading, } = useSelector((state) => state.admin)
 
     const body = resumeData ? resumeData.body : ''
 
@@ -25,34 +20,9 @@ function UserSingle() {
 
     const matches = useMediaQuery('(min-width:600px)');
 
-    const style = matches ? {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 400,
-        bgcolor: 'background.paper',
-        border: '2px solid #000',
-        boxShadow: 24,
-        p: 4,
-
-    } : {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: '90%',
-        bgcolor: 'background.paper',
-        border: '2px solid #000',
-        boxShadow: 24,
-        p: 4,
-
-    }
-
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-
 
     useEffect(() => {
 
@@ -93,15 +63,6 @@ function UserSingle() {
             } size={100} />
         </Box>
     }
-
-    if (user && user.role === 'secretario') {
-        return <SecretaryLevel />
-    }
-
-    if (user && user.role === 'presidente') {
-        return <PresidentLevel />
-    }
-
 
     return (
         <Box sx={{
@@ -401,13 +362,11 @@ function UserSingle() {
                         }>
                             <Box>
                                 <button className="button-purple" onClick={handleOpen} disabled={user._id === id}>Excluir</button>
-                                <Modal
+                                <Dialog
                                     open={open}
                                     onClose={handleClose}
-                                    aria-labelledby="modal-modal-title"
-                                    aria-describedby="modal-modal-description"
                                 >
-                                    <Box sx={style}>
+                                    <DialogContent>
 
                                         <h3 className="semi-bold" >
                                             Tem certeza que deseja excluir?
@@ -433,8 +392,8 @@ function UserSingle() {
 
                                         </Box>
 
-                                    </Box>
-                                </Modal>
+                                    </DialogContent>
+                                </Dialog>
                             </Box>
 
 

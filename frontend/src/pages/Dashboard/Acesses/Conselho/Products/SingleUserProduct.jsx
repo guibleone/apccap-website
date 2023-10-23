@@ -1,4 +1,4 @@
-import { Alert, Box, Button, CircularProgress, Container, Divider, Grid, Modal, TextField, Typography, useMediaQuery } from '@mui/material'
+import { Alert, Box, Button, CircularProgress, Container, Divider, Grid, Dialog, TextField, Typography, useMediaQuery, DialogContent } from '@mui/material'
 import { useParams } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
@@ -30,31 +30,6 @@ export default function SingleUserProduct() {
 
   const handleOpenApprove = () => setOpenApprove(!openApprove)
   const handleOpenRepprove = () => setOpenRepprove(!openRepprove)
-
-
-  const style = matches ? {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-
-  } : {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '90%',
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-
-  }
 
   // informação do documento
   const [documentData, setDocumentData] = useState({
@@ -484,11 +459,11 @@ export default function SingleUserProduct() {
           </Grid>
         </Grid>
 
-        <Modal
+        <Dialog
           open={openApprove}
           onClose={handleOpenApprove}
         >
-          <Box sx={style}>
+          <DialogContent>
             <Box sx={{
               display: 'flex',
               flexDirection: 'column',
@@ -515,15 +490,15 @@ export default function SingleUserProduct() {
 
               </Box>
             </Box>
-          </Box>
-        </Modal>
+          </DialogContent>
+        </Dialog>
 
 
-        <Modal
+        <Dialog
           open={openRepprove}
           onClose={handleOpenRepprove}
         >
-          <Box sx={style}>
+          <DialogContent>
             <Box sx={{
               display: 'flex',
               flexDirection: 'column',
@@ -550,8 +525,8 @@ export default function SingleUserProduct() {
 
               </Box>
             </Box>
-          </Box>
-        </Modal>
+          </DialogContent>
+        </Dialog>
 
       </Container>
     </Box>

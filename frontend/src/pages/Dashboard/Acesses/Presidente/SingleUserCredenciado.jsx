@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Container, Divider, Grid, Skeleton, Typography, Modal, CircularProgress, TextareaAutosize, Card, CardMedia, CardContent } from '@mui/material'
+import { Avatar, Box, Container, Divider, Grid, Typography, Dialog, CircularProgress, TextareaAutosize, DialogContent, } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { useDispatch, useSelector, } from 'react-redux'
@@ -9,8 +9,6 @@ import { useNavigate } from 'react-router'
 import { AiFillWarning, AiOutlineDownload } from 'react-icons/ai'
 import { styleError, styleSuccess } from '../../../toastStyles'
 import { toast } from 'react-toastify'
-import { disapproveUser } from '../../../../features/admin/adminSlice'
-import { FcCancel, FcDeleteDatabase, FcOk } from 'react-icons/fc'
 import ProductsPagination from '../../../../components/Pagination/Products'
 import { colors } from '../../../colors'
 import { MdLiquor } from 'react-icons/md'
@@ -18,7 +16,7 @@ import { MdLiquor } from 'react-icons/md'
 export default function User() {
     const { user } = useSelector((state) => state.auth)
     const { userData: produtor, isLoading: isLoadingAdmin, } = useSelector((state) => state.admin)
-    const { payments, isLoading: isLoadingPayment } = useSelector((state) => state.payments)
+    const { isLoading: isLoadingPayment } = useSelector((state) => state.payments)
     const matches = useMediaQuery('(min-width:800px)')
 
     const [products, setProducts] = useState()
@@ -33,30 +31,6 @@ export default function User() {
     const { id } = useParams()
 
     const navigate = useNavigate()
-
-    const style = matches ? {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 400,
-        bgcolor: 'background.paper',
-        border: '2px solid #000',
-        boxShadow: 24,
-        p: 4,
-
-    } : {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: '90%',
-        bgcolor: 'background.paper',
-        border: '2px solid #000',
-        boxShadow: 24,
-        p: 4,
-
-    }
 
     const [relatory, setRelatory] = useState('')
 
@@ -309,29 +283,28 @@ export default function User() {
 
                 </Box>
 
-                <Modal
+                <Dialog
                     open={openDesaprove}
                     onClose={handleCloseDesaprove}
                 >
-                    <Box sx={style}>
+                    <DialogContent>
                         <Box sx={{
                             display: 'flex',
                             flexDirection: 'column',
                             gap: '10px',
-                            alignItems: 'center',
                         }}>
                             <Box display={'flex'} justifyContent={'space-between'}>
                                 <Typography variant="h6" >Tem certeza ? </Typography>
                                 <AiFillWarning color='red' size={30} />
                             </Box>
 
-                            <Typography textAlign={'center'} variant="h7" >Digite o motivo da exclusão</Typography>
+                            <Typography variant="h7" >Digite o motivo da exclusão</Typography>
 
                             <TextareaAutosize onChange={(e) => setRelatory(e.target.value)} minRows={8} style={{ width: '100%', padding: '10px', border: '1px solid black' }} />
 
-                            <Typography color={'red'} variant="h7" >Será enviado um email ao produtor.</Typography>
+                            <Typography color={'red'} variant="h7" >Será enviado um email ao produtor</Typography>
 
-                            <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+                            <Box sx={{ display: 'flex', gap: '10px', justifyContent:'flex-end' ,marginTop:'1rem' }}>
 
                                 <button className='button-white' onClick={handleCloseDesaprove}>Cancelar</button>
 
@@ -345,8 +318,8 @@ export default function User() {
 
                             </Box>
                         </Box>
-                    </Box>
-                </Modal>
+                    </DialogContent>
+                </Dialog>
 
 
             </Container>

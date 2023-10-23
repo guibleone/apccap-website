@@ -1,8 +1,7 @@
-import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Button, Container, Grid, Modal, useMediaQuery } from '@mui/material'
+import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Button, Container, Grid, useMediaQuery } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { colors } from '../colors'
-import { BsArrowDownShort, BsArrowRightShort, BsArrowUpRight, BsChevronDown, BsChevronRight } from 'react-icons/bs'
-import { useNavigate } from 'react-router-dom'
+import { BsArrowDownShort, BsArrowRightShort,BsChevronDown, BsChevronRight } from 'react-icons/bs'
 import { useDispatch, useSelector } from 'react-redux'
 import Formulario from './Etapas/Formulario'
 import { toast } from 'react-toastify'
@@ -74,6 +73,11 @@ export default function Credencial() {
         }
 
     }, [user])
+
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }
+        , [])
 
 
     return (
@@ -261,7 +265,7 @@ export default function Credencial() {
                                                 <h5 className='regular'>
 
                                                 </h5>
-                                                <Button onClick={handleCancel} color='success' variant='outlined' disabled={payments.subscription !== 'active' ? true : false} className='Button-purple'>
+                                                <Button onClick={handleCancel} color='success' variant='outlined' disabled={payments.subscription === 'active' ? true : false} className='Button-purple'>
                                                     Cancelar
                                                 </Button>
                                             </Box>
@@ -289,7 +293,7 @@ export default function Credencial() {
 
                     {/* aprovar credencial */}
 
-                    {user && (user.role === 'produtor_associado' &&  payments && payments.subscription !== 'active' && !user.oldRole) && (<>
+                    {user && (user.role === 'produtor_associado' && payments && payments.subscription !== 'active' ) && (<>
                         <Grid item xs={12} md={12}>
 
                             <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} sx={{
@@ -479,6 +483,10 @@ export default function Credencial() {
                                                 <>
                                                     <Documentos />
                                                     <BsArrowDownShort size={20} />
+                                                    <h3 className='semi-bold black'>
+                                                        Análise
+                                                    </h3>
+                                                    <BsArrowDownShort size={20} />
                                                 </>
                                             )}
 
@@ -507,12 +515,6 @@ export default function Credencial() {
                                             <h3 className='semi-bold black'>
                                                 Acesso
                                             </h3>
-
-                                        </Box>
-                                        <Box sx={{ display: 'flex', gap: '48px', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-
-
-
 
                                         </Box>
 

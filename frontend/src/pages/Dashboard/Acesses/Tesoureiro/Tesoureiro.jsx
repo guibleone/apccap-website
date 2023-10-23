@@ -1,13 +1,8 @@
-import { Container, Typography, Box, Divider, Button, Grid, CircularProgress, useMediaQuery, } from '@mui/material'
-import AddSpread from './AddSpread'
+import { Container, Box, Grid, CircularProgress, useMediaQuery, } from '@mui/material'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { resetSpreadSheet, getSpreadSheets, addExcel, resetExcel, deleteExcel } from '../../../../features/spreadSheet/spreadSheetSlice'
-import ConcludedSpread from './ConcludedSpread'
-import AddExcelSpread from './AddExcelSpread'
+import {  getSpreadSheets, addExcel, resetExcel, deleteExcel } from '../../../../features/spreadSheet/spreadSheetSlice'
 import { Link, useNavigate } from 'react-router-dom'
-import ButtonChangeRole from '../../../../components/ChangeRole/ButtonChangeRole'
-import Reunion from '../../../../components/Reunions/Reunion'
 import { colors } from '../../../colors'
 import { BsArrowUpRight, BsDownload, BsPlusCircle } from 'react-icons/bs'
 import { AiOutlineDelete, AiOutlineDownload, AiOutlineEdit, AiOutlineFile } from 'react-icons/ai'
@@ -15,7 +10,6 @@ import { toast } from 'react-toastify'
 import { styleSuccess } from '../../../toastStyles'
 
 export default function Tesoureiro() {
-  const navigate = useNavigate()
   const matches = useMediaQuery('(max-width:600px)');
 
   const { user } = useSelector((state) => state.auth)

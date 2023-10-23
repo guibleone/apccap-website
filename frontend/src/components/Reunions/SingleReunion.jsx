@@ -1,44 +1,18 @@
-import { Alert, Box, Button, Checkbox, CircularProgress, Container, Grid, Modal, Typography, useMediaQuery } from '@mui/material'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { Alert, Box, Checkbox, CircularProgress, Container, Grid, Dialog, Typography, useMediaQuery, DialogContent } from '@mui/material'
+import React, { useEffect, useRef, useState } from 'react'
 import { colors } from '../../pages/colors'
 import { useDispatch, useSelector } from 'react-redux'
 import { addReunionAta, finishReunion, getOneReunion, handleVoto, presenceList, reset, signAta } from '../../features/reunion/reunionSlice'
 import { Link, useParams } from 'react-router-dom'
-import { useDropzone } from 'react-dropzone'
 import { styleError, styleSuccess } from '../../pages/toastStyles'
 import { toast } from 'react-toastify'
 import { BsDownload, BsInfoCircle, BsPen, BsPlusCircle } from 'react-icons/bs'
-import { AiFillBook, AiOutlineDropbox, AiOutlineEdit } from 'react-icons/ai'
+import { AiFillBook, AiOutlineEdit } from 'react-icons/ai'
 import { FcCancel, FcCheckmark } from 'react-icons/fc'
 
 export default function SingleReunion() {
 
     const matches = useMediaQuery('(min-width:600px)')
-
-    const style = matches ? {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 400,
-        bgcolor: 'background.paper',
-        border: '2px solid #000',
-        boxShadow: 24,
-        p: 4,
-
-    } : {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: '90%',
-        bgcolor: 'background.paper',
-        border: '2px solid #000',
-        boxShadow: 24,
-        p: 4,
-
-    }
-
 
     // incializar o redux
     const { user } = useSelector((state) => state.auth)
@@ -350,7 +324,7 @@ export default function SingleReunion() {
                                 flexDirection: 'column',
                                 gap: '10px'
                             }}>
-                                {reunionData?.pathPdf ? <button style={{ maxWidth: '350px' }} c className='button-purple' onClick={() => window.location.href = reunionData?.pathPdf} target='_blank' >Convocação</button> : 'Sem convocação da reunião'}
+                                {reunionData?.pathPdf ? <button style={{ maxWidth: '350px' }} className='button-purple' onClick={() => window.location.href = reunionData?.pathPdf} target='_blank' >Convocação</button> : 'Sem convocação da reunião'}
                                 <Box sx={{
                                     display: 'flex',
                                     flexDirection: 'column',
@@ -393,8 +367,8 @@ export default function SingleReunion() {
                                                                 )}
                                                             </Box>
                                                         </Grid>
-                                                        {!reunionData?.ata === 'assinada' && reunionData?.ata?.assinaturas.includes(`${user.dados_pessoais.name} - ${user.role}`) && (
-                                                            <Grid item xs={12} lg={7}>
+                                                        {reunionData?.ata !== 'assinada' && reunionData?.ata?.assinaturas.includes(`${user.dados_pessoais.name} - ${user.role}`) && (
+                                                            <Grid item xs={12} lg={12}>
                                                                 <Alert severity="success" >
                                                                     Assinado
                                                                 </Alert>
@@ -416,7 +390,7 @@ export default function SingleReunion() {
                                                 )}
                                                 {reunionData && reunionData.status === 'agendada' && (
                                                     <Grid item xs={12} lg={12}>
-                                                        <Button variant='outlined' color='success' onClick={() => handleFinishReunion()} >Concluir</Button>
+                                                        <button button className='button-white' onClick={() => handleFinishReunion()} >Concluir</button>
                                                     </Grid>
                                                 )}
                                                 {reunionData && reunionData.status === 'assinada' && (
@@ -435,11 +409,11 @@ export default function SingleReunion() {
                                                 ) : (
                                                     <Grid item xs={12} lg={12}>
                                                         {reunionData?.membros && reunionData?.membros?.convocados.length > 0 && reunionData?.membros?.presentes.length < 1 ? (
-                                                            <Button variant='outlined' color='warning' onClick={() => { handleOpenList(); setMembers(reunionData?.membros?.convocados); }} >
+                                                            <button className='button-white' onClick={() => { handleOpenList(); setMembers(reunionData?.membros?.convocados); }} >
                                                                 Lista de Presença
-                                                            </Button>
+                                                            </button>
                                                         ) : (
-                                                            <Button variant='outlined' color='success' onClick={() => { handleOpenAta(); setFile(null); }} >Adicionar Ata</Button>
+                                                            <button className='button-white' onClick={() => { handleOpenAta(); setFile(null); }} >Adicionar Ata</button>
                                                         )}
                                                     </Grid>
                                                 )}
@@ -493,8 +467,8 @@ export default function SingleReunion() {
                                                         }}>Assinar</button>
                                                     </Grid>
                                                 )}
-                                                {!reunionData?.ata === 'assinada' && reunionData?.ata?.assinaturas.includes(`${user.dados_pessoais.name} - ${user.role}`) && (
-                                                    <Grid item xs={12} lg={7}>
+                                                {reunionData?.ata !== 'assinada' && reunionData?.ata?.assinaturas.includes(`${user.dados_pessoais.name} - ${user.role}`) && (
+                                                    <Grid item xs={12} lg={12}>
                                                         <Alert severity="success" >
                                                             Assinado
                                                         </Alert>
@@ -563,7 +537,7 @@ export default function SingleReunion() {
                             }} >
                                 Membros Presentes
                             </h3>
-                            {reunionData?.membros?.presentes ? reunionData?.membros?.presentes.map((member, index) => {
+                            {reunionData?.membros?.presentes?.length > 0 ? reunionData?.membros?.presentes.map((member, index) => {
                                 return (
                                     <h4 className='regular black' key={index}>
                                         {member}
@@ -579,10 +553,10 @@ export default function SingleReunion() {
 
                 </Grid>
 
-                <Modal
+                <Dialog
                     open={openAta}
                     onClose={handleOpenAta}                >
-                    <Box sx={style}>
+                    <DialogContent>
                         <Box sx={{
                             display: 'flex',
                             flexDirection: 'column',
@@ -619,15 +593,15 @@ export default function SingleReunion() {
                                 </button>
                             </Box>
                         </Box>
-                    </Box>
-                </Modal>
+                    </DialogContent>
+                </Dialog>
 
 
                 {
-                    <Modal
+                    <Dialog
                         open={openDetailsSign}
                     >
-                        <Box sx={style}>
+                        <DialogContent>
                             <Box sx={{
                                 display: 'flex',
                                 flexDirection: 'column',
@@ -656,26 +630,27 @@ export default function SingleReunion() {
                                 }
 
 
-                                <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
-                                    <Button color='info' variant='outlined' onClick={handleOpenDetailsSign}>Voltar</Button>
+                                <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '1rem' }}>
+                                    <button className='button-white' onClick={handleOpenDetailsSign}>Voltar</button>
                                 </Box>
                             </Box>
-                        </Box>
-                    </Modal>
+                        </DialogContent>
+                    </Dialog>
                 }
 
 
-                <Modal
+                <Dialog
                     open={openList}
+                    onClose={handleOpenList}
                 >
-                    <Box sx={style}>
+                    <DialogContent>
 
                         <Box display={'flex'} justifyContent={'space-between'}>
                             <Typography variant="h6" >Presença dos convocados </Typography>
                             <BsPen size={30} />
                         </Box>
 
-                        <Box sx={{ maxHeight: '300px' }}>
+                        <Box sx={{ maxHeight: '300px', overflow: 'scroll' }}>
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                                 {reunionData && reunionData?.membros?.convocados?.length > 0 ? (
                                     reunionData?.membros?.convocados?.map((member, index) => (
@@ -697,16 +672,16 @@ export default function SingleReunion() {
                         </Box>
 
 
-                        <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
-                            <Button color='info' variant='outlined' onClick={handleOpenList}>Voltar</Button>
-                            <Button color='success' variant='outlined' onClick={handlePresenceList}>Salvar</Button>
+                        <Box sx={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+                            <button className='button-white' onClick={handleOpenList}>Voltar</button>
+                            <button className='button-purple' onClick={handlePresenceList}>Salvar</button>
                         </Box>
-                    </Box>
+                    </DialogContent>
 
-                </Modal >
+                </Dialog >
 
-                <Modal open={openPauta} onClose={handleOpenPauta}>
-                    <Box sx={style}>
+                <Dialog open={openPauta} onClose={handleOpenPauta}>
+                    <DialogContent>
                         <Grid container spacing={2} >
                             <Grid item xs={12} md={12}>
                                 <Box display={'flex'} justifyContent={'space-between'}>
@@ -723,7 +698,7 @@ export default function SingleReunion() {
                                 </h3>
                             </Grid>
 
-                           {/**  <Grid item xs={12} md={12}>
+                            {/**  <Grid item xs={12} md={12}>
                                 <h3 className='semi-bold black'>
                                     Votos
                                 </h3>
@@ -777,10 +752,10 @@ export default function SingleReunion() {
 
                         </Grid>
 
-                    </Box>
+                    </DialogContent>
 
 
-                </Modal>
+                </Dialog>
 
             </Container>
         </Box >

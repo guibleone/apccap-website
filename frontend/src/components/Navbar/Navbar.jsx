@@ -6,17 +6,17 @@ import { resetDocuments } from "../../features/documents/documentsSlice"
 import { reset as resetAdmin } from "../../features/admin/adminSlice"
 import { reset as resetProducts } from "../../features/products/productsSlice"
 import { reset as resetSpreadsheet } from "../../features/spreadSheet/spreadSheetSlice"
-import { Button, Container, Box, Typography, CssBaseline, Avatar, Grid, Menu, Tooltip, IconButton, MenuItem, Divider, TextField, AppBar } from '@mui/material'
+import { Box, Typography, CssBaseline, Avatar } from '@mui/material'
 import { useMediaQuery } from "@mui/material"
 import NavMenu from "./NavMenu"
 import ButtonChangeRole from "../ChangeRole/ButtonChangeRole"
 import { useState } from "react"
 import { CiSearch } from "react-icons/ci";
 import './StylesNavbar.css'
-import { AiOutlineArrowDown, AiOutlineUser } from "react-icons/ai"
+import { AiOutlineUser } from "react-icons/ai"
 import { resetPayments } from '../../features/payments/paymentsSlice'
 import { MdOutlineLiquor } from "react-icons/md"
-import { BiMap, BiUserPlus } from "react-icons/bi"
+import {BiUserPlus } from "react-icons/bi"
 import { TbMap2 } from "react-icons/tb"
 
 
@@ -508,6 +508,7 @@ function Navbar() {
 
                 <Link className="links" to="/"><h4>Início</h4></Link>
                 <Link className="links" to="/balancos"><h4>Balanços</h4></Link>
+                <Link className="links" to="/reunioes"><h4>Reuniões</h4></Link>
                 {user && (
                   ((user.role !== 'admin' && (user.role !== 'user')) || user.oldRole)
                     ?

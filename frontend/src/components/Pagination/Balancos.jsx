@@ -2,12 +2,11 @@ import { Box, Pagination } from '@mui/material'
 import axios from 'axios';
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from "react-redux"
-import { getSpreadsWithoutLogin, setSpreadsheets } from '../../features/spreadSheet/spreadSheetSlice';
+import { setSpreadsheets } from '../../features/spreadSheet/spreadSheetSlice';
 
 export default function BalancosPagination({ setSpreadSheetsData, search }) {
 
     const { spreadSheets, excel } = useSelector((state) => state.spreadSheet);
-    const { user } = useSelector((state) => state.auth);
 
     const dispatch = useDispatch();
     const pageSize = 6;
@@ -26,7 +25,6 @@ export default function BalancosPagination({ setSpreadSheetsData, search }) {
     useEffect(() => {
 
         setSpreadSheetsData(spreadSheets);
-
 
     }, [spreadSheets]);
 

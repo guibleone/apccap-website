@@ -166,6 +166,20 @@ export const cancelCredencial = createAsyncThunk('auth/cancelCredencial', async(
 
 })
 
+// redefinir senha
+
+export const resetPassword = createAsyncThunk('auth/resetPassword', async(user, thunkAPI) => {
+    try {
+        const response = await authService.resetPassword(user)
+        return response
+    }
+    catch (error) {
+        // caso ocorra algum erro
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
 // slice para funções de autnticação de usuário
 export const authSlice = createSlice({
     name: 'auth',
@@ -327,6 +341,20 @@ export const authSlice = createSlice({
                 state.user = action.payload
             })
             .addCase(cancelCredencial.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+            })
+            // redefinir senha
+            .addCase(resetPassword.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(resetPassword.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isSuccess = true
+                state.message = action.payload
+            })
+            .addCase(resetPassword.rejected, (state, action) => {
                 state.isLoading = false
                 state.isError = true
                 state.message = action.payload
