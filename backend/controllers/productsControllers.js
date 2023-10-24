@@ -18,8 +18,7 @@ const getProducts = asyncHandler(async (req, res) => {
     const products = await Product.find({ producer: user })
 
     res.status(200).json(products);
-}
-)
+})
 
 // pegar unico produto
 const getSingleProduct = asyncHandler(async (req, res) => {
@@ -34,28 +33,6 @@ const getSingleProduct = asyncHandler(async (req, res) => {
     res.status(200).json(product)
 })
 
-// gerar selos
-
-const generateSelos = ({ params }) => {
-
-    const { sequence_value, quantity, startSelo, endSelo } = params
-
-    const firstPart = (sequence_value).toString().padStart(3, "0")
-
-    for (let i = 0; i < quantity; i++) {
-
-        if (lastSelo) {
-            const selo = `${firstPart}` + `${(parseInt(lastSelo.slice(-4)) + i + 1).toString().padStart(5, "0")}`
-            selos.push(selo)
-            continue
-        }
-
-        const selo = `${firstPart}` + `${(i + 1).toString().padStart(5, "0")}`
-    }
-
-
-    return selos
-}
 
 // adicionar produtos
 const addProduct = asyncHandler(async (req, res) => {
@@ -165,7 +142,7 @@ const addPhoto = asyncHandler(async (req, res) => {
             throw new Error('Formato de Arquivo Inválido')
         }
 
-        const refStorage = ref(storage, `productsPhotos/${user}/${product.name}.jpg`)
+        const refStorage = ref(storage, `productsPhotos/${user}/${req.params.id}.jpg`)
 
         const metadata = {
             contentType: 'image/jpeg',
@@ -190,60 +167,39 @@ const addPhoto = asyncHandler(async (req, res) => {
 
 // rasteeio de produto
 const trackProduct = asyncHandler(async (req, res) => {
+    try {
+        const { selo } = req.body;
 
-    const { selo } = req.body
-
-    if (!selo) {
-        res.status(404)
-        throw new Error('Selo inválido')
-    }
-
-    if (selo.slice(0, 3) === '000') {
-        res.status(404)
-        throw new Error('Selo inválido')
-    }
-
-    if (selo.slice(0, 8) > 99999999) {
-        res.status(404)
-        throw new Error('Selo inválido')
-    }
-
-    if (selo.length !== 8) {
-        res.status(404)
-        throw new Error('Selo inválido')
-    }
-
-    const firtsPart = selo.slice(0, 3)
-
-    const user = await User.findOne({ sequence_value: firtsPart })
-
-    if (!user) {
-        res.status(404)
-        throw new Error('Selo inválido por usuário')
-    }
-
-    const products = await Product.find({ producer: user._id })
-
-    if (!products) {
-        res.status(404)
-        throw new Error('Selo inválido por produto')
-    }
-
-    const product = products.find((product) => {
-        if (product.selo.startSelo <= selo && product.selo.endSelo >= selo) {
-            return product
+        if (!selo || selo.length !== 8 || selo.slice(0, 3) === '000' || selo.slice(0, 8) > 99999999) {
+            return res.status(400).json({ error: 'Selo inválido' });
         }
-    })
 
-    if (!product) {
-        res.status(404)
-        throw new Error('Selo inválido')
+        const firstPart = selo.slice(0, 3);
+
+        const user = await User.findOne({ sequence_value: firstPart });
+
+        if (!user) {
+            return res.status(404).json({ error: 'Selo inválido por usuário' });
+        }
+
+        const products = await Product.find({ producer: user._id });
+
+        if (!products || products.length === 0) {
+            return res.status(404).json({ error: 'Selo inválido por produto' });
+        }
+
+        const product = products.find(product => product.selo.startSelo <= selo && product.selo.endSelo >= selo);
+
+        if (!product) {
+            return res.status(404).json({ error: 'Selo inválido' });
+        }
+
+        return res.status(200).json(product);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Erro ao rastrear produto' });
     }
-
-    res.status(200).json(product)
-
-})
-
+});
 
 // deletar produtos
 const deleteProduct = asyncHandler(async (req, res) => {
@@ -405,7 +361,6 @@ const addSelosPayed = asyncHandler(async (req, res) => {
     try {
 
         const { userId, productId } = req.body
-        console.log(req.body)
 
         const product = await Product.findById(productId)
         const user = await User.findById(userId)
@@ -592,7 +547,6 @@ module.exports =
     getProducerResume,
     getSelos,
     addSelo,
-    generateSelos,
     addSelosPayed,
     addRelatorysProducts,
     deleteRelatorysProducts,

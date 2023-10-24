@@ -66,7 +66,7 @@ export default function ProductAnalise() {
                             </Grid>
                         </Grid>
 
-                        <Grid container spacing={2} columnSpacing={5} sx={{ marginTop: '20px', marginBottom: '40px' }} >
+                        <Grid container spacing={2} columnSpacing={5} sx={{ marginTop: '20px',paddingBottom:'72px' }} >
 
                             <Grid item xs={12} sm={12} lg={4} >
                                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', border: '1px solid #000', padding: '20px', borderRadius: '10px' }}>

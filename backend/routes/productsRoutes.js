@@ -2,7 +2,7 @@ const express = require('express');
 const { hasRole } = require('../middlewares/authMiddleware');
 const { getProducts, addProduct, deleteProduct, getSingleProduct, updateProduct, addPhoto, 
     trackProduct, getProducer, getProducerResume, 
-    getSelos, addSelo, generateSelos, addSelosPayed, 
+    getSelos, addSelo, addSelosPayed, 
     addRelatorysProducts, deleteRelatorysProducts,
     approveProductRelatory, repproveProductRelatory} = require('../controllers/productsControllers');
 const { uploadProduct, uploadSelo, uploadRelatorys, uploadRelatory, } = require('../middlewares/multer');
@@ -38,9 +38,6 @@ router.post('/foto/:id', hasRole(['produtor','produtor_associado']), uploadProdu
 
 // rastrear produto
 router.post('/rastrear', trackProduct)
-
-// gerar selos
-router.post('/selo-generate', generateSelos)
 
 // adicionar selos pagos
 router.post('/selo-pago', addSelosPayed)

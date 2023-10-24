@@ -223,7 +223,7 @@ export default function Produtor() {
                     }
                     {product.status === 'pendente' &&
                       <button className='button-grey-bottom-border' onClick={() => handlePayment({ id: product._id, quantity: product.selo.quantity })}>
-                        pagar Selos
+                        pagar selos
                       </button>
 
                     }
@@ -340,7 +340,7 @@ export default function Produtor() {
 
                   </Box>
 
-                  <button onClick={() => navigate('/login')} className='button-purple' style={{ width: 'auto' }}>
+                  <button onClick={() => navigate('/credencial')} className='button-purple' style={{ width: 'auto' }}>
                     Continuar processo <BsArrowUpRight size={20} style={{ verticalAlign: 'bottom' }} />
                   </button>
 

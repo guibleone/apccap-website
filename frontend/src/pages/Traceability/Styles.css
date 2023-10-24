@@ -168,7 +168,7 @@ margin-left: auto;
 
     .check-mark {
         top: 0px;
-        left: 190px; /* Adjust top position for smaller screens */
+        left: 250px; /* Adjust top position for smaller screens */
         width: 100px;
         z-index: 4;
     }
@@ -183,7 +183,7 @@ margin-left: auto;
         width: 80px; /* Adjust width for smaller screens */
         height: 80px; /* Adjust height for smaller screens */
         top: 200px; /* Adjust top position for smaller screens */
-        left: 0px; /* Adjust left position for smaller screens */
+        left: 35px; /* Adjust left position for smaller screens */
     }
 
     .produtos-information{

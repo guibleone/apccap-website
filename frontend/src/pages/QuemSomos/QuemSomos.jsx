@@ -307,7 +307,7 @@ export default function QuemSomos() {
 
                         <Grid item xs={12} lg={12}>
 
-                            <ProdutoresPagination setProdutoresData={(produtor) => setProdutores(produtor)} cidade={'Holambra'} />
+                            <ProdutoresPagination setProdutoresData={(produtor) => setProdutores(produtor)} cidade={'Serra Negra'} />
 
                         </Grid>
 

@@ -269,7 +269,7 @@ export default function President() {
 
 
           <Grid item xs={12} md={12} pb={10}>
-            {(users && users?.todos?.length > 4) && (
+            {(users && users?.todos?.length >= 4) && (
               <Box sx={{
                 display: 'flex',
                 justifyContent: 'flex-end',

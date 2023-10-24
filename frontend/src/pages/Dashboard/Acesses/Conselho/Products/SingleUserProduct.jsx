@@ -313,7 +313,7 @@ export default function SingleUserProduct() {
 
 
 
-        <Grid container spacing={2} sx={{ marginTop: '20px', marginBottom: '40px' }} >
+        <Grid container spacing={2} sx={{ marginTop: '20px', paddingBottom:'72px'}} >
           <Grid item xs={12} sm={12} lg={12} pb={4} >
             <h3 style={{
               fontWeight: 540, color: '#140C9F', borderBottom: '3px solid #140C9F', width: !matches ? '100%' : '270px',

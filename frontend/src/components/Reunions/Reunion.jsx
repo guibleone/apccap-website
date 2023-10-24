@@ -49,7 +49,9 @@ export default function Reunion() {
 
     return (
         <Box sx={{ backgroundColor: colors.main_white, minHeight: '100vh' }}>
-            <Container maxWidth='xl'>
+            <Container maxWidth='xl' sx={{
+                paddingBottom:'72px'
+            }}>
                 <Grid container spacing={2} >
                     <Grid item xs={12} lg={12} >
                         <Box sx={{ textAlign: 'center',  padding: '72px 0', }}>

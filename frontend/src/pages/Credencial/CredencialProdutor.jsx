@@ -1,7 +1,7 @@
 import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Button, Container, Grid, useMediaQuery } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { colors } from '../colors'
-import { BsArrowDownShort, BsArrowRightShort,BsChevronDown, BsChevronRight } from 'react-icons/bs'
+import { BsArrowDownShort, BsArrowRightShort, BsChevronDown, BsChevronRight } from 'react-icons/bs'
 import { useDispatch, useSelector } from 'react-redux'
 import Formulario from './Etapas/Formulario'
 import { toast } from 'react-toastify'
@@ -13,13 +13,15 @@ import Mensalidade from './Mensalidade'
 import { getDocuments } from '../../features/documents/documentsSlice'
 
 export default function Credencial() {
+    // responsividade
+    const matches = useMediaQuery('(min-width:600px)');
 
     const dispatch = useDispatch()
 
     const { payments } = useSelector((state) => state.payments)
 
     // abir e fechar passos 
-    const [expanded, setExpanded] = useState('panel1');
+    const [expanded, setExpanded] = useState(matches ? 'panel1' : '');
     const handleChange = (panel) => (event, newExpanded) => {
         setExpanded(newExpanded ? panel : false);
     }
@@ -28,8 +30,7 @@ export default function Credencial() {
     const { user, isSuccess, isError, message } = useSelector((state) => state.auth)
     const { documents } = useSelector((state) => state.documents)
 
-    // responsividade
-    const matches = useMediaQuery('(min-width:600px)');
+
 
     // mostar toast de sucesso ou erro
     useEffect(() => {
@@ -86,7 +87,7 @@ export default function Credencial() {
             minHeight: '100vh',
         }}>
             <Container maxWidth='xl'>
-                <Grid container spacing={2}>
+                <Grid container spacing={2} pb={'72px'}>
                     <Grid item xs={12} md={4}>
                         <Box sx={{
                             display: 'flex',
@@ -293,7 +294,7 @@ export default function Credencial() {
 
                     {/* aprovar credencial */}
 
-                    {user && (user.role === 'produtor_associado' && payments && payments.subscription !== 'active' ) && (<>
+                    {user && (user.role === 'produtor_associado' && payments && payments.subscription !== 'active') && (<>
                         <Grid item xs={12} md={12}>
 
                             <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} sx={{

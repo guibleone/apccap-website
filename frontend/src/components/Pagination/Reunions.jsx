@@ -78,7 +78,7 @@ export default function ReunionPagination({ setReunionData, status, type, date, 
             alignContent: 'center',
             justifyContent: 'center',
             display: 'flex',
-            margin: '20px 0'
+            marginTop: '20px'
         }}>
 
             <Pagination
