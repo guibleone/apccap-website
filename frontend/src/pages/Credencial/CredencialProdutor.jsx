@@ -455,8 +455,17 @@ export default function Credencial() {
 
 
                                             {user && !user.formulario_requerimento && (
+
                                                 <>
                                                     <Formulario />
+                                                    <BsArrowDownShort size={20} />
+                                                    <h3 className='semi-bold black'>
+                                                        Documentos
+                                                    </h3>
+                                                    <BsArrowDownShort size={20} />
+                                                    <h3 className='semi-bold black'>
+                                                        Análise
+                                                    </h3>
                                                     <BsArrowDownShort size={20} />
                                                 </>
                                             )}
@@ -483,10 +492,13 @@ export default function Credencial() {
 
                                                 <>
                                                     <Documentos />
+
                                                     <BsArrowDownShort size={20} />
+
                                                     <h3 className='semi-bold black'>
                                                         Análise
                                                     </h3>
+                                                    
                                                     <BsArrowDownShort size={20} />
                                                 </>
                                             )}

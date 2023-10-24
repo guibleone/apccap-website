@@ -126,7 +126,7 @@ export default function Analise() {
             <Grid container spacing={2} columnSpacing={5} sx={{ marginTop: '20px', marginBottom: '40px' }} >
 
                 <Grid item xs={12} sm={12} lg={4} >
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', border: '1px solid #000', padding: '20px'}}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center',  padding: '20px'}}>
 
                         <h4 className='black'> Análise do pedido</h4>
 
@@ -159,7 +159,7 @@ export default function Analise() {
                 </Grid>
 
                 <Grid item xs={12} sm={12} lg={4} >
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', border: '1px solid #000', padding: '20px'}}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center',  padding: '20px'}}>
 
                         <h4 className='black' >Vistoria</h4>
 
@@ -191,7 +191,7 @@ export default function Analise() {
                 </Grid>
 
                 <Grid item xs={12} sm={12} lg={4} >
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', border: '1px solid #000', padding: '20px'}}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center',  padding: '20px'}}>
 
                         <h4 className='black' >Análise Laboratorial</h4>
 

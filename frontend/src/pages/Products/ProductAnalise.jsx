@@ -47,8 +47,6 @@ export default function ProductAnalise() {
             <Container maxWidth='lg'>
                 {product &&
                     <>
-
-
                         <Grid container spacing={2} p={matches ? 9 : 0} pt={!matches ? 9 : 2} >
                             <Grid item xs={12} lg={12}>
                                 <div className='title'>
@@ -56,7 +54,7 @@ export default function ProductAnalise() {
                                         Acompanhar Análise
                                     </h1>
 
-                                    <h3 className='regular black'>
+                                    <h3 className='regular black' style={{textAlign:'center'}}>
                                         Acompanhe o andamento do processo de seu produto
                                     </h3>
 
@@ -69,7 +67,7 @@ export default function ProductAnalise() {
                         <Grid container spacing={2} columnSpacing={5} sx={{ marginTop: '20px',paddingBottom:'72px' }} >
 
                             <Grid item xs={12} sm={12} lg={4} >
-                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', border: '1px solid #000', padding: '20px', borderRadius: '10px' }}>
+                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center',  padding: '10px' }}>
 
                                     <h4> Análise do pedido</h4>
 
@@ -102,7 +100,7 @@ export default function ProductAnalise() {
                             </Grid>
 
                             <Grid item xs={12} sm={12} lg={4} >
-                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', border: '1px solid #000', padding: '20px', borderRadius: '10px' }}>
+                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center',  padding: '10px' }}>
 
                                     <h4 >Vistoria</h4>
 
@@ -134,7 +132,7 @@ export default function ProductAnalise() {
                             </Grid>
 
                             <Grid item xs={12} sm={12} lg={4} >
-                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', border: '1px solid #000', padding: '20px', borderRadius: '10px' }}>
+                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center',  padding: '10px' }}>
 
                                     <h4 >Análise Laboratorial</h4>
 

@@ -153,8 +153,8 @@ function Traceability() {
                     <img src={require('../../imgs/Check.png')} alt="check" className="check-mark" />
                     
                     <Avatar sx={{
-                      width: matches ? 250 : 600,
-                      height: matches ? 250 : 600,
+                      width: matches ? 250 : 450,
+                      height: matches ? 250 : 450,
                     }} src={productData.path ? productData.path : 'https://placehold.co/300x300'} alt="Foto do produto" />
 
 

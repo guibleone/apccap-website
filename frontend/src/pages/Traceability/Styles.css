@@ -100,18 +100,18 @@
 .check-mark {
     position: absolute;
     top: 0px;
-    left: 470px;
+    right: 30%;
     z-index: 1;
-    width: 205px;
+    width: 150px;
 }
 
 
 .foto-produtor {
     position: absolute;
-    width: 150px;
-    height: 150px;
+    width: 130px;
+    height: 130px;
     border-radius: 50%;
-    top: 500px;
+    bottom: 10px;
     left: 0px;
     object-fit: cover;
 }
