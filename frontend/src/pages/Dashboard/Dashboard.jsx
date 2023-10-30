@@ -325,7 +325,7 @@ function Dashboard() {
                   Lorem ipsum dolor sit amet consectetur. Id non enim nulla tempus ridiculus sed vitae. Lorem ipsum dolor sit amet consectetur, id non enim nulla tempus ridiculus sed vitae.
                 </h4>
 
-                <Link className="saiba-mais">
+                <Link to={'/quem-somos#associar'} className="saiba-mais">
                   <h3>
                     Saiba mais
                   </h3>

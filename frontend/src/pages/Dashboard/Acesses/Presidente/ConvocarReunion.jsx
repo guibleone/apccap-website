@@ -22,8 +22,6 @@ export default function ConvocarReunion({ onClose }) {
 
     const [pdfInstance, updatePdf] = usePDF();
 
-    // estados
-    const [users, setUsers] = useState([])
     const [startDate, setStartDate] = useState(new Date());
 
     const [year, setYear] = useState(new Date().getFullYear())

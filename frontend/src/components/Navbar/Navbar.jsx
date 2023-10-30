@@ -10,7 +10,6 @@ import { Box, Typography, CssBaseline, Avatar } from '@mui/material'
 import { useMediaQuery } from "@mui/material"
 import NavMenu from "./NavMenu"
 import ButtonChangeRole from "../ChangeRole/ButtonChangeRole"
-import { useState } from "react"
 import { CiSearch } from "react-icons/ci";
 import './StylesNavbar.css'
 import { AiOutlineUser } from "react-icons/ai"
@@ -19,21 +18,10 @@ import { MdOutlineLiquor } from "react-icons/md"
 import {BiUserPlus } from "react-icons/bi"
 import { TbMap2 } from "react-icons/tb"
 
-
 function Navbar() {
 
   const { user } = useSelector(state => state.auth)
   const { payments } = useSelector(state => state.payments)
-
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -165,34 +153,6 @@ function Navbar() {
                   </Box>
 
                 </Box>
-
-
-                {/*<div class="dropdown">
-                  <Avatar src={(user && user.dados_pessoais.profilePhoto) ? user.dados_pessoais.profilePhoto : 'https://placehold.co/600x400'} alt="Foto de Perfil"
-                    sx={{ width: 36, height: 36 }} />
-
-                  <div class="dropdown-content">
-
-                    <Link className="link-content" to="/meu-perfil">
-                      <Avatar src={(user && user.dados_pessoais.profilePhoto) ? user.dados_pessoais.profilePhoto : 'https://placehold.co/600x400'} alt="Foto de Perfil"
-                        sx={{ width: 28, height: 28 }} />
-                      <h4 style={{ fontWeight: 400 }}>Meu Perfil</h4>
-                    </Link>
-
-                    <Divider />
-
-                    {user && (
-                      ((user.role !== 'admin' && (user.role !== 'user')) || user.oldRole)
-                        ? <ButtonChangeRole />
-                        : null
-                    )}
-
-                    <button className="button-red" onClick={onLogout}>Sair</button>
-
-                  </div>
-                </div>
-            
-                */}
 
               </div>
 

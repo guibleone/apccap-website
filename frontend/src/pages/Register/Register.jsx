@@ -327,8 +327,8 @@ function Register() {
                 </h1>
 
                 <p>
-                  Para você que  não é um produtor associado, cumpre com os <br />
-                  <Link style={{ color: '#140C9F', fontWeight: 700, textDecorationColor: '#140C9F' }} >requisitos</Link> e deseja se associar.
+                  Para você que é um produtor, cumpre com os <br />
+                  <Link to={'/quem-somos#associar'} style={{ color: '#140C9F', fontWeight: 700, textDecorationColor: '#140C9F' }} >requisitos</Link> e deseja utilizar nossos selos.
                 </p>
               </div>
             </Grid>

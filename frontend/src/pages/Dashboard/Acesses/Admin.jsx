@@ -7,7 +7,10 @@ import { toast } from 'react-toastify'
 import { resetStatus } from "../../../features/admin/adminSlice"
 import { styleError, styleSuccess } from '../../toastStyles'
 import { FaUserEdit } from 'react-icons/fa'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import PublicationsPagination from '../../../components/Pagination/Publications';
+import { BsArrowUpRight } from 'react-icons/bs';
+import { AiOutlineEdit } from 'react-icons/ai';
 
 export default function Admin() {
 
@@ -19,6 +22,8 @@ export default function Admin() {
   const dispatch = useDispatch()
 
   const [users, setUsers] = useState([])
+  const [publications, setPublications] = useState([])
+  const { destaques } = useSelector((state) => state.blog)
 
   useEffect(() => {
 
@@ -45,7 +50,7 @@ export default function Admin() {
 
       <Container maxWidth='xl' >
         <Box sx={{
-          padding: matches ? '72px 5px' : '72px  35px',
+          padding: matches ? '72px 0px' : '72px  0px',
           display: 'flex',
           flexDirection: 'column',
           gap: matches ? '20px' : '0',
@@ -87,14 +92,10 @@ export default function Admin() {
 
                   </Box>
 
-                  <p sx={{
-                    color: '#000',
-                    fontWeight: 500,
-                    fontSize: '14px',
-                  }}>
+                  <h5 className='regular black'>
 
                     {user?.role === 'produtor_associado' ? 'Produtor Associado' : user?.role.charAt(0)?.toUpperCase() + user?.role?.slice(1)}
-                  </p>
+                  </h5>
                 </Box>
 
               </Grid>
@@ -107,7 +108,78 @@ export default function Admin() {
 
         </Box>
 
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={12}>
+            <Box sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}>
+              <h3 style={{ color: '#000', fontWeight: 600 }}>
+                Publicações em Destaque
+              </h3>
 
+              <button onClick={() => navigate('/publicacoes')} className='button-white-bottom-border'>
+                Ver Todas <BsArrowUpRight size={20} style={{ verticalAlign: 'bottom', marginLeft: '5px' }} />
+              </button>
+
+            </Box>
+          </Grid>
+
+          {destaques && destaques?.map((publicacao) => (
+            <Grid key={publicacao._id} item xs={12} md={3}>
+              <Box
+                sx={{
+                  borderRadius: '6px',
+                  border: '1.5px solid #9B9C9E',
+                  padding: '24px',
+                  flexDirection: 'column',
+                  '&:hover': {
+                    cursor: 'pointer',
+                    border: '1.5px solid #00007B',
+                  }
+                }} >
+
+                <Box sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                }}>
+                  <h3 style={{ color: '#000', fontWeight: 600 }}>
+                    {publicacao.title}
+                  </h3>
+
+                  <AiOutlineEdit style={{ color: '#000', fontSize: '20px' }} />
+
+                </Box>
+
+                <Link style={{
+                  textDecorationColor: '#000',
+
+                }}>
+                  <h5 className='regular black italic'>
+                    {publicacao?.theme}
+                  </h5>
+                </Link>
+
+                <Box sx={{
+                  marginTop: '24px',
+                }}>
+
+                  <h4 className='semi-bold black' >
+                    {publicacao?.publication_date.split('-')[2].split('T')[0]}/{publicacao?.publication_date.split('-')[1]}/{publicacao?.publication_date.split('-')[0]}
+                  </h4>
+                </Box>
+
+              </Box>
+
+
+
+            </Grid>
+
+          ))}
+
+        </Grid>
+
+        <PublicationsPagination setPublicationsData={(p) => setPublications(p)} isDestaque={true} pages={2} />
 
 
       </Container>

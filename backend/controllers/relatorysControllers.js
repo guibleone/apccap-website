@@ -3,8 +3,6 @@ const asyncHandler = require('express-async-handler')
 const { ref, getDownloadURL, uploadBytesResumable, deleteObject } = require("firebase/storage");
 const { storage } = require('../db/firebase.js');
 
-
-
 // pegar relatórios
 const getRelatorys = asyncHandler(async (req, res) => {
     const page = req.query.page ? parseInt(req.query.page) : 1;
