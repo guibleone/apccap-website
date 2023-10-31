@@ -45,13 +45,13 @@ const getUsersData = asyncHandler(async (req, res) => {
 
         if (roles !== 'undefined' && roles !== '' && roles[0] !== 'undefined') {
             query = {
-               $and: [
+                $and: [
                     { role: { $in: roles } }
                 ]
             }
         }
 
-        if(roles.includes('todos') && roles[0] !== 'undefined'){
+        if (roles.includes('todos') && roles[0] !== 'undefined') {
             query = {}
         }
 
@@ -62,10 +62,10 @@ const getUsersData = asyncHandler(async (req, res) => {
             .skip(skip)
             .limit(pageSize)
             .select('-dados_pessoais.password')
-            .exec()        
+            .exec()
 
 
-        res.status(200).json({ totalDocuments, users, productsQuantity , roles });
+        res.status(200).json({ totalDocuments, users, productsQuantity, roles });
     } catch (error) {
         res.status(400).json({ error: 'Erro ao carregar usuários' });
     }
@@ -76,7 +76,13 @@ const getUsersData = asyncHandler(async (req, res) => {
 // pegar membros da associação
 const getMembros = asyncHandler(async (req, res) => {
     try {
-        const users = await User.find({ role: ['presidente', 'secretario', 'tesoureiro', 'conselho'] })
+        const users = await User.find({
+            $or:
+                [
+                    { role: { $in: ['presidente', 'secretario', 'tesoureiro', 'conselho'] } },
+                    { oldRole: { $in: ['presidente', 'secretario', 'tesoureiro', 'conselho'] } }
+                ]
+        })
             .select('dados_pessoais.name dados_pessoais.profilePhoto role')
             .exec()
         res.status(200).json(users)

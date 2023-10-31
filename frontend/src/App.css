@@ -20,6 +20,8 @@
     --main-red: #BF232C;
     --main-black: #000;
     --main-grey: #E9E9E9;
+    --main-grey-light: #686B6E;
+    --main-blue:#40B6E9
 }
 
 h1,
@@ -61,6 +63,9 @@ h4 {
     font-style: italic;
 }
 
+.underline {
+    text-decoration: underline;
+}
 
 html {
     -webkit-box-sizing: border-box;
@@ -126,6 +131,22 @@ html {
     background-color: var(--main-purple);
     color: var(--main-white);
     border: 1px solid var(--main-white);
+}
+
+.button-blue{
+    background-color: var(--main-blue);
+    color: var(--main-purple);
+    padding: 10px 20px ;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border: none;
+}
+
+.button-blue:hover{
+    background-color: var(--main-white);
+    color: var(--main-purple);
 }
 
 .button-white-bottom-border {
@@ -214,6 +235,33 @@ html {
     position: relative;
     width: 100%;
 
+}
+
+.button-grey {
+    background-color: var(--main-grey);
+    color: var(--main-grey-light);
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border: none;
+}
+
+.button-grey:hover {
+    background-color: var(--main-black);
+    color: var(--main-white);
+}
+
+
+.button-white-file{
+    background-color: var(--main-white);
+    border: none;
+    text-align: start;
+}
+
+.button-white-file:hover{
+    cursor: pointer;
 }
 
 .button-text {

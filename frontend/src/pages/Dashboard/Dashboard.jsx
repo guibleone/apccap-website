@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { useNavigate } from "react-router-dom"
 import { Typography, Box,  CssBaseline,CircularProgress, useMediaQuery, Grid, Card, Avatar,  } from '@mui/material';
 import Secretary from "./Acesses/Secretario/Secretary"
 import Tesoureiro from "./Acesses/Tesoureiro/Tesoureiro"
 import President from "./Acesses/Presidente/President"
-import Admin from "./Acesses/Admin"
+import Admin from "./Acesses/Admin/Admin"
 import { getSubscription } from "../../features/payments/paymentsSlice"
 import Conselho from "./Acesses/Conselho/Conselho";
 import { CiCircleCheck } from 'react-icons/ci'
@@ -20,7 +19,7 @@ import ProdutoresPagination from "../../components/Pagination/Produtores";
 
 
 function Dashboard() {
-  
+
 
   const { user } = useSelector((state) => state.auth)
   const { isLoading: isLoadingPayments } = useSelector((state) => state.payments)

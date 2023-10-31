@@ -481,7 +481,7 @@ function NavMenu() {
                                     textDecoration: 'none',
 
                                 }
-                            } to="/produtos">Publicações</Link>
+                            } to="/publicacoes">Publicações</Link>
                         </ListItem>
 
                     </>}

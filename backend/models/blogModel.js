@@ -29,9 +29,14 @@ const blogSchema = new mongoose.Schema({
         require: true
     },
     author: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
+     name: {
+        type: String,
+        require: true
+     },
+     role: {
+        type: String,
+        require: true
+     },
     },
 
 })

@@ -6,7 +6,7 @@ import { Box, Pagination } from '@mui/material';
 
 export default function PublicationsPagination({ setPublicationsData, theme, isDestaque, invisible, pages }) {
 
-    const { publications, destaques } = useSelector((state) => state.blog)
+    const { publications, destaques, isSuccess } = useSelector((state) => state.blog)
 
     const dispatch = useDispatch();
     const pageSize = pages ? pages : 6;
@@ -20,7 +20,7 @@ export default function PublicationsPagination({ setPublicationsData, theme, isD
 
         fetchData(pagination.page);
 
-    }, [pagination.page]);
+    }, [pagination.page, isSuccess]);
 
     const handlePageChange = (event, page) => {
         setPagination({
@@ -48,7 +48,7 @@ export default function PublicationsPagination({ setPublicationsData, theme, isD
                         ...pagination,
                         count: response.data.totalPublications,
                     });
-                    
+
                     return;
                 }
 

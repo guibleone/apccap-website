@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const Blog = require('../models/blogModel.js');
+const User = require('../models/userModel.js');
 const { ref, getDownloadURL, uploadBytesResumable, deleteObject } = require("firebase/storage");
 const { storage } = require('../db/firebase.js')
 
@@ -43,8 +44,13 @@ const getPublications = asyncHandler(async (req, res) => {
 
 // criar uma nova notícia
 const createPublication = asyncHandler(async (req, res) => {
+
+    const { values } = req.body
+
     try {
-        const { title, description, theme, author, isDestaque } = req.body
+        const { title, description, theme, author, isDestaque } = JSON.parse(values)
+
+        const user = await User.findById(author).select('dados_pessoais.name role')
 
         if (!title || !description || !theme || !author) {
             res.status(400)
@@ -75,7 +81,10 @@ const createPublication = asyncHandler(async (req, res) => {
             description,
             theme,
             isDestaque: isDestaque ? isDestaque : false,
-            author,
+            author: {
+                name: user.dados_pessoais.name,
+                role: user.role
+            },
             thumbnail: url
         })
 
@@ -90,7 +99,7 @@ const createPublication = asyncHandler(async (req, res) => {
 
 // exportar controllers
 
-module.exports = { 
+module.exports = {
     createPublication,
     getPublications,
- }
+}

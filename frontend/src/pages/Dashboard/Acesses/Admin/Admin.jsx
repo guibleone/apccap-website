@@ -2,13 +2,13 @@ import React from 'react'
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from "react-redux"
 import { Box, useMediaQuery, Grid, CssBaseline, Container } from '@mui/material';
-import UsersPagination from "../../../components/Pagination/Users"
+import UsersPagination from "../../../../components/Pagination/Users"
 import { toast } from 'react-toastify'
-import { resetStatus } from "../../../features/admin/adminSlice"
-import { styleError, styleSuccess } from '../../toastStyles'
+import { resetStatus } from "../../../../features/admin/adminSlice"
+import { styleError, styleSuccess } from '../../../toastStyles'
 import { FaUserEdit } from 'react-icons/fa'
 import { Link, useNavigate } from 'react-router-dom';
-import PublicationsPagination from '../../../components/Pagination/Publications';
+import PublicationsPagination from '../../../../components/Pagination/Publications';
 import { BsArrowUpRight } from 'react-icons/bs';
 import { AiOutlineEdit } from 'react-icons/ai';
 
@@ -108,7 +108,7 @@ export default function Admin() {
 
         </Box>
 
-        <Grid container spacing={2}>
+        <Grid container spacing={2} >
           <Grid item xs={12} md={12}>
             <Box sx={{
               display: 'flex',
@@ -125,8 +125,16 @@ export default function Admin() {
             </Box>
           </Grid>
 
+          <Grid item >
+            {(destaques && destaques.length === 0) && (
+              <h3 className='regular black'>
+                Nenhuma publicação em destaque.
+              </h3>
+            )}
+          </Grid>
+
           {destaques && destaques?.map((publicacao) => (
-            <Grid key={publicacao._id} item xs={12} md={3}>
+            <Grid key={publicacao._id} item xs={12} md={2.9}>
               <Box
                 sx={{
                   borderRadius: '6px',
@@ -144,7 +152,7 @@ export default function Admin() {
                   justifyContent: 'space-between',
                 }}>
                   <h3 style={{ color: '#000', fontWeight: 600 }}>
-                    {publicacao.title}
+                  {publicacao.title.slice(0, 20)}... 
                   </h3>
 
                   <AiOutlineEdit style={{ color: '#000', fontSize: '20px' }} />
@@ -179,7 +187,7 @@ export default function Admin() {
 
         </Grid>
 
-        <PublicationsPagination setPublicationsData={(p) => setPublications(p)} isDestaque={true} pages={2} />
+        <PublicationsPagination setPublicationsData={(p) => setPublications(p)} isDestaque={true} pages={4} invisible={true}  />
 
 
       </Container>
