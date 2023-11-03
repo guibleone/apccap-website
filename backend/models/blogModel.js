@@ -25,8 +25,14 @@ const blogSchema = new mongoose.Schema({
         default: Date.now.bind(Date)
     },
     thumbnail: {
-        type: String,
-        require: true
+        originalname: {
+            type: String,
+            require: true
+        },
+        url: {
+            type: String,
+            require: true
+        }
     },
     author: {
      name: {
@@ -36,6 +42,9 @@ const blogSchema = new mongoose.Schema({
      role: {
         type: String,
         require: true
+     },
+     profilePhoto: {
+        type: String,
      },
     },
 

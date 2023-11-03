@@ -15,7 +15,7 @@ import './StylesNavbar.css'
 import { AiOutlineUser } from "react-icons/ai"
 import { resetPayments } from '../../features/payments/paymentsSlice'
 import { MdOutlineLiquor } from "react-icons/md"
-import {BiUserPlus } from "react-icons/bi"
+import { BiUserPlus } from "react-icons/bi"
 import { TbMap2 } from "react-icons/tb"
 
 function Navbar() {
@@ -689,19 +689,25 @@ function Navbar() {
 
           </div>
 
+
           <div className="actions">
 
+            {/** 
             <div className="pesquisar">
               <CiSearch size={30} style={{ color: '#140C9F', marginTop: '6px' }} />
               <input type="text" placeholder="Pesquisar" />
             </div>
+            */}
 
 
             <button className="button-purple" style={{ width: '230px' }} onClick={() => navigate('/entrar')}>Área Produtor</button>
 
           </div>
+
         </div>
+
       )
+
       }
 
 

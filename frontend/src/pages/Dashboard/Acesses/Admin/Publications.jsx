@@ -1,17 +1,19 @@
-import { Avatar, Box, Checkbox, CircularProgress, Container, Dialog, DialogActions, DialogContent, FormControl, Grid, InputLabel, MenuItem, Select, TextField, TextareaAutosize, Typography, useMediaQuery } from '@mui/material'
+import { Avatar, Box, Checkbox, CircularProgress, Container, Dialog, DialogContent, FormControl, Grid, InputLabel, MenuItem, Select, TextField, useMediaQuery } from '@mui/material'
 import React, { useEffect, useRef, useState } from 'react'
 import { colors } from '../../../colors'
 import { AiOutlineDownload, AiOutlineEdit, AiOutlinePlus } from 'react-icons/ai'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import PublicationsPagination from '../../../../components/Pagination/Publications'
 import { toast } from 'react-toastify'
 import { styleError, styleSuccess } from '../../../toastStyles'
-import { createPublication, reset } from '../../../../features/blog/blogSlice'
+import { createPublication,  getSinglePublication, reset } from '../../../../features/blog/blogSlice'
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import EditPublicationDialog from './EditPublication'
 
 export default function Publications() {
 
-    const navigate = useNavigate()
     const dispatch = useDispatch()
 
     const matches = useMediaQuery('(min-width:600px)')
@@ -21,24 +23,26 @@ export default function Publications() {
         window.scrollTo(0, 0)
     }, [])
 
-
     // criar publicação
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(!open);
 
+    const [openEdit, setOpenEdit] = useState(false);
+    const handleOpenEdit = () => {
+        setOpenEdit(!openEdit)
+    }
+
     const [publicationsData, setPublications] = useState([])
     const { destaques, publications, isLoading, isSuccess, isError, message } = useSelector((state) => state.blog)
 
-
     const temas = [
+        'Produção',
         'Resultados de Competições',
         'Tendências e Inovações',
-        'Rotulagem e Design',
         'Mercado e Vendas',
-        'Legislação e Regulamentação',
-        'Eventos',
-        'História e Cultura da Cachaça',
-        'Selos',
+        'Legislação',
+        'História e Cultura',
+        'Selos e IG',
         'Associação'
     ]
 
@@ -57,16 +61,25 @@ export default function Publications() {
         setThumbnail(event.target.files[0]);
     };
 
+    const [description, setDescription] = useState('')
 
     const [values, setValues] = useState({
         title: '',
-        description: '',
         theme: '',
+        description: '',
         isDestaque: false,
         author: user._id
     })
 
-    // função para mudar os valores 
+    useEffect(() => {
+        setValues({
+            ...values,
+            description: description
+        });
+    }, [description]);
+
+
+    // função para mudar os valores
 
     const onChange = (event) => {
         const { name, value } = event.target;
@@ -76,6 +89,7 @@ export default function Publications() {
     const changeIsDestaque = () => {
         setValues({ ...values, isDestaque: !values.isDestaque })
     }
+
 
     // enviar dados
     const onSubmit = (event) => {
@@ -96,9 +110,16 @@ export default function Publications() {
     useEffect(() => {
 
         if (isSuccess) {
-            toast.success(message, styleSuccess)
-            handleOpen()
-            setThumbnail(null)
+            if (message === 'Publicação deletada com sucesso.') {
+                handleOpenEdit()
+            } if (message === 'Publicação editada com sucesso.') {
+                handleOpenEdit()
+                setThumbnail(null)
+            } else {
+                handleOpen()
+                setThumbnail(null)
+            }
+            setDescription('')
         }
 
         if (isError) {
@@ -118,88 +139,105 @@ export default function Publications() {
         }}>
             <Container maxWidth='xl' >
 
-                <Grid container spacing={2}  >
-                    <Grid item xs={12} md={12}>
-                        <Box sx={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                        }}>
-                            <h3 style={{ color: '#000', fontWeight: 600 }}>
-                                Publicações em Destaque
-                            </h3>
+                <Box
 
-                        </Box>
-                    </Grid>
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: matches ? '20px' : '0',
+                    }}>
+                    <Box sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
 
-                    <Grid item >
-                        {(destaques && destaques.length === 0) && (
-                            <h3 className='regular black'>
-                                Nenhuma publicação em destaque.
-                            </h3>
-                        )}
-                    </Grid>
+                    }}>
+                        <h3 style={{ color: '#000', fontWeight: 600 }}>
+                            Publicações em Destaque
+                        </h3>
 
-                    {destaques && destaques?.map((publicacao) => (
-                        <Grid key={publicacao._id} item xs={12} md={2.9} >
-                            <Box
-                                sx={{
-                                    borderRadius: '6px',
-                                    border: '1.5px solid #9B9C9E',
-                                    padding: '24px',
-                                    flexDirection: 'column',
-                                    '&:hover': {
-                                        cursor: 'pointer',
-                                        border: '1.5px solid #00007B',
-                                    }
-                                }} >
+                    </Box>
 
-                                <Box sx={{
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                }}>
-                                    <h3 style={{ color: '#000', fontWeight: 600 }}>
-                                        {publicacao.title.slice(0, 20)}...
-                                    </h3>
 
-                                    <AiOutlineEdit style={{ color: '#000', fontSize: '20px' }} />
+                    {destaques && destaques?.length === 0 && (
+                        <h3 className='regular black' style={{ marginTop: '24px' }}>
+                            Nenhuma publicação em destaque.
+                        </h3>
+                    )}
+
+                    <Grid
+                        sx={{ margin: '10px 0', display: 'flex', flexDirection: !matches ? 'column' : 'row', gap: !matches ? '20px' : '0' }}
+                        container={matches}
+                        rowSpacing={3}
+                        columnSpacing={{ xs: 8, sm: 6, md: 3 }} >
+
+
+                        {destaques && destaques?.map((publicacao) => (
+                            <Grid onClick={() => { handleOpenEdit(); dispatch(getSinglePublication(publicacao._id)) }} key={publicacao._id} item xs={12} md={3}>
+                                <Box
+                                    sx={{
+                                        borderRadius: '6px',
+                                        border: '1.5px solid #9B9C9E',
+                                        padding: '24px',
+                                        flexDirection: 'column',
+                                        '&:hover': {
+                                            cursor: 'pointer',
+                                            border: '1.5px solid #00007B',
+                                        }
+                                    }} >
+
+                                    <Box sx={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                    }}>
+                                        <h3 style={{ color: '#000', fontWeight: 600 }}>
+                                            {publicacao.title.slice(0, 20)}...
+                                        </h3>
+
+                                        <AiOutlineEdit style={{ color: '#000', fontSize: '20px' }} />
+
+                                    </Box>
+
+                                    <Link style={{
+                                        textDecorationColor: '#000',
+
+                                    }}>
+                                        <h5 className='regular black italic'>
+                                            {publicacao?.theme}
+                                        </h5>
+                                    </Link>
+
+                                    <Box sx={{
+                                        marginTop: '24px',
+                                    }}>
+
+                                        <h4 className='semi-bold black' >
+                                            {publicacao?.publication_date.split('-')[2].split('T')[0]}/{publicacao?.publication_date.split('-')[1]}/{publicacao?.publication_date.split('-')[0]}
+                                        </h4>
+                                    </Box>
 
                                 </Box>
 
-                                <Link style={{
-                                    textDecorationColor: '#000',
-
-                                }}>
-                                    <h5 className='regular black italic'>
-                                        {publicacao?.theme}
-                                    </h5>
-                                </Link>
-
-                                <Box sx={{
-                                    marginTop: '24px',
-                                }}>
-
-                                    <h4 className='semi-bold black' >
-                                        {publicacao?.publication_date.split('-')[2].split('T')[0]}/{publicacao?.publication_date.split('-')[1]}/{publicacao?.publication_date.split('-')[0]}
-                                    </h4>
-                                </Box>
-
-                            </Box>
 
 
+                            </Grid>
 
-                        </Grid>
+                        ))}
 
-                    ))}
+                    </Grid>
 
-                </Grid>
+                    <PublicationsPagination setPublicationsData={(p) => setPublications(p)} isDestaque={true} pages={4} />
 
-                <PublicationsPagination setPublicationsData={(p) => setPublications(p)} isDestaque={true} pages={4} />
-
-                <Grid container spacing={2} >
-                    <Grid item xs={12} md={12}>
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: matches ? '20px' : '0',
+                    }}>
                         <Box sx={{
                             display: 'flex',
                             justifyContent: 'space-between',
+                            alignItems: 'center',
+
                         }}>
                             <h3 style={{ color: '#000', fontWeight: 600 }}>
                                 Todas as Publicações
@@ -210,73 +248,79 @@ export default function Publications() {
                             </button>
 
                         </Box>
-                    </Grid>
 
-                    <Grid item >
-                        {(publications && publications.length === 0) && (
-                            <h3 className='regular black'>
-                                Nenhuma publicação públicada.
+                        {publications && publications?.length === 0 && (
+                            <h3 className='regular black' style={{ marginTop: '24px' }}>
+                                Nenhuma publicação postada.
                             </h3>
                         )}
-                    </Grid>
 
-                    {publications && publications?.map((publicacao) => (
-                        <Grid key={publicacao._id} item xs={12} md={2.9} >
-                            <Box
-                                sx={{
-                                    borderRadius: '6px',
-                                    border: '1.5px solid #9B9C9E',
-                                    padding: '24px',
-                                    flexDirection: 'column',
-                                    '&:hover': {
-                                        cursor: 'pointer',
-                                        border: '1.5px solid #00007B',
-                                    }
-                                }} >
+                        <Grid
+                            sx={{ margin: '10px 0', display: 'flex', flexDirection: !matches ? 'column' : 'row', gap: !matches ? '20px' : '0' }}
+                            container={matches}
+                            rowSpacing={3}
+                            columnSpacing={{ xs: 8, sm: 6, md: 3 }} >
 
-                                <Box sx={{
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                }}>
-                                    <h3 style={{ color: '#000', fontWeight: 600 }}>
-                                        {publicacao.title.slice(0, 20)}...
-                                    </h3>
+                            {publications && publications?.map((publicacao) => (
+                                <Grid onClick={() => { handleOpenEdit(); dispatch(getSinglePublication(publicacao._id)) }} key={publicacao._id} item xs={12} md={3}>
+                                    <Box
+                                        sx={{
+                                            borderRadius: '6px',
+                                            border: '1.5px solid #9B9C9E',
+                                            padding: '24px',
+                                            flexDirection: 'column',
+                                            '&:hover': {
+                                                cursor: 'pointer',
+                                                border: '1.5px solid #00007B',
+                                            }
+                                        }} >
 
-                                    <AiOutlineEdit style={{ color: '#000', fontSize: '20px' }} />
+                                        <Box sx={{
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                        }}>
+                                            <h3 style={{ color: '#000', fontWeight: 600 }}>
+                                                {publicacao.title.slice(0, 20)}...
+                                            </h3>
 
-                                </Box>
+                                            <AiOutlineEdit style={{ color: '#000', fontSize: '20px' }} />
 
-                                <Link style={{
-                                    textDecorationColor: '#000',
+                                        </Box>
 
-                                }}>
-                                    <h5 className='regular black italic'>
-                                        {publicacao?.theme}
-                                    </h5>
-                                </Link>
+                                        <Link style={{
+                                            textDecorationColor: '#000',
 
-                                <Box sx={{
-                                    marginTop: '24px',
-                                }}>
+                                        }}>
+                                            <h5 className='regular black italic'>
+                                                {publicacao?.theme}
+                                            </h5>
+                                        </Link>
 
-                                    <h4 className='semi-bold black' >
-                                        {publicacao?.publication_date.split('-')[2].split('T')[0]}/{publicacao?.publication_date.split('-')[1]}/{publicacao?.publication_date.split('-')[0]}
-                                    </h4>
-                                </Box>
+                                        <Box sx={{
+                                            marginTop: '24px',
+                                        }}>
 
-                            </Box>
+                                            <h4 className='semi-bold black' >
+                                                {publicacao?.publication_date.split('-')[2].split('T')[0]}/{publicacao?.publication_date.split('-')[1]}/{publicacao?.publication_date.split('-')[0]}
+                                            </h4>
+                                        </Box>
+
+                                    </Box>
 
 
+
+                                </Grid>
+
+                            ))}
 
                         </Grid>
-
-                    ))}
-
-                </Grid>
+                    </Box>
+                </Box>
 
                 <PublicationsPagination setPublicationsData={(p) => setPublications(p)} pages={4} />
 
             </Container>
+
 
 
             <Dialog open={open} onClose={handleOpen} maxWidth="lg" fullWidth>
@@ -311,7 +355,11 @@ export default function Publications() {
                             }}>
                                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                                     <h4 className="medium black">Título</h4>
-                                    <TextField name='title' onChange={onChange} fullWidth placeholder="Cachaça ganha prêmio"
+                                    <TextField name='title' onChange={onChange} fullWidth placeholder="Cachaça ganha prêmio" inputProps={
+                                        {
+                                            maxLength: 90,
+                                        }
+                                    }
                                         sx={
                                             {
                                                 '& .MuiInputBase-root': {
@@ -390,20 +438,27 @@ export default function Publications() {
                         <Grid item xs={12} md={12}>
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                                 <h4 className="medium black">Descrição</h4>
-                                <TextareaAutosize
+                                <ReactQuill
+                                    className="black"
                                     name='description'
-                                    onChange={onChange}
-                                    minRows={7}
-                                    maxRows={10}
+                                    theme="snow"
+                                    value={description}
+                                    onChange={setDescription}
                                     placeholder="Escreva o corpo do notícia aqui ..."
-                                    style={{
-                                        padding: '10px',
-                                        resize: 'none',
-                                        backgroundColor: colors.main_white,
-                                        borderColor: '#4AC97E',
-                                        width: '100%',
+
+                                    modules={{
+                                        toolbar: [
+                                            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                                            ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                                            [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+                                            ['link', 'clean'],
+                                        ],
+
+
                                     }}
+                                    style={{ height: '150px' }}
                                 />
+
                             </Box>
                         </Grid>
 
@@ -427,7 +482,9 @@ export default function Publications() {
                 </DialogContent>
             </Dialog>
 
+            {/** EDITAR */}
 
+            <EditPublicationDialog openEdit={openEdit} handleOpenEdit={handleOpenEdit} />
 
         </Box>
     )

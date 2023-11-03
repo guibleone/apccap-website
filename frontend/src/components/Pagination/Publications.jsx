@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setDestaques, setPublications } from '../../features/blog/blogSlice';
 import { Box, Pagination } from '@mui/material';
 
-export default function PublicationsPagination({ setPublicationsData, theme, isDestaque, invisible, pages }) {
+export default function PublicationsPagination({ setPublicationsData, theme, isDestaque, invisible, pages, loadPublications }) {
 
     const { publications, destaques, isSuccess } = useSelector((state) => state.blog)
 
@@ -20,7 +20,7 @@ export default function PublicationsPagination({ setPublicationsData, theme, isD
 
         fetchData(pagination.page);
 
-    }, [pagination.page, isSuccess]);
+    }, [pagination.page, isSuccess, theme]);
 
     const handlePageChange = (event, page) => {
         setPagination({
@@ -28,6 +28,14 @@ export default function PublicationsPagination({ setPublicationsData, theme, isD
             page: page,
         });
     };
+
+    useEffect(() => {
+
+        if (loadPublications) {
+            loadPublications()
+        }
+    }
+    , [pagination.page,])
 
     useEffect(() => {
 
@@ -41,7 +49,7 @@ export default function PublicationsPagination({ setPublicationsData, theme, isD
         axios.get(`/api/blog?pageSize=${pageSize}&page=${page}&theme=${theme}&isDestaque=${isDestaque}`)
             .then((response) => {
 
-                if (isDestaque) {
+                if (isDestaque && !theme) {
                     dispatch(setDestaques(response.data));
 
                     setPagination({
@@ -49,22 +57,33 @@ export default function PublicationsPagination({ setPublicationsData, theme, isD
                         count: response.data.totalPublications,
                     });
 
-                    return;
+                    return
+                }             
+
+                if (theme) {
+
+                    dispatch(setPublications(response.data));
+
+                    setPagination({
+                        ...pagination,
+                        page: 1,
+                        count: response.data.totalPublications,
+                    });
+
+                    return
                 }
 
                 dispatch(setPublications(response.data));
-
                 setPagination({
                     ...pagination,
                     count: response.data.totalPublications,
                 });
+
             })
             .catch((error) => {
                 console.error(error);
-                // Handle errors here
             });
     };
-
 
     return (
         <Box sx={{
@@ -74,6 +93,7 @@ export default function PublicationsPagination({ setPublicationsData, theme, isD
             display: 'flex',
             margin: 'auto',
             padding: '20px 0 72px 0',
+
         }}>
 
             <Pagination
@@ -81,7 +101,7 @@ export default function PublicationsPagination({ setPublicationsData, theme, isD
                 page={pagination.page}
                 onChange={handlePageChange}
                 style={{
-                    display: invisible ? 'none' : 'flex'
+                    display: invisible ? 'none' : 'flex',
                 }}
             />
         </Box>

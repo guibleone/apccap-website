@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import BalancosPagination from '../../components/Pagination/Balancos'
 import AtasPagination from '../../components/Pagination/Atas'
 import RelatorysPagination from '../../components/Pagination/Relatorys'
+import Footer from '../../components/Footer/Footer'
 
 export default function DocumentosPublicos() {
 
@@ -264,7 +265,8 @@ export default function DocumentosPublicos() {
         <RelatorysPagination setRelatorysData={(data) => setRelatorys(data)} search={searchRelatory} />
 
       </Container>
-
+      <Footer />
     </Box>
+    
   )
 }

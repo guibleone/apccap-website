@@ -36,6 +36,10 @@ import Relatorios from './pages/Dashboard/Acesses/Secretario/Relatorios';
 import TodosProdutores from './pages/QuemSomos/TodosProdutores';
 import ForgotPassword from './pages/Login/ForgotPassword';
 import Publications from './pages/Dashboard/Acesses/Admin/Publications';
+import { register } from 'swiper/element/bundle'
+import SinglePublication from './pages/Blog/SinglePublication';
+
+register()
 
 function App() {
   return (
@@ -75,6 +79,7 @@ function App() {
           <Route path='/todos-produtores' element={<TodosProdutores />} />
           <Route path='/esqueci-senha' element={<ForgotPassword />} />
           <Route path='/publicacoes' element={<Publications />} />
+          <Route path='/blog/:id' element={<SinglePublication />} />
           <Route path='*' element={<h1>Not Found 404</h1>} />
         </Routes> 
       </Router>

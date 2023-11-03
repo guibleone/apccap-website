@@ -24,15 +24,8 @@
     --main-blue:#40B6E9
 }
 
-h1,
-h2,
-h3,
-h4 {
+.main-purple {
     color: var(--main-purple);
-}
-
-.black {
-    color: var(--main-black);
 }
 
 .white {
@@ -65,6 +58,14 @@ h4 {
 
 .underline {
     text-decoration: underline;
+}
+
+.bold-purple {
+    font-weight: 700;
+}
+
+.bold-purple:hover {
+    color: var(--main-white);
 }
 
 html {
