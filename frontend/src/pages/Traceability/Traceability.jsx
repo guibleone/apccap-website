@@ -170,19 +170,19 @@ function Traceability() {
                     gap: '20px',
                   }} >
                     <div className="nome">
-                      <h2>
+                      <h2 className='main-purple'>
                         Nome do Produto
                       </h2>
-                      <h3>
+                      <h3 className='main-purple'> 
                         {productData.name}
                       </h3>
                     </div>
 
                     <div className="sobre">
-                      <h2>
+                      <h2 className='main-purple'>
                         Descrição do Produto
                       </h2>
-                      <h3 style={{
+                      <h3 className='main-purple' style={{
                         textAlign: 'justify'
                       }}>
                         {productData.description}
@@ -190,28 +190,15 @@ function Traceability() {
                     </div>
 
                     <div className="sobre-production">
-                      <h2>
+                      <h2 className='main-purple'>
                         Sobre o Produtor
                       </h2>
 
-                      {producerResume && producerResume[0] ? <h3>{producerResume[0].body}</h3> : <h3>Sem informações.</h3>}
+                      {producerResume && producerResume[0] ? <h3 className='main-purple'>{producerResume[0].body}</h3> : <h3 className='main-purple'>Sem informações.</h3>}
 
                     </div>
                   </Box>
                 </Grid>
-
-
-                {/*  <Typography variant='h4'> Produto Oficial </Typography>
-
-          <img width={300} src={productData.path ? productData.path : 'https://placehold.co/300x300'} alt="Foto do produto" />
-
-          <Typography variant='h5'> {productData.name} </Typography>
-          <Typography variant='h5'> {productData.description} </Typography>
-
-          <Button variant='contained' onClick={() => navigate(`/produtor/${productData.producer}`)} sx={{ textDecoration: 'none', width: '300px' }} >Produtor</Button>
-          <Button sx={{ width: '300px' }} variant='contained' color='success' onClick={() => dispatch(reset()) && navigate('/rastreabilidade')}> Voltar </Button>
-
-          */}
 
               </Grid>
 

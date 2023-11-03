@@ -54,7 +54,7 @@ export default function DocumentosPublicos() {
         <Grid container spacing={2} >
           <Grid item xs={12} lg={12} >
             <Box sx={{ padding: '36px 0', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <h2 className='bold'>
+              <h2 className='bold main-purple'>
                 Balanços Financeiros
               </h2>
               <Box sx={{
@@ -65,7 +65,7 @@ export default function DocumentosPublicos() {
                 alignItems: 'center',
                 gap: '16px',
               }}>
-                <h4 className='regular' style={{
+                <h4 className='regular main-purple' style={{
                   maxWidth: '500px',
 
                 }}>
@@ -124,7 +124,7 @@ export default function DocumentosPublicos() {
         <Grid container spacing={2} >
           <Grid item xs={12} lg={12} >
             <Box sx={{ padding: '36px 0', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <h2 className='bold'>
+              <h2 className='bold main-purple'>
                 ATA de Reuniões
               </h2>
               <Box sx={{
@@ -135,7 +135,7 @@ export default function DocumentosPublicos() {
                 alignItems: 'center',
                 gap: '16px',
               }}>
-                <h4 className='regular' style={{
+                <h4 className='regular main-purple' style={{
                   maxWidth: '500px',
 
                 }}>
@@ -199,7 +199,7 @@ export default function DocumentosPublicos() {
         <Grid container spacing={2} >
           <Grid item xs={12} lg={12} >
             <Box sx={{ padding: '36px 0', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <h2 className='bold'>
+              <h2 className='bold main-purple'>
                 Relatórios
               </h2>
               <Box sx={{
@@ -210,7 +210,7 @@ export default function DocumentosPublicos() {
                 flexDirection: matches ? 'row' : 'column',
                 alignItems: 'center',
               }}>
-                <h4 className='regular' style={{
+                <h4 className='regular main-purple' style={{
                   maxWidth: '500px',
 
                 }}>

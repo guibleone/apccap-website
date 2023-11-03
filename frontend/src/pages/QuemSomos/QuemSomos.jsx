@@ -542,7 +542,7 @@ export default function QuemSomos() {
                                         }} >
 
 
-                                            <h3 className={expanded !== 'panel1' ? 'black semi-bold' : 'semi-bold'} >
+                                            <h3 className={expanded !== 'panel1' ? 'black semi-bold' : 'main-purple semi-bold'} >
                                                 Quais documentos preciso enviar ?
                                             </h3>
 
@@ -578,7 +578,7 @@ export default function QuemSomos() {
                                         }} >
 
 
-                                            <h3 className={expanded !== 'panel2' ? 'black semi-bold' : 'semi-bold'} >
+                                            <h3 className={expanded !== 'panel2' ? 'black semi-bold' : 'main-purple semi-bold'} >
                                                 Todo o processo ocorre virtualmente ?
                                             </h3>
 
@@ -615,7 +615,7 @@ export default function QuemSomos() {
                                         }} >
 
 
-                                            <h3 className={expanded !== 'panel3' ? 'black semi-bold' : 'semi-bold'} >
+                                            <h3 className={expanded !== 'panel3' ? 'black semi-bold' : 'main-purple semi-bold'} >
                                                 Posso recorrer caso não seja aprovado ?
                                             </h3>
 
@@ -651,7 +651,7 @@ export default function QuemSomos() {
                                         }} >
 
 
-                                            <h3 className={expanded !== 'panel4' ? 'black semi-bold' : 'semi-bold'} >
+                                            <h3 className={expanded !== 'panel4' ? 'black semi-bold' : 'main-purple semi-bold'} >
                                                 O processo de associação dura quanto tempo ?
                                             </h3>
 
@@ -687,7 +687,7 @@ export default function QuemSomos() {
                                         }} >
 
 
-                                            <h3 className={expanded !== 'panel5' ? 'black semi-bold' : 'semi-bold'} >
+                                            <h3 className={expanded !== 'panel5' ? 'black semi-bold' : 'main-purple semi-bold'} >
                                                 Onde posso tirar outras dúvidas ?
                                             </h3>
 
@@ -737,10 +737,10 @@ export default function QuemSomos() {
                                 flexDirection: 'column',
                                 gap: '16px'
                             }}>
-                                <h1>
+                                <h1 className='main-purple'>
                                     Você também pode ser um produtor APCCAP.
                                 </h1>
-                                <h3 className='regular'>
+                                <h3 className='regular main-purple'>
                                     Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quos ut, porro harum temporibus nobis libero praesentium quo ipsam explicabo laborum beatae nisi voluptates fuga delectus ex, vel magni in sint!
                                 </h3>
                             </Box>
