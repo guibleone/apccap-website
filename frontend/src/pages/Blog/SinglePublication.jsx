@@ -128,7 +128,7 @@ export default function SinglePublication() {
 
         </Grid>
 
-        {singlePublication?.theme && <PublicationsPagination setPublicationsData={(p) => setPublicationsData(p)} theme={singlePublication?.theme} invisible={true} pages={3} />}
+        {singlePublication?.theme && <PublicationsPagination setPublicationsData={(p) => setPublicationsData(p)} theme={singlePublication?.theme} invisible={true} pages={4} />}
 
       </Container>
 

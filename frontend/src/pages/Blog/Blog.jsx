@@ -152,9 +152,26 @@ function Blog() {
                               Promovido
                             </h5>
 
-                            <h1 className='white bold'>
-                              {destaque.title}
-                            </h1>
+                            {!matches ? (<>
+                              <Box sx={{
+                                position: 'relative',
+                              }}>
+                                <img
+                                  src={destaque?.thumbnail ? destaque.thumbnail.url : 'https://placehold.co/600x400'}
+                                  alt='imagem'
+                                  style={{ objectFit: 'cover' }} width={'100%'} height={'160px'} />
+
+                                <h2 className='white bold' style={{
+                                }}>
+                                  {destaque.title}
+                                </h2>
+                              </Box>
+                            </>) : (
+
+                              <h1 className='white bold'>
+                                {destaque.title}
+                              </h1>
+                            )}
 
                             <h5 className='regular' style={{ color: '#9B9C9E' }}>
                               Por <span style={{ marginRight: '10px' }} className='underline'>{destaque.author.name.split(' ')[0]} {destaque.author.name.split(' ')[destaque.author.name.split(' ').length - 1]}</span>
@@ -163,7 +180,13 @@ function Blog() {
                             </h5>
                           </Box>
 
-                          <div className='regular white' style={{textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: destaque?.description.length > 300 ? destaque.description.substring(0, 300) + '...' : destaque.description }} />
+                          {matches ? (
+                            <div className='regular white' style={{ textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: destaque?.description.length > 300 ? destaque.description.substring(0, 300) + '...' : destaque.description }} />
+                          )
+                            : (
+                              <div className='regular white' style={{ textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: destaque?.description.length > 150 ? destaque.description.substring(0, 150) + '...' : destaque.description }} />
+                            )}
+
 
                         </Box>
                         <button onClick={() => navigate(`/blog/${destaque._id}`)} className='button-blue' style={{
@@ -252,11 +275,28 @@ function Blog() {
                     {publication?.theme}
                   </h5>
 
-                  <h2 className='black bold'>
-                    {publication.title}
-                  </h2>
+                  {!matches ? (<>
+                    <Box sx={{
+                      position: 'relative',
+                    }}>
+                      <img
+                        src={publication?.thumbnail ? publication.thumbnail.url : 'https://placehold.co/600x400'}
+                        alt='imagem'
+                        style={{ objectFit: 'cover' }} width={'100%'} height={'160px'} />
 
-                  <div className='regular black' style={{textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: publication?.description.length > 300 ? publication.description.substring(0, 300) + '...' : publication.description }} />
+                      <h1 className='black bold' style={{
+                      }}>
+                        {publication.title}
+                      </h1>
+                    </Box>
+                  </>) : (
+
+                    <h2 className='black bold'>
+                      {publication.title}
+                    </h2>
+                  )}
+
+                  <div className='regular black' style={{ textAlign: 'justify',marginTop:'10px' }} dangerouslySetInnerHTML={{ __html: publication?.description.length > 300 ? publication.description.substring(0, 300) + '...' : publication.description }} />
                   <Box sx={{
                     display: 'flex',
                     marginTop: '36px',
@@ -295,7 +335,6 @@ function Blog() {
               Nenhuma notícia encontrada.
             </h3>
           )}
-
 
         </Container>
 

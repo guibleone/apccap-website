@@ -399,7 +399,7 @@ export default function QuemSomos() {
             <Box sx={{
                 backgroundColor: colors.main_white,
                 position: 'relative',
-                minHeight: '300px',
+
             }}>
 
                 <div className="custom-shape-divider-top-1697630909">
@@ -407,6 +407,7 @@ export default function QuemSomos() {
                         <path d="M1200 0L0 0 598.97 114.72 1200 0z" className="shape-fill"></path>
                     </svg>
                 </div>
+
                 <Container id='associar' maxWidth='xl'>
 
                     <Box sx={{

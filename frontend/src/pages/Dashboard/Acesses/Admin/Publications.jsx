@@ -326,7 +326,7 @@ export default function Publications() {
             <Dialog open={open} onClose={handleOpen} maxWidth="lg" fullWidth>
                 <DialogContent sx={{
                     backgroundColor: colors.main_white,
-                    padding: matches ? '72px 24px' : '36px 15px',
+                    padding: matches ? '64px 24px' : '36px 15px',
                 }}>
 
                     <Grid container columnSpacing={8} rowSpacing={5}>
@@ -464,10 +464,10 @@ export default function Publications() {
 
                     </Grid>
 
-                    <Grid item xs={12} md={12} mt={7} sx={{
+                    <Grid item xs={12} md={12} mt={matches ? 7 :15} sx={{
                         display: 'flex',
-                        justifyContent: matches ? 'flex-start' : 'center',
-                        gap: '20px'
+                        flexDirection: matches ? 'row' : 'column',
+                        gap: '20px',
                     }}>
                         <button
                             onClick={onSubmit}
