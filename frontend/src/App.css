@@ -36,6 +36,10 @@
     color: var(--main-purple-dark);
 }
 
+.black {
+    color: var(--main-black);
+}
+
 .bold {
     font-weight: 700;
 }

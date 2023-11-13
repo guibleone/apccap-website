@@ -130,11 +130,11 @@ function Traceability() {
   return (
     <>
       <Box sx={{
-        backgroundColor: colors.main_white
+        backgroundColor: colors.main_white,
       }}>
         <CssBaseline />
         <Container maxWidth='xl' sx={{
-          padding: '50px 20px',
+          padding: '80px 20px',
         }}>
 
           {!isError &&

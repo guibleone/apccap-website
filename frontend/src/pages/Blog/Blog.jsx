@@ -366,7 +366,7 @@ function Blog() {
 
               <Grid onClick={() => { handleNavigateTheme(tema); }} item sm={12} md={2.8} sx={{
                 display: 'flex',
-                border: `2px solid #140C9F`,
+                border: `2px solid #000000`,
                 padding: '20px 10px',
                 margin: '12px',
                 width: '100%',
