@@ -141,7 +141,7 @@ function Footer() {
 
       <Box mt={5}>
         <h5 className='white regular' style={{ textAlign: 'center' }}>
-          {"Copyright ©  Apccap  "}
+          {"Todos os direitos reservados ©  Apccap  "}
           {new Date().getFullYear()}
         </h5>
       </Box>
