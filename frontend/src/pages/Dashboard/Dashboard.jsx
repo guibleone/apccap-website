@@ -119,13 +119,13 @@ function Dashboard() {
 
           </div>
 
-          <section className="festival">
+          <section className="festival" onClick={() => navigate('/festival-cachaca')}>
             <div className="texto-festival">
               <h1>
                 Festival da Cachaça
               </h1>
               <h3>
-                19, 20 e 21 de Setembro
+                8, 19 e 20 de Outubro
               </h3>
 
             </div>
@@ -462,7 +462,7 @@ function Dashboard() {
 
                 </Grid>
 
-                
+
 
               </Grid>
             </Container>

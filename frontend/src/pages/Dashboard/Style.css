@@ -57,7 +57,7 @@
     color: var(--main-purple);
 }
 
-.rastreio-img{
+.rastreio-img {
     width: 175px;
     height: auto;
     /* To maintain the image's aspect ratio */
@@ -77,6 +77,10 @@
     height: 100%;
     background-color: var(--main-orange);
     align-items: center;
+}
+
+.festival:hover {
+    cursor: pointer;
 }
 
 
@@ -184,6 +188,7 @@
         left: 0;
     }
 }
+
 /* media query */
 
 @media (max-width: 768px) {
