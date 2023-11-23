@@ -29,13 +29,15 @@ const paySelos = asyncHandler(async (req, res) => {
 
 const payMensalidade = asyncHandler(async (req, res) => {
     const URL = 'http://localhost:3000/credencial';
-    const { email, cpf } = req.body;
+    const { email, cpf, tipo } = req.body;
+
+    const price = tipo === 'Mês' && 'price_1OFbIWGd1qyb4oDeypVisyDU' || tipo === 'Semestre' && 'price_1OFbIWGd1qyb4oDeQxYCFewQ' || tipo === 'Ano' && 'price_1OFbIWGd1qyb4oDeye6ho62C'
 
     try {
         // Create a customer with the provided CPF
         const customer = await stripe.customers.create({
-            email: email, 
-            description:cpf,
+            email: email,
+            description: cpf,
         });
 
         // Create a subscription session for the customer
@@ -43,7 +45,7 @@ const payMensalidade = asyncHandler(async (req, res) => {
             customer: customer.id, // Use the customer's ID
             line_items: [
                 {
-                    price: 'price_1NiGIeGd1qyb4oDeAHRJHfPW',
+                    price: price,
                     quantity: 1,
                 },
             ],
@@ -71,7 +73,7 @@ const getSubscription = asyncHandler(async (req, res) => {
         }
 
         const customerResult = await stripe.customers.list({
-           email: user.dados_pessoais.email, // Use 'email' instead of 'user.email'
+            email: user.dados_pessoais.email, // Use 'email' instead of 'user.email'
             limit: 1
         });
 

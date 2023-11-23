@@ -25,6 +25,7 @@ export default function Mensalidade() {
       const response = await axios.post('/api/payment/comprar-mensalidade', {
         email: user.dados_pessoais.email,
         cpf: user.dados_pessoais.cpf,
+        tipo: plano.nome,
       })
 
       if (response.data) {
@@ -39,6 +40,12 @@ export default function Mensalidade() {
   }
 
   const [messagePayment, setMessagePayment] = useState("");
+
+  const [plano, setPlano] = useState({
+    nome: 'Mês',
+    valor: '59,90',
+  })
+
 
   useEffect(() => {
 
@@ -81,13 +88,51 @@ export default function Mensalidade() {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
 
-      {(payments && !payments.portal) && (
-
-        <button onClick={handleSubmit} style={{ backgroundColor: isLoadingPayment && colors.main_white }} className='button-purple' disabled={isLoadingPayment || (payments && payments.subscription)} variant='outlined' color='success' type="submit">
-          {isLoadingPayment ? <CircularProgress color="success" size={24} /> : <>
-            Assinar Credencial<BsArrowUpRight size={20} style={{ verticalAlign: 'bottom' }} />
-          </>}
-        </button>
+{(payments && !payments.portal) && (
+        <>
+          <Box sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '10px',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: colors.main_white,
+            padding: '20px',           
+            boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.25)',
+          }}> 
+            <h2>
+              Plano
+            </h2>
+            <h3>
+              <span className='main-purple'>{plano.valor}</span>/{plano.nome}
+            </h3>
+            <Box sx={{
+              display: 'flex',
+              gap: '10px',
+            }}>
+              <button 
+              className={plano.nome === 'Mês' ? 'button-purple' : 'button-white'}
+              onClick={() => setPlano({ nome: 'Mês', valor: '59,90' })} variant='outlined' color='success'>
+                Mensal
+              </button>
+              <button 
+              className={plano.nome === 'Semestre' ? 'button-purple' : 'button-white'}
+              onClick={() => setPlano({ nome: 'Semestre', valor: '349,90' })} variant='outlined' color='success'>
+                Semestral
+              </button>
+              <button 
+              className={plano.nome === 'Ano' ? 'button-purple' : 'button-white'}
+              onClick={() => setPlano({ nome: 'Ano', valor: '599,90' })} variant='outlined' color='success'>
+                Anual
+              </button>
+            </Box>
+          </Box>
+          <button onClick={handleSubmit} style={{ backgroundColor: isLoadingPayment && colors.main_white }} className='button-purple' disabled={isLoadingPayment || (payments && payments.subscription)} variant='outlined' color='success' type="submit">
+            {isLoadingPayment ? <CircularProgress color="success" size={24} /> : <>
+              Assinar <BsArrowUpRight size={20} style={{ verticalAlign: 'bottom' }} />
+            </>}
+          </button>
+        </>
 
       )}
 
