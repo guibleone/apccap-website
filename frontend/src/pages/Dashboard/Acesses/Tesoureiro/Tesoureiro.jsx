@@ -1,7 +1,7 @@
 import { Container, Box, Grid, CircularProgress, useMediaQuery, } from '@mui/material'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {  getSpreadSheets, addExcel, resetExcel, deleteExcel } from '../../../../features/spreadSheet/spreadSheetSlice'
+import { getSpreadSheets, addExcel, resetExcel, deleteExcel } from '../../../../features/spreadSheet/spreadSheetSlice'
 import { Link, useNavigate } from 'react-router-dom'
 import { colors } from '../../../colors'
 import { BsArrowUpRight, BsDownload, BsPlusCircle } from 'react-icons/bs'
@@ -58,11 +58,11 @@ export default function Tesoureiro() {
   }
     , [excel])
 
-    useEffect(() => {
+  useEffect(() => {
 
-      dispatch(getSpreadSheets({ token: user.token }))
+    dispatch(getSpreadSheets({ token: user.token }))
 
-    }, [excel.isSuccess])
+  }, [excel.isSuccess])
 
 
   return (
@@ -91,8 +91,10 @@ export default function Tesoureiro() {
                 <h1 className='black semi-bold'>
                   Tesoureiro
                 </h1>
-                <h5 className='black regular'>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente at voluptatem beatae aut! Fugiat reprehenderit quasi ut nam, adipisci eaque et dolorem officia eveniet repudiandae! Inventore saepe expedita vero minus.
+                <h5 className='black regular' style={{
+                  textAlign: 'justify'
+                }}>
+                  Como tesoureiro, tenha o poder de gerenciar as finanças e adicionar balanços financeiros de forma direta. Sua contribuição é fundamental para manter a estabilidade econômica da APCCAP e garantir uma gestão transparente e responsável dos recursos.
                 </h5>
               </Box>
               <button onClick={() => window.location.href = 'https://dashboard.stripe.com/test/payments'} className='button-purple' style={{ width: '222px' }}>

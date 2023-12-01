@@ -1,7 +1,7 @@
 import { Box, Container, Grid, useMediaQuery, CircularProgress } from '@mui/material'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {  getReunions } from '../../../../features/reunion/reunionSlice'
+import { getReunions } from '../../../../features/reunion/reunionSlice'
 import { addRelatory, reset as resetRelatory } from '../../../../features/relatorys/relatorysSlice'
 import { AiOutlineDelete, AiOutlineDownload, AiOutlineEdit, AiOutlineFile } from 'react-icons/ai'
 import { styleSuccess } from '../../../toastStyles'
@@ -122,8 +122,10 @@ export default function Secretary() {
                 <h1 className='black semi-bold'>
                   Secretário
                 </h1>
-                <h5 className='black regular'>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente at voluptatem beatae aut! Fugiat reprehenderit quasi ut nam, adipisci eaque et dolorem officia eveniet repudiandae! Inventore saepe expedita vero minus.
+                <h5 className='black regular' style={{
+                  textAlign: 'justify'
+                }}>
+                  Como secretário, sua função abrange a criação da lista de presença e a integração diretamente na ata das reuniões. Assuma o controle da documentação essencial, facilitando a transparência e a eficiência no registro das atividades da APCCAP.
                 </h5>
               </Box>
               <button onClick={() => navigate('/meu-perfil')} className='button-purple' style={{ width: '182px' }}>
@@ -288,7 +290,7 @@ export default function Secretary() {
 
           </Grid>
 
-          <RelatorysPagination setRelatorysData={(relatory) => setRelatorys(relatory)} invisible={true} search={''}/>
+          <RelatorysPagination setRelatorysData={(relatory) => setRelatorys(relatory)} invisible={true} search={''} />
 
 
         </Grid>

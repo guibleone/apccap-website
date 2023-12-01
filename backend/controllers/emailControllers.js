@@ -16,7 +16,7 @@ const sendEmail = asyncHandler(async (req, res) => {
     switch (method) {
         case "POST": {
             const data = await resend.sendEmail({
-                from: 'Apccap <contato.produtor@apccap.shop>',
+                from: 'Apccap <contato.produtor@apccap.com.br>',
                 to: `${email}`, // TODO: change to `email
                 subject: `${title}`, // TODO: change to `title
                 html: `
@@ -71,7 +71,7 @@ const senConvocationEmail = asyncHandler(async (req, res) => {
     switch (method) {
         case "POST": {
             const data = await resend.sendEmail({
-                from: 'Apccap <reuniao.associados@apccap.shop>',
+                from: 'Apccap <reuniao.associados@apccap.com.br>',
                 to: emails, // TODO: change to `email
                 subject: title, // TODO: change to `title
                 html:
@@ -119,14 +119,14 @@ const sendRelatoryEmail = asyncHandler(async (req, res) => {
 
     try {
         const data = await resend.sendEmail({
-            from: 'Apccap <credencial.produtor@apccap.shop>',
+            from: 'Apccap <credencial.produtor@apccap.com.br>',
             to: `${email}`, // TODO: change to `email
             subject: title, // TODO: change to `title
             html: `<h4>Atenção Produtor, </h4>
 
                 <p>Seu relatório de ${title} foi <h4>${result}</h4></p> 
                 
-                <p>Para mais informações, entre em contato com a associação. Ou acesse o site <a href="www.apccap.shop">Apccap</a>.</p> 
+                <p>Para mais informações, entre em contato com a associação. Ou acesse o site <a href="www.apccap.com.br">Apccap</a>.</p> 
                 
                 <p>Atenciosamente, </p>
 
@@ -174,14 +174,14 @@ const sendProductRelatoryEmail = asyncHandler(async (req, res) => {
 
     try {
         const data = await resend.sendEmail({
-            from: 'Apccap <produto.analise@apccap.shop>',
+            from: 'Apccap <produto.analise@apccap.com.br>',
             to: `${email}`, // TODO: change to `email
             subject: title, // TODO: change to `title
             html: `<h4>Atenção Produtor, </h4>
 
                 <p>O relatório do produto ${produto} na ${typeEmail} foi <h4>${result}</h4></p> 
                 
-                <p>Para mais informações, entre em contato com a associação. Ou acesse o site <a href="www.apccap.shop">Apccap</a>.</p> 
+                <p>Para mais informações, entre em contato com a associação. Ou acesse o site <a href="www.apccap.com.br">Apccap</a>.</p> 
                 
                 <p>Atenciosamente, </p>
 
@@ -212,14 +212,14 @@ const sendRecursoEmail = asyncHandler(async (req, res) => {
 
     try {
         const data = await resend.sendEmail({
-            from: 'Apccap <recurso.produtor@apccap.shop>',
+            from: 'Apccap <recurso.produtor@apccap.com.br>',
             to: `${email}`, // TODO: change to `email
             subject: 'Análise do Recurso', // TODO: change to `title
             html: `<h4>Atenção Produtor, </h4>
 
                 <p>Seu recurso da Análise do pedido foi <h4>${result}</h4></p> 
                 
-                <p>Para mais informações, entre em contato com a associação. Ou acesse o site <a href="www.apccap.shop">Apccap</a>.</p> 
+                <p>Para mais informações, entre em contato com a associação. Ou acesse o site <a href="www.apccap.com.br">Apccap</a>.</p> 
                 
                 <p>Atenciosamente, </p>
 
@@ -265,7 +265,7 @@ const sendResetEmail = asyncHandler(async (req, res) => {
 
     try {
         const data = await resend.sendEmail({
-            from: 'Apccap <redifinir.senha@apccap.shop>',
+            from: 'Apccap <redifinir.senha@apccap.com.br>',
             to: `${email}`, // TODO: change to `email
             subject: 'Redefinição de Senha', // TODO: change to `title
             html: `<p>Atenção Produtor, </p>

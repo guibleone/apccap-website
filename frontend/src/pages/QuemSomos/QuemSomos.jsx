@@ -742,7 +742,7 @@ export default function QuemSomos() {
                                     Você também pode ser um produtor APCCAP.
                                 </h1>
                                 <h3 className='regular main-purple'>
-                                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quos ut, porro harum temporibus nobis libero praesentium quo ipsam explicabo laborum beatae nisi voluptates fuga delectus ex, vel magni in sint!
+                                Descubra a oportunidade de se tornar um produtor da APCCAP e faça parte ativa do nosso compromisso com a excelência. Junte-se a nós na construção de um impacto positivo e significativo em nossa comunidade.
                                 </h3>
                             </Box>
                         </Grid>

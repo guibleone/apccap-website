@@ -104,8 +104,10 @@ export default function President() {
                 <h1 className='black semi-bold'>
                   Presidente
                 </h1>
-                <h5 className='black regular'>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente at voluptatem beatae aut! Fugiat reprehenderit quasi ut nam, adipisci eaque et dolorem officia eveniet repudiandae! Inventore saepe expedita vero minus.
+                <h5 className='black regular' style={{
+                  textAlign: 'justify'
+                }}>
+                Como presidente, desfrute de um controle completo: gerencie e convoque reuniões estratégicas, além de administrar facilmente a participação dos nossos valiosos produtores associados. Sua plataforma exclusiva para liderança eficaz na APCCAP.
                 </h5>
               </Box>
               <button onClick={() => navigate('/meu-perfil')} className='button-purple' style={{ width: '182px' }}>

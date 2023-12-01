@@ -39,8 +39,10 @@ export default function Conselho() {
                                 <h1 className='black semi-bold'>
                                     Conselho Regulador
                                 </h1>
-                                <h5 className='black regular'>
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente at voluptatem beatae aut! Fugiat reprehenderit quasi ut nam, adipisci eaque et dolorem officia eveniet repudiandae! Inventore saepe expedita vero minus.
+                                <h5 className='black regular' style={{
+                  textAlign: 'justify'
+                }}>
+                                Como membro do Conselho Regulador, assuma a responsabilidade de gerenciar credenciais e avaliar pedidos de selos. Sua posição é crucial para manter os padrões elevados e garantir a qualidade que define a APCCAP.
                                 </h5>
                             </Box>
                             <button onClick={() => navigate('/meu-perfil')} className='button-purple' style={{ width: '182px' }}>

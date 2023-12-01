@@ -121,15 +121,17 @@ export default function Produtor() {
                   flexDirection: 'column',
                   gap: '10px'
                 }}>
-                  
-              <h3 className='semi-bold black'>
-                Credencial
-              </h3>
+
+                  <h3 className='semi-bold black'>
+                    Credencial
+                  </h3>
                   <h1 className='bold black'>
                     Produtor Não Associado
                   </h1>
-                  <h5 className='regular black'>
-                    Lorem ipsum dolor sit amet consectetur. Adipiscing amet morbi bibendum senectus. Eget sed vulputate arcu.Lorem ipsum dolor sit amet consectetur. Adipiscing amet morbi bibendum senectus. Eget sed vulputate arcu.
+                  <h5 className='regular black' style={{
+                    textAlign: 'justify'
+                  }}>
+                    Como produtor , você tem o privilégio de solicitar produtos autenticados com selos de Indicação Geográfica (IG). Aproveite essa oportunidade exclusiva para agregar valor aos seus produtos e fortalecer ainda mais sua conexão com a APCCAP.
                   </h5>
                 </Box>
                 <button onClick={() => navigate('/credencial')} className='button-purple' style={{ width: '182px' }}>
@@ -141,15 +143,17 @@ export default function Produtor() {
                   flexDirection: 'column',
                   gap: '10px'
                 }}>
-                  
-              <h3 className='semi-bold black'>
-                Credencial
-              </h3>
+
+                  <h3 className='semi-bold black'>
+                    Credencial
+                  </h3>
                   <h1 className='bold black'>
                     Produtor Associado
                   </h1>
-                  <h5 className='regular black'>
-                    Lorem ipsum dolor sit amet consectetur. Adipiscing amet morbi bibendum senectus. Eget sed vulputate arcu.Lorem ipsum dolor sit amet consectetur. Adipiscing amet morbi bibendum senectus. Eget sed vulputate arcu.
+                  <h5 className='regular black' style={{
+                    textAlign: 'justify'
+                  }}>
+                    Como produtor associado, você tem o privilégio de solicitar produtos autenticados com selos de Indicação Geográfica (IG). Aproveite essa oportunidade exclusiva para agregar valor aos seus produtos e fortalecer ainda mais sua conexão com a APCCAP.
                   </h5>
                 </Box>
                   <button onClick={() => navigate('/credencial')} className='button-purple' style={{ width: '182px' }}>

@@ -112,22 +112,22 @@ export default function Mensalidade() {
             }}>
               <button 
               className={plano.nome === 'Mês' ? 'button-purple' : 'button-white'}
-              onClick={() => setPlano({ nome: 'Mês', valor: '59,90' })} variant='outlined' color='success'>
+              onClick={() => setPlano({ nome: 'Mês', valor: '59,90' })} >
                 Mensal
               </button>
               <button 
               className={plano.nome === 'Semestre' ? 'button-purple' : 'button-white'}
-              onClick={() => setPlano({ nome: 'Semestre', valor: '349,90' })} variant='outlined' color='success'>
+              onClick={() => setPlano({ nome: 'Semestre', valor: '349,90' })} >
                 Semestral
               </button>
               <button 
               className={plano.nome === 'Ano' ? 'button-purple' : 'button-white'}
-              onClick={() => setPlano({ nome: 'Ano', valor: '599,90' })} variant='outlined' color='success'>
+              onClick={() => setPlano({ nome: 'Ano', valor: '599,90' })} >
                 Anual
               </button>
             </Box>
           </Box>
-          <button onClick={handleSubmit} style={{ backgroundColor: isLoadingPayment && colors.main_white }} className='button-purple' disabled={isLoadingPayment || (payments && payments.subscription)} variant='outlined' color='success' type="submit">
+          <button onClick={handleSubmit} style={{ backgroundColor: isLoadingPayment && colors.main_white }} className='button-purple' disabled={isLoadingPayment || (payments && payments.subscription)}  type="submit">
             {isLoadingPayment ? <CircularProgress color="success" size={24} /> : <>
               Assinar <BsArrowUpRight size={20} style={{ verticalAlign: 'bottom' }} />
             </>}

@@ -307,7 +307,7 @@ function Informations() {
                             required
                             fullWidth
                             id="email"
-                            placeholder='appcap@gmail.com'
+                            placeholder='apccap@gmail.com'
                             name="email"
                             onChange={handleChangeDadosPessoais} type='email' value={dadosPessoais.email}
 

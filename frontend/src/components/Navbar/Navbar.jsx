@@ -641,7 +641,6 @@ function Navbar() {
           <div className="links-centrais">
 
             <Link className="links" to="/"><h4>Inicial</h4></Link>
-            <Link className="links" to="/rastreabilidade"><h4>Rastreabilidade</h4></Link>
             <Link className="links" to="/festival-cachaca"><h4>Festival da Cachaça</h4></Link>
 
             <div className="dropdown">

@@ -1,4 +1,4 @@
-import { AiFillFacebook as Facebook, AiFillInstagram as Instagram} from 'react-icons/ai'
+import { AiFillFacebook as Facebook, AiFillInstagram as Instagram } from 'react-icons/ai'
 import { Box, Grid, useMediaQuery } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { RiTwitterXFill } from 'react-icons/ri'
@@ -47,9 +47,17 @@ function Footer() {
               Páginas
             </h3>
 
+            {/** 
             <div>
               <Link to="/rastreabilidade" variant="body2" color="inherit" style={{ textDecoration: 'none' }}>
                 <h5 className='white regular'>Rastreabilidade</h5>
+              </Link>
+            </div>
+            */}
+
+            <div>
+              <Link to="/documentos" variant="body2" color="inherit" style={{ textDecoration: 'none' }}>
+                <h5 className='white regular'>Documentos</h5>
               </Link>
             </div>
 

@@ -413,7 +413,7 @@ function Blog() {
                   Você também pode ser um produtor APCCAP.
                 </h1>
                 <h4 className='white regular' style={{ marginTop: '20px' }}>
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorem beatae sequi consequatur assumenda, saepe harum amet quas deserunt at, rem totam aliq
+                Descubra como você pode se tornar um produtor APCCAP e fazer parte ativa do nosso compromisso com a excelência. Junte-se a nós na construção de um impacto positivo e significativo em nossa comunidade.
                 </h4>
               </Box>
             </Grid>

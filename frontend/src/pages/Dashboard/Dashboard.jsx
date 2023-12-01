@@ -90,17 +90,18 @@ function Dashboard() {
           <div className="header">
             <div className="text-side">
               <h1 style={{ fontWeight: 700 }}>
-                Busque pela cachaça que adiquiriu e saiba mais sobre sua procedência
+                Fique por dentro de tudo sobre a APCCAP
               </h1>
 
               <div className="rastrear">
 
-                <Link to={'/rastreabilidade'} className="link" style={{
+                <Link to={'/quem-somos'} className="link" style={{
                   borderBottom: '3px solid #140C9F',
+                  width: 'fit-content',
                 }}>
 
                   <h3 >
-                    Rastrear
+                  Saiba Mais
                   </h3>
 
                   <div>
@@ -113,7 +114,7 @@ function Dashboard() {
             </div>
 
             {!matches && (<>
-              <img src={require('../../imgs/seloFoto.png')} alt="rastreio" />
+              <img src={require('../../imgs/logo-apccap.png')} alt="rastreio" width={260} height={260}/>
             </>)}
 
 
@@ -314,10 +315,10 @@ function Dashboard() {
                   Você também pode se tornar um produtor da APCCAP
                 </h1>
                 <h4 style={{ fontWeight: 400, fontSize: matches ? '14px' : '' }}>
-                  Lorem ipsum dolor sit amet consectetur. Id non enim nulla tempus ridiculus sed vitae. Lorem ipsum dolor sit amet consectetur, id non enim nulla tempus ridiculus sed vitae.
+                Descubra como você pode contribuir para o nosso compromisso com a excelência e se envolver ativamente na construção de um impacto positivo em nossa comunidade.
                 </h4>
                 <h4 style={{ fontWeight: 400, fontSize: matches ? '14px' : '' }}>
-                  Lorem ipsum dolor sit amet consectetur. Id non enim nulla tempus ridiculus sed vitae. Lorem ipsum dolor sit amet consectetur, id non enim nulla tempus ridiculus sed vitae.
+                Na APCCAP, acreditamos que cada indivíduo tem o potencial de ser um agente de mudança. Ao se tornar um produtor, você se junta a uma comunidade dedicada que valoriza a inovação, a sustentabilidade e o impacto positivo.
                 </h4>
 
                 <Link to={'/quem-somos#associar'} className="saiba-mais">
@@ -371,7 +372,7 @@ function Dashboard() {
                         Acompanhe as notícias
                       </h1>
                       <h4 style={{ fontWeight: 400, fontSize: matches ? '14px' : '', color: colors.main_purple, }}>
-                        Lorem ipsum dolor sit amet consectetur. Id non enim nulla tempus ridiculus sed vitae
+                      Mantenha-se informado sobre eventos, conquistas e iniciativas que moldam nosso compromisso com a comunidade.
                       </h4>
                     </Box>
 

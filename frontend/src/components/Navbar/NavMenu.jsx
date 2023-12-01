@@ -224,17 +224,7 @@ function NavMenu() {
                             } to="/">Início</Link>
                         </ListItem>
 
-                        <ListItem >
-                            <ListItemIcon>
-                                <TbSearch style={{ color: "#FAF8F8" }} h />
-                            </ListItemIcon>
-                            <Link style={
-                                {
-                                    color: 'inherit',
-                                    textDecoration: 'none',
-                                }
-                            } to="/rastreabilidade">Rastreabilidade</Link>
-                        </ListItem>
+                    
 
                         <ListItem >
                             <ListItemIcon>
