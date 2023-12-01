@@ -42,4 +42,4 @@ Visite o website [aqui](https://www.apccap.com.br).
 
 ## Licença
 
-Este projeto é licenciado sob a [Licença Pública Geral GNU](LICENSE.md). Consulte o arquivo `LICENSE.md` para obter mais detalhes.
+Este projeto é licenciado sob a [Licença Pública Geral GNU](LICENSE). Consulte o arquivo `LICENSE.md` para obter mais detalhes.
