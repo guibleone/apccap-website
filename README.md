@@ -28,7 +28,7 @@ Este website foi desenvolvido em colaboração com a Associação dos Produtores
 - Hospedagem: Servidor VPS
 - [Outras tecnologias e ferramentas utilizadas]
   - Postman: Teste e desenvolvimento de APIs.
-  - Firebase: Serviços de autenticação, armazenamento de arquivos e hospedagem.
+  - Firebase: Serviços de armazenamento de arquivos.
   
 ## Como Iniciar
 
@@ -42,4 +42,4 @@ Visite o website [aqui](https://www.apccap.com.br).
 
 ## Licença
 
-Este projeto é licenciado sob a [Licença Pública Geral GNU](LICENSE). Consulte o arquivo `LICENSE.md` para obter mais detalhes.
+Este projeto é licenciado sob a [Licença Pública Geral GNU](LICENSE). Consulte o arquivo `LICENSE` para obter mais detalhes.
