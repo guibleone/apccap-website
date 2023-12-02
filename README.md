@@ -32,7 +32,7 @@ Este website foi desenvolvido em colaboração com a Associação dos Produtores
   
 ## Como Iniciar
 
-1. Clone o repositório: `git clone https://github.com/seu-usuario/seu-repositorio.git`
+1. Clone o repositório: `git clone https://github.com/guibleone/apccap-website`
 2. Instale as dependências: `npm install`
 3. Execute o projeto: `npm start`
 
