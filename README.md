@@ -1,45 +1,45 @@
-# Website da Indicação Geográfica de Cachaça para a APCCAP
+# Geographical Indication Cachaça Website for APCCAP
 
-Este repositório contém o código-fonte e os recursos para o website dedicado à Indicação Geográfica (IG) de Cachaça, desenvolvido especificamente para a APCCAP (Associação dos Produtores de Cachaça do Circuito das Águas Paulistas). A IG é uma certificação que destaca a qualidade e autenticidade da produção de cachaça em uma região geográfica específica.
+This repository contains the source code and resources for the website dedicated to the Geographical Indication (GI) of Cachaça, specifically developed for APCCAP (Association of Cachaça Producers of the Circuito das Águas Paulistas). The GI is a certification that highlights the quality and authenticity of cachaça production in a specific geographic region.
 
-## Sobre o Projeto
+## About the Project
 
-O objetivo deste website é educar, promover e celebrar a tradição e a cultura envolvidas na produção de cachaça com Indicação Geográfica na região do Circuito das Águas Paulistas. Ele apresenta informações detalhadas sobre as características distintivas da cachaça produzida na região certificada, bem como os produtores e métodos tradicionais envolvidos.
+The goal of this website is to educate, promote, and celebrate the tradition and culture involved in producing cachaça with Geographical Indication in the Circuito das Águas Paulistas region. It provides detailed information about the distinctive characteristics of the cachaça produced in the certified region, as well as the producers and traditional methods involved.
 
-## Recursos Principais
+## Main Features
 
-- **Páginas Informativas:** Explore informações sobre a história da cachaça na região, as práticas de produção e os benefícios da Indicação Geográfica.
+- **Informative Pages:** Explore information about the history of cachaça in the region, production practices, and the benefits of Geographical Indication.
 
-- **Catálogo de Produtores:** Destaque os produtores certificados com IG, apresentando suas histórias, métodos de produção e produtos exclusivos.
+- **Producer Catalog:** Highlight GI-certified producers, presenting their stories, production methods, and exclusive products.
 
-- **Eventos e Notícias:** Mantenha os visitantes atualizados sobre eventos relacionados à cachaça, notícias do setor e outras atividades relevantes.
+- **Events and News:** Keep visitors updated on cachaça-related events, industry news, and other relevant activities.
 
-- **Gerenciamento de Acessos:** Este website serve como uma plataforma para o gerenciamento dos acessos e membros da Associação, proporcionando um ambiente seguro e controlado.
+- **Access Management:** This website serves as a platform for managing the access and members of the Association, providing a secure and controlled environment.
 
-## Desenvolvido para a APCCAP
+## Developed for APCCAP
 
-Este website foi desenvolvido em colaboração com a Associação dos Produtores de Cachaça do Circuito das Águas Paulistas (APCCAP) para promover a produção autêntica e de alta qualidade da cachaça na região.
+This website was developed in collaboration with the Association of Cachaça Producers of the Circuito das Águas Paulistas (APCCAP) to promote authentic and high-quality cachaça production in the region.
 
-## Tecnologias Utilizadas
+## Technologies Used
 
 - Frontend: ReactJS
 - Backend: Node.js, Express
-- Banco de Dados: MongoDB
-- Hospedagem: Servidor VPS
-- [Outras tecnologias e ferramentas utilizadas]
-  - Postman: Teste e desenvolvimento de APIs.
-  - Firebase: Serviços de armazenamento de arquivos.
+- Database: MongoDB
+- Hosting: VPS Server
+- [Other technologies and tools used]
+  - Postman: API testing and development.
+  - Firebase: File storage services.
   
-## Como Iniciar
+## How to Start
 
-1. Clone o repositório: `git clone https://github.com/guibleone/apccap-website`
-2. Instale as dependências: `npm install`
-3. Execute o projeto: `npm start`
+1. Clone the repository: `git clone https://github.com/guibleone/apccap-website`
+2. Install the dependencies: `npm install`
+3. Run the project: `npm start`
 
-## Link do Site
+## Website Link
 
-Visite o website [aqui](https://www.apccap.com.br).
+Visit the website [here](https://www.apccap.com.br).
 
-## Licença
+## License
 
-Este projeto é licenciado sob a [Licença Pública Geral GNU](LICENSE). Consulte o arquivo `LICENSE` para obter mais detalhes.
+This project is licensed under the [GNU General Public License](LICENSE). Refer to the `LICENSE` file for more details.
