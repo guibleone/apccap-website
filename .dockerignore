@@ -1,0 +1,15 @@
+.git
+.openclaude
+**/node_modules
+**/build
+**/dist
+**/.cache
+**/coverage
+*.log
+.env
+.env.*
+!.env.example
+npm-debug.log*
+pnpm-debug.log*
+Dockerfile*
+docker-compose*.yml

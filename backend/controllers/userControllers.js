@@ -183,6 +183,7 @@ const loginUser = asyncHandler(async (req, res) => {
             return res.json({ message: 'CPF ou senha inválidos' });
         }
     } catch (error) {
+        console.error(error)
         res.status(500)
         throw new Error('Erro ao fazer login')
     }
@@ -435,6 +436,7 @@ const becomeProducer = asyncHandler(async (req, res) => {
 
     } catch (error) {
         res.status(400)
+        console.error(error);
         throw new Error('Erro ao se tornar produtor')
     }
 
@@ -661,7 +663,7 @@ const resetPassword = asyncHandler(async (req, res) => {
         await user.save()
 
         res.status(200).json({ message: 'Senha redefinida com sucesso' });
-        
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Erro ao redefinir senha' });

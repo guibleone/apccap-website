@@ -409,7 +409,7 @@ function Dashboard() {
                     marginTop: matches ? '-40px' : '0',
                   }}>
 
-                    {publications.map((publication, index) => (
+                    {publications?.map((publication, index) => (
                       <div key={index} onClick={() => navigate(`/blog/${publication._id}`)}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', padding: matches ? '30px' : 0 }}>
 

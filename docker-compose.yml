@@ -1,0 +1,35 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: app-frontend
+    ports:
+      - "8080:80"       
+    depends_on:
+      - backend         
+    networks:
+      - app-network
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: app-backend
+    environment:
+      - NODE_ENV=production
+      - PORT=${PORT}
+      - MONGO_URI=${MONGO_URI}
+      - RESEND_API_KEY=${RESEND_API_KEY}
+      - JWT_SECRET=${JWT_SECRET}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+    ports:
+      - "3000:${PORT}"     
+    networks:
+      - app-network
+
+# ----------------------------------------
+# Rede Interna Compartilhada
+# ----------------------------------------
+networks:
+  app-network:
+    driver: bridge

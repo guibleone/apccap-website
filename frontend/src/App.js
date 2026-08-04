@@ -12,7 +12,7 @@ import Blog from './pages/Blog/Blog';
 import SingleProduct from './pages/Products/SingleProduct';
 import Traceability from './pages/Traceability/Traceability';
 import SingleProducer from './pages/Traceability/SingleProducer';
-import UserSingle from './pages/UserSingle/UserSingle';
+import UserSingle from './pages/UserSingle/UserSingle.jsx'
 import Festival from './pages/Festival/Festival';
 import QuemSomos from './pages/QuemSomos/QuemSomos';
 import User from './pages/Dashboard/Acesses/Presidente/SingleUserCredenciado';

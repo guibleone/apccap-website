@@ -17,12 +17,14 @@ const reunionRouter = require('./routes/reunionRoutes.js')
 const relatorysRouter = require('./routes/relatorysRoutes.js')
 const blogRouter = require('./routes/blogRoutes.js')
 const path = require('path')
+const morgan = require('morgan');
 
 // inicializar o expresss
 const app = express()
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(morgan('dev')); 
 
 app.use(cors({
     origin: '*',
@@ -42,14 +44,6 @@ app.use('/api/planilha', spreadSheetRouter)
 app.use('/api/reunion', reunionRouter)
 app.use('/api/relatorys', relatorysRouter)
 app.use('/api/blog', blogRouter)
-
-const dirname = path.resolve();
-
-app.use(express.static(path.join(dirname, '/frontend/build')));
-
-app.get("*", (req, res) =>
-  res.sendFile(path.join(dirname, "./frontend/build/index.html"))
-)
 
 // função que conecta ao BD
 connect()
