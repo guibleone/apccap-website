@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Accordion, AccordionDetails, AccordionSummary, Box, Container, Grid,  Typography, useMediaQuery } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Box, Container, Grid, Typography, useMediaQuery } from '@mui/material';
 import { colors } from '../colors';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './Styles.css'
-import { getMembros,  } from '../../features/admin/adminSlice';
-import {  AiOutlineInstagram, AiOutlineWhatsApp } from 'react-icons/ai';
+import { getMembros, } from '../../features/admin/adminSlice';
+import { AiOutlineInstagram, AiOutlineWhatsApp } from 'react-icons/ai';
 import Footer from '../../components/Footer/Footer';
-import { BsArrowUpRight,  } from 'react-icons/bs';
+import { BsArrowUpRight, } from 'react-icons/bs';
 import { BiMinus, BiPlus } from 'react-icons/bi';
 import ProdutoresPagination from '../../components/Pagination/Produtores';
 
@@ -39,7 +39,7 @@ export default function QuemSomos() {
 
     useEffect(() => {
         if (location.hash) {
-            lastHash.current = location.hash.slice(1); 
+            lastHash.current = location.hash.slice(1);
         }
 
         if (lastHash.current && document.getElementById(lastHash.current)) {
@@ -56,7 +56,7 @@ export default function QuemSomos() {
 
     return (
         <>
-            <Box  id='associacao' sx={{
+            <Box id='associacao' sx={{
                 backgroundColor: colors.main_blue,
                 padding: '80px 0 150px 0',
 
@@ -99,43 +99,49 @@ export default function QuemSomos() {
                             </Box>
                         </Grid>
                     </Grid>
-
                     <Grid container columnSpacing={2} rowSpacing={4} >
-                        {membros?.length > 0 ? membros.slice(0, 4).map((membro, index) => (
-                            <Grid key={index} item xs={12} lg={3}>
-                                <Box sx={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    gap: '16px'
-                                }}>
+                        {membros?.length > 0 ? membros.slice(0, 4).map((membro, index) => {
 
-                                    <img src={membro?.dados_pessoais?.profilePhoto} alt='imagem' width={matches ? 200 : '55%'} height={matches ? 286 : 260} style={{
-                                        objectFit: 'cover'
+                            const placeholderImg = `https://ui-avatars.com/api/?name=${encodeURIComponent(membro.dados_pessoais.name)}&background=random&size=256`;
 
-                                    }} />
+                            return (
+                                <Grid key={index} item xs={12} lg={3}>
+                                    <Box sx={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        gap: '16px'
+                                    }}>
 
-                                    <div style={{ textAlign: 'center' }}>
-                                        <h3 className='white medium'>
-                                            {membro.role.charAt(0).toUpperCase() + membro.role.slice(1)}
-                                        </h3>
-                                        <h4 className='white regular'>
-                                            {membro.dados_pessoais.name.split(' ')[0]} {membro.dados_pessoais.name.split(' ')[membro.dados_pessoais.name.split(' ').length - 1]}
-                                        </h4>
-                                    </div>
+                                        <img
+                                            src={membro?.dados_pessoais?.profilePhoto || placeholderImg}
+                                            alt={`Foto de ${membro.dados_pessoais.name}`}
+                                            width={matches ? 200 : '55%'}
+                                            height={matches ? 286 : 260}
+                                            style={{ objectFit: 'cover' }}
+                                            onError={(e) => { e.target.onerror = null; e.target.src = placeholderImg; }}
+                                        />
 
-                                </Box>
-                            </Grid>
+                                        <div style={{ textAlign: 'center' }}>
+                                            <h3 className='white medium'>
+                                                {membro.role.charAt(0).toUpperCase() + membro.role.slice(1)}
+                                            </h3>
+                                            <h4 className='white regular'>
+                                                {membro.dados_pessoais.name.split(' ')[0]} {membro.dados_pessoais.name.split(' ')[membro.dados_pessoais.name.split(' ').length - 1]}
+                                            </h4>
+                                        </div>
 
-                        )) :
+                                    </Box>
+                                </Grid>
+                            )
+                        }) :
                             <Grid item xs={12} lg={6}>
                                 <h2 className='white'>
-                                    Membros da associção ainda não cadastrados
+                                    Membros da associação ainda não cadastrados
                                 </h2>
                             </Grid>
                         }
                     </Grid>
-
 
 
                 </Container>
@@ -194,7 +200,7 @@ export default function QuemSomos() {
                                         justifyContent: 'space-between',
                                     }}>
                                         <div>
-                                        <a target='_blank' rel="noreferrer" href={produtor?.marca?.site ? `https://${produtor?.marca?.site} `: `https://www.google.com/maps/dir//${produtor?.propriedade?.logradouro_propriedade}%20-%20${produtor?.propriedade?.cidade_propriedade},%20${produtor?.propriedade?.estado_propriedade},%20${produtor?.propriedade?.cep_propriedade}/data=!4m6!4m5!1m1!4e2!1m2!1m1!1s0x94c6c6b0a0a0a0a7:0x1b0b0b0b0b0b0b0b?sa=X&ved=2ahUKEwjJ6Z7X2Z7zAhVYIbkGHXZrDZIQ9RcwDHoECBQQBQ`} style={{ textDecorationColor: colors.main_white }}>
+                                            <a target='_blank' rel="noreferrer" href={produtor?.marca?.site ? `https://${produtor?.marca?.site} ` : `https://www.google.com/maps/dir//${produtor?.propriedade?.logradouro_propriedade}%20-%20${produtor?.propriedade?.cidade_propriedade},%20${produtor?.propriedade?.estado_propriedade},%20${produtor?.propriedade?.cep_propriedade}/data=!4m6!4m5!1m1!4e2!1m2!1m1!1s0x94c6c6b0a0a0a0a7:0x1b0b0b0b0b0b0b0b?sa=X&ved=2ahUKEwjJ6Z7X2Z7zAhVYIbkGHXZrDZIQ9RcwDHoECBQQBQ`} style={{ textDecorationColor: colors.main_white }}>
                                                 <h3 className='white semi-bold'>
                                                     {produtor.propriedade.nome_propriedade}
                                                 </h3>
@@ -272,7 +278,7 @@ export default function QuemSomos() {
                                         justifyContent: 'space-between',
                                     }}>
                                         <div>
-                                        <a target='_blank' rel="noreferrer" href={produtor?.marca?.site ? `https://${produtor?.marca?.site} `: `https://www.google.com/maps/dir//${produtor?.propriedade?.logradouro_propriedade}%20-%20${produtor?.propriedade?.cidade_propriedade},%20${produtor?.propriedade?.estado_propriedade},%20${produtor?.propriedade?.cep_propriedade}/data=!4m6!4m5!1m1!4e2!1m2!1m1!1s0x94c6c6b0a0a0a0a7:0x1b0b0b0b0b0b0b0b?sa=X&ved=2ahUKEwjJ6Z7X2Z7zAhVYIbkGHXZrDZIQ9RcwDHoECBQQBQ`} style={{ textDecorationColor: colors.main_white }}>
+                                            <a target='_blank' rel="noreferrer" href={produtor?.marca?.site ? `https://${produtor?.marca?.site} ` : `https://www.google.com/maps/dir//${produtor?.propriedade?.logradouro_propriedade}%20-%20${produtor?.propriedade?.cidade_propriedade},%20${produtor?.propriedade?.estado_propriedade},%20${produtor?.propriedade?.cep_propriedade}/data=!4m6!4m5!1m1!4e2!1m2!1m1!1s0x94c6c6b0a0a0a0a7:0x1b0b0b0b0b0b0b0b?sa=X&ved=2ahUKEwjJ6Z7X2Z7zAhVYIbkGHXZrDZIQ9RcwDHoECBQQBQ`} style={{ textDecorationColor: colors.main_white }}>
                                                 <h3 className='white semi-bold'>
                                                     {produtor.propriedade.nome_propriedade}
                                                 </h3>
@@ -742,7 +748,7 @@ export default function QuemSomos() {
                                     Você também pode ser um produtor APCCAP.
                                 </h1>
                                 <h3 className='regular main-purple'>
-                                Descubra a oportunidade de se tornar um produtor da APCCAP e faça parte ativa do nosso compromisso com a excelência. Junte-se a nós na construção de um impacto positivo e significativo em nossa comunidade.
+                                    Descubra a oportunidade de se tornar um produtor da APCCAP e faça parte ativa do nosso compromisso com a excelência. Junte-se a nós na construção de um impacto positivo e significativo em nossa comunidade.
                                 </h3>
                             </Box>
                         </Grid>
